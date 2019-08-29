@@ -13,6 +13,8 @@ setup(
     install_requires=[
         'requests>=2.21.0',
         'sphinx>=2.2.0',
-        'sphinx_rtd_theme>=0.4.3'
+        'sphinx_rtd_theme>=0.4.3',
+        'python-engineio @ git+ssh://git@github.com/Hyperdyne/python-engineio.git',
+        'python-socketio @ git+ssh://git@github.com/Hyperdyne/python-socketio.git'
     ],
 )
