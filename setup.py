@@ -12,5 +12,7 @@ setup(
     python_requires='>=3.6.7',
     install_requires=[
         'requests>=2.21.0',
+        'sphinx>=2.2.0',
+        'sphinx_rtd_theme>=0.4.3'
     ],
 )
