@@ -143,7 +143,7 @@ class CLI:
         parser.add_argument('--password', default='', help="Password for username", type=str)
         parser.add_argument('--cert', default=None, help="The SSL certificate for the daemon", type=str, required=False)
         parser.add_argument('--host', default='https://localhost', help="The IPv4 address of the controller",   type=str)
-        parser.add_argument('--port', default=8080,        help="The port of the controller", type=int)
+        parser.add_argument('--port', default=5000,        help="The port of the controller", type=int)
         return parser
 
     def interpret(self):
