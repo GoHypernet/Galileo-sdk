@@ -1,9 +1,8 @@
 #! /usr/bin/env python3
-from time import sleep
+"""This script allows you to automatically accept all users that are requesting to land on your machine."""
+
 import sys
 import argparse
-import socketio
-
 from galileo.api import API as Galileo
 
 
@@ -16,16 +15,16 @@ def error(msg, exit_code=None):
 
 
 def main(host, port, cert, username, password):
-    # First, connect to Galileo by creating an instance.
+    # First, connect to Galileo by creating an instance
     try:
         galileo = Galileo(host, port, cert)
     except:
         error(f"Could not connect to Galileo at {host} on port {port} with cert {cert}.", 1)
 
-    # Get the tokens for authentication.
+    # Get the tokens for authentication
     try:
-        galileo.get_tokens(username, password)  # Get the tokens for authentication.
-        galileo.create_socket_client()  # Create a socket.io client and connect to the server (which is the middleware)
+        galileo.get_tokens(username, password)  # Get the tokens for authentication
+        galileo.create_socket_client()  # Create a socket.io client and connect to the server
     except:
         error("Could not get token with given username and password.", 2)
 
@@ -39,7 +38,8 @@ def main(host, port, cert, username, password):
             error(f"Something went wrong while accepting request from '{landing_zone_id}'.")
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Commands a running Galileo daemon to automatically accept all P2L requests and group invitations. Requires that galileod and galileo-cli are running.")
+    parser = argparse.ArgumentParser(description="Commands a running Galileo daemon to automatically accept all P2L "
+                                                 "requests. Requires that galileod and galileo-cli are running.")
     parser.add_argument('--host', default='https://localhost', help="The IPv4 address of the daemon", type=str)
     parser.add_argument('--port', default=5000, help="The port of the daemon", type=int)
     parser.add_argument('--cert', default='galileod.crt', help="The SSL certificate for the daemon", type=str)

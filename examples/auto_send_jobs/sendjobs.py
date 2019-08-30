@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
+"""This script allows you to automatically send jobs to all online machines in a group."""
+
 import sys
 import argparse
-
 from galileo.api import API as Galileo
 
 
@@ -14,26 +15,27 @@ def error(msg, exit_code=None):
 
 
 def main(host, port, cert, username, password, group, job):
-    # First, connect to Galileo by creating an instance.
+    # First, connect to Galileo by creating an instance
     try:
         galileo = Galileo(host, port, cert)
     except:
         error(f"Could not connect to Galileo at {host} on port {port} with cert {cert}.", 1)
 
-    # Get the tokens for authentication.
+    # Get the tokens for authentication
     try:
-        galileo.get_tokens(username, password)
-        galileo.create_socket_client()
+        galileo.get_tokens(username, password)  # Get the tokens for authentication
+        galileo.create_socket_client()  # Create a socket.io client and connect to the server
     except:
         error("Could not get token with given username and password.", 2)
 
-    # Check if I have access to the group
+    # Get all groups that you belong to
     groups = []
     try:
         groups = galileo.groups()
     except:
         error(f"Could not get groups.")
 
+    # Get information about the right group (must belong in the group already)
     group_info = {}
     for g in groups:
         if group == g['name']:
@@ -42,17 +44,14 @@ def main(host, port, cert, username, password, group, job):
     if not group_info:
         error(f"You do not have group permissions.")
 
-    # Get the IDs of all online machines within the group
-    # print("This is groups info", group_info)
-# print("\n\nThis is group info machine", group_info['machines'])
-# print("\n\nThis is machines", galileo.machines())
-
+    # Get all machines on the network
     machines = []
     try:
         machines = galileo.machines()
     except:
         error(f"Could not get groups")
 
+    # Get the IDs of all online machines within the group (targets)
     targets = []
     for group_machine in group_info['machines']:
         for machine in machines:
@@ -62,7 +61,7 @@ def main(host, port, cert, username, password, group, job):
     if not targets:
         print("No machines available to send job to.")
 
-    # Send a job to each online machine within the group
+    # Send a job to each target
     for machine_id in targets:
         try:
             galileo.job_submit(job, machine_id)
@@ -71,7 +70,8 @@ def main(host, port, cert, username, password, group, job):
             error(f"Something went wrong with sending a job.")
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Commands a running Galileo daemon to automatically send jobs to a group. Requires that galileod is running.")
+    parser = argparse.ArgumentParser(description="Commands a running Galileo daemon to automatically send jobs to a "
+                                                 "group. Requires that galileod and galileo-cli is running.")
     parser.add_argument('--host', default='https://localhost', help="The IPv4 address of the daemon", type=str)
     parser.add_argument('--port', default=5000, help="The port of the daemon", type=int)
     parser.add_argument('--cert', default='galileod.crt', help="The SSL certificate for the daemon", type=str)

@@ -1,9 +1,8 @@
 #! /usr/bin/env python3
-from time import sleep
+"""This script allows you to automatically accept all groups invitations and add your machines to the group."""
+
 import sys
 import argparse
-import socketio
-
 from galileo.api import API as Galileo
 
 
@@ -16,22 +15,22 @@ def error(msg, exit_code=None):
 
 
 def main(host, port, cert, username, password):
-    # First, connect to Galileo by creating an instance.
+    # First, connect to Galileo by creating an instance
     try:
         galileo = Galileo(host, port, cert)
     except:
         error(f"Could not connect to Galileo at {host} on port {port} with cert {cert}.", 1)
 
     try:
-        galileo.get_tokens(username, password)  # Get the tokens for authentication.
-        galileo.create_socket_client()  # Create a socket.io client and connect to the server (which is the middleware)
+        galileo.get_tokens(username, password)  # Get the tokens for authentication
+        galileo.create_socket_client()  # Create a socket.io client and connect to the server
     except:
         error("Could not get token with given username and password.", 2)
 
-    # Listener will listen for p2l invites and decline.
+    # Listener will listen for p2l invites and decline
     @galileo.sio.on('p2l_invite')
     def on_p2l_invite(landing_zone_id):
-        # Decline all invites from members that want you to land on their machine.
+        # Decline all invites from members that want you to land on their machine
         try:
             print(f"Declining invite from: '{landing_zone_id}'.")
             galileo.p2l_invite_response(landing_zone_id, "reject")
@@ -47,7 +46,7 @@ def main(host, port, cert, username, password):
         except:
             error(f"Something went wrong while accepting invite to '{group_id}'.")
 
-    # After accepting the group, add all of your machines to the group.
+    # After accepting the group, add all of your machines to the group
     @galileo.sio.on('group_invite_response_user')
     def on_group_invite_response_user(group_id, response):
         if response == "accept":
@@ -68,8 +67,9 @@ def main(host, port, cert, username, password):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Commands a running Galileo daemon to automatically accept all P2L requests and group invitations. Requires that galileod and galileo-cli are running.")
+    parser = argparse.ArgumentParser(description="Commands a running Galileo daemon to automatically accept all group "
+                                                 "invitations and add your machines to the group. Requires that "
+                                                 "galileod and galileo-cli are running.")
     parser.add_argument('--host', default='https://localhost', help="The IPv4 address of the daemon", type=str)
     parser.add_argument('--port', default=5000, help="The port of the daemon", type=int)
     parser.add_argument('--cert', default='galileod.crt', help="The SSL certificate for the daemon", type=str)
