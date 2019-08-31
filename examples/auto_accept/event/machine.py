@@ -30,12 +30,12 @@ def main(host, port, cert, username, password):
 
     # Listener will listen for p2l requests and accept.
     @galileo.sio.on('p2l_request')
-    def on_p2l_request(landing_zone_id):
+    def on_p2l_request(launch_pad_id):
         try:
-            print(f"Accept request from: {landing_zone_id}")
-            galileo.p2l_request_response(landing_zone_id, "accept")
+            print(f"Accept request from: {launch_pad_id}")
+            galileo.p2l_request_response(launch_pad_zone_id, "accept")
         except:
-            error(f"Something went wrong while accepting request from '{landing_zone_id}'.")
+            error(f"Something went wrong while accepting request from '{launch_pad_id}'.")
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Commands a running Galileo daemon to automatically accept all P2L "
