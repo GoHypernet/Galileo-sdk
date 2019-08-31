@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='galileo',
-    version='0.0.4',
+    name='galileo-sdk',
+    version='0.0.1',
     license='MIT',
     packages=find_packages(),
     entry_points={
@@ -13,8 +13,7 @@ setup(
     python_requires='>=3.6.7',
     install_requires=[
         'requests>=2.21.0',
-        'python-engineio @ git+ssh://git@github.com/Hyperdyne/python-engineio.git@ef4f74eec7c45690aea6f3d3dab669305b8344ed',
-        'python-socketio @ git+ssh://git@github.com/Hyperdyne/python-socketio.git@5f10992c9ce0a9794abc796412b7792825a4641d'
+        'galileo-socketio',
     ],
     extras_require={
         "docs": [
