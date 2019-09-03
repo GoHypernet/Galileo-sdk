@@ -23,7 +23,8 @@ def main(host, port, cert, username, password, group, job):
 
     # Get the tokens for authentication
     try:
-        galileo.login(username, password)  # Get the tokens for authentication
+        galileo.get_tokens(username, password)  # Get the tokens for authentication
+        galileo.create_socket_client()  # Create a socket.io client and connect to the server
     except:
         error("Could not login with given username and password.", 2)
 
