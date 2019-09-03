@@ -2,8 +2,8 @@ from urllib.parse import urlunparse, urljoin
 from functools import partial
 import json
 import sys
-
 import requests
+from time import sleep
 import socketio
 
 
@@ -44,6 +44,13 @@ class API:
         self.ctrl_addr = ctrl_addr
         self.ctrl_port = ctrl_port
         self.ctrl_cert = ctrl_cert
+        self._registered = False
+
+    def is_registered(self):
+        return self._registered
+
+    def set_register(self):
+        self._registered = True
 
     def callback(self, code, msg=None):
         if code != 0:
@@ -102,7 +109,11 @@ class API:
         self.authenticate()
         self.register()
         self.create_socket_client()
-
+        
+        # while True:
+        #     if self.registered: break
+        #     sleep(2)
+        
     def create_socket_client(self):
         """
         Create new socket client, connect to the server, and emit a partial event.

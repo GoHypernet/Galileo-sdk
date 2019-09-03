@@ -33,7 +33,7 @@ def main(host, port, cert, username, password):
     def on_p2l_request(launch_pad_id):
         try:
             print(f"Accept request from: {launch_pad_id}")
-            galileo.p2l_request_response(launch_pad_zone_id, "accept")
+            galileo.p2l_request_response(launch_pad_id, "accept")
         except:
             error(f"Something went wrong while accepting request from '{launch_pad_id}'.")
 
