@@ -23,17 +23,23 @@ def main(host, port, cert, username, password, group, job):
 
     # Get the tokens for authentication
     try:
-        galileo.get_tokens(username, password)  # Get the tokens for authentication
-        galileo.create_socket_client()  # Create a socket.io client and connect to the server
+        galileo.login(username, password)  # Get the tokens for authentication
     except:
-        error("Could not get token with given username and password.", 2)
+        error("Could not login with given username and password.", 2)
+
+    @galileo.sio.on('registration_complete')
+    def on_registration_complete(err_code, *args, **kwargs):
+        galileo.set_register()
+
+    while True:
+        if galileo.is_registered(): break
 
     # Get all groups that you belong to
     groups = []
     try:
         groups = galileo.groups()
     except:
-        error(f"Could not get groups.")
+        error("Could not get groups.")
 
     # Get information about the right group (must belong in the group already)
     group_info = {}
@@ -42,24 +48,28 @@ def main(host, port, cert, username, password, group, job):
             group_info = g
 
     if not group_info:
-        error(f"You do not have group permissions.")
+        error("You do not have group permissions.")
 
     # Get all machines on the network
     machines = []
     try:
+        print("Getting all machines.")
         machines = galileo.machines()
     except:
-        error(f"Could not get groups")
+        error("Could not get machines")
 
     # Get the IDs of all online machines within the group (targets)
     targets = []
-    for group_machine in group_info['machines']:
-        for machine in machines:
-            if (group_machine == machine['id']) and (machine['status'].upper() == 'ONLINE'):
-                targets.append(group_machine)
+    if group_info['machines']:
+        for group_machine in group_info['machines']:
+            for machine in machines:
+                if (group_machine == machine['id']) and (machine['status'].upper() == 'ONLINE'):
+                    targets.append(group_machine)
+    else:
+        error("There are no machines in this group.")
 
     if not targets:
-        print("No machines available to send job to.")
+        error("No machines available to send job to.")
 
     # Send a job to each target
     for machine_id in targets:
@@ -67,7 +77,7 @@ def main(host, port, cert, username, password, group, job):
             galileo.job_submit(job, machine_id)
             print(f"Job sent to {machine_id}")
         except:
-            error(f"Something went wrong with sending a job.")
+            error("Something went wrong with sending a job.")
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Commands a running Galileo daemon to automatically send jobs to a "
