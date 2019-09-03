@@ -19,7 +19,7 @@ with Galileo.
 2. To write your scripts using the Galileo API, put `from galileo.api import API` at the beginning of your script. Examples of scripts are included under the `examples` folder. 
 
 ## API Documentation
-Documentation for the API can be found on the [Galileo website](https://galileo.io/sdk).
+Documentation for the API can be found on the [Galileo website](https://galileoapp.io/sdk).
 
 
 
