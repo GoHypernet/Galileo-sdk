@@ -64,7 +64,7 @@ def main(host, port, cert, username, password, group, job):
         for group_machine in group_info['machines']:
             for machine in machines:
                 if (group_machine == machine['id']) and (machine['status'].upper() == 'ONLINE'):
-                    targets.append(group_machine)
+                    targets.append((group_machine, machine['name']))
     else:
         error("There are no machines in this group.")
 
@@ -72,10 +72,10 @@ def main(host, port, cert, username, password, group, job):
         error("No machines available to send job to.")
 
     # Send a job to each target
-    for machine_id in targets:
+    for machine_id, machine_name in targets:
         try:
             galileo.job_submit(job, machine_id)
-            print(f"Job sent to {machine_id}")
+            print(f"Job sent to {machine_name}")
         except:
             error("Something went wrong with sending a job.")
 
