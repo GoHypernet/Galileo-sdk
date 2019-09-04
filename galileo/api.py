@@ -44,13 +44,6 @@ class API:
         self.ctrl_addr = ctrl_addr
         self.ctrl_port = ctrl_port
         self.ctrl_cert = ctrl_cert
-        self._registered = False
-
-    def is_registered(self):
-        return self._registered
-
-    def set_register(self):
-        self._registered = True
 
     def callback(self, code, msg=None):
         if code != 0:
@@ -109,18 +102,14 @@ class API:
         self.authenticate()
         self.register()
         self.create_socket_client()
-        
-        # while True:
-        #     if self.registered: break
-        #     sleep(2)
-        
+
     def create_socket_client(self):
         """
         Create new socket client, connect to the server, and emit a partial event.
 
         :return: None
         """
-        self.sio = socketio.Client(logger=True)
+        self.sio = socketio.Client(logger=False)
         self.sio.connect(f'{self.ctrl_addr}:{self.ctrl_port}', certfile=self.ctrl_cert)
         self.sio.emit = partial(self.sio.emit, callback=self.callback)
 
