@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 import sys
 import argparse
-import json
 import inspect
 import traceback
-from datetime import datetime
-from collections import OrderedDict
+import readline
+readline.set_completer_delims(' \t\n')
+import cmd
+import os
+from functools import partial
+from glob import glob
 
 
 import requests
@@ -46,96 +49,12 @@ def list_to_table(l):
     matrix = [[x] for x in l]
     return matrix_to_table(matrix)
 
-class Command:
-    def __init__(self, names, doc, action, prompts=[]):
-        if isinstance(names, str):
-            names = [names]
-        if len(names) != len(set(names)):
-            raise ValueError(f"Cannot create command with redundant names: {names}")
-        self.names = names
-        self.doc = doc
-        self.action = action
-        self.prompts = prompts
 
-    def run(self, indent):
-        kwargs = {}
-        for var, metavar in self.prompts:
-            kwargs[var] = input(f'{indent}{metavar}: ').strip()
-        return self.action(**kwargs)
+class CLI(cmd.Cmd):
+    intro = 'Welcome to Galileo!'
+    prompt = 'Command (? for help): '
+    file = None
 
-    def help_msg(self, indent):
-        return f"{indent}{', '.join(self.names):15}\t\t\t{self.doc}"
-
-class Commander:
-    def __init__(self, indent_len=4):
-        self.indent = ' ' * indent_len
-        self.prompt = "Command (h for help): "
-        self.name_to_cmd = OrderedDict()
-        self.add_cmd(['help', 'h'], doc="Print this information", action=self.help)
-        self.add_cmd(['quit', 'q', 'exit'], doc="Quit the interpreter", action=self.quit)
-
-    def print(self, *objects, **kwargs):
-        objects = [str(obj).replace('\n', f'{self.indent}\n') for obj in objects]
-        if 'end' in kwargs:
-            kwargs['end'] = kwargs['end'].replace('\n', f'{self.indent}\n')
-        else:
-            kwargs['end'] = f'{self.indent}\n'
-        print(*objects, **kwargs)
-
-    @property
-    def cmds(self):
-        return OrderedDict.fromkeys(self.name_to_cmd.values()).keys()
-
-    def help(self):
-        help_msgs = [cmd.help_msg(self.indent) for cmd in self.cmds]
-        return '\n'.join(help_msgs)
-
-    def quit(self):
-        self.do_loop = False
-
-    def cmd(self, names, doc, prompts=[]):
-        def wrap(func, prompts=prompts):
-            params = inspect.signature(func).parameters.keys()
-            if prompts:
-                if len(params) != len(prompts):
-                    raise ValueError("Inequal number of prompts and parameters")
-            else:
-                prompts = [p.replace('_',' ').title() for p in params]
-            prompts = list(zip(params, prompts))
-            self.add_cmd(names, doc=doc, action=func, prompts=prompts)
-            return func
-        return wrap
-
-    def add_cmd(self, names, doc, action, prompts=[]):
-        cmd = Command(names, doc=doc, action=action, prompts=prompts)
-        for name in cmd.names:
-            if name in self.name_to_cmd:
-                raise ValueError(f"Duplicated command name: {name}")
-            self.name_to_cmd[name] = cmd
-
-    def loop(self):
-        self.do_loop = True
-        while self.do_loop:
-            name = input(self.prompt).strip()
-            if name not in self.name_to_cmd:
-                print(f"{self.indent}Unrecognized command name: {name}")
-                continue
-
-            try:
-                print(self.name_to_cmd[name].run(self.indent))
-            except Exception as e:
-                self.print("Something went wrong with that call")
-                self.print(traceback.format_exc())
-                continue
-
-
-class CLI:
-    def __init__(self, username, password, host, port, cert):
-        self.api = API(host, port, cert)
-        self.api.login(username, password)
-        self.init_cmdr()
-
-    # TODO: make formatter print default values
     @staticmethod
     def init_parser():
         parser = argparse.ArgumentParser(description="Command line interface for Galileo")
@@ -143,132 +62,308 @@ class CLI:
         parser.add_argument('--password', default='', help="Password for username", type=str)
         parser.add_argument('--cert', default=None, help="The SSL certificate for the daemon", type=str, required=False)
         parser.add_argument('--host', default='https://localhost', help="The IPv4 address of the controller",   type=str)
-        parser.add_argument('--port', default=5000,        help="The port of the controller", type=int)
+        parser.add_argument('--port', default=8080,        help="The port of the controller", type=int)
         return parser
 
+    def __init__(self, username, password, host, port, cert):
+        super().__init__()
+        self.api = API(host, port, cert)
+        self.api.login(username, password)
+        self._upgrade_commands()
+
+    def _param_completer(self, param, text, state):
+        matches = self._matches(param, text)
+        if state >= len(matches):
+            return None
+        return matches[state]
+
+    def _arg_split_wrapper(self, func):
+        params = list(inspect.signature(func).parameters.keys())
+        def wrapper(arg=''):
+            args = arg.split()
+            old_completer = readline.get_completer()
+            for param in params[len(args):]:
+                readline.set_completer(partial(self._param_completer, param))
+                args.append(input(f'  {param}: '))
+            readline.set_completer(old_completer)
+
+            try:
+                return func(*args)
+            except:
+                print('Something went wrong with that command')
+                print(traceback.format_exc())
+
+        return wrapper
+
+    def _matches(self, param, text):
+        if param == 'group_id':
+            return [x['id'] for x in self.api.groups() if x['id'].startswith(text)]
+        if param == 'job_id':
+            return []
+        if param == 'landing_zone_id':
+            return [x['id'] for x in self.api.landing_zones() if x['id'].startswith(text)]
+        if param == 'launch_pad_id':
+            return [x['id'] for x in self.api.launch_pads() if x['id'].startswith(text)]
+        if param == 'machine_id':
+            return [x['id'] for x in self.api.machines() if x['id'].startswith(text)]
+        if param == 'path':
+            paths = glob(text + '*')
+            return [f'{x}{os.sep}' if os.path.isdir(x) else x for x in paths]
+        return []
+
+    def _make_arg_completer(self, func):
+        params = list(inspect.signature(func).parameters.keys())
+        def completer(text, line, beg_idx, end_idx):
+            param_idx = len(line.split()) - 1
+            if text:
+                param_idx -= 1
+            if param_idx >= len(params):
+                return []
+            param = params[param_idx]
+            return self._matches(param, text)
+        return completer
+
+    def cmd_names(self):
+        protected_cmds = {'do_help'}
+        for name in self.get_names():
+            if ((not name.startswith('do_')) or
+                (name in protected_cmds)):
+                continue
+            yield name[3:]
+
+    def _upgrade_commands(self):
+        for name in self.cmd_names():
+            func = getattr(self, f'do_{name}')
+            setattr(self, f'complete_{name}', self._make_arg_completer(func))
+            setattr(self, f'do_{name}', self._arg_split_wrapper(func))
+
     def interpret(self):
-        self.cmdr.loop()
+        self.cmdloop()
         self.api.disconnect()
 
-    # TODO: get good doc msgs directly from __doc__ properties of app endpoints
-    def init_cmdr(self):
-        self.cmdr = Commander()
+    def emptyline(self):
+        return
 
-        @self.cmdr.cmd('machines', 'All machines on the network')
-        def machines():
-            machines = self.api.machines()
-            return dictlist_to_table(machines, ['name', 'owner_id', 'status', 'id', 'os'])
+    def do_machines(self):
+        'All machines on the network'
+        machines = self.api.machines()
+        print(dictlist_to_table(machines, ['name', 'owner_id', 'status', 'id', 'os']))
 
-        @self.cmdr.cmd('localmachine', 'Return information about this machine')
-        def local_machine():
-            return dictlist_to_table([self.api.local_machine()], ['name', 'owner_id', 'status', 'id'])
+    def do_localmachine(self):
+        'Return information about this machine'
+        print(dictlist_to_table([self.api.local_machine()], ['name', 'owner_id', 'status', 'id']))
 
-        @self.cmdr.cmd('landingzones', 'Machines you have P2L on')
-        def landing_zones():
-            lzs = self.api.landing_zones()
-            return dictlist_to_table(lzs, ['name', 'owner_id', 'status', 'id'])
+    def do_landingzones(self):
+        'Machines you have P2L on'
+        lzs = self.api.landing_zones()
+        print(dictlist_to_table(lzs, ['name', 'owner_id', 'status', 'id']))
 
-        @self.cmdr.cmd('launchpads', 'Users that have P2L on this machine')
-        def launch_pads():
-            lps = self.api.launch_pads()
-            return list_to_table(lps)
+    def do_launchpads(self):
+        'Users that have P2L on this machine'
+        lps = self.api.launch_pads()
+        print(list_to_table(lps))
 
-        @self.cmdr.cmd('sentp2lreqs', 'Machines that have yet to respond to your request for P2L')
-        def sent_p2l_requests():
-            reqs = self.api.p2l_requests_sent()
-            return dictlist_to_table(reqs, ['name', 'owner_id', 'status', 'id'])
+    def do_sentp2lreqs(self):
+        'Machines that have yet to respond to your request for P2L'
+        reqs = self.api.p2l_requests_sent()
+        print(dictlist_to_table(reqs, ['name', 'owner_id', 'status', 'id']))
 
-        @self.cmdr.cmd('recvdp2lreqs', 'Users that have requested P2L on this machine and await your response')
-        def recvd_p2l_requests():
-            reqs = self.api.p2l_requests_recvd()
-            return list_to_table(reqs)
+    def do_recvdp2lreqs(self):
+        'Users that have requested P2L on this machine and await your response'
+        reqs = self.api.p2l_requests_recvd()
+        print(list_to_table(reqs))
 
-        @self.cmdr.cmd('sentp2linvs', 'Users that you have invited to land jobs on this machine')
-        def sent_p2l_invs():
-            invs = self.api.p2l_invites_sent()
-            return list_to_table(invs)
+    def do_sentp2linvs(self):
+        'Users that you have invited to land jobs on this machine'
+        invs = self.api.p2l_invites_sent()
+        print(list_to_table(invs))
 
-        @self.cmdr.cmd('recvdp2linvs', 'Machines that have invited you to land jobs on them')
-        def recvd_p2l_invs():
-            invs = self.api.p2l_invites_recvd()
-            return dictlist_to_table(invs, ['name', 'owner_id', 'status', 'id'])
+    def do_recvdp2linvs(self):
+        'Machines that have invited you to land jobs on them'
+        invs = self.api.p2l_invites_recvd()
+        print(dictlist_to_table(invs, ['name', 'owner_id', 'status', 'id']))
 
-        @self.cmdr.cmd('groups', 'List of groups that you belong to')
-        def groups():
-            groups = self.api.groups()
-            return dictlist_to_table(groups, ['name', 'description', 'id', 'owner', 'admins', 'members', 'machines'])
+    def do_groups(self):
+        'List of groups that you belong to'
+        groups = self.api.groups()
+        print(dictlist_to_table(groups, ['name', 'description', 'id', 'owner', 'admins', 'members', 'machines']))
 
-        @self.cmdr.cmd('sentgroupinvs', 'Invitations to a group that you have sent', ['group_id'])
-        def sent_group_invs(group_id):
-            invs = self.api.group_invites_sent(group_id)
-            return list_to_table(invs)
+    def do_sentgroupinvs(self, group_id):
+        'Invitations to a group that you have sent'
+        invs = self.api.group_invites_sent(group_id)
+        print(list_to_table(invs))
 
-        @self.cmdr.cmd('recvdgroupinvs', 'Groups to which you have received invitations')
-        def recvd_group_invs():
-            invs = self.api.group_invites_recvd()
-            return dictlist_to_table(invs, ['name', 'id', 'owner'])
+    def do_recvdgroupinvs(self):
+        'Groups to which you have received invitations'
+        invs = self.api.group_invites_recvd()
+        print(dictlist_to_table(invs, ['name', 'id', 'owner']))
 
-        @self.cmdr.cmd('sentgroupreqs', 'Requests to join groups that you have sent')
-        def sent_group_reqs():
-            reqs = self.api.group_requests_sent()
-            return list_to_table(reqs)
+    def do_sentgroupreqs(self):
+        'Requests to join groups that you have sent'
+        reqs = self.api.group_requests_sent()
+        print(list_to_table(reqs))
 
-        @self.cmdr.cmd('recvdgroupreqs', 'Pending requests from prospective members for groups that you administrate', ['group_id'])
-        def recvd_group_reqs(group_id):
-            reqs = self.api.group_requests_recvd(group_id)
-            return list_to_table(reqs)
+    def do_recvdgroupreqs(self, group_id):
+        'Pending requests from prospective members for groups that you administrate'
+        reqs = self.api.group_requests_recvd(group_id)
+        print(list_to_table(reqs))
 
-        @self.cmdr.cmd('sentjobs', 'Jobs that you have sent to a landing zone')
-        def sent_jobs():
-            jobs = self.api.sent_jobs()
-            return dictlist_to_table(jobs, ['name', 'landing_zone', 'id', 'status', 'run_time', 'results_path', 'status_history'])
+    def do_sentjobs(self):
+        'Jobs that you have sent to a landing zone'
+        jobs = self.api.sent_jobs()
+        print(dictlist_to_table(jobs, ['name', 'landing_zone', 'id', 'status', 'run_time', 'results_path', 'status_history']))
 
-        @self.cmdr.cmd('sentjob', 'Jobs that you have sent to a landing zone', ['job_id'])
-        def sent_job(job_id):
-            job = self.api.sentjob(job_id)
-            return dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status', 'run_time', 'status_history'])
+    def do_sentjob(self, job_id):
+        'Jobs that you have sent to a landing zone'
+        job = self.api.sentjob(job_id)
+        print(dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status', 'run_time', 'status_history']))
 
-        @self.cmdr.cmd('recvdjobs', 'Jobs that you have sent to a landing zone')
-        def recvd_jobs():
-            jobs = self.api.received_jobs()
-            return dictlist_to_table(jobs, ['name', 'launch_pad', 'id', 'status', 'run_time', 'status_history'])
+    def do_recvdjobs(self):
+        'Jobs that you have sent to a landing zone'
+        jobs = self.api.received_jobs()
+        print(dictlist_to_table(jobs, ['name', 'launch_pad', 'id', 'status', 'run_time', 'status_history']))
 
-        @self.cmdr.cmd('recvdjob', 'Jobs that you have sent to a landing zone', ['job_id'])
-        def recvd_job(job_id):
-            job = self.api.recvdjob(job_id)
-            return dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status', 'run_time', 'status_history'])
+    def do_recvdjob(self, job_id):
+        'Jobs that you have sent to a landing zone'
+        job = self.api.recvdjob(job_id)
+        print(dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status', 'run_time', 'status_history']))
 
-        self.cmdr.cmd('sendp2lreq',   'Request p2l on another machine', ['landing_zone_id'])(self.api.p2l_request)
-        self.cmdr.cmd('withdrawp2lreq', 'Stop requesting p2l on another machine', ['landing_zone_id'])(self.api.p2l_request_withdrawal)
-        self.cmdr.cmd('acceptp2lreq', 'Accept a p2l request', ['launch_pad_id'])(lambda x: self.api.p2l_request_response(x, 'accept'))
-        self.cmdr.cmd('rejectp2lreq', 'Reject a p2l request', ['launch_pad_id'])(lambda x: self.api.p2l_request_response(x, 'reject'))
-        self.cmdr.cmd('sendp2linv',   'Invite a user to land jobs on this machine', ['launch_pad_id'])(self.api.p2l_invite)
-        self.cmdr.cmd('withdrawp2linv', 'Stop inviting a user to land jobs on this machine', ['launch_pad_id'])(self.api.p2l_invite_withdrawal)
-        self.cmdr.cmd('acceptp2linv', 'Accept a p2l invite', ['landing_zone_id'])(lambda x: self.api.p2l_invite_response(x, 'accept'))
-        self.cmdr.cmd('rejectp2linv', 'Reject a p2l invite', ['landing_zone_id'])(lambda x: self.api.p2l_invite_response(x, 'reject'))
-        self.cmdr.cmd('revokep2l', 'Take away a user\'s p2l on this machine', ['launch_pad_id'])(self.api.p2l_revocation)
-        self.cmdr.cmd('resignp2l', 'Give up your p2l on some machine', ['landing_zone_id'])(self.api.p2l_resignation)
-        self.cmdr.cmd('creategroup', 'Create a new group', ['Name', 'Description'])(lambda x, y: self.api.group_creation(x, y, []))
-        self.cmdr.cmd('destroygroup', 'Destroy a group that you own', ['group_id'])(self.api.group_destruction)
-        self.cmdr.cmd('sendgroupinv', 'Invite a user to join a group you administer', ['group_id', 'username'])(self.api.group_invite)
-        self.cmdr.cmd('acceptgroupinv', 'Accept an invitation to join a group', ['group_id'])(lambda x: self.api.group_invite_response(x, 'accept'))
-        self.cmdr.cmd('rejectgroupinv', 'Reject an invitation to join a group', ['group_id'])(lambda x: self.api.group_invite_response(x, 'reject'))
-        self.cmdr.cmd('sendgroupreq', 'Request to join a group', ['group_id'])(self.api.group_request)
-        self.cmdr.cmd('acceptgroupreq', 'Accept a request to join a group', ['group_id', 'username'])(lambda x, y: self.api.group_request_response(x, y, 'accept'))
-        self.cmdr.cmd('rejectgroupreq', 'Reject a request to join a group', ['group_id', 'username'])(lambda x, y: self.api.group_request_response(x, y, 'reject'))
-        self.cmdr.cmd('leavegroup', 'Elect to leave a group you belong to', ['group_id'])(self.api.group_withdrawal)
-        self.cmdr.cmd('expelgroupmember', 'Kick someone out of a group that you administrate', ['group_id', 'username'])(self.api.group_expulsion)
-        self.cmdr.cmd('groupaddmachine', 'add machien', ['group_id', 'machine_id'])(self.api.group_machine_addition)
-        self.cmdr.cmd('grouprmmachine', 'rm machien', ['group_id', 'machine_id'])(self.api.group_machine_removal)
-        self.cmdr.cmd('submitjob', 'submit a job to a landing zone', ['path', 'landing_zone_id'])(self.api.job_submit)
-        self.cmdr.cmd('stopjob', 'Stop a job', ['job_id'])(self.api.job_stop)
-        self.cmdr.cmd('startjob', 'Start a job', ['job_id'])(self.api.job_start)
-        self.cmdr.cmd('pausejob', 'Pause a job', ['job_id'])(self.api.job_pause)
-        self.cmdr.cmd('hidejob', 'Hide a job', ['job_id'])(self.api.job_hide)
-        self.cmdr.cmd('sharefolder', 'Shares a folder', ['path'])(self.api.share_folder)
-        self.cmdr.cmd('shutdown', 'Shutdown')(self.api.shutdown)
-        self.cmdr.cmd('pid', 'Get the server process id')(self.api.pid)
-        self.cmdr.cmd('sendlog', 'Send your log to the backend', ['path'])(self.api.send_log)
+    def do_sendp2lreq(self, landing_zone_id):
+        'Request p2l on another machine'
+        self.api.p2l_request(landing_zone_id)
+
+    def do_withdrawp2lreq(self, landing_zone_id):
+        'Stop requesting p2l on another machine'
+        self.api.p2l_request_withdrawal(landing_zone_id)
+
+    def do_acceptp2lreq(self, launch_pad_id):
+        'Accept a p2l request'
+        self.api.p2l_request_response(launch_pad_id, 'accept')
+
+    def do_rejectp2lreq(self, launch_pad_id):
+        'Reject a p2l request'
+        self.api.p2l_request_response(launch_pad_id, 'reject')
+
+    def do_sendp2linv(self, launch_pad_id):
+        'Invite a user to land jobs on this machine'
+        self.api.p2l_invite(launch_pad_id)
+
+    def do_withdrawp2linv(self, launch_pad_id):
+        'Stop inviting a user to land jobs on this machine'
+        self.api.p2l_invite_withdrawal(launch_pad_id)
+
+    def do_acceptp2linv(sel, landing_zone_id):
+        'Accept a p2l invite'
+        self.api.p2l_invite_response(landing_zone_id, 'accept')
+
+    def do_rejectp2linv(sel, landing_zone_id):
+        'Reject a p2l invite'
+        self.api.p2l_invite_response(landing_zone_id, 'reject')
+
+    def do_revokep2l(self, launch_pad_id):
+        'Take away a user\'s p2l on this machine'
+        self.api.p2l_revocation(launch_pad_id)
+
+    def do_resignp2l(self, landing_zone_id):
+        'Give up your p2l on some machine'
+        self.api.p2l_resignation(landing_zone_id)
+
+    def do_creategroup(self, name, description):
+        'Create a new group'
+        self.api.group_creation(name, description, [])
+
+    def do_destroygroup(self, group_id):
+        'Destroy a group that you own'
+        self.api.group_destruction(group_id)
+
+    def do_sendgroupinv(self, group_id, user_id):
+        'Invite a user to join a group you administer'
+        self.api.group_invite(group_id, user_id)
+
+    def do_acceptgroupinv(self, group_id):
+        'Accept an invitation to join a group'
+        self.api.group_invite_response(group_id, 'accept')
+
+    def do_rejectgroupinv(self, group_id):
+        'Reject an invitation to join a group'
+        self.api.group_invite_response(group_id, 'reject')
+
+    def do_sendgroupreq(self, group_id):
+        'Request to join a group'
+        self.api.group_request(group_id)
+
+    def do_acceptgroupreq(self, group_id, user_id):
+        'Accept a request to join a group'
+        self.api.group_request_response(group_id, user_id, 'accept')
+
+    def do_rejectgroupreq(self, group_id, user_id):
+        'Reject a request to join a group'
+        self.api.group_request_response(group_id, user_id, 'reject')
+
+    def do_leavegroup(self, group_id):
+        'Elect to leave a group you belong to'
+        self.api.group_withdrawal(group_id)
+
+    def do_expelgroupmember(self, group_id, user_id):
+        'Kick someone out of a group that you administrate'
+        self.api.group_expulsion(group_id, user_id)
+
+    def do_groupaddmachine(self, group_id, machine_id):
+        'add machien'
+        self.api.group_machine_addition(group_id, machine_id)
+
+    def do_grouprmmachine(self, group_id, machine_id):
+        'rm machien'
+        self.api.group_machine_removal(group_id, machine_id)
+
+    def do_submitjob(self, path, landing_zone_id):
+        'submit a job to a landing zone'
+        self.api.job_submit(path, landing_zone_id)
+
+    def do_downloadjob(self, job_id, results_path):
+        'Download the results of a completed job'
+        self.api.job_download(job_id, results_path)
+
+    def do_stopjob(self, job_id):
+        'Stop a job'
+        self.api.job_stop(job_id)
+
+    def do_startjob(self, job_id):
+        'Start a job'
+        self.api.job_start(job_id)
+
+    def do_pausejob(self, job_id):
+        'Pause a job'
+        self.api.job_pause(job_id)
+
+    def do_topjob(self, job_id):
+        'Top the process info of a job'
+        self.api.job_top(job_id)
+
+    def do_logjob(self, job_id):
+        'Tail the stdout of a job'
+        self.api.job_logs(job_id)
+
+    def do_hidejob(self, job_id):
+        'Hide a job'
+        self.api.job_hide(job_id)
+
+    def do_sharefolder(self, path):
+        'Shares a folder'
+        self.api.share_folder(path)
+
+    def do_shutdown(self):
+        'Shutdown'
+        self.api.shutdown()
+
+    def def_pid(self):
+        'Get the server process id'
+        self.api.pid()
+
+    def do_sendlog(self, path):
+        'Send your log to the backend'
+        self.api.send_log(path)
+
 
 def main(argv=sys.argv[1:]):
     args = CLI.init_parser().parse_args(argv)
