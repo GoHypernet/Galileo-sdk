@@ -27,14 +27,7 @@ def main(host, port, cert, username, password, group, job):
         galileo.create_socket_client()  # Create a socket.io client and connect to the server
     except:
         error("Could not login with given username and password.", 2)
-
-    @galileo.sio.on('registration_complete')
-    def on_registration_complete(err_code, *args, **kwargs):
-        galileo.set_register()
-
-    while True:
-        if galileo.is_registered(): break
-
+        
     # Get all groups that you belong to
     groups = []
     try:
