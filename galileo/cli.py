@@ -123,6 +123,14 @@ class CLI(cmd.Cmd):
             return self._matches(param, text)
         return completer
 
+    def _make_helper(self, name, func):
+        params = list(inspect.signature(func).parameters.keys())
+        params = [f'<{x}>' for x in params]
+        def helper():
+            print(f'  {name}: {" ".join(params)}\n'
+                  f'    {func.__doc__}')
+        return helper
+
     def cmd_names(self):
         protected_cmds = {'do_help'}
         for name in self.get_names():
@@ -136,6 +144,7 @@ class CLI(cmd.Cmd):
             func = getattr(self, f'do_{name}')
             setattr(self, f'complete_{name}', self._make_arg_completer(func))
             setattr(self, f'do_{name}', self._arg_split_wrapper(func))
+            setattr(self, f'help_{name}', self._make_helper(name, func))
 
     def interpret(self):
         self.cmdloop()

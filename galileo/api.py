@@ -110,7 +110,7 @@ class API:
         :return: None
         """
         self.sio = socketio.Client(logger=False)
-        self.sio.connect(f'{self.ctrl_addr}:{self.ctrl_port}', certfile=self.ctrl_cert)
+        self.sio.connect(f'{self.ctrl_addr}:{self.ctrl_port}', headers=self.headers, certfile=self.ctrl_cert)
         self.sio.emit = partial(self.sio.emit, callback=self.callback)
 
     def _make_url(self, endpoint, params='', query='', fragment=''):
@@ -543,6 +543,16 @@ class API:
         """
         self.sio.emit('job_submit', (path, landing_zone_id))
 
+    def job_download(self, job_id, results_path):
+        """
+        Download the results of a launched job that has completed
+
+        :param job_id: Job ID string
+        :param results_path: A file system path to store the results in
+        :return: None
+        """
+        self.sio.emit('job_download', (job_id, results_path))
+
     def job_stop(self, job_id):
         """
         Stop a running job.
@@ -569,6 +579,24 @@ class API:
         :return: None
         """
         self.sio.emit('job_pause', job_id)
+
+    def job_top(self, job_id):
+        """
+        Get process status à la 'docker top'
+
+        :param job_id: job ID string
+        :return: None
+        """
+        self.sio.emit('job_top', job_id)
+
+    def job_logs(self, job_id):
+        """
+        Get the current stdout of a job
+
+        :param job_id: job ID string
+        :return: None
+        """
+        self.sio.emit('job_logs', job_id)
 
     def job_hide(self, job_id):
         """
