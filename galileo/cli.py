@@ -139,6 +139,33 @@ class CLI(cmd.Cmd):
                 continue
             yield name[3:]
 
+    # Overrides the do_help function of CMD to print groupings
+    def do_help(self, arg):
+        helps_of_groupings = [name[5:] for name in self.get_names() if name[:4] == 'help']
+        if arg:
+            cmd.Cmd.do_help(self, arg)
+        else:
+            self.print_topics(self.doc_header, helps_of_groupings, 15, 80)
+
+
+    def help_p2l(self):
+        'Stands for "permission to land.'
+        p2l_cmds = [cmd[3:] for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help']
+        self.print_topics(self.doc_header, p2l_cmds, 15, 80)
+
+
+    def help_groups(self):
+        'Information on current groups you are in.'
+        groups_cmds = [cmd[3:] for cmd in self.get_names() if 'group' in cmd and cmd[:4] != 'help']
+        self.print_topics(self.doc_header, groups_cmds, 15, 80)
+
+
+    def help_jobs(self):
+        'Running and seeing jobs.'
+        jobs_cmds = [cmd[3:] for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help']
+        self.print_topics(self.doc_header, jobs_cmds, 15, 80)
+
+
     def _upgrade_commands(self):
         for name in self.cmd_names():
             func = getattr(self, f'do_{name}')
