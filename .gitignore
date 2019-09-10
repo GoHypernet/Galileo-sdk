@@ -1,2 +1,9 @@
 .idea
 .DS_Store
+build
+dist
+*.egg-info
+__pycache__
+venv
+_build
+setup.spec
