@@ -261,11 +261,11 @@ class CLI(cmd.Cmd):
         'Stop inviting a user to land jobs on this machine'
         self.api.p2l_invite_withdrawal(launch_pad_id)
 
-    def do_acceptp2linv(sel, landing_zone_id):
+    def do_acceptp2linv(self, landing_zone_id):
         'Accept a p2l invite'
         self.api.p2l_invite_response(landing_zone_id, 'accept')
 
-    def do_rejectp2linv(sel, landing_zone_id):
+    def do_rejectp2linv(self, landing_zone_id):
         'Reject a p2l invite'
         self.api.p2l_invite_response(landing_zone_id, 'reject')
 
