@@ -9,7 +9,7 @@ import cmd
 import os
 from functools import partial
 from glob import glob
-
+from termcolor import colored, cprint
 
 import requests
 
@@ -139,6 +139,11 @@ class CLI(cmd.Cmd):
                 continue
             yield name[3:]
 
+    # Adds exit as a possible command that exits the cli
+    def do_exit(self):
+        return True
+
+
     # Overrides the do_help function of CMD to print groupings
     def do_help(self, arg):
         helps_of_groupings = [name[5:] for name in self.get_names() if name[:4] == 'help']
@@ -147,23 +152,63 @@ class CLI(cmd.Cmd):
         else:
             self.print_topics(self.doc_header, helps_of_groupings, 15, 80)
 
-
-    def help_p2l(self):
+    def help_p2l_cmds(self):
         'Stands for "permission to land.'
         p2l_cmds = [cmd[3:] for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, p2l_cmds, 15, 80)
 
 
-    def help_groups(self):
+    def help_groups_cmds(self):
         'Information on current groups you are in.'
         groups_cmds = [cmd[3:] for cmd in self.get_names() if 'group' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, groups_cmds, 15, 80)
 
 
-    def help_jobs(self):
+    def help_jobs_cmds(self):
         'Running and seeing jobs.'
         jobs_cmds = [cmd[3:] for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, jobs_cmds, 15, 80)
+
+
+    # Allows the user to run job specific commands within the jobs grouping
+    def do_jobs(self, *args):
+        text = colored('Example text', 'red', attrs=['reverse', 'blink'])
+        print(text)
+        cprint('One more excample', 'green', 'on_red')
+        if args[0] == 'download' and len(args) == 3:
+            try:
+                do_downloadjob(self, args[1], args[2])
+            except:
+                print(f'Arguments "{args[1]}" and "{args[2]}" are not valid.')
+        elif args[0] in ['start', 'stop', 'pause', 'top', 'hide', 'log'] and len(args) == 2:
+            try:
+                func_name = 'do_' + args[0] + 'jobs'
+                func_to_run = globals()[func_name]
+                func_to_run(self, args[1])
+            except:
+                print(f'Arguments "{args[0]}" and "{args[1]}" are not valid.')
+        else:
+            print(f'Argument "{args[0]}" is not included as a jobs command.')
+
+    # Continue down hard-coded groupings or change cmd names for each function to remove prefix/suffix?
+    # Okay to override the print topics method in the cmd module?
+
+
+    # Allows users to run ptl specific commands within the jobs grouping
+    def do_ptl(self, *args):
+        if args[0] in ['sentreqs', 'recreqs', 'sentinvs', 'recinvs'] and len(args) == 1:
+            try:
+                first_part = arg[0][:-4]
+                second_part = arg[0][-4:]
+                func_name = 'do_' + first_part + 'p2l' + second_part
+                func_to_run = globals()[func_name]
+                func_to_run(self)
+            except:
+                print(f'Arguments "{args[0]}" are not valid')
+
+        elif args[0] in ['withdraw']:
+            pass
+                
 
 
     def _upgrade_commands(self):
