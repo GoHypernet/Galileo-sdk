@@ -23,7 +23,7 @@ def matrix_to_table(matrix, sep='  '):
 
     for row in matrix:
         if len(row) != len(matrix[0]):
-            raise ValueError("matrix rows are of inconsistent lengths")
+            raise ValueError("matrix rows are of inonsistent lengths")
 
     max_widths = [0] * len(matrix[0])
     for row in matrix:
@@ -49,11 +49,21 @@ def list_to_table(l):
     matrix = [[x] for x in l]
     return matrix_to_table(matrix)
 
+def print_ascii():
+    print('   _____       _ _ _            ')
+    print('  / ____|     | (_) |           ')
+    print(' | |  __  __ _| |_| | ___  ___  ') 
+    print(' | | |_ |/ _` | | | |/ _ \\/ _ \\ ') 
+    print(' | |__| | (_| | | | |  __/ (_) |') 
+    print('  \\_____|\\__,_|_|_|_|\\___|\\___/ ') 
+    print('                                ') 
+    print('                                ') 
 
 class CLI(cmd.Cmd):
     intro = 'Welcome to Galileo!'
     prompt = 'Command (? for help): '
     file = None
+    print_ascii()
 
     @staticmethod
     def init_parser():
@@ -153,7 +163,7 @@ class CLI(cmd.Cmd):
             self.print_topics(self.doc_header, helps_of_groupings, 15, 80)
 
     def help_p2l_cmds(self):
-        'Stands for "permission to land.'
+        'Stands for "permission to land."'
         p2l_cmds = [cmd[3:] for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, p2l_cmds, 15, 80)
 
@@ -169,12 +179,28 @@ class CLI(cmd.Cmd):
         jobs_cmds = [cmd[3:] for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, jobs_cmds, 15, 80)
 
+    # Okay to override the print topics method in the cmd module?
+    def print_topics(self, header, cmds, cmdlen, maxcol):
+        if header:
+            cprint(f'{str(header)}\n', 'cyan')
+        if self.ruler:
+            cprint(f'{str(self.ruler * len(header))}', 'cyan')
+        if cmds:
+            for cmd in cmds:
+                spaces = 20 - len(cmd)
+                new_cmd = 'help_' + cmd
+                doc_string = getattr(self, new_cmd).__doc__
+                colored_cmd = colored(cmd, 'white', attrs=['bold'])
+                print(f'{colored_cmd} {str(spaces * " ")}  {doc_string}')
+        #self.columnize(cmds, maxcol-1)
+
+        self.stdout.write('\n')
+
+    #Overwrite columnize in order to pretty display the cmds      
+
 
     # Allows the user to run job specific commands within the jobs grouping
     def do_jobs(self, *args):
-        text = colored('Example text', 'red', attrs=['reverse', 'blink'])
-        print(text)
-        cprint('One more excample', 'green', 'on_red')
         if args[0] == 'download' and len(args) == 3:
             try:
                 do_downloadjob(self, args[1], args[2])
@@ -191,7 +217,6 @@ class CLI(cmd.Cmd):
             print(f'Argument "{args[0]}" is not included as a jobs command.')
 
     # Continue down hard-coded groupings or change cmd names for each function to remove prefix/suffix?
-    # Okay to override the print topics method in the cmd module?
 
 
     # Allows users to run ptl specific commands within the jobs grouping
