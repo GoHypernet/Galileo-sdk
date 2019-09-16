@@ -162,19 +162,19 @@ class CLI(cmd.Cmd):
         else:
             self.print_topics(self.doc_header, helps_of_groupings, 15, 80)
 
-    def help_p2l_cmds(self):
+    def help_p2l(self):
         'Stands for "permission to land."'
         p2l_cmds = [cmd[3:] for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, p2l_cmds, 15, 80)
 
 
-    def help_groups_cmds(self):
+    def help_groupings(self):
         'Information on current groups you are in.'
         groups_cmds = [cmd[3:] for cmd in self.get_names() if 'group' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, groups_cmds, 15, 80)
 
 
-    def help_jobs_cmds(self):
+    def help_jobs(self):
         'Running and seeing jobs.'
         jobs_cmds = [cmd[3:] for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, jobs_cmds, 15, 80)
@@ -220,8 +220,8 @@ class CLI(cmd.Cmd):
 
 
     # Allows users to run ptl specific commands within the jobs grouping
-    def do_ptl(self, *args):
-        if args[0] in ['sentreqs', 'recreqs', 'sentinvs', 'recinvs'] and len(args) == 1:
+    def do_p2l(self, *args):
+        if args[0] in ['sentreqs', 'recvdreqs', 'sentinvs', 'recvdinvs'] and len(args) == 1:
             try:
                 first_part = arg[0][:-4]
                 second_part = arg[0][-4:]
@@ -231,10 +231,28 @@ class CLI(cmd.Cmd):
             except:
                 print(f'Arguments "{args[0]}" are not valid')
 
-        elif args[0] in ['withdraw']:
-            pass
-                
+        elif args[0] in ['sendreq', 'withdrawreq', 'acceptreq', 'rejectreq', 'sendinv',
+        				'withdrawinv', 'acceptinv', 'rejectinv', ''] and len(args) == 2:
+        	try:
+        		first_part = arg[0][:-3]
+        		second_part = arg[0][-3:]
+        		func_name = 'do_' + first_part + 'p2l' + second_part
+        		func_to_run = globals()[func_name]
+        		func_to_run(self, args[1])
+        	except:
+        		print(f'Arguments "{args[0]}" and "{args[1]}" are not valid')
 
+        elif args[0] in ['revoke', 'resign'] and len(args) == 2:
+        	try:
+        		func_name = 'do_' + args[0] + 'p2l'
+        		func_to_run = globals()[func_name]
+        		func_to_run(self, args[1])
+        	except:
+        		print(f'Arguments "{args[0]}" and "{args[1]}" are not valid')
+
+
+    def do_groupings(self,*args):
+    	pass
 
     def _upgrade_commands(self):
         for name in self.cmd_names():
