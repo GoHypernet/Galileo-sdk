@@ -153,9 +153,18 @@ class CLI(cmd.Cmd):
     def do_exit(self):
         return True
 
-
-    # Overrides the do_help function of CMD to print groupings
     def do_help(self, arg):
+        '''
+            Summary: Overrides the CMD class do_help option to display 
+                     docstrings of commands and command groupings.
+
+            Input:  Optional help argument being either a command or a 
+                    grouping of commands like 'p2l', 'jobs', or 'groupings'.
+
+            Output: Calls print_topics to generate colored output of 
+                    commands and docstrings
+        '''
+
         helps_of_groupings = [name for name in self.get_names() if name[:4] == 'help']
         if arg:
             # Check arg syntax
@@ -178,19 +187,19 @@ class CLI(cmd.Cmd):
 
     def help_p2l(self):
         '''Stands for "permission to land."'''
-        p2l_cmds = [cmd for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help']
+        p2l_cmds = [cmd for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help' and cmd != 'do_p2l']
         self.print_topics(self.doc_header, p2l_cmds, 15, 80)
 
 
     def help_groupings(self):
         '''Information on current groups you are in.'''
-        groups_cmds = [cmd for cmd in self.get_names() if 'group' in cmd and cmd[:4] != 'help']
+        groups_cmds = [cmd for cmd in self.get_names() if 'group' in cmd and cmd[:4] != 'help' and cmd != 'do_groupings']
         self.print_topics(self.doc_header, groups_cmds, 15, 80)
 
 
     def help_jobs(self):
         '''Running and seeing jobs.'''
-        jobs_cmds = [cmd for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help']
+        jobs_cmds = [cmd for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help' and cmd != 'do_jobs']
         self.print_topics(self.doc_header, jobs_cmds, 15, 80)
 
     # Okay to override the print topics method in the cmd module?
@@ -201,73 +210,127 @@ class CLI(cmd.Cmd):
             cprint(f'{str(self.ruler * len(header))}', 'cyan')
         if cmds:
             for cmd in cmds:
-                print(cmd)
                 first, second = cmd.split('_')
                 spaces = 20 - len(second)
                 doc_string = getattr(CLI, cmd).__doc__
                 colored_cmd = colored(second, 'white', attrs=['bold'])
                 print(f'{colored_cmd} {str(spaces * " ")}  {doc_string}')
-        #self.columnize(cmds, maxcol-1)
 
-        self.stdout.write('\n')
+        self.stdout.write('\n')  
 
-    #Overwrite columnize in order to pretty display the cmds      
-
-
-    # Allows the user to run job specific commands within the jobs grouping
     def do_jobs(self, *args):
+        '''
+            Summary: Arguments are parsed and functions are looked up in the cmd dictionary
+                     in order to find the proper function name to call
+
+            Input:   jobs command with optional command arguments
+
+            Output:  The running of whatever do_ command the user input as an argument
+
+        '''
+        cmd_dict = self.generate_cmd_dictionary()
         if args[0] == 'download' and len(args) == 3:
             try:
-                do_downloadjob(self, args[1], args[2])
+                self.do_downloadjob(args[1], args[2])
             except:
                 print(f'Arguments "{args[1]}" and "{args[2]}" are not valid.')
-        elif args[0] in ['start', 'stop', 'pause', 'top', 'hide', 'log'] and len(args) == 2:
+        elif args[0] in cmd_dict['job'].keys():
             try:
-                func_name = 'do_' + args[0] + 'jobs'
+                func_name = cmd_dict['job'][args[0]]
                 func_to_run = globals()[func_name]
-                func_to_run(self, args[1])
+                func_to_run(self, *args[1:])
             except:
-                print(f'Arguments "{args[0]}" and "{args[1]}" are not valid.')
+                print('Your command failed to run with the listed arguments below:\n')
+                for arg in args:
+                    print(f'{arg} ')
         else:
-            print(f'Argument "{args[0]}" is not included as a jobs command.')
+            print(f'Argument {args[0]} is not a valid command within the groupings grouping.')
 
-    # Continue down hard-coded groupings or change cmd names for each function to remove prefix/suffix?
-
-
-    # Allows users to run ptl specific commands within the jobs grouping
     def do_p2l(self, *args):
-        if args[0] in ['sentreqs', 'recvdreqs', 'sentinvs', 'recvdinvs'] and len(args) == 1:
+        '''
+            Summary: Arguments are parsed and functions are looked up in the cmd dictionary
+                     in order to find the proper function name to call
+
+            Input:   p2l command with optional command arguments
+
+            Output:  The running of whatever do_ command the user input as an argument
+
+        '''
+        cmd_dict = self.generate_cmd_dictionary()
+        if args[0] in cmd_dict['p2l'].keys():
             try:
-                first_part = arg[0][:-4]
-                second_part = arg[0][-4:]
-                func_name = 'do_' + first_part + 'p2l' + second_part
+                func_name = cmd_dict['p2l'][args[0]]
                 func_to_run = globals()[func_name]
-                func_to_run(self)
+                func_to_run(self, *args[1:])
             except:
-                print(f'Arguments "{args[0]}" are not valid')
-
-        elif args[0] in ['sendreq', 'withdrawreq', 'acceptreq', 'rejectreq', 'sendinv',
-        				'withdrawinv', 'acceptinv', 'rejectinv', ''] and len(args) == 2:
-        	try:
-        		first_part = arg[0][:-3]
-        		second_part = arg[0][-3:]
-        		func_name = 'do_' + first_part + 'p2l' + second_part
-        		func_to_run = globals()[func_name]
-        		func_to_run(self, args[1])
-        	except:
-        		print(f'Arguments "{args[0]}" and "{args[1]}" are not valid')
-
-        elif args[0] in ['revoke', 'resign'] and len(args) == 2:
-        	try:
-        		func_name = 'do_' + args[0] + 'p2l'
-        		func_to_run = globals()[func_name]
-        		func_to_run(self, args[1])
-        	except:
-        		print(f'Arguments "{args[0]}" and "{args[1]}" are not valid')
+                print('Your command failed to run with the listed arguments below:\n')
+                for arg in args:
+                    print(f'{arg} ')
+        else:
+            print(f'Argument {args[0]} is not a valid command within the p2l grouping.')
 
 
     def do_groupings(self,*args):
-    	pass
+        '''
+            Summary: Arguments are parsed and functions are looked up in the cmd dictionary
+                     in order to find the proper function name to call
+
+            Input:   groupings command with optional command arguments
+
+            Output:  The running of whatever do_ command the user input as an argument
+
+        '''
+        cmd_dict = self.generate_cmd_dictionary()
+        if args[0] == 'groups' and len(args) == 1:
+            self.do_groups()
+        elif args[0] in cmd_dict['group'].keys():
+            try:
+                func_name = cmd_dict['group'][args[0]]
+                func_to_run = globals()[func_name]
+                func_to_run(self, *args[1:])
+            except:
+                print('Your command failed to run with the listed arguments below:\n')
+                for arg in args:
+                    print(f'{arg} ')
+        else:
+            print(f'Argument {args[0]} is not a valid command within the groupings grouping.')
+
+    def generate_cmd_dictionary(self):
+        '''
+            Summary: All functions are parsed and added to a dictionary depending on
+                     what category they fall in. A reference to the function name
+                     is stored along with the abbreviated versions that a user may
+                     call on the command line. 
+
+            Input:   None
+
+            Output:  A dictionary with keys being groupings then values being another
+                     dictionary containing abbreviated names and full function names.
+ 
+        '''
+        list_of_keywords = ['group', 'job', 'p2l']
+        dictionary = dict.fromkeys(list_of_keywords, {})
+        for func in self.get_names():
+            if func[:3] == 'do_':
+                name = func[3:]
+                if 'groups' in name:
+                    name = name.replace('groups', '')
+                    dictionary['group'][name] = func
+                elif 'jobs' in name:
+                    name = name.replace('jobs', '')
+                    dictionary['job'][name] = func
+                elif 'group' in name:
+                    name = name.replace('group', '')
+                    dictionary['group'][name] = func
+                elif 'job' in name:
+                    name = name.replace('job', '')
+                    dictionary['job'][name] = func
+                elif 'p2l' in name:
+                    name = name.replace('p2l', '')
+                    dictionary['p2l'][name] = func
+            else:
+                pass
+        return dictionary
 
     def _upgrade_commands(self):
         for name in self.cmd_names():
