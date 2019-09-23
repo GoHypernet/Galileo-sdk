@@ -156,27 +156,41 @@ class CLI(cmd.Cmd):
 
     # Overrides the do_help function of CMD to print groupings
     def do_help(self, arg):
-        helps_of_groupings = [name[5:] for name in self.get_names() if name[:4] == 'help']
+        helps_of_groupings = [name for name in self.get_names() if name[:4] == 'help']
         if arg:
-            cmd.Cmd.do_help(self, arg)
+            # Check arg syntax
+            try:
+                func = getattr(CLI, 'help_' + arg)
+            except AttributeError:
+                try:
+                    doc = getattr(CLI, 'do_' + arg).__doc__
+                    if doc:
+                        cmd = 'do_' + arg
+                        self.print_topics(self.doc_header, [cmd], 12, 80)
+                        return
+                except AttributeError:
+                    pass
+                self.stdout.write("&s\n"%str(self.nohelp % (arg,)))
+                return
+            func(self)
         else:
             self.print_topics(self.doc_header, helps_of_groupings, 15, 80)
 
     def help_p2l(self):
-        'Stands for "permission to land."'
-        p2l_cmds = [cmd[3:] for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help']
+        '''Stands for "permission to land."'''
+        p2l_cmds = [cmd for cmd in self.get_names() if 'p2l' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, p2l_cmds, 15, 80)
 
 
     def help_groupings(self):
-        'Information on current groups you are in.'
-        groups_cmds = [cmd[3:] for cmd in self.get_names() if 'group' in cmd and cmd[:4] != 'help']
+        '''Information on current groups you are in.'''
+        groups_cmds = [cmd for cmd in self.get_names() if 'group' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, groups_cmds, 15, 80)
 
 
     def help_jobs(self):
-        'Running and seeing jobs.'
-        jobs_cmds = [cmd[3:] for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help']
+        '''Running and seeing jobs.'''
+        jobs_cmds = [cmd for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help']
         self.print_topics(self.doc_header, jobs_cmds, 15, 80)
 
     # Okay to override the print topics method in the cmd module?
@@ -187,10 +201,11 @@ class CLI(cmd.Cmd):
             cprint(f'{str(self.ruler * len(header))}', 'cyan')
         if cmds:
             for cmd in cmds:
-                spaces = 20 - len(cmd)
-                new_cmd = 'help_' + cmd
-                doc_string = getattr(self, new_cmd).__doc__
-                colored_cmd = colored(cmd, 'white', attrs=['bold'])
+                print(cmd)
+                first, second = cmd.split('_')
+                spaces = 20 - len(second)
+                doc_string = getattr(CLI, cmd).__doc__
+                colored_cmd = colored(second, 'white', attrs=['bold'])
                 print(f'{colored_cmd} {str(spaces * " ")}  {doc_string}')
         #self.columnize(cmds, maxcol-1)
 
