@@ -347,19 +347,22 @@ class CLI(cmd.Cmd):
     def emptyline(self):
         return
 
+    # Removed id and os from table
     def do_machines(self):
         'All machines on the network'
         machines = self.api.machines()
-        print(dictlist_to_table(machines, ['name', 'owner_id', 'status', 'id', 'os']))
+        print(dictlist_to_table(machines, ['name', 'owner_id', 'status']))
 
+    # Removed id from table
     def do_localmachine(self):
         'Return information about this machine'
-        print(dictlist_to_table([self.api.local_machine()], ['name', 'owner_id', 'status', 'id']))
+        print(dictlist_to_table([self.api.local_machine()], ['name', 'owner_id', 'status']))
 
+    # Removed id from table
     def do_landingzones(self):
         'Machines you have P2L on'
         lzs = self.api.landing_zones()
-        print(dictlist_to_table(lzs, ['name', 'owner_id', 'status', 'id']))
+        print(dictlist_to_table(lzs, ['name', 'owner_id', 'status']))
 
     def do_launchpads(self):
         'Users that have P2L on this machine'
@@ -386,10 +389,11 @@ class CLI(cmd.Cmd):
         invs = self.api.p2l_invites_recvd()
         print(dictlist_to_table(invs, ['name', 'owner_id', 'status', 'id']))
 
+    # Removed admins, members, and machines from table
     def do_groups(self):
         'List of groups that you belong to'
         groups = self.api.groups()
-        print(dictlist_to_table(groups, ['name', 'description', 'id', 'owner', 'admins', 'members', 'machines']))
+        print(dictlist_to_table(groups, ['name', 'description', 'id', 'owner']))
 
     def do_sentgroupinvs(self, group_id):
         'Invitations to a group that you have sent'
@@ -411,25 +415,29 @@ class CLI(cmd.Cmd):
         reqs = self.api.group_requests_recvd(group_id)
         print(list_to_table(reqs))
 
+    # Removed run_time and status_history from table
     def do_sentjobs(self):
         'Jobs that you have sent to a landing zone'
         jobs = self.api.sent_jobs()
-        print(dictlist_to_table(jobs, ['name', 'landing_zone', 'id', 'status', 'run_time', 'results_path', 'status_history']))
+        print(dictlist_to_table(jobs, ['name', 'landing_zone', 'id', 'status', 'results_path']))
 
+    # Removed run_time and status_history from table
     def do_sentjob(self, job_id):
         'Jobs that you have sent to a landing zone'
         job = self.api.sentjob(job_id)
-        print(dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status', 'run_time', 'status_history']))
+        print(dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status']))
 
+    # Removed run_time and status_history from table
     def do_recvdjobs(self):
         'Jobs that you have sent to a landing zone'
         jobs = self.api.received_jobs()
-        print(dictlist_to_table(jobs, ['name', 'launch_pad', 'id', 'status', 'run_time', 'status_history']))
+        print(dictlist_to_table(jobs, ['name', 'launch_pad', 'id', 'status']))
 
+    # Removed run_time and status_history from table
     def do_recvdjob(self, job_id):
         'Jobs that you have sent to a landing zone'
         job = self.api.recvdjob(job_id)
-        print(dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status', 'run_time', 'status_history']))
+        print(dictlist_to_table([job], ['name', 'landing_zone', 'id', 'status']))
 
     def do_sendp2lreq(self, landing_zone_id):
         'Request p2l on another machine'
