@@ -10,6 +10,7 @@ import os
 from functools import partial
 from glob import glob
 from termcolor import colored, cprint
+from getpass import getpass
 
 import requests
 
@@ -576,7 +577,7 @@ def main(argv=sys.argv[1:]):
 
     while not (args.username and args.password):
         args.username = input("Username: ").strip()
-        args.password = input("Password: ").strip()
+        args.password = getpass("Password: ")
 
     cli = CLI(**vars(args))
     cli.interpret()
