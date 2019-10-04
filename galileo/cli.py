@@ -167,6 +167,10 @@ class CLI(cmd.Cmd):
         '''
 
         helps_of_groupings = [name for name in self.get_names() if name[:4] == 'help']
+        self.doc_header = 'Below, there is a list of commands or command categories accompanied by a short description.\n\n'
+        self.doc_header += 'If you want to learn more about a category or command, run "help <category>" or for example "help p2l."\n\n'
+        self.doc_header += 'To run a command, there are two different options. You may use the category prefix before running an abbreviated command, or just run the full complete command. '
+        self.doc_header += 'An example of using the category plus the abbreviated version of a command is seen here: "jobs log <arg1>". Here, you can use a shorter version of the full command "logjobs <arg1>".\n'
         if arg:
             # Check arg syntax
             try:
@@ -208,7 +212,7 @@ class CLI(cmd.Cmd):
         if header:
             cprint(f'{str(header)}\n', 'cyan')
         if self.ruler:
-            cprint(f'{str(self.ruler * len(header))}', 'cyan')
+            cprint(f'{str(self.ruler * int(len(header)/3))}', 'cyan')
         if cmds:
             for cmd in cmds:
                 first, second = cmd.split('_')
