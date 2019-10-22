@@ -97,7 +97,6 @@ class CLI(cmd.Cmd):
                 readline.set_completer(partial(self._param_completer, param))
                 args.append(input(f'  {param}: '))
             readline.set_completer(old_completer)
-
             try:
                 return func(*args)
             except:
@@ -207,7 +206,6 @@ class CLI(cmd.Cmd):
         jobs_cmds = [cmd for cmd in self.get_names() if 'job' in cmd and cmd[:4] != 'help' and cmd != 'do_jobs']
         self.print_topics(self.doc_header, jobs_cmds, 15, 80)
 
-    # Okay to override the print topics method in the cmd module?
     def print_topics(self, header, cmds, cmdlen, maxcol):
         if header:
             cprint(f'{str(header)}\n', 'cyan')
@@ -234,16 +232,11 @@ class CLI(cmd.Cmd):
 
         '''
         cmd_dict = self.generate_cmd_dictionary()
-        if args[0] == 'download' and len(args) == 3:
-            try:
-                self.do_downloadjob(args[1], args[2])
-            except:
-                print(f'Arguments "{args[1]}" and "{args[2]}" are not valid.')
-        elif args[0] in cmd_dict['job'].keys():
+        if args[0] in cmd_dict['job'].keys():
             try:
                 func_name = cmd_dict['job'][args[0]]
-                func_to_run = globals()[func_name]
-                func_to_run(self, *args[1:])
+                func_to_run = getattr(self, func_name)
+                self._arg_split_wrapper(func_to_run(*args[1:]))()
             except:
                 print('Your command failed to run with the listed arguments below:\n')
                 for arg in args:
@@ -265,8 +258,8 @@ class CLI(cmd.Cmd):
         if args[0] in cmd_dict['p2l'].keys():
             try:
                 func_name = cmd_dict['p2l'][args[0]]
-                func_to_run = globals()[func_name]
-                func_to_run(self, *args[1:])
+                func_to_run = getattr(self, func_name)
+                self._arg_split_wrapper(func_to_run(*args[1:]))()
             except:
                 print('Your command failed to run with the listed arguments below:\n')
                 for arg in args:
@@ -291,8 +284,8 @@ class CLI(cmd.Cmd):
         elif args[0] in cmd_dict['group'].keys():
             try:
                 func_name = cmd_dict['group'][args[0]]
-                func_to_run = globals()[func_name]
-                func_to_run(self, *args[1:])
+                func_to_run = getattr(self, func_name)
+                self._arg_split_wrapper(func_to_run(*args[1:]))()
             except:
                 print('Your command failed to run with the listed arguments below:\n')
                 for arg in args:
@@ -313,36 +306,26 @@ class CLI(cmd.Cmd):
                      dictionary containing abbreviated names and full function names.
  
         '''
-        list_of_keywords = ['group', 'job', 'p2l']
-        dictionary = dict.fromkeys(list_of_keywords, {})
+        dictionary = {'group': {}, 'job': {}, 'p2l': {}}
         for func in self.get_names():
             if func[:3] == 'do_':
                 name = func[3:]
-                if 'groups' in name:
-                    name = name.replace('groups', '')
-                    dictionary['group'][name] = func
-                elif 'jobs' in name:
-                    name = name.replace('jobs', '')
-                    dictionary['job'][name] = func
-                elif 'group' in name:
-                    name = name.replace('group', '')
-                    dictionary['group'][name] = func
+                if 'group' in name:
+                    dictionary['group'][name.replace('group','')] = func
                 elif 'job' in name:
-                    name = name.replace('job', '')
-                    dictionary['job'][name] = func
+                    dictionary['job'][name.replace('job', '')] = func
                 elif 'p2l' in name:
-                    name = name.replace('p2l', '')
-                    dictionary['p2l'][name] = func
-            else:
-                pass
+                    dictionary['p2l'][name.replace('p2l', '')] = func
         return dictionary
 
     def _upgrade_commands(self):
+        protected_cmds = ['groupings', 'p2l', 'jobs']
         for name in self.cmd_names():
-            func = getattr(self, f'do_{name}')
-            setattr(self, f'complete_{name}', self._make_arg_completer(func))
-            setattr(self, f'do_{name}', self._arg_split_wrapper(func))
-            setattr(self, f'help_{name}', self._make_helper(name, func))
+            if name not in protected_cmds:
+                func = getattr(self, f'do_{name}')
+                setattr(self, f'complete_{name}', self._make_arg_completer(func))
+                setattr(self, f'do_{name}', self._arg_split_wrapper(func))
+                setattr(self, f'help_{name}', self._make_helper(name, func))
 
     def interpret(self):
         self.cmdloop()
