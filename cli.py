@@ -14,7 +14,7 @@ from glob import glob
 import requests
 
 
-from .api import API, RegistrationError
+from src.api import API, RegistrationError
 
 
 def matrix_to_table(matrix, sep='  '):

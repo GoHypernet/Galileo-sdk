@@ -20,5 +20,7 @@ setup(
             'sphinx>=2.2.0',
             'sphinx_rtd_theme>=0.4.3'
         ]
-    }
+    },
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest', 'unittest']
 )
