@@ -1,3 +1,4 @@
+from typing import List, Optional
 from urllib.parse import urlunparse
 
 import requests
@@ -13,7 +14,7 @@ class MachinesRepository:
         settings = self._settings_repository.get_settings()
         backend = settings.backend
         schema, addr = backend.split("://")
-        return urlunparse((schema, backend, endpoint, params, query, fragment))
+        return urlunparse((schema, addr, endpoint, params, query, fragment))
 
     def _request(self, request, endpoint, data=None, params="", query="", fragment=""):
         url = self._make_url(endpoint, params, query, fragment)
@@ -25,7 +26,7 @@ class MachinesRepository:
     def _put(self, *args, **kwargs):
         return self._request(requests.put, *args, **kwargs)
 
-    def get_machine_by_id(self, machine_id):
+    def get_machine_by_id(self, machine_id: str):
         """
         Get machine's info by its id
 
@@ -34,7 +35,13 @@ class MachinesRepository:
         """
         return self._get(f"/machines/{machine_id}")
 
-    def list_machines(self, page=1, items=25, mids=None, userids=None):
+    def list_machines(
+        self,
+        mids: Optional[List[str]] = None,
+        userids: Optional[List[str]] = None,
+        page: Optional[int] = 1,
+        items: Optional[int] = 25,
+    ):
         """
         List all machines
 
@@ -44,9 +51,12 @@ class MachinesRepository:
         :param userids: optional, filter by user id
         :return: {'machines': [<machines>]}
         """
-        return self._get("/machines", {page, items, mids, userids})
+        return self._get(
+            "/machines",
+            {"page": page, "items": items, "mids": mids, "userids": userids},
+        )
 
-    def update_max_concurrent_jobs(self, mid, amount):
+    def update_max_concurrent_jobs(self, mid: str, amount: int):
         """
         Update the number of allowed concurrent jobs for a machine
 
@@ -54,4 +64,4 @@ class MachinesRepository:
         :param amount: number of allowed concurrent jobs
         :return:
         """
-        return self._put(f"/machines/{mid}/update_max", {amount})
+        return self._put(f"/machines/{mid}/update_max", {"amount": amount})
