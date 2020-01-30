@@ -1,6 +1,7 @@
 from unittest import mock
 
 from src.business.services.profiles import ProfilesService
+from src.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 
@@ -11,15 +12,6 @@ auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 profile_repo = mock.Mock()
 profile_service = ProfilesService(profile_repo)
-
-
-class MockResponse:
-    def __init__(self, json_data, status_code):
-        self.json_data = json_data
-        self.status_code = status_code
-
-    def json(self):
-        return self.json_data
 
 
 def test_list_users():

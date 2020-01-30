@@ -1,8 +1,10 @@
 from typing import List, Optional
 
+from ...data.repositories.profiles import ProfilesRepository
+
 
 class ProfilesService:
-    def __init__(self, profile_repo):
+    def __init__(self, profile_repo: ProfilesRepository):
         self._profile_repo = profile_repo
 
     def list_users(
