@@ -176,7 +176,7 @@ class StationsRepository:
         Permanently delete a station
 
         :param station_id: station's id
-        :return: boolean, True for success
+        :return: boolean, True for successxf
         """
         return self._delete(f"/station/{station_id}")
 
