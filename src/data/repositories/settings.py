@@ -1,17 +1,17 @@
-from ...config.settings import local, development, production
 from enum import Enum
+
+from ...config.settings import development, local, production
 
 
 class Config(Enum):
-    Local: 'local'
-    Development: 'development'
-    Production: 'production'
+    Local: "local"
+    Development: "development"
+    Production: "production"
 
 
 class Settings:
     def __init__(self):
-        self.backend = ''
-        pass
+        self.backend = ""
 
 
 class SettingsRepository:

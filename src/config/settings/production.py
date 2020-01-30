@@ -1,1 +1,1 @@
-BACKEND='https://booming-client-217619.appspot.com'
+BACKEND = "https://booming-client-217619.appspot.com"
