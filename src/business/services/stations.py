@@ -76,7 +76,7 @@ class StationsService:
         return r.status_code == 200
 
     def remove_machines_from_station(self, station_id: str, mids: List[str]):
-        r = self._stations_repo.remove_machines_from_station(self, station_id, mids)
+        r = self._stations_repo.remove_machines_from_station(station_id, mids)
         return r.status_code == 200
 
     def add_volumes_to_station(
@@ -100,5 +100,11 @@ class StationsService:
     ):
         r = self._stations_repo.remove_host_path_from_volume(
             station_id, volume_id, host_path_id
+        )
+        return r.status_code == 200
+
+    def remove_volume_from_station(self, station_id: str, volume_id):
+        r = self._stations_repo.remove_volume_from_station(
+            station_id, volume_id
         )
         return r.status_code == 200
