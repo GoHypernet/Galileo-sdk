@@ -54,7 +54,7 @@ class ProfilesRepository:
         """
         Get your Galileo profile
 
-        :return: Response with information about yourself
+        :return: Response with information about yourself, {userid, username, wallets, mids}
         """
         return self._get("/users/self")
 
@@ -71,10 +71,10 @@ class ProfilesRepository:
         """
         Get all Galileo users and their profiles
 
-        :param userids:
-        :param usernames:
-        :param partial_usernames:
-        :param wallets:
+        :param userids: optional, filter by list of userids
+        :param usernames: optional, filter by list of usernames
+        :param partial_usernames: optional, filter by partial usernames
+        :param wallets: optional, filter by list of wallet ids
         :param public_keys: optional, filter by public key
         :param page: optional, page #
         :param items: optional, items per page

@@ -1,6 +1,7 @@
 from unittest import mock
 
 from src.data.repositories.profiles import ProfilesRepository
+from src.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 
@@ -13,14 +14,6 @@ profile_repo = ProfilesRepository(settings_repo, auth_provider)
 
 
 def mocked_requests_get(*args, **kwargs):
-    class MockResponse:
-        def __init__(self, json_data, status_code):
-            self.json_data = json_data
-            self.status_code = status_code
-
-        def json(self):
-            return self.json_data
-
     if args[0] == f"{BACKEND}/users":
         return MockResponse({"users": [{"profile": i} for i in range(27)]}, 200)
     elif args[0] == f"{BACKEND}/users/self":
