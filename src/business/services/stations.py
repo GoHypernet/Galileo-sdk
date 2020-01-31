@@ -95,16 +95,14 @@ class StationsService:
         )
         return r.json()
 
-    def remove_host_path_from_volume(
+    def delete_host_path_from_volume(
         self, station_id: str, volume_id: str, host_path_id: str
     ):
-        r = self._stations_repo.remove_host_path_from_volume(
+        r = self._stations_repo.delete_host_path_from_volume(
             station_id, volume_id, host_path_id
         )
         return r.status_code == 200
 
     def remove_volume_from_station(self, station_id: str, volume_id):
-        r = self._stations_repo.remove_volume_from_station(
-            station_id, volume_id
-        )
+        r = self._stations_repo.remove_volume_from_station(station_id, volume_id)
         return r.status_code == 200
