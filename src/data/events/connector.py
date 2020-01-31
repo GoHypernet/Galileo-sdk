@@ -8,10 +8,24 @@ from ...business.objects.jobs import (JobLauncherResultsDownloadedEvent,
                                       StationJobUpdatedEvent)
 from ...business.objects.machines import (MachinesEvents,
                                           MachineStatusUpdateEvent)
-from ...business.objects.stations import (NewStationEvent,
-                                          StationAdminInviteSentEvent,
-                                          StationsEvents,
-                                          StationUserInviteReceivedEvent)
+from ...business.objects.stations import (
+    NewStationEvent, StationAdminDestroyedEvent,
+    StationAdminInviteAcceptedEvent, StationAdminInviteSentEvent,
+    StationAdminMachineAddedEvent, StationAdminMachineRemovedEvent,
+    StationAdminMemberRemovedEvent, StationAdminRequestAcceptedEvent,
+    StationAdminRequestReceivedEvent, StationAdminRequestRejectedEvent,
+    StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
+    StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
+    StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
+    StationMemberMachineRemovedEvent, StationMemberMemberEvent,
+    StationMemberMemberRemovedEvent, StationMemberVolumeAddedEvent,
+    StationMemberVolumeHostPathAddedEvent,
+    StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
+    StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
+    StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
+    StationUserRequestAcceptedEvent, StationUserRequestDestroyedEvent,
+    StationUserRequestRejectedEvent, StationUserRequestSentEvent,
+    StationUserWithdrawnEvent)
 from ..providers.auth import AuthProvider
 from ..repositories.settings import SettingsRepository
 
@@ -34,10 +48,11 @@ class GalileoConnector:
             f"{settings.backend}/galileo/user_interface/v1",
             headers={"Authorization": f"Bearer {token}"},
         )
+        self._register_jobs_listeners()
+        self._register_machines_listeners()
+        self._register_stations_listeners()
 
-        self._register_listeners()
-
-    def _register_listeners(self):
+    def _register_machines_listeners(self):
         # Machines
         @self._socket.on("machine/status_updated")
         def on_machine_status_updated(data: Any):
@@ -45,6 +60,7 @@ class GalileoConnector:
                 MachineStatusUpdateEvent(mid=data["mid"], status=data["status"])
             )
 
+    def _register_jobs_listeners(self):
         # Jobs
         @self._socket.on("job_launcher_updated")
         def on_job_launcher_updated(data: Any):
@@ -68,6 +84,7 @@ class GalileoConnector:
         def on_job_log(data: Any):
             self.jobs_events.job_log(JobLogEvent(data["job"], data["log"]))
 
+    def _register_stations_listeners(self):
         # Stations
         @self._socket.on("new_station")
         def on_new_station(data: Any):
@@ -85,33 +102,186 @@ class GalileoConnector:
                 StationUserInviteReceivedEvent(data["station"])
             )
 
-        # @self._socket.on("station_admin_invite_accepted")
-        # @self._socket.on("station_member_member_added")
-        # @self._socket.on("station_user_invite_accepted")
-        # @self._socket.on("station_admin_invite_rejected")
-        # @self._socket.on("station_admin_request_received")
-        # @self._socket.on("station_user_request_sent")
-        # @self._socket.on("station_admin_request_accepted")
-        # @self._socket.on("station_user_request_accepted")
-        # @self._socket.on("station_admin_request_rejected")
-        # @self._socket.on("station_user_request_rejected")
-        # @self._socket.on("station_admin_member_removed")
-        # @self._socket.on("station_admin_machine_removed")
-        # @self._socket.on("station_member_member_removed")
-        # @self._socket.on("station_member_machine_removed")
-        # @self._socket.on("station_user_withdrawn")
-        # @self._socket.on("station_user_expelled")
-        # @self._socket.on("station_admin_destroyed")
-        # @self._socket.on("station_member_destroyed")
-        # @self._socket.on("station_user_invite_destroyed")
-        # @self._socket.on("station_user_request_destroyed")
-        # @self._socket.on("station_admin_machine_added")
-        # @self._socket.on("station_member_machine_added")
-        # @self._socket.on("station_admin_volume_added")
-        # @self._socket.on("station_member_volume_added")
-        # @self._socket.on("station_admin_volume_host_path_added")
-        # @self._socket.on("station_member_volume_host_path_added")
-        # @self._socket.on("station_admin_volume_host_path_removed")
-        # @self._socket.on("station_member_volume_host_path_removed")
-        # @self._socket.on("station_admin_volume_removed")
-        # @self._socket.on("station_member_volume_removed")
+        @self._socket.on("station_admin_invite_accepted")
+        def on_station_admin_invite_accepted(data: Any):
+            self.station_events.station_admin_invite_accepted(
+                StationAdminInviteAcceptedEvent(data["stationid"], data["userids"])
+            )
+
+        @self._socket.on("station_member_member_added")
+        def on_station_member_member_added(data: Any):
+            self.station_events.station_member_member_added(
+                StationMemberMemberEvent(data["stationid"], data["userid"])
+            )
+
+        @self._socket.on("station_user_invite_accepted")
+        def on_station_user_invite_accepted(data: Any):
+            self.station_events.station_user_invite_accepted(
+                StationUserInviteAcceptedEvent(data["stationid"])
+            )
+
+        @self._socket.on("station_admin_invite_rejected")
+        def on_station_admin_invite_rejected(data: Any):
+            self.station_events.station_admin_invite_rejected(data["stationid"])
+
+        @self._socket.on("station_admin_request_received")
+        def on_station_admin_request_received(data: Any):
+            self.station_events.station_admin_request_received(
+                StationAdminRequestReceivedEvent(data["stationid"], data["userid"])
+            )
+
+        @self._socket.on("station_user_request_sent")
+        def on_station_user_request_sent(data: Any):
+            self.station_events.station_user_request_sent(
+                StationUserRequestSentEvent(data["stationid"], data["userid"])
+            )
+
+        @self._socket.on("station_admin_request_accepted")
+        def on_station_admin_request_accepted(data: Any):
+            self.station_events.station_admin_request_accepted(
+                StationAdminRequestAcceptedEvent(data["stationid"], data["userid"])
+            )
+
+        @self._socket.on("station_user_request_accepted")
+        def on_station_user_request_accepted(data: Any):
+            self.station_events.station_user_request_accepted(
+                StationUserRequestAcceptedEvent(data["stationid"])
+            )
+
+        @self._socket.on("station_admin_request_rejected")
+        def on_station_admin_request_rejected(data: Any):
+            self.station_events.station_admin_request_rejected(
+                StationAdminRequestRejectedEvent(data["stationid"], data["userid"])
+            )
+
+        @self._socket.on("station_user_request_rejected")
+        def on_station_user_request_rejected(data: Any):
+            self.station_events.station_user_request_rejected(
+                StationUserRequestRejectedEvent(data["stationid"])
+            )
+
+        @self._socket.on("station_admin_member_removed")
+        def on_station_admin_member_removed(data: Any):
+            self.station_events.station_admin_member_removed(
+                StationAdminMemberRemovedEvent(data["stationid"], data["userid"])
+            )
+
+        @self._socket.on("station_admin_machine_removed")
+        def on_station_admin_machine_removed(data: Any):
+            self.station_events.station_admin_machine_removed(
+                StationAdminMachineRemovedEvent(data["stationid"], data["mids"])
+            )
+
+        @self._socket.on("station_member_member_removed")
+        def on_station_member_member_removed(data: Any):
+            self.station_events.station_member_member_removed(
+                StationMemberMemberRemovedEvent(data["stationid"], data["mids"])
+            )
+
+        @self._socket.on("station_member_machine_removed")
+        def on_station_member_machine_removed(data: Any):
+            self.station_events.station_member_machine_removed(
+                StationMemberMachineRemovedEvent(data["stationid"], data["mids"])
+            )
+
+        @self._socket.on("station_user_withdrawn")
+        def on_station_user_withdrawn(data: Any):
+            self.station_events.station_user_withdrawn(
+                StationUserWithdrawnEvent(data["stationid"], data["mids"])
+            )
+
+        @self._socket.on("station_user_expelled")
+        def on_station_user_expelled(data: Any):
+            self.station_events.station_user_expelled(
+                StationUserExpelledEvent(data["stationid"])
+            )
+
+        @self._socket.on("station_admin_destroyed")
+        def on_station_admin_destroyed(data: Any):
+            self.station_events.station_admin_destroyed(
+                StationAdminDestroyedEvent(data["admin"])
+            )
+
+        @self._socket.on("station_member_destroyed")
+        def on_station_member_destroyed(data: Any):
+            self.station_events.station_member_destroyed(
+                StationMemberDestroyedEvent(data["stationid"])
+            )
+
+        @self._socket.on("station_user_invite_destroyed")
+        def on_station_user_invite_destroyed(data: Any):
+            self.station_events.station_user_invite_destroyed(
+                StationUserInviteDestroyedEvent(data["stationid"])
+            )
+
+        @self._socket.on("station_user_request_destroyed")
+        def on_station_user_request_destroyed(data: Any):
+            self.station_events.station_user_request_destroyed(
+                StationUserRequestDestroyedEvent(data["stationid"])
+            )
+
+        @self._socket.on("station_admin_machine_added")
+        def on_station_admin_machine_added(data: Any):
+            self.station_events.station_admin_machine_added(
+                StationAdminMachineAddedEvent(data["stationid"], data["mids"])
+            )
+
+        @self._socket.on("station_member_machine_added")
+        def on_station_member_machine_added(data: Any):
+            self.station_events.station_member_machine_added(
+                StationMemberMachineAddedEvent(data["stationid"], data["mids"])
+            )
+
+        @self._socket.on("station_admin_volume_added")
+        def on_station_admin_volume_added(data: Any):
+            self.station_events.station_admin_volume_added(
+                StationAdminVolumeAddedEvent(data["stationid"], data["volumes"])
+            )
+
+        @self._socket.on("station_member_volume_added")
+        def on_station_member_volume_added(data: Any):
+            self.station_events.station_member_volume_added(
+                StationMemberVolumeAddedEvent(data["stationid"], data["volumes"])
+            )
+
+        @self._socket.on("station_admin_volume_host_path_added")
+        def on_station_admin_volume_host_path_added(data: Any):
+            self.station_events.station_admin_volume_host_path_added(
+                StationAdminVolumeHostPathAddedEvent(data["stationid"], data["volumes"])
+            )
+
+        @self._socket.on("station_member_volume_host_path_added")
+        def on_station_member_volume_host_path_added(data: Any):
+            self.station_events.station_member_volume_host_path_added(
+                StationMemberVolumeHostPathAddedEvent(
+                    data["stationid"], data["volumes"]
+                )
+            )
+
+        @self._socket.on("station_admin_volume_host_path_removed")
+        def on_station_admin_volume_host_path_removed(data: Any):
+            self.station_events.station_admin_volume_host_path_removed(
+                StationAdminVolumeHostPathRemovedEvent(
+                    data["stationid"], data["volumes"]
+                )
+            )
+
+        @self._socket.on("station_member_volume_host_path_removed")
+        def on_station_member_volume_host_path_removed(data: Any):
+            self.station_events.station_member_volume_host_path_removed(
+                StationMemberVolumeHostPathRemovedEvent(
+                    data["stationid"], data["volumes"]
+                )
+            )
+
+        @self._socket.on("station_admin_volume_removed")
+        def on_station_admin_volume_removed(data: Any):
+            self.station_events.station_admin_volume_removed(
+                StationAdminVolumeRemovedEvent(data["stationid"], data["volume_names"])
+            )
+
+        @self._socket.on("station_member_volume_removed")
+        def on_station_member_volume_removed(data: Any):
+            self.station_events.station_member_volume_removed(
+                StationMemberVolumeRemovedEvent(data["stationid"], data["volume_names"])
+            )
