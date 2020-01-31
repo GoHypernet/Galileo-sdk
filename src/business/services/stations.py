@@ -59,8 +59,8 @@ class StationsService:
         r = self._stations_repo.reject_request_to_join(station_id, userids)
         return r.status_code == 200
 
-    def leave_station(self, station_id):
-        r = self._stations_repo.reject_request_to_join(station_id)
+    def leave_station(self, station_id: str):
+        r = self._stations_repo.leave_station(station_id)
         return r.status_code == 200
 
     def remove_member_from_station(self, station_id: str, userid: str):
