@@ -23,9 +23,9 @@ from ...business.objects.stations import (
     StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
     StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
     StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
-    StationUserRequestAcceptedEvent, StationUserRequestDestroyedEvent,
-    StationUserRequestRejectedEvent, StationUserRequestSentEvent,
-    StationUserWithdrawnEvent)
+    StationUserInviteRejectedEvent, StationUserRequestAcceptedEvent,
+    StationUserRequestDestroyedEvent, StationUserRequestRejectedEvent,
+    StationUserRequestSentEvent, StationUserWithdrawnEvent)
 from ..providers.auth import AuthProvider
 from ..repositories.settings import SettingsRepository
 
@@ -122,7 +122,9 @@ class GalileoConnector:
 
         @self._socket.on("station_admin_invite_rejected")
         def on_station_admin_invite_rejected(data: Any):
-            self.station_events.station_admin_invite_rejected(data["stationid"])
+            self.station_events.station_admin_invite_rejected(
+                StationUserInviteRejectedEvent(data["stationid"])
+            )
 
         @self._socket.on("station_admin_request_received")
         def on_station_admin_request_received(data: Any):
