@@ -4,30 +4,13 @@ from .business.services import jobs, log, machines, profiles, stations
 from .data.events.connector import GalileoConnector
 from .data.providers import auth
 from .data.repositories import jobs, machines, profiles, settings, stations
-
-
-class JobsSdk:
-    def __init__(self, jobs_service):
-        self._jobs_service = jobs_service
-
-
-class MachinesSdk:
-    def __init__(self, machines_service):
-        self._machines_service = machines_service
-
-
-class ProfilesSdk:
-    def __init__(self, profiles_service):
-        self._profile_service = profiles_service
-
-
-class StationsSdk:
-    def __init__(self, stations_service):
-        self._stations_service = stations_service
+from .sdk.jobs import JobsSdk
+from .sdk.machines import MachinesSdk
+from .sdk.profiles import ProfilesSdk
+from .sdk.stations import StationsSdk
 
 
 class GalileoSdk:
-    events: GalileoConnector
     jobs: JobsSdk
     stations: StationsSdk
     profiles: ProfilesSdk
@@ -63,17 +46,17 @@ class GalileoSdk:
                 "Authentication token AND refresh token (OR) username AND password, must be provided"
             )
 
-        self.events = GalileoConnector(self._settings, self._auth_provider)
+        self._events = GalileoConnector(self._settings, self._auth_provider)
 
         self._jobs_repo = jobs.JobsRepository(self._settings, self._auth_provider)
         self._jobs_service = jobs.JobsService(self._jobs_repo)
-        self.jobs = JobsSdk(self._jobs_service)
+        self.jobs = JobsSdk(self._jobs_service, self._events.jobs_events)
 
         self._stations_repo = stations.StationsRepository(
             self._settings, self._auth_provider
         )
         self._stations_service = stations.StationsService(self._stations_repo)
-        self.stations = StationsSdk(self._jobs_repo)
+        self.stations = StationsSdk(self._stations_service, self._events.station_events)
 
         self._profiles_repo = profiles.ProfilesRepository(
             self._settings, self._auth_provider
@@ -85,4 +68,6 @@ class GalileoSdk:
             self._settings, self._auth_provider
         )
         self._machines_service = machines.MachinesService(self._machines_repo)
-        self.machines = MachinesSdk(self._machines_service)
+        self.machines = MachinesSdk(
+            self._machines_service, self._events.machines_events
+        )
