@@ -1,7 +1,6 @@
 from typing import Callable, List, Optional
 
-from ..business.objects.machines import (MachinesEvents,
-                                         MachineStatusUpdateEvent)
+from ..business.objects.machines import MachinesEvents, MachineStatusUpdateEvent
 from ..business.services.machines import MachinesService
 
 

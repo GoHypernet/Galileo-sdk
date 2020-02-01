@@ -2,30 +2,51 @@ from typing import Any
 
 import socketio
 
-from ...business.objects.jobs import (JobLauncherResultsDownloadedEvent,
-                                      JobLauncherUpdatedEvent, JobLogEvent,
-                                      JobsEvents, JobTopEvent,
-                                      StationJobUpdatedEvent)
-from ...business.objects.machines import (MachinesEvents,
-                                          MachineStatusUpdateEvent)
+from ...business.objects.jobs import (
+    JobLauncherResultsDownloadedEvent,
+    JobLauncherUpdatedEvent,
+    JobLogEvent,
+    JobsEvents,
+    JobTopEvent,
+    StationJobUpdatedEvent,
+)
+from ...business.objects.machines import MachinesEvents, MachineStatusUpdateEvent
 from ...business.objects.stations import (
-    NewStationEvent, StationAdminDestroyedEvent,
-    StationAdminInviteAcceptedEvent, StationAdminInviteSentEvent,
-    StationAdminMachineAddedEvent, StationAdminMachineRemovedEvent,
-    StationAdminMemberRemovedEvent, StationAdminRequestAcceptedEvent,
-    StationAdminRequestReceivedEvent, StationAdminRequestRejectedEvent,
-    StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
-    StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
-    StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
-    StationMemberMachineRemovedEvent, StationMemberMemberEvent,
-    StationMemberMemberRemovedEvent, StationMemberVolumeAddedEvent,
+    NewStationEvent,
+    StationAdminDestroyedEvent,
+    StationAdminInviteAcceptedEvent,
+    StationAdminInviteSentEvent,
+    StationAdminMachineAddedEvent,
+    StationAdminMachineRemovedEvent,
+    StationAdminMemberRemovedEvent,
+    StationAdminRequestAcceptedEvent,
+    StationAdminRequestReceivedEvent,
+    StationAdminRequestRejectedEvent,
+    StationAdminVolumeAddedEvent,
+    StationAdminVolumeHostPathAddedEvent,
+    StationAdminVolumeHostPathRemovedEvent,
+    StationAdminVolumeRemovedEvent,
+    StationMemberDestroyedEvent,
+    StationMemberMachineAddedEvent,
+    StationMemberMachineRemovedEvent,
+    StationMemberMemberEvent,
+    StationMemberMemberRemovedEvent,
+    StationMemberVolumeAddedEvent,
     StationMemberVolumeHostPathAddedEvent,
-    StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
-    StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
-    StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
-    StationUserInviteRejectedEvent, StationUserRequestAcceptedEvent,
-    StationUserRequestDestroyedEvent, StationUserRequestRejectedEvent,
-    StationUserRequestSentEvent, StationUserWithdrawnEvent)
+    StationMemberVolumeHostPathRemovedEvent,
+    StationMemberVolumeRemovedEvent,
+    StationsEvents,
+    StationUserExpelledEvent,
+    StationUserInviteAcceptedEvent,
+    StationUserInviteDestroyedEvent,
+    StationUserInviteReceivedEvent,
+    StationUserInviteRejectedEvent,
+    StationUserRequestAcceptedEvent,
+    StationUserRequestDestroyedEvent,
+    StationUserRequestRejectedEvent,
+    StationUserRequestSentEvent,
+    StationUserWithdrawnEvent,
+)
 from ..providers.auth import AuthProvider
 from ..repositories.settings import SettingsRepository
 
