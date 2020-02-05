@@ -38,4 +38,4 @@ class MachinesService:
 
     def update_max_concurrent_jobs(self, mid: str, amount: int):
         r = self._machines_repo.update_max_concurrent_jobs(mid, amount)
-        return r.status_code == 200
+        return r.json()
