@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Optional
 from urllib.parse import urlunparse
 
 import requests
@@ -24,7 +24,16 @@ class ProfilesRepository:
         settings = self._settings_repository.get_settings()
         backend = settings.backend
         schema, addr = backend.split("://")
-        return urlunparse((schema, addr, endpoint, params, query, fragment))
+        return urlunparse(
+            (
+                schema,
+                f"{addr}/galileo/user_interface/v1",
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
+        )
 
     def _request(
         self,
@@ -58,40 +67,9 @@ class ProfilesRepository:
         """
         return self._get("/users/self")
 
-    def list_users(
-        self,
-        userids: Optional[List[str]] = None,
-        usernames: Optional[List[str]] = None,
-        partial_usernames: Optional[List[str]] = None,
-        wallets: Optional[List[str]] = None,
-        public_keys: Optional[List[str]] = None,
-        page: Optional[int] = None,
-        items: Optional[int] = None,
-    ):
-        """
-        Get all Galileo users and their profiles
-
-        :param userids: optional, filter by list of userids
-        :param usernames: optional, filter by list of usernames
-        :param partial_usernames: optional, filter by partial usernames
-        :param wallets: optional, filter by list of wallet ids
-        :param public_keys: optional, filter by public key
-        :param page: optional, page #
-        :param items: optional, items per page
-        :return: Response with a list of Galileo users' profiles
-        """
-        return self._get(
-            "/users",
-            {
-                "page": page,
-                "items": items,
-                "userids": userids,
-                "usernames": usernames,
-                "partial_usernames": partial_usernames,
-                "wallets": wallets,
-                "public_keys": public_keys,
-            },
-        )
+    def list_users(self, query: str):
+        print("list_users", query)
+        return self._get("/users", query=query)
 
     def list_station_invites(self):
         """

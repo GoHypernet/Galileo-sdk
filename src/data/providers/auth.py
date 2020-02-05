@@ -22,8 +22,12 @@ class AuthProvider:
             self._refresh_token = refresh_token
         elif username and password:
             r = requests.post(
-                f"{settings.backend}/oauth/token",
-                {"username": username, "password": password, "grant_type": "password",},
+                f"{settings.backend}/galileo/landing_zone/v1/oauth/token",
+                json={
+                    "username": username,
+                    "password": password,
+                    "grant_type": "password",
+                },
             )
             if r.status_code != 200:
                 raise ValueError(

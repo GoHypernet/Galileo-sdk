@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from ...data.repositories.stations import StationsRepository
+from ..utils.generate_query_str import generate_query_str
 
 
 class StationsService:
@@ -18,21 +19,39 @@ class StationsService:
         page: Optional[int] = 1,
         items: Optional[int] = 25,
     ):
-        r = self._stations_repo.list_stations(
-            stationids=stationids,
-            names=names,
-            mids=mids,
-            user_roles=user_roles,
-            volumeids=volumeids,
-            descriptions=descriptions,
-            page=page,
-            items=items,
+        """
+        List Galileo stations
+
+        :param stationids: optional, filter based on stationids
+        :param names: optional, filter based on names
+        :param mids: optional, filter based on mids
+        :param user_roles: optional, filter based on user roles
+        :param volumeids: optional, filter based on volumeids
+        :param descriptions: optional, filter based on descriptions
+        :param page: optional, page #
+        :param items: optional, items per page
+        :return: Response with object {'stations': [<List of stations>]}
+        """
+
+        query: str = generate_query_str(
+            {
+                "page": page,
+                "items": items,
+                "stationids": stationids,
+                "names": names,
+                "mids": mids,
+                "user_roles": user_roles,
+                "volumeids": volumeids,
+                "descriptions": descriptions,
+            }
         )
 
-        return r.json()
+        r = self._stations_repo.list_stations(query)
 
-    def create_station(self, name: str, usernames: List[str], description: str):
-        r = self._stations_repo.create_station(name, usernames, description)
+        return r.json() if r.status_code == 200 else None
+
+    def create_station(self, name: str, userids: List[str], description: str):
+        r = self._stations_repo.create_station(name, userids, description)
         return r.json()
 
     def invite_to_station(self, station_id: str, userids: List[str]):
@@ -101,7 +120,7 @@ class StationsService:
         r = self._stations_repo.delete_host_path_from_volume(
             station_id, volume_id, host_path_id
         )
-        return r.status_code == 200
+        return r.json()
 
     def remove_volume_from_station(self, station_id: str, volume_id):
         r = self._stations_repo.remove_volume_from_station(station_id, volume_id)

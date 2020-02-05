@@ -1,9 +1,13 @@
 from typing import Callable, List, Optional
 
-from ..business.objects.jobs import (JobLauncherResultsDownloadedEvent,
-                                     JobLauncherUpdatedEvent, JobLogEvent,
-                                     JobsEvents, JobTopEvent,
-                                     StationJobUpdatedEvent)
+from ..business.objects.jobs import (
+    JobLauncherResultsDownloadedEvent,
+    JobLauncherUpdatedEvent,
+    JobLogEvent,
+    JobsEvents,
+    JobTopEvent,
+    StationJobUpdatedEvent,
+)
 from ..business.services.jobs import JobsService
 
 

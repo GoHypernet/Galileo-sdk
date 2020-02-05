@@ -1,23 +1,41 @@
 from typing import Callable, List, Optional
 
 from ..business.objects.stations import (
-    NewStationEvent, StationAdminDestroyedEvent,
-    StationAdminInviteAcceptedEvent, StationAdminInviteSentEvent,
-    StationAdminMachineAddedEvent, StationAdminMachineRemovedEvent,
-    StationAdminMemberRemovedEvent, StationAdminRequestAcceptedEvent,
-    StationAdminRequestReceivedEvent, StationAdminRequestRejectedEvent,
-    StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
-    StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
-    StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
-    StationMemberMachineRemovedEvent, StationMemberMemberEvent,
-    StationMemberMemberRemovedEvent, StationMemberVolumeAddedEvent,
+    NewStationEvent,
+    StationAdminDestroyedEvent,
+    StationAdminInviteAcceptedEvent,
+    StationAdminInviteSentEvent,
+    StationAdminMachineAddedEvent,
+    StationAdminMachineRemovedEvent,
+    StationAdminMemberRemovedEvent,
+    StationAdminRequestAcceptedEvent,
+    StationAdminRequestReceivedEvent,
+    StationAdminRequestRejectedEvent,
+    StationAdminVolumeAddedEvent,
+    StationAdminVolumeHostPathAddedEvent,
+    StationAdminVolumeHostPathRemovedEvent,
+    StationAdminVolumeRemovedEvent,
+    StationMemberDestroyedEvent,
+    StationMemberMachineAddedEvent,
+    StationMemberMachineRemovedEvent,
+    StationMemberMemberEvent,
+    StationMemberMemberRemovedEvent,
+    StationMemberVolumeAddedEvent,
     StationMemberVolumeHostPathAddedEvent,
-    StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
-    StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
-    StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
-    StationUserInviteRejectedEvent, StationUserRequestAcceptedEvent,
-    StationUserRequestDestroyedEvent, StationUserRequestRejectedEvent,
-    StationUserRequestSentEvent, StationUserWithdrawnEvent)
+    StationMemberVolumeHostPathRemovedEvent,
+    StationMemberVolumeRemovedEvent,
+    StationsEvents,
+    StationUserExpelledEvent,
+    StationUserInviteAcceptedEvent,
+    StationUserInviteDestroyedEvent,
+    StationUserInviteReceivedEvent,
+    StationUserInviteRejectedEvent,
+    StationUserRequestAcceptedEvent,
+    StationUserRequestDestroyedEvent,
+    StationUserRequestRejectedEvent,
+    StationUserRequestSentEvent,
+    StationUserWithdrawnEvent,
+)
 from ..business.services.stations import StationsService
 
 
@@ -214,8 +232,8 @@ class StationsSdk:
             items=items,
         )
 
-    def create_station(self, name: str, usernames: List[str], description: str):
-        return self._stations_service.create_station(name, usernames, description)
+    def create_station(self, name: str, userids: List[str], description: str):
+        return self._stations_service.create_station(name, userids, description)
 
     def invite_to_station(self, station_id: str, userids: List[str]):
         return self._stations_service.invite_to_station(station_id, userids)

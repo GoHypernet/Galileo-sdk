@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from ...data.repositories.jobs import JobsRepository
+from ..utils.generate_query_str import generate_query_str
 
 
 class JobsService:
@@ -59,17 +60,34 @@ class JobsService:
         page: Optional[int] = 1,
         items: Optional[int] = 25,
     ):
+        """
+        List all current jobs
 
-        r = self._jobs_repo.list_jobs(
-            jobids=jobids,
-            receiverids=receiverids,
-            senderids=senderids,
-            oaids=oaids,
-            userids=userids,
-            stationids=stationids,
-            statuses=statuses,
-            page=page,
-            items=items,
+        :param page: optional, page #
+        :param items: optional, item per page
+        :param jobids: optional, filter by job id
+        :param receiverids: optional, filter by receiver's id
+        :param senderids: optional, filter by sender's id
+        :param oaids: optional, filter by oaid
+        :param userids: optional, filter by user's id
+        :param stationids: optional, filter by station's id
+        :param statuses: optional, filter by job's status
+        :return: response with object {'jobs', [<jobs>]}
+        """
+
+        query = generate_query_str(
+            {
+                "page": page,
+                "items": items,
+                "jobids": jobids,
+                "receiverids": receiverids,
+                "senderids": senderids,
+                "oaids": oaids,
+                "userids": userids,
+                "stationids": stationids,
+                "statuses": statuses,
+            },
         )
+        r = self._jobs_repo.list_jobs(query)
 
         return r.json()

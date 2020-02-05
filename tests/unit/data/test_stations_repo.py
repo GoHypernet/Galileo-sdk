@@ -4,6 +4,7 @@ from src.data.repositories.stations import StationsRepository
 from src.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
+NAMESPACE = "/galileo/user_interface/v1"
 STATION_ID = "STATION_ID"
 USER_ID = "USER_ID"
 VOLUMES_ID = "VOLUMES_ID"
@@ -25,14 +26,14 @@ stations_repo = StationsRepository(settings_repo, auth_provider)
 
 
 def mocked_requests_get(*args, **kwargs):
-    if args[0] == f"{BACKEND}/stations":
+    if args[0] == f"{BACKEND}{NAMESPACE}/stations":
         return MockResponse({"stations": [{"stations": i} for i in range(10)]}, 200)
 
     return MockResponse(None, 404)
 
 
 def mocked_requests_post(*args, **kwargs):
-    if args[0] == f"{BACKEND}/station":
+    if args[0] == f"{BACKEND}{NAMESPACE}/station":
         return MockResponse(
             {
                 "station": {
@@ -46,48 +47,51 @@ def mocked_requests_post(*args, **kwargs):
             },
             200,
         )
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/users/invite":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/invite":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/users":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/machines":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/machines":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/volumes":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes":
         return MockResponse({"volumes": "volume"}, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths":
+    elif (
+        args[0]
+        == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths"
+    ):
         return MockResponse({"volume": "volume"}, 200)
 
     return MockResponse(None, 404)
 
 
 def mocked_requests_put(*args, **kwargs):
-    if args[0] == f"{BACKEND}/station/{STATION_ID}/users/accept":
+    if args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/accept":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/users/reject":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/reject":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/users/approve":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/approve":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/users/reject":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/reject":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/user/withdraw":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/user/withdraw":
         return MockResponse(True, 200)
 
     return MockResponse(None, 404)
 
 
 def mocked_requests_delete(*args, **kwargs):
-    if args[0] == f"{BACKEND}/station/{STATION_ID}/user/{USER_ID}/delete":
+    if args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/user/{USER_ID}/delete":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/machines":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/machines":
         return MockResponse(True, 200)
     elif (
         args[0]
-        == f"{BACKEND}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths/{HOST_PATH}"
+        == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths/{HOST_PATH}"
     ):
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/station/{STATION_ID}/volumes/{VOLUMES_ID}":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes/{VOLUMES_ID}":
         return MockResponse(True, 200)
 
     return MockResponse(None, 404)
@@ -96,23 +100,12 @@ def mocked_requests_delete(*args, **kwargs):
 @mock.patch("requests.get", side_effect=mocked_requests_get)
 def test_list_stations(mocked_requests):
     # Call
-    r = stations_repo.list_stations()
+    r = stations_repo.list_stations("")
     r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/stations",
-        headers=HEADERS,
-        json={
-            "page": 1,
-            "items": 25,
-            "stationids": None,
-            "names": None,
-            "mids": None,
-            "user_roles": None,
-            "volumeids": None,
-            "descriptions": None,
-        },
+        f"{BACKEND}{NAMESPACE}/stations", headers=HEADERS, json=None,
     )
 
     # Assert
@@ -129,7 +122,7 @@ def test_create_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station",
+        f"{BACKEND}{NAMESPACE}/station",
         headers=HEADERS,
         json={"name": NAME, "usernames": USERNAMES, "description": DESCRIPTION,},
     )
@@ -147,7 +140,7 @@ def test_invite_to_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/users/invite",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/invite",
         headers=HEADERS,
         json={"userids": USERNAMES},
     )
@@ -164,7 +157,9 @@ def test_accept_station_invite(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/users/accept", headers=HEADERS, json=None
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/accept",
+        headers=HEADERS,
+        json=None,
     )
 
     # Assert
@@ -179,7 +174,9 @@ def test_reject_station_invite(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/users/reject", headers=HEADERS, json=None
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/reject",
+        headers=HEADERS,
+        json=None,
     )
 
     # Assert
@@ -194,7 +191,7 @@ def test_request_to_join(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/users", headers=HEADERS, json=None
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users", headers=HEADERS, json=None
     )
 
     # Assert
@@ -209,7 +206,7 @@ def test_approve_request_to_join(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/users/approve",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/approve",
         headers=HEADERS,
         json={"userids": USERNAMES},
     )
@@ -226,7 +223,7 @@ def test_reject_request_to_join(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/users/reject",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/users/reject",
         headers=HEADERS,
         json={"userids": USERNAMES},
     )
@@ -243,7 +240,9 @@ def test_leave_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/user/withdraw", headers=HEADERS, json=None
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/user/withdraw",
+        headers=HEADERS,
+        json=None,
     )
 
     # Assert
@@ -258,7 +257,7 @@ def test_remove_member_from_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/user/{USER_ID}/delete",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/user/{USER_ID}/delete",
         headers=HEADERS,
         json=None,
     )
@@ -275,7 +274,7 @@ def test_delete_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}", headers=HEADERS, json=None
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}", headers=HEADERS, json=None
     )
 
     # Assert
@@ -290,7 +289,9 @@ def test_add_machines_to_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/machines", headers=HEADERS, json={"mids": MIDS}
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/machines",
+        headers=HEADERS,
+        json={"mids": MIDS},
     )
 
     # Assert
@@ -305,7 +306,9 @@ def test_remove_machines_from_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/machines", headers=HEADERS, json={"mids": MIDS}
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/machines",
+        headers=HEADERS,
+        json={"mids": MIDS},
     )
 
     # Assert
@@ -321,7 +324,7 @@ def test_add_volumes_to_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/volumes",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes",
         headers=HEADERS,
         json={"name": NAME, "mount_point": MOUNT_POINT, "access": ACCESS},
     )
@@ -340,7 +343,7 @@ def test_add_host_path_to_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths",
         headers=HEADERS,
         json={"mid": MIDS[0], "host_path": HOST_PATH},
     )
@@ -356,7 +359,7 @@ def test_delete_host_path_from_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths/{HOST_PATH}",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths/{HOST_PATH}",
         headers=HEADERS,
         json=None,
     )
@@ -373,7 +376,7 @@ def test_remove_volume_from_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/station/{STATION_ID}/volumes/{VOLUMES_ID}",
+        f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes/{VOLUMES_ID}",
         headers=HEADERS,
         json=None,
     )
