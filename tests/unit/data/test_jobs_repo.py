@@ -4,6 +4,7 @@ from src.data.repositories.jobs import JobsRepository
 from src.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
+NAMESPACE = "/galileo/user_interface/v1"
 RETURN_URL = "GOOGLE"
 FILENAME = "filename"
 JOB_ID = "job_id"
@@ -19,35 +20,35 @@ job_repo = JobsRepository(settings_repo, auth_provider)
 
 
 def mocked_requests_get(*args, **kwargs):
-    if args[0] == f"{BACKEND}/job/upload_request":
+    if args[0] == f"{BACKEND}{NAMESPACE}/job/upload_request":
         return MockResponse({"location": RETURN_URL, "filename": FILENAME}, 200)
-    elif args[0] == f"{BACKEND}/jobs/{JOB_ID}/results/location":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results/location":
         return MockResponse({"location": RETURN_URL, "filename": FILENAME}, 200)
-    elif args[0] == f"{BACKEND}/jobs/{JOB_ID}/top":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/top":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/jobs/{JOB_ID}/logs":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/logs":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/jobs":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs":
         return MockResponse({"jobs": [{"job": i} for i in range(25)]}, 200)
     return MockResponse(None, 404)
 
 
 def mocked_requests_post(*args, **kwargs):
-    if args[0] == f"{BACKEND}/jobs":
+    if args[0] == f"{BACKEND}{NAMESPACE}/jobs":
         return MockResponse({"job": {"jobinfo": "jobinfo"}}, 200)
     return MockResponse(None, 404)
 
 
 def mocked_requests_put(*args, **kwargs):
-    if args[0] == f"{BACKEND}/jobs/{JOB_ID}/results/download_complete":
+    if args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results/download_complete":
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}/jobs/{JOB_ID}/run":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/run":
         return MockResponse({"job": {"status": "submit"}}, 200)
-    elif args[0] == f"{BACKEND}/jobs/{JOB_ID}/stop":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/stop":
         return MockResponse({"job": {"status": "stop"}}, 200)
-    elif args[0] == f"{BACKEND}/jobs/{JOB_ID}/pause":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/pause":
         return MockResponse({"job": {"status": "pause"}}, 200)
-    elif args[0] == f"{BACKEND}/jobs/{JOB_ID}/start":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/start":
         return MockResponse({"job": {"status": "start"}}, 200)
     return MockResponse(None, 404)
 
@@ -60,7 +61,7 @@ def test_request_send_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/job/upload_request",
+        f"{BACKEND}{NAMESPACE}/job/upload_request",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -77,7 +78,7 @@ def test_request_send_job_completed(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs",
+        f"{BACKEND}{NAMESPACE}/jobs",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json={
             "destination_mid": DEST_MID,
@@ -98,7 +99,7 @@ def test_request_receive_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/results/location",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results/location",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -115,7 +116,7 @@ def test_request_receive_job_completed(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/results/download_complete",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results/download_complete",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -133,7 +134,7 @@ def test_submit_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/run",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/run",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -150,7 +151,7 @@ def test_request_stop_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/stop",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/stop",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -167,7 +168,7 @@ def test_request_pause_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/pause",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/pause",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -184,7 +185,7 @@ def test_request_start_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/start",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/start",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -200,7 +201,7 @@ def test_request_top_from_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/top",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/top",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -217,7 +218,7 @@ def test_request_logs_from_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs/{JOB_ID}/logs",
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/logs",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -230,24 +231,14 @@ def test_request_logs_from_job(mocked_requests):
 @mock.patch("requests.get", side_effect=mocked_requests_get)
 def test_list_jobs(mocked_requests):
     # Call
-    r = job_repo.list_jobs()
+    r = job_repo.list_jobs("")
     r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/jobs",
+        f"{BACKEND}{NAMESPACE}/jobs",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
-        json={
-            "page": 1,
-            "items": 25,
-            "jobids": None,
-            "receiverids": None,
-            "senderids": None,
-            "oaids": None,
-            "userids": None,
-            "stationids": None,
-            "statuses": None,
-        },
+        json=None,
     )
 
     # Assert

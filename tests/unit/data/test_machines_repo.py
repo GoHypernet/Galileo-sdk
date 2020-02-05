@@ -4,6 +4,7 @@ from src.data.repositories.machines import MachinesRepository
 from src.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
+NAMESPACE = "/galileo/user_interface/v1"
 MID = "machines_id"
 AMOUNT = 10
 
@@ -16,15 +17,15 @@ machines_repo = MachinesRepository(settings_repo, auth_provider)
 
 
 def mocked_requests_get(*args, **kwargs):
-    if args[0] == f"{BACKEND}/machines/{MID}":
+    if args[0] == f"{BACKEND}{NAMESPACE}/machines/{MID}":
         return MockResponse({"machine_info": "machine_info"}, 200)
-    elif args[0] == f"{BACKEND}/machines":
+    elif args[0] == f"{BACKEND}{NAMESPACE}/machines":
         return MockResponse({"machines": [{"machine": i} for i in range(10)]}, 200)
     return MockResponse(None, 404)
 
 
 def mocked_requests_put(*args, **kwargs):
-    if args[0] == f"{BACKEND}/machines/{MID}/update_max":
+    if args[0] == f"{BACKEND}{NAMESPACE}/machines/{MID}/update_max":
         return MockResponse(True, 200)
 
     return MockResponse(None, 404)
@@ -38,7 +39,7 @@ def get_machine_by_id(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/machines/{MID}",
+        f"{BACKEND}{NAMESPACE}/machines/{MID}",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json=None,
     )
@@ -50,11 +51,11 @@ def get_machine_by_id(mocked_requests):
 @mock.patch("requests.get", side_effect=mocked_requests_get)
 def list_machines(mocked_requests):
     # Call
-    r = machines_repo.list_machines()
+    r = machines_repo.list_machines("")
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/machines",
+        f"{BACKEND}{NAMESPACE}/machines",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json={"page": None, "items": None, "mids": None, "userids": None},
     )
@@ -71,7 +72,7 @@ def update_max_concurrent_jobs(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}/machines/{MID}/update_max",
+        f"{BACKEND}{NAMESPACE}/machines/{MID}/update_max",
         headers={"Authorization": f"Bearer ACCESS_TOKEN"},
         json={"amount": AMOUNT},
     )

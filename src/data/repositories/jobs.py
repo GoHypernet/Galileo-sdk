@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Optional
 from urllib.parse import urlunparse
 
 import requests
@@ -24,7 +24,16 @@ class JobsRepository:
         settings = self._settings_repository.get_settings()
         backend = settings.backend
         schema, addr = backend.split("://")
-        return urlunparse((schema, addr, endpoint, params, query, fragment))
+        return urlunparse(
+            (
+                schema,
+                f"{addr}/galileo/user_interface/v1",
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
+        )
 
     def _request(
         self,
@@ -148,43 +157,5 @@ class JobsRepository:
         """
         return self._get(f"/jobs/{job_id}/logs")
 
-    def list_jobs(
-        self,
-        jobids: Optional[List[str]] = None,
-        receiverids: Optional[List[str]] = None,
-        senderids: Optional[List[str]] = None,
-        oaids: Optional[List[str]] = None,
-        userids: Optional[List[str]] = None,
-        stationids: Optional[List[str]] = None,
-        statuses: Optional[List[str]] = None,
-        page: Optional[int] = 1,
-        items: Optional[int] = 25,
-    ):
-        """
-        List all current jobs
-
-        :param page: optional, page #
-        :param items: optional, item per page
-        :param jobids: optional, filter by job id
-        :param receiverids: optional, filter by receiver's id
-        :param senderids: optional, filter by sender's id
-        :param oaids: optional, filter by oaid
-        :param userids: optional, filter by user's id
-        :param stationids: optional, filter by station's id
-        :param statuses: optional, filter by job's status
-        :return: response with object {'jobs', [<jobs>]}
-        """
-        return self._get(
-            "/jobs",
-            {
-                "page": page,
-                "items": items,
-                "jobids": jobids,
-                "receiverids": receiverids,
-                "senderids": senderids,
-                "oaids": oaids,
-                "userids": userids,
-                "stationids": stationids,
-                "statuses": statuses,
-            },
-        )
+    def list_jobs(self, query: str):
+        return self._get("/jobs", query=query)

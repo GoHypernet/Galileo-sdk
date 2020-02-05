@@ -1,1 +1,1 @@
-from .sdk import GalileoSdk
+from src.galileo_sdk import GalileoSdk

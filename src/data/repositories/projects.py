@@ -7,7 +7,7 @@ from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 
 
-class MachinesRepository:
+class ProjectsRepository:
     def __init__(
         self, settings_repository: SettingsRepository, auth_provider: AuthProvider
     ):
@@ -47,30 +47,17 @@ class MachinesRepository:
         except requests.exceptions.RequestException as e:
             print(e)
 
-    def _get(self, *args, **kwargs):
-        return self._request(requests.get, *args, **kwargs)
+    def _post(self, *args, **kwargs):
+        return self._request(requests.post, *args, **kwargs)
 
-    def _put(self, *args, **kwargs):
-        return self._request(requests.put, *args, **kwargs)
+    def create_project(self):
+        return self._post("/projects")
 
-    def get_machine_by_id(self, machine_id: str):
-        """
-        Get machine's info by its id
+    def run_job_on_station(self, project_id: str, station_id: str):
+        return self._post(f"/projects/{project_id}", data={"station_id": station_id})
 
-        :param machine_id: machines id
-        :return: response with an object of machine info
-        """
-        return self._get(f"/machines/{machine_id}")
-
-    def list_machines(self, query: str):
-        return self._get("/machines", query=query)
-
-    def update_max_concurrent_jobs(self, mid: str, amount: int):
-        """
-        Update the number of allowed concurrent jobs for a machine
-
-        :param mid: machine's id
-        :param amount: number of allowed concurrent jobs
-        :return:
-        """
-        return self._put(f"/machines/{mid}/update_max", {"amount": amount})
+    def run_job_on_machine(self, project_id: str, station_id: str, machine_id: str):
+        return self._post(
+            f"/projects/{project_id}",
+            data={"station_id": station_id, "machine_id": machine_id},
+        )

@@ -232,8 +232,8 @@ class StationsSdk:
             items=items,
         )
 
-    def create_station(self, name: str, usernames: List[str], description: str):
-        return self._stations_service.create_station(name, usernames, description)
+    def create_station(self, name: str, userids: List[str], description: str):
+        return self._stations_service.create_station(name, userids, description)
 
     def invite_to_station(self, station_id: str, userids: List[str]):
         return self._stations_service.invite_to_station(station_id, userids)

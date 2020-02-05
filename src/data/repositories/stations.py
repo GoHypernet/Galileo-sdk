@@ -1,5 +1,6 @@
+import json
 from typing import List, Optional
-from urllib.parse import urlunparse
+from urllib.parse import urlencode, urlunparse
 
 import requests
 
@@ -18,13 +19,21 @@ class StationsRepository:
         settings = self._settings_repository.get_settings()
         backend = settings.backend
         schema, addr = backend.split("://")
-        return urlunparse((schema, addr, endpoint, params, query, fragment))
+        return urlunparse(
+            (
+                schema,
+                f"{addr}/galileo/user_interface/v1",
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
+        )
 
     def _request(self, request, endpoint, data=None, params="", query="", fragment=""):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
         headers = {"Authorization": f"Bearer {access_token}"}
-        print("json", data)
         try:
             r = request(url, json=data, headers=headers)
             return r
@@ -43,56 +52,22 @@ class StationsRepository:
     def _delete(self, *args, **kwargs):
         return self._request(requests.delete, *args, **kwargs)
 
-    def list_stations(
-        self,
-        stationids: Optional[List[str]] = None,
-        names: Optional[List[str]] = None,
-        mids: Optional[List[str]] = None,
-        user_roles: Optional[List[str]] = None,
-        volumeids: Optional[List[str]] = None,
-        descriptions: Optional[List[str]] = None,
-        page: Optional[int] = 1,
-        items: Optional[int] = 25,
-    ):
-        """
-        List Galileo stations
+    def list_stations(self, query: str):
 
-        :param stationids: optional, filter based on stationids
-        :param names: optional, filter based on names
-        :param mids: optional, filter based on mids
-        :param user_roles: optional, filter based on user roles
-        :param volumeids: optional, filter based on volumeids
-        :param descriptions: optional, filter based on descriptions
-        :param page: optional, page #
-        :param items: optional, items per page
-        :return: Response with object {'stations': [<List of stations>]}
-        """
-        return self._get(
-            "/stations",
-            {
-                "page": page,
-                "items": items,
-                "stationids": stationids,
-                "names": names,
-                "mids": mids,
-                "user_roles": user_roles,
-                "volumeids": volumeids,
-                "descriptions": descriptions,
-            },
-        )
+        return self._get("/stations", query=query)
 
-    def create_station(self, name: str, usernames: List[str], description: str):
+    def create_station(self, name: str, userids: List[str], description: str):
         """
         Create a new station
 
         :param name: name of station
-        :param usernames: list of members to invite
+        :param userids: list of members's user ids to invite
         :param description: description of station
         :return: Response with object of the station created
         """
         return self._post(
             "/station",
-            {"name": name, "usernames": usernames, "description": description},
+            {"name": name, "usernames": userids, "description": description},
         )
 
     def invite_to_station(self, station_id: str, userids: List[str]):
@@ -176,7 +151,7 @@ class StationsRepository:
         Permanently delete a station
 
         :param station_id: station's id
-        :return: boolean, True for successxf
+        :return: boolean, True for success
         """
         return self._delete(f"/station/{station_id}")
 
@@ -239,11 +214,13 @@ class StationsRepository:
         self, station_id: str, volume_id: str, host_path_id: str
     ):
         """
+        Remove a host path
+        Host path is where the landing zone will store the results of a job
 
-        :param station_id:
-        :param volume_id:
-        :param host_path_id:
-        :return:
+        :param station_id: station's id
+        :param volume_id: volume's id
+        :param host_path_id: host path id
+        :return: boolean, True for success
         """
 
         return self._delete(
@@ -252,12 +229,9 @@ class StationsRepository:
 
     def remove_volume_from_station(self, station_id: str, volume_id: str):
         """
-        Remove a host path
-        Host path is where the landing zone will store the results of a job
-
+        Remove a volume from station
         :param station_id: station's id
         :param volume_id: volume's id
-        :param host_path_id: host path id
         :return: boolean, True for success
         """
         return self._delete(f"/station/{station_id}/volumes/{volume_id}")
