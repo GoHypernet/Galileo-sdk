@@ -56,47 +56,47 @@ class StationsService:
 
     def invite_to_station(self, station_id: str, userids: List[str]):
         r = self._stations_repo.invite_to_station(station_id, userids)
-        return r.status_code == 200
+        return r.json()
 
     def accept_station_invite(self, station_id: str):
         r = self._stations_repo.accept_station_invite(station_id)
-        return r.status_code == 200
+        return r.json()
 
     def reject_station_invite(self, station_id: str):
         r = self._stations_repo.reject_station_invite(station_id)
-        return r.status_code == 200
+        return r.json()
 
     def request_to_join(self, station_id: str):
         r = self._stations_repo.request_to_join(station_id)
-        return r.status_code == 200
+        return r.json()
 
     def approve_request_to_join(self, station_id: str, userids: List[str]):
         r = self._stations_repo.approve_request_to_join(station_id, userids)
-        return r.status_code == 200
+        return r.json()
 
     def reject_request_to_join(self, station_id: str, userids: List[str]):
         r = self._stations_repo.reject_request_to_join(station_id, userids)
-        return r.status_code == 200
+        return r.json()
 
     def leave_station(self, station_id: str):
         r = self._stations_repo.leave_station(station_id)
-        return r.status_code == 200
+        return r.json()
 
     def remove_member_from_station(self, station_id: str, userid: str):
         r = self._stations_repo.remove_member_from_station(station_id, userid)
-        return r.status_code == 200
+        return r.json()
 
     def delete_station(self, station_id: str):
         r = self._stations_repo.delete_station(station_id)
-        return r.status_code == 200
+        return r.json()
 
     def add_machines_to_station(self, station_id: str, mids: List[str]):
         r = self._stations_repo.add_machines_to_station(station_id, mids)
-        return r.status_code == 200
+        return r.json()
 
     def remove_machines_from_station(self, station_id: str, mids: List[str]):
         r = self._stations_repo.remove_machines_from_station(station_id, mids)
-        return r.status_code == 200
+        return r.json()
 
     def add_volumes_to_station(
         self, station_id: str, name: str, mount_point: str, access: str
@@ -124,4 +124,4 @@ class StationsService:
 
     def remove_volume_from_station(self, station_id: str, volume_id):
         r = self._stations_repo.remove_volume_from_station(station_id, volume_id)
-        return r.status_code == 200
+        return r.json()

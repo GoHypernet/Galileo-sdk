@@ -4,7 +4,7 @@ import os
 # Must set env variables before running tests
 USERNAME = os.getenv("GALILEO_USER")
 PASSWORD = os.getenv("GALILEO_PASSWORD")
-CONFIG = "development"
+CONFIG = "local"
 
 galileo = GalileoSdk(username=USERNAME, password=PASSWORD, config=CONFIG,)
 
@@ -78,21 +78,21 @@ def test_add_and_delete_host_path_to_volume():
     host_path = galileo.stations.add_host_path_to_volume(
         station_id=station_id,
         volume_id=volumes["volumes"]["volumeid"],
-        mid=self["mids"][0],
+        mid="mid-1",
         host_path="host_path",
     )
+    print(host_path)
 
     deleted_host_path = galileo.stations.delete_host_path_from_volume(
         station_id=station_id,
         volume_id=volumes["volumes"]["volumeid"],
-        host_path_id=host_path["volume"]["host_paths"][0],
+        host_path_id=host_path["volume"]["host_paths"][0]["volumehostpathid"],
     )
 
     galileo.stations.delete_station(station_id)
 
-    # print(deleted_host_path)
+    print(deleted_host_path)
 
     assert [] == volumes["volumes"]["host_paths"]
     assert "host_path" == host_path["volume"]["host_paths"][0]["host_path"]
-    # assert deleted_host_path['host_path'] == "host_path"
-    # assert deleted_host_path["mid"] == self["mids"][0]
+    assert deleted_host_path == True
