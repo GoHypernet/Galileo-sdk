@@ -38,20 +38,6 @@ def mocked_requests_get(*args, **kwargs):
 @mock.patch("requests.get", side_effect=mocked_requests_get)
 def test_list_users(mocked_requests):
     # Call
-
-    print(
-        generate_query_str(
-            {
-                "userids": ["userids"],
-                "usernames": ["usernames"],
-                "partial_usernames": ["partial_usernames"],
-                "wallets": ["wallets"],
-                "public_keys": ["public_keys"],
-                "page": 1,
-                "items": 25,
-            }
-        )
-    )
     r = profile_repo.list_users(
         generate_query_str(
             {

@@ -1,5 +1,5 @@
-from typing import Optional
 import os
+from typing import Optional
 
 from .business.services.jobs import JobsService
 from .business.services.log import LogService
@@ -50,13 +50,13 @@ class GalileoSdk:
             self._auth_provider = AuthProvider(
                 settings_repository=self._settings,
                 auth_token=str(os.environ["GALILEO_TOKEN"]),
-                refresh_token=str(os.environ["GALILEO_REFRESH_TOKEN"])
+                refresh_token=str(os.environ["GALILEO_REFRESH_TOKEN"]),
             )
         elif "GALILEO_USER" in os.environ and "GALILEO_PASSWORD" in os.environ:
             self._auth_provider = AuthProvider(
                 settings_repository=self._settings,
                 username=str(os.environ["GALILEO_USER"]),
-                password=str(os.environ["GALILEO_PASSWORD"])
+                password=str(os.environ["GALILEO_PASSWORD"]),
             )
         elif auth_token and refresh_token:
             self._auth_provider = AuthProvider(

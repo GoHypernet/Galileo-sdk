@@ -51,7 +51,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinx_material",
-    'sphinx.ext.autosummary'
+    "sphinx.ext.autosummary",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -94,7 +94,7 @@ html_theme_options = {
     "theme_color": "#4dc1ab",
     "color_primary": "teal",
     "globaltoc_collapse": True,
-    'globaltoc_includehidden': True,
+    "globaltoc_includehidden": True,
 }
 
 html_logo = "images/galileo-logo.png"
