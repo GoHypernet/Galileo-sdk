@@ -47,8 +47,6 @@ An example of exporting your environment variable on MacOS:
     $ export GALILEO_USER=user@galileoapp.io
     $ export GALILEO_CONFIG=development
 
-If you set :code:`GALILEO_USER` and :code:`GALILEO_PASSWORD`, we will set the environment variables :code:`GALILEO_TOKEN` and :code:`GALILEO_REFRESH_TOKEN` once your username-password combination succeeds.
-
 :code:`GalileoSdk` exposes the Jobs, Machines, Profiles, Projects, and Stations APIs
 
 Examples of using each of the APIs:
