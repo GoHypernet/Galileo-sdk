@@ -40,9 +40,7 @@ def main(
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="View station details"
-    )
+    parser = argparse.ArgumentParser(description="View station details")
 
     parser.add_argument(
         "--username", default="", help="Username for login", type=str, required=False
