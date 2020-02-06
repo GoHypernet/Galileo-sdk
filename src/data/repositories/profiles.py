@@ -60,21 +60,10 @@ class ProfilesRepository:
         return self._request(requests.post, *args, **kwargs)
 
     def self(self):
-        """
-        Get your Galileo profile
-
-        :return: Response with information about yourself, {userid, username, wallets, mids}
-        """
         return self._get("/users/self")
 
     def list_users(self, query: str):
-        print("list_users", query)
         return self._get("/users", query=query)
 
     def list_station_invites(self):
-        """
-        Get all your station invites
-
-        :return: Response with a list of station invites
-        """
         return self._get("/users/invites")

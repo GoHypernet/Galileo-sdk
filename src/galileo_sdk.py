@@ -1,4 +1,5 @@
 from typing import Optional
+import os
 
 from .business.services.jobs import JobsService
 from .business.services.log import LogService
@@ -34,16 +35,30 @@ class GalileoSdk:
         refresh_token: Optional[str] = None,
         username: Optional[str] = None,
         password: Optional[str] = None,
-        config=None,
+        config: Optional[str] = None,
     ):
         self.log = LogService()
 
-        if config is None:
+        if "GALILEO_CONFIG" in os.environ:
+            self._settings = SettingsRepository(str(os.environ["GALILEO_CONFIG"]))
+        elif config is None:
             self._settings = SettingsRepository("production")
         else:
             self._settings = SettingsRepository(config)
 
-        if auth_token and refresh_token:
+        if "GALILEO_TOKEN" in os.environ and "GALILEO_REFRESH_TOKEN" in os.environ:
+            self._auth_provider = AuthProvider(
+                settings_repository=self._settings,
+                auth_token=str(os.environ["GALILEO_TOKEN"]),
+                refresh_token=str(os.environ["GALILEO_REFRESH_TOKEN"])
+            )
+        elif "GALILEO_USER" in os.environ and "GALILEO_PASSWORD" in os.environ:
+            self._auth_provider = AuthProvider(
+                settings_repository=self._settings,
+                username=str(os.environ["GALILEO_USER"]),
+                password=str(os.environ["GALILEO_PASSWORD"])
+            )
+        elif auth_token and refresh_token:
             self._auth_provider = AuthProvider(
                 settings_repository=self._settings,
                 auth_token=auth_token,

@@ -1,6 +1,7 @@
 from typing import Optional
 
 import requests
+import os
 
 from ..repositories.settings import SettingsRepository
 
@@ -36,6 +37,8 @@ class AuthProvider:
             r = r.json()
             self._access_token = r["access_token"]
             self._refresh_token = r["refresh_token"]
+        os.environ["GALILEO_TOKEN"] = self._access_token
+        os.environ["GALILEO_REFRESH_TOKEN"] = self._refresh_token
 
     def get_access_token(self):
         return self._access_token

@@ -1,12 +1,11 @@
-from src import GalileoSdk
 import os
 
+from src import GalileoSdk
+
 # Must set env variables before running tests
-USERNAME = os.getenv("GALILEO_USER")
-PASSWORD = os.getenv("GALILEO_PASSWORD")
 CONFIG = "development"
 
-galileo = GalileoSdk(username=USERNAME, password=PASSWORD, config=CONFIG,)
+galileo = GalileoSdk(config=CONFIG)
 
 
 def test_list_users():

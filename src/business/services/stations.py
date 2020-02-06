@@ -19,20 +19,6 @@ class StationsService:
         page: Optional[int] = 1,
         items: Optional[int] = 25,
     ):
-        """
-        List Galileo stations
-
-        :param stationids: optional, filter based on stationids
-        :param names: optional, filter based on names
-        :param mids: optional, filter based on mids
-        :param user_roles: optional, filter based on user roles
-        :param volumeids: optional, filter based on volumeids
-        :param descriptions: optional, filter based on descriptions
-        :param page: optional, page #
-        :param items: optional, items per page
-        :return: Response with object {'stations': [<List of stations>]}
-        """
-
         query: str = generate_query_str(
             {
                 "page": page,
