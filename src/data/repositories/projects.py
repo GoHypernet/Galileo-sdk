@@ -67,6 +67,9 @@ class ProjectsRepository:
     def upload_single_file(self, project_id: str, file: Any):
         return self._post(f"/projects/{project_id}/files", files=file)
 
+    def upload_single_file(self, project_id: str):
+        return self._post(f"/projects/{project_id}/files")
+
     def run_job_on_station(self, project_id: str, station_id: str):
         return self._post(
             f"/projects/{project_id}/jobs", data={"station_id": station_id}
