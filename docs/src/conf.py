@@ -13,6 +13,8 @@
 import os
 import sys
 
+import sphinx_material
+
 import src.galileo_sdk
 
 # -- Python specific configuration -------------------------------------------
@@ -48,6 +50,8 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
+    "sphinx_material",
+    'sphinx.ext.autosummary'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -73,9 +77,31 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+# Choose the material theme
+html_theme = "sphinx_material"
+# Get the them path
+html_theme_path = sphinx_material.html_theme_path()
+# Register the required helpers for the html context
+html_context = sphinx_material.get_html_context()
+
+html_theme_options = {
+    "repo_name": "Galileo-sdk",
+    "repo_url": "https://github.com/GoHypernet/Galileo-sdk",
+    "html_minify": True,
+    "css_minify": True,
+    "nav_title": "SDK Documentation",
+    "globaltoc_depth": 3,
+    "theme_color": "#4dc1ab",
+    "color_primary": "teal",
+    "globaltoc_collapse": True,
+    'globaltoc_includehidden': True,
+}
+
+html_logo = "images/galileo-logo.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+# html_static_path = ["_static"]
+
+keep_warnings = False
