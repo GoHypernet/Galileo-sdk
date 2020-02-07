@@ -38,6 +38,7 @@ class ProjectsRepository:
         query: Optional[str] = None,
         fragment: Optional[str] = None,
         files: Optional[Any] = None,
+        filename: Optional[str] = None
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
@@ -47,7 +48,9 @@ class ProjectsRepository:
             if files is None:
                 r = request(url, json=data, headers=headers)
             else:
-                r = request(url, json=data, headers=headers, files=files)
+                headers["filename"] = filename
+                headers["Content-Type"] = "application/octet-stream"
+                r = request(url, json=data, headers=headers, data=files)
             return r
         except requests.exceptions.RequestException as e:
             print(e)
@@ -64,8 +67,8 @@ class ProjectsRepository:
     def create_project(self, name: str, description: str):
         return self._post("/projects", {"name": name, "description": description})
 
-    def upload_single_file(self, project_id: str, file: Any):
-        return self._post(f"/projects/{project_id}/files", files=file)
+    def upload_single_file(self, project_id: str, file: Any, filename: str):
+        return self._post(f"/projects/{project_id}/files", files=file, filename=filename)
 
     def run_job_on_station(self, project_id: str, station_id: str):
         return self._post(

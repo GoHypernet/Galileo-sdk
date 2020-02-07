@@ -33,8 +33,8 @@ class ProjectsService:
         r = self._projects_repo.create_project(name, description)
         return r.json()
 
-    def upload_single_file(self, project_id: str, file: Any):
-        r = self._projects_repo.upload_single_file(project_id, file)
+    def upload_single_file(self, project_id: str, file: Any, filename: str):
+        r = self._projects_repo.upload_single_file(project_id, file, filename)
         return r.json()
 
     def run_job_on_station(self, project_id: str, station_id: str):
