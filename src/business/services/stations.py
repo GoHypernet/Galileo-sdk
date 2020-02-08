@@ -36,8 +36,10 @@ class StationsService:
 
         return r.json() if r.status_code == 200 else None
 
-    def create_station(self, name: str, userids: List[str], description: str):
-        r = self._stations_repo.create_station(name, userids, description)
+    def create_station(
+        self, name: str, description: str, userids: Optional[List[str]] = None
+    ):
+        r = self._stations_repo.create_station(name, description, userids)
         return r.json()
 
     def invite_to_station(self, station_id: str, userids: List[str]):

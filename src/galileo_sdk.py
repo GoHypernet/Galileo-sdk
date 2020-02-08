@@ -1,6 +1,5 @@
 import os
 from typing import Optional
-import os
 
 from .business.services.jobs import JobsService
 from .business.services.log import LogService
@@ -46,6 +45,9 @@ class GalileoSdk:
             self._settings = SettingsRepository("production")
         else:
             self._settings = SettingsRepository(config)
+
+        settings = self._settings.get_settings()
+        self.backend = settings.backend
 
         if "GALILEO_TOKEN" in os.environ and "GALILEO_REFRESH_TOKEN" in os.environ:
             self._auth_provider = AuthProvider(

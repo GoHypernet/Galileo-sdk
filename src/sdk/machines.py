@@ -53,7 +53,7 @@ class MachinesSdk:
             mids=mids, userids=userids, page=page, items=items
         )
 
-    def update_concurrent_max_jobs(self, mid: str, amount: str):
+    def update_concurrent_max_jobs(self, mid: str, amount: int):
         """
         Update the number of allowed concurrent jobs for a machine
 

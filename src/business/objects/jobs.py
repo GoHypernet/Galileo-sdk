@@ -58,6 +58,7 @@ class Job:
     """
     Details of a job
     """
+
     def __init__(
         self,
         userid: str,

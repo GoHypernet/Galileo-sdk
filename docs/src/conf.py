@@ -14,7 +14,6 @@ import os
 import sys
 
 import sphinx_material
-
 import src.galileo_sdk
 
 # -- Python specific configuration -------------------------------------------
