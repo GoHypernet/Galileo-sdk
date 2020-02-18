@@ -457,7 +457,9 @@ class StationsSdk:
             items=items,
         )
 
-    def create_station(self, name: str, userids: List[str], description: str):
+    def create_station(
+        self, name: str, description: str, userids: Optional[List[str]] = None
+    ):
         """
         Create a new station
 
@@ -466,7 +468,7 @@ class StationsSdk:
         :param description: description of station
         :return: {"station": Station}
         """
-        return self._stations_service.create_station(name, userids, description)
+        return self._stations_service.create_station(name, description, userids)
 
     def invite_to_station(self, station_id: str, userids: List[str]):
         """

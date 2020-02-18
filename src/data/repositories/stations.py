@@ -55,7 +55,9 @@ class StationsRepository:
     def list_stations(self, query: str):
         return self._get("/stations", query=query)
 
-    def create_station(self, name: str, userids: List[str], description: str):
+    def create_station(
+        self, name: str, description: str, userids: Optional[List[str]] = None
+    ):
         return self._post(
             "/station",
             {"name": name, "usernames": userids, "description": description},

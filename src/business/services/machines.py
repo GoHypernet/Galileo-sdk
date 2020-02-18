@@ -22,7 +22,6 @@ class MachinesService:
         query = generate_query_str(
             {"mids": mids, "userids": userids, "page": page, "items": items}
         )
-        print("query", query)
         r = self._machines_repo.list_machines(query)
         return r.json()
 

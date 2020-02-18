@@ -1,7 +1,7 @@
+import os
 from typing import Optional
 
 import requests
-import os
 
 from ..repositories.settings import SettingsRepository
 
