@@ -107,5 +107,5 @@ class JobsRepository:
     def get_results_url(self, job_id: str):
         return self._get(f"/jobs/{job_id}/results")
 
-    def download_results(self, url: str):
-        return self._get(url)
+    def download_results(self, job_id: str, query: str):
+        return self._get(f"/jobs/{job_id}/results", query=query)
