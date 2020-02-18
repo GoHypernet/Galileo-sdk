@@ -1,4 +1,5 @@
 from typing import Any, List, Optional
+import requests
 
 from ...data.repositories.projects import ProjectsRepository
 from ..utils.generate_query_str import generate_query_str
@@ -27,20 +28,40 @@ class ProjectsService:
         )
 
         r = self._projects_repo.list_projects(query)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def create_project(self, name: str, description: str):
         r = self._projects_repo.create_project(name, description)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def upload_single_file(self, project_id: str, file: Any, filename: str):
         r = self._projects_repo.upload_single_file(project_id, file, filename)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def run_job_on_station(self, project_id: str, station_id: str):
         r = self._projects_repo.run_job_on_station(project_id, station_id)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def run_job_on_machine(self, project_id: str, station_id: str, machine_id: str):
         r = self._projects_repo.run_job_on_machine(project_id, station_id, machine_id)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)

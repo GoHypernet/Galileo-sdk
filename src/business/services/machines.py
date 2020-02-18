@@ -1,4 +1,5 @@
 from typing import List, Optional
+import requests
 
 from ...data.repositories.machines import MachinesRepository
 from ..utils.generate_query_str import generate_query_str
@@ -10,7 +11,11 @@ class MachinesService:
 
     def get_machine_by_id(self, machine_id: str):
         r = self._machines_repo.get_machine_by_id(machine_id)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def list_machines(
         self,
@@ -23,8 +28,16 @@ class MachinesService:
             {"mids": mids, "userids": userids, "page": page, "items": items}
         )
         r = self._machines_repo.list_machines(query)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def update_max_concurrent_jobs(self, mid: str, amount: int):
         r = self._machines_repo.update_max_concurrent_jobs(mid, amount)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)

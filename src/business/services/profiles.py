@@ -1,4 +1,5 @@
 from typing import List, Optional
+import requests
 
 from ...data.repositories.profiles import ProfilesRepository
 from ..utils.generate_query_str import generate_query_str
@@ -30,12 +31,24 @@ class ProfilesService:
             }
         )
         r = self._profile_repo.list_users(query)
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def self(self):
         r = self._profile_repo.self()
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
 
     def list_station_invites(self):
         r = self._profile_repo.list_station_invites()
-        return r.json()
+        try:
+            r.raise_for_status()
+            return r.json()
+        except requests.exceptions.HTTPError as e:
+            return "HTTPError: " + str(e)
