@@ -15,10 +15,9 @@ def test_create_project():
 
 def test_list_projects():
     project_list = galileo.projects.list_projects()
-    project_list["projects"].sort(key=lambda project: project["creation_timestamp"])
 
-    assert project_list["projects"][-1]["name"] == "test_project"
-    assert project_list["projects"][-1]["description"] == "description"
+    assert "creation_timestamp" in project_list["projects"][0]
+    assert "source_path" in project_list["projects"][0]
 
 
 def test_upload_file():

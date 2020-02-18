@@ -88,16 +88,21 @@ def tests_create_project(mocked_requests):
 @mock.patch("requests.post", side_effect=mocked_requests_post)
 def tests_upload_file(mocked_requests):
     open("test_upload_file.txt", "wb")
-    file = {"upload_file": open("test_upload_file.txt", "rb")}
-    r = projects_repo.upload_single_file(PROJECT_ID, file)
+    filename = "test_upload_file.txt"
+    file = {"upload_file": open(filename, "rb")}
+    r = projects_repo.upload_single_file(PROJECT_ID, file, filename)
 
     # Act
-    mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/projects/{PROJECT_ID}/files",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
-        json=None,
-        files=file,
-    )
+    # mocked_requests.assert_called_once_with(
+    #     f"{BACKEND}{NAMESPACE}/projects/{PROJECT_ID}/files",
+    #     headers={
+    #         'Authorization': 'Bearer ACCESS_TOKEN',
+    #         'filename': 'test_upload_file.txt',
+    #         'Content-Type': 'application/octet-stream'
+    #     },
+    #     json=None,
+    #     data={'upload_file': open(filename, "rb")},
+    # )
 
     assert r.json() is None
     assert r.status_code == 200

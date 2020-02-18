@@ -43,8 +43,9 @@ def test_create_project():
 
 def test_upload_single_file():
     projects_repo.upload_single_file.return_value = MockResponse(None, 200)
-    file = {"upload_file": open("test_upload_file.txt", "rb")}
-    r = projects_service.upload_single_file(PROJECT_ID, file)
+    filename = "test_upload_file.txt"
+    file = {"upload_file": open(filename, "rb")}
+    r = projects_service.upload_single_file(PROJECT_ID, file, filename)
 
     assert r is None
 

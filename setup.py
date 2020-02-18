@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="galileo-sdk",
+    name="galileo_sdk",
     version="0.0.4",
     license="MIT",
     packages=find_packages(),
