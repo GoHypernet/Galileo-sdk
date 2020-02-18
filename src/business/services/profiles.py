@@ -18,18 +18,6 @@ class ProfilesService:
         page: Optional[int] = None,
         items: Optional[int] = None,
     ):
-        """
-       Get all Galileo users and their profiles
-
-       :param userids: optional, filter by list of userids
-       :param usernames: optional, filter by list of usernames
-       :param partial_usernames: optional, filter by partial usernames
-       :param wallets: optional, filter by list of wallet ids
-       :param public_keys: optional, filter by public key
-       :param page: optional, page #
-       :param items: optional, items per page
-       :return: Response with a list of Galileo users' profiles
-       """
         query = generate_query_str(
             {
                 "page": page,

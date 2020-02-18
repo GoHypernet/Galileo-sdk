@@ -62,24 +62,11 @@ class JobsRepository:
         return self._request(requests.delete, *args, **kwargs)
 
     def request_send_job(self):
-        """
-        Sending job request requires you to upload the job to Google Storage
-
-        :return: location: Google Storage URL where you can upload job
-        """
         return self._get("/job/upload_request")
 
     def request_send_job_completed(
         self, destination_mid: str, file_name: str, station_id: str
     ):
-        """
-        After finishing your upload to Google Storage, inform that the job is ready to go
-
-        :param destination_mid: landing zone id
-        :param file_name: job's name
-        :param station_id: station you're sending the job through
-        :return: {"job" : Job}
-        """
         return self._post(
             "/jobs",
             {
@@ -90,72 +77,35 @@ class JobsRepository:
         )
 
     def request_receive_job(self, job_id: str):
-        """
-        :param job_id: job's id
-        :return: {"location": URL, "filename": filename}
-        """
         return self._get(f"/jobs/{job_id}/results/location")
 
     def request_receive_job_completed(self, job_id: str):
-        """
-        :param job_id: job's id
-        :return: boolean, True for success
-        """
         return self._put(f"/jobs/{job_id}/results/download_complete")
 
     def submit_job(self, job_id: str):
-        """
-        Start running the job
-
-        :param job_id: job's id
-        :return: {"job": Job}
-        """
         return self._put(f"/jobs/{job_id}/run")
 
     def request_stop_job(self, job_id: str):
-        """
-        Request to stop a job - sent by launcher
-
-        :param job_id: job's id
-        :return: response with object {"job": Job}
-        """
         return self._put(f"/jobs/{job_id}/stop")
 
     def request_pause_job(self, job_id: str):
-        """
-        Request to pause job - sent by launcher
 
-        :param job_id: job's id
-        :return: response with object {"job": Job}
-        """
         return self._put(f"/jobs/{job_id}/pause")
 
     def request_start_job(self, job_id: str):
-        """
-        Request start job - sent by launcher
-
-        :param job_id: job's id
-        :return: response with object {"job": Job}
-        """
         return self._put(f"/jobs/{job_id}/start")
 
     def request_top_from_job(self, job_id: str):
-        """
-        Request results of Top from docker - sent by launcher
-
-        :param job_id: job's id
-        :return: boolean, True on success
-        """
         return self._get(f"/jobs/{job_id}/top")
 
     def request_logs_from_jobs(self, job_id: str):
-        """
-        Request results of logs from docker - sent by launcher
-
-        :param job_id: job id
-        :return: boolean, True on success
-        """
         return self._get(f"/jobs/{job_id}/logs")
 
     def list_jobs(self, query: str):
         return self._get("/jobs", query=query)
+
+    def get_results_url(self, job_id: str):
+        return self._get(f"/jobs/{job_id}/results")
+
+    def download_results(self, url: str):
+        return self._get(url)

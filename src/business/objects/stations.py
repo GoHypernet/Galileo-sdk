@@ -1,6 +1,87 @@
-from typing import Callable, List
+import enum
+from typing import Callable, List, Optional
 
 from ...business.objects.event import EventEmitter
+
+
+class EVolumeAccess(enum.Enum):
+    READ = "r"
+    READWRITE = "rw"
+
+
+class VolumeHostPath:
+    def __init__(
+        self, volumehostpathid: Optional[str], volumeid: str, mid: str, host_path: str
+    ):
+        self.volumehostpathid = volumehostpathid
+        self.volumeid = volumeid
+        self.mid = mid
+        self.host_path = host_path
+
+
+class Volume:
+    volumeid: Optional[str]
+    stationid: Optional[str]
+    name: Optional[str]
+    mount_point: Optional[str]
+    access: Optional[EVolumeAccess]
+    host_paths: Optional[List[VolumeHostPath]]
+
+    def __init__(
+        self,
+        stationid: str = None,
+        name: str = None,
+        mount_point: str = None,
+        access: EVolumeAccess = EVolumeAccess.READ,
+        host_paths: List[VolumeHostPath] = None,
+        volumeid: str = None,
+    ):
+
+        self.volumeid = volumeid
+        self.stationid = stationid
+        self.name = name
+
+        self.mount_point = mount_point
+        self.access = access
+
+        self.host_paths = host_paths
+
+
+class EStationUserRole(enum.Enum):
+    OWNER = 0
+    ADMIN = 1
+    MEMBER = 2
+    PENDING = 3
+    INVITED = 4
+    BLOCKED = 5
+
+
+class StationUser:
+    def __init__(
+        self, stationuserid: str, stationid: str, userid: str, status: EStationUserRole
+    ):
+        self.stationuserid = stationuserid
+        self.stationid = stationid
+        self.userid = userid
+        self.status = status
+
+
+class Station:
+    def __init__(
+        self,
+        stationid: str,
+        name: str,
+        description: str,
+        users: List[StationUser],
+        machine_ids: Optional[List[str]] = None,
+        volume_ids: Optional[List[str]] = None,
+    ):
+        self.stationid = stationid
+        self.name = name
+        self.description = description
+        self.users = users
+        self.mids = machine_ids
+        self.volume_ids = volume_ids
 
 
 class NewStationEvent:
