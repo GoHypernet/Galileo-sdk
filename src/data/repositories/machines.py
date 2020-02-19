@@ -41,11 +41,9 @@ class MachinesRepository:
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
         headers = {"Authorization": f"Bearer {access_token}"}
-        try:
-            r = request(url, json=data, headers=headers)
-            return r
-        except requests.exceptions.RequestException as e:
-            print(e)
+        r = request(url, json=data, headers=headers)
+        r.raise_for_status()
+        return r
 
     def _get(self, *args, **kwargs):
         return self._request(requests.get, *args, **kwargs)
@@ -54,23 +52,11 @@ class MachinesRepository:
         return self._request(requests.put, *args, **kwargs)
 
     def get_machine_by_id(self, machine_id: str):
-        """
-        Get machine's info by its id
-
-        :param machine_id: machines id
-        :return: response with an object of machine info
-        """
         return self._get(f"/machines/{machine_id}")
 
     def list_machines(self, query: str):
         return self._get("/machines", query=query)
 
     def update_max_concurrent_jobs(self, mid: str, amount: int):
-        """
-        Update the number of allowed concurrent jobs for a machine
 
-        :param mid: machine's id
-        :param amount: number of allowed concurrent jobs
-        :return:
-        """
         return self._put(f"/machines/{mid}/update_max", {"amount": amount})

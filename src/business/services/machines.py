@@ -1,4 +1,5 @@
 from typing import List, Optional
+import requests
 
 from ...data.repositories.machines import MachinesRepository
 from ..utils.generate_query_str import generate_query_str
@@ -19,20 +20,9 @@ class MachinesService:
         page: Optional[int] = 1,
         items: Optional[int] = 25,
     ):
-        """
-        List all machines
-
-        :param page: optional, page #
-        :param items: optional, items per page
-        :param mids: optional, filter by machine id
-        :param userids: optional, filter by user id
-        :return: {'machines': [<machines>]}
-        """
-
         query = generate_query_str(
             {"mids": mids, "userids": userids, "page": page, "items": items}
         )
-        print("query", query)
         r = self._machines_repo.list_machines(query)
         return r.json()
 

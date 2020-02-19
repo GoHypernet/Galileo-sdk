@@ -1,4 +1,5 @@
 from typing import List, Optional
+import requests
 
 from ...data.repositories.stations import StationsRepository
 from ..utils.generate_query_str import generate_query_str
@@ -19,20 +20,6 @@ class StationsService:
         page: Optional[int] = 1,
         items: Optional[int] = 25,
     ):
-        """
-        List Galileo stations
-
-        :param stationids: optional, filter based on stationids
-        :param names: optional, filter based on names
-        :param mids: optional, filter based on mids
-        :param user_roles: optional, filter based on user roles
-        :param volumeids: optional, filter based on volumeids
-        :param descriptions: optional, filter based on descriptions
-        :param page: optional, page #
-        :param items: optional, items per page
-        :return: Response with object {'stations': [<List of stations>]}
-        """
-
         query: str = generate_query_str(
             {
                 "page": page,
@@ -47,11 +34,12 @@ class StationsService:
         )
 
         r = self._stations_repo.list_stations(query)
+        return r.json()
 
-        return r.json() if r.status_code == 200 else None
-
-    def create_station(self, name: str, userids: List[str], description: str):
-        r = self._stations_repo.create_station(name, userids, description)
+    def create_station(
+        self, name: str, description: str, userids: Optional[List[str]] = None
+    ):
+        r = self._stations_repo.create_station(name, description, userids)
         return r.json()
 
     def invite_to_station(self, station_id: str, userids: List[str]):

@@ -47,11 +47,9 @@ class ProfilesRepository:
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
         headers = {"Authorization": f"Bearer {access_token}"}
-        try:
-            r = request(url, json=data, headers=headers)
-            return r
-        except requests.exceptions.RequestException as e:
-            print(e)
+        r = request(url, json=data, headers=headers)
+        r.raise_for_status()
+        return r
 
     def _get(self, *args, **kwargs):
         return self._request(requests.get, *args, **kwargs)
@@ -60,21 +58,10 @@ class ProfilesRepository:
         return self._request(requests.post, *args, **kwargs)
 
     def self(self):
-        """
-        Get your Galileo profile
-
-        :return: Response with information about yourself, {userid, username, wallets, mids}
-        """
         return self._get("/users/self")
 
     def list_users(self, query: str):
-        print("list_users", query)
         return self._get("/users", query=query)
 
     def list_station_invites(self):
-        """
-        Get all your station invites
-
-        :return: Response with a list of station invites
-        """
         return self._get("/users/invites")
