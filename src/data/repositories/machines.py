@@ -1,0 +1,76 @@
+from typing import Any, Callable, Optional
+from urllib.parse import urlunparse
+
+import requests
+
+from ..providers.auth import AuthProvider
+from .settings import SettingsRepository
+
+
+class MachinesRepository:
+    def __init__(
+        self, settings_repository: SettingsRepository, auth_provider: AuthProvider
+    ):
+        self._settings_repository = settings_repository
+        self._auth_provider = auth_provider
+
+    def _make_url(self, endpoint, params="", query="", fragment=""):
+        settings = self._settings_repository.get_settings()
+        backend = settings.backend
+        schema, addr = backend.split("://")
+        return urlunparse(
+            (
+                schema,
+                f"{addr}/galileo/user_interface/v1",
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
+        )
+
+    def _request(
+        self,
+        request: Callable,
+        endpoint: str,
+        data: Optional[Any] = None,
+        params: Optional[str] = None,
+        query: Optional[str] = None,
+        fragment: Optional[str] = None,
+    ):
+        url = self._make_url(endpoint, params, query, fragment)
+        access_token = self._auth_provider.get_access_token()
+        headers = {"Authorization": f"Bearer {access_token}"}
+        try:
+            r = request(url, json=data, headers=headers)
+            return r
+        except requests.exceptions.RequestException as e:
+            print(e)
+
+    def _get(self, *args, **kwargs):
+        return self._request(requests.get, *args, **kwargs)
+
+    def _put(self, *args, **kwargs):
+        return self._request(requests.put, *args, **kwargs)
+
+    def get_machine_by_id(self, machine_id: str):
+        """
+        Get machine's info by its id
+
+        :param machine_id: machines id
+        :return: response with an object of machine info
+        """
+        return self._get(f"/machines/{machine_id}")
+
+    def list_machines(self, query: str):
+        return self._get("/machines", query=query)
+
+    def update_max_concurrent_jobs(self, mid: str, amount: int):
+        """
+        Update the number of allowed concurrent jobs for a machine
+
+        :param mid: machine's id
+        :param amount: number of allowed concurrent jobs
+        :return:
+        """
+        return self._put(f"/machines/{mid}/update_max", {"amount": amount})

@@ -2,5 +2,5 @@
 
 API
 ==========
-.. automodule:: galileo.api
+.. automodule:: src.galileo_sdk
    :members:
