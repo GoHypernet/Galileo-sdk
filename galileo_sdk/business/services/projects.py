@@ -1,5 +1,4 @@
 from typing import Any, List, Optional
-import requests
 import os
 
 from ...data.repositories.projects import ProjectsRepository

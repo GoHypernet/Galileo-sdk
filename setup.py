@@ -1,10 +1,15 @@
 from setuptools import find_packages, setup
+import glob
 
 setup(
     name="galileo_sdk",
-    version="0.0.4",
+    version="0.0.13",
     license="MIT",
-    packages=find_packages(),
+    author="Hypernet Labs",
+    author_email="hypernet@hypernetlabs.io",
+    url="https://hypernetwork.io/",
+    packages=["galileo_sdk"],
+    package_data={"galileo_sdk": ["sdk/**", "business/**/*", "config/**/*", "data/**/*"]},
     python_requires=">=3.6.7",
     install_requires=["requests>=2.21.0", "python-socketio"],
     extras_require={"docs": ["sphinx>=2.2.0", "sphinx-material"]},
