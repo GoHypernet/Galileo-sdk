@@ -31,24 +31,12 @@ class ProfilesService:
             }
         )
         r = self._profile_repo.list_users(query)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def self(self):
         r = self._profile_repo.self()
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def list_station_invites(self):
         r = self._profile_repo.list_station_invites()
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()

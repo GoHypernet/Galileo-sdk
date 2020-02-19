@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from ...data.repositories.jobs import JobsRepository
 from ..utils.generate_query_str import generate_query_str
+from ..objects.exceptions import JobsException
 
 
 class JobsService:
@@ -12,11 +13,7 @@ class JobsService:
 
     def request_send_job(self):
         r = self._jobs_repo.request_send_job()
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_send_job_completed(
         self, destination_mid: str, file_name: str, station_id: str
@@ -24,75 +21,39 @@ class JobsService:
         r = self._jobs_repo.request_send_job_completed(
             destination_mid, file_name, station_id
         )
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_receive_job(self, job_id: str):
         r = self._jobs_repo.request_receive_job(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_receive_job_completed(self, job_id: str):
         r = self._jobs_repo.request_receive_job_completed(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def submit_job(self, job_id: str):
         r = self._jobs_repo.submit_job(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_stop_job(self, job_id: str):
         r = self._jobs_repo.request_stop_job(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_pause_job(self, job_id: str):
         r = self._jobs_repo.request_pause_job(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_start_job(self, job_id: str):
         r = self._jobs_repo.request_start_job(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_top_from_job(self, job_id: str):
         r = self._jobs_repo.request_top_from_job(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def request_logs_from_job(self, job_id: str):
         r = self._jobs_repo.request_logs_from_jobs(job_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def list_jobs(
         self,
@@ -118,23 +79,16 @@ class JobsService:
             },
         )
         r = self._jobs_repo.list_jobs(query)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def download_job_results(self, job_id: str, path: str):
-        try:
-            r = self._jobs_repo.get_results_url(job_id)
-            r = r.json()
-        except:
-            raise ValueError("Cannot download the results of this job")
+        r = self._jobs_repo.get_results_url(job_id)
+        r = r.json()
 
         url_list: List = r["files"]
 
         if not url_list:
-            raise ValueError("No files to download")
+            raise JobsException(job_id, "No files to download")
 
         for url in url_list:
             results = self._jobs_repo.download_results(job_id, generate_query_str({

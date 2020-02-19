@@ -44,16 +44,15 @@ class ProjectsRepository:
         access_token = self._auth_provider.get_access_token()
         headers = {"Authorization": f"Bearer {access_token}"}
 
-        try:
-            if files is None:
-                r = request(url, json=data, headers=headers)
-            else:
-                headers["filename"] = filename
-                headers["Content-Type"] = "application/octet-stream"
-                r = request(url, json=data, headers=headers, data=files)
-            return r
-        except requests.exceptions.RequestException as e:
-            print(e)
+        if files is None:
+            r = request(url, json=data, headers=headers)
+        else:
+            headers["filename"] = filename
+            headers["Content-Type"] = "application/octet-stream"
+            r = request(url, json=data, headers=headers, data=files)
+
+        r.raise_for_status()
+        return r
 
     def _get(self, *args, **kwargs):
         return self._request(requests.get, *args, **kwargs)

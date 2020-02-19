@@ -37,7 +37,7 @@ class ProjectsSdk:
         """
         return self._projects_service.create_project(name, description)
 
-    def upload_single_file(self, project_id: str, file: Any, filename: str):
+    def upload(self, project_id: str, file: Any, filename: str):
         """
         Upload a single file
 
@@ -46,7 +46,7 @@ class ProjectsSdk:
         :param filename:
         :return: boolean
         """
-        return self._projects_service.upload_single_file(project_id, file, filename)
+        return self._projects_service.upload(project_id, file, filename)
 
     def run_job_on_station(self, project_id: str, station_id: str):
         """

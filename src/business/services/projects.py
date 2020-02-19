@@ -1,5 +1,6 @@
 from typing import Any, List, Optional
 import requests
+import os
 
 from ...data.repositories.projects import ProjectsRepository
 from ..utils.generate_query_str import generate_query_str
@@ -28,40 +29,29 @@ class ProjectsService:
         )
 
         r = self._projects_repo.list_projects(query)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def create_project(self, name: str, description: str):
         r = self._projects_repo.create_project(name, description)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
-    def upload_single_file(self, project_id: str, file: Any, filename: str):
-        r = self._projects_repo.upload_single_file(project_id, file, filename)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+    def upload(self, project_id: str, dir: Any, name: str):
+        for root, dirs, files in os.walk(dir):
+            for file in files:
+                basename = os.path.basename(root)
+                if basename == name:
+                    filename = file
+                else:
+                    filename = os.path.join(os.path.basename(root), file)
+
+                filepath = os.path.join(os.path.abspath(root), file)
+                self._projects_repo.upload_single_file(project_id, filepath, filename)
+        return True
 
     def run_job_on_station(self, project_id: str, station_id: str):
         r = self._projects_repo.run_job_on_station(project_id, station_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def run_job_on_machine(self, project_id: str, station_id: str, machine_id: str):
         r = self._projects_repo.run_job_on_machine(project_id, station_id, machine_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()

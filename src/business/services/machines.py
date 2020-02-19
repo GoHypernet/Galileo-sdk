@@ -11,11 +11,7 @@ class MachinesService:
 
     def get_machine_by_id(self, machine_id: str):
         r = self._machines_repo.get_machine_by_id(machine_id)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def list_machines(
         self,
@@ -28,16 +24,8 @@ class MachinesService:
             {"mids": mids, "userids": userids, "page": page, "items": items}
         )
         r = self._machines_repo.list_machines(query)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
 
     def update_max_concurrent_jobs(self, mid: str, amount: int):
         r = self._machines_repo.update_max_concurrent_jobs(mid, amount)
-        try:
-            r.raise_for_status()
-            return r.json()
-        except requests.exceptions.HTTPError as e:
-            return "HTTPError: " + str(e)
+        return r.json()
