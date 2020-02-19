@@ -117,7 +117,7 @@ def test_list_stations(mocked_requests):
 @mock.patch("requests.post", side_effect=mocked_requests_post)
 def test_create_station(mocked_requests):
     # Call
-    r = stations_repo.create_station(NAME, USERNAMES, DESCRIPTION)
+    r = stations_repo.create_station(NAME, DESCRIPTION, USERNAMES)
     r = r.json()
 
     # Act

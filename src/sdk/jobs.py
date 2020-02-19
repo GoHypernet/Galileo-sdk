@@ -111,7 +111,6 @@ class JobsSdk:
         self,
         jobids: Optional[List[str]] = None,
         receiverids: Optional[List[str]] = None,
-        senderids: Optional[List[str]] = None,
         oaids: Optional[List[str]] = None,
         userids: Optional[List[str]] = None,
         stationids: Optional[List[str]] = None,
@@ -124,7 +123,6 @@ class JobsSdk:
 
         :param jobids: Filter by job ids
         :param receiverids: Filter by receiver ids
-        :param senderids: Filter by sender ids
         :param oaids: Filter by offer acceptance ids
         :param userids: Filter by user ids
         :param stationids: Filter by station ids
@@ -136,7 +134,6 @@ class JobsSdk:
         return self._jobs_service.list_jobs(
             jobids=jobids,
             receiverids=receiverids,
-            senderids=senderids,
             oaids=oaids,
             userids=userids,
             stationids=stationids,

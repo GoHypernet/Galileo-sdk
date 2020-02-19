@@ -1,9 +1,8 @@
 def generate_query_str(*args, **kwargs):
     params = args[0]
     param_str = ""
-
     for key in params:
-        if params[key] is not None:
+        if params[key]:
             if isinstance(params[key], list) and len(params[key]) == 0:
                 pass
             elif isinstance(params[key], list):

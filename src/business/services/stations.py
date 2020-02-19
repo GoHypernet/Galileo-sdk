@@ -1,4 +1,5 @@
 from typing import List, Optional
+import requests
 
 from ...data.repositories.stations import StationsRepository
 from ..utils.generate_query_str import generate_query_str
@@ -33,8 +34,7 @@ class StationsService:
         )
 
         r = self._stations_repo.list_stations(query)
-
-        return r.json() if r.status_code == 200 else None
+        return r.json()
 
     def create_station(
         self, name: str, description: str, userids: Optional[List[str]] = None

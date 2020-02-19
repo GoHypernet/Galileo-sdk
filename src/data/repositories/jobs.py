@@ -47,7 +47,9 @@ class JobsRepository:
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
         headers = {"Authorization": f"Bearer {access_token}"}
-        return request(url, json=data, headers=headers)
+        r = request(url, json=data, headers=headers)
+        r.raise_for_status()
+        return r
 
     def _get(self, *args, **kwargs):
         return self._request(requests.get, *args, **kwargs)
@@ -107,5 +109,5 @@ class JobsRepository:
     def get_results_url(self, job_id: str):
         return self._get(f"/jobs/{job_id}/results")
 
-    def download_results(self, url: str):
-        return self._get(url)
+    def download_results(self, job_id: str, query: str):
+        return self._get(f"/jobs/{job_id}/results", query=query)

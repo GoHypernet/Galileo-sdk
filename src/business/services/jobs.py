@@ -1,8 +1,10 @@
 import os
+import requests
 from typing import List, Optional
 
 from ...data.repositories.jobs import JobsRepository
 from ..utils.generate_query_str import generate_query_str
+from ..objects.exceptions import JobsException
 
 
 class JobsService:
@@ -57,7 +59,6 @@ class JobsService:
         self,
         jobids: Optional[List[str]] = None,
         receiverids: Optional[List[str]] = None,
-        senderids: Optional[List[str]] = None,
         oaids: Optional[List[str]] = None,
         userids: Optional[List[str]] = None,
         stationids: Optional[List[str]] = None,
@@ -71,7 +72,6 @@ class JobsService:
                 "items": items,
                 "jobids": jobids,
                 "receiverids": receiverids,
-                "senderids": senderids,
                 "oaids": oaids,
                 "userids": userids,
                 "stationids": stationids,
@@ -79,19 +79,22 @@ class JobsService:
             },
         )
         r = self._jobs_repo.list_jobs(query)
-
         return r.json()
 
     def download_job_results(self, job_id: str, path: str):
-        try:
-            r = self._jobs_repo.get_results_url(job_id)
-            r = r.json()
-        except:
-            raise ValueError("Cannot download the results of this job")
+        r = self._jobs_repo.get_results_url(job_id)
+        r = r.json()
 
         url_list: List = r["files"]
 
+        if not url_list:
+            raise JobsException(job_id, "No files to download")
+
         for url in url_list:
-            results = self._jobs_repo.download_results(url)
-            filename = url.split("filename=")[1]
-            results.content(os.path.join(path, filename), "wb").write(results.content)
+            results = self._jobs_repo.download_results(job_id, generate_query_str({
+                "filename": url["filename"],
+                "path": url["path"]
+            }))
+            open(os.path.join(path, url["filename"]), "wb").write(results.content)
+
+        return True

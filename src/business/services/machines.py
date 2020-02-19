@@ -1,4 +1,5 @@
 from typing import List, Optional
+import requests
 
 from ...data.repositories.machines import MachinesRepository
 from ..utils.generate_query_str import generate_query_str
