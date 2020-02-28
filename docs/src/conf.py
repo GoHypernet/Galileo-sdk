@@ -14,7 +14,7 @@ import os
 import sys
 
 import sphinx_material
-import src.galileo_sdk
+import galileo_sdk
 
 # -- Python specific configuration -------------------------------------------
 
@@ -36,7 +36,7 @@ copyright = "2020, Hypernet Labs"
 author = "Hypernet Labs"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.4"
+# release = "0.0.13"
 
 
 # -- General configuration ---------------------------------------------------
@@ -94,6 +94,11 @@ html_theme_options = {
     "color_primary": "teal",
     "globaltoc_collapse": True,
     "globaltoc_includehidden": True,
+    "version_dropdown": False,
+}
+
+html_sidebars = {
+    "**": ["globaltoc.html"]
 }
 
 html_logo = "images/galileo-logo.png"

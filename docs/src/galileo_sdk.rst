@@ -1,7 +1,7 @@
 .. _quickstart:
 
-Quickstart
-==========
+Quickstart for SDK and Command Line Interface
+==============================================
 Installation
 ------------
 
@@ -25,11 +25,13 @@ Writing your first script
 
     from galileo_sdk import GalileoSdk
 
+    # all parameters are optional however, must provide either auth and refresh token
+    # OR username and password
     galileo = GalileoSdk(
-        auth_token="AUTH_TOKEN",
+        auth_token="AUTH_TOKEN", # optional, must also provide refresh token
         refresh_token="REFRESH_TOKEN",
-        username="user@galileoapp.io",
-        password="*****"
+        username="user@galileoapp.io", # optional, must also provide a password
+        password="*****",
         config="development"
     )
 
@@ -82,5 +84,28 @@ You can also write callbacks that will execute upon events. The example below is
     galileo.station.on_station_admin_request_received(on_request_received)
 
 
+Using the Galileo Command Line Interface
+-------------------------
+The Galileo CLI is an application that utilizes the Galileo SDK to view jobs without a GUI.
 
+Install via pip:
+
+.. code-block:: bash
+
+    $ pip install galileo-cli
+
+Provide a username and password combination or authorization token and refresh token combination. One way of providing a username is to set environment variables GALILEO_USER and GALILEO_PASSWORD.
+
+.. code-block:: bash
+
+    $ export GALILEO_USER=user@galileoapp.io
+    $ export GALILEO_PASSWORD=password
+    $ galileo-cli
+
+Another way to login is to provide your username on the command line, where you will be prompted for your password:
+
+.. code-block:: bash
+
+    $ galileo-cli -u user@galileoapp.io
+    $ Password:
 

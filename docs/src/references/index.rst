@@ -6,33 +6,34 @@ Jobs
 API
 ****
 .. autosummary::
-    ~src.sdk.jobs.JobsSdk.on_job_launcher_updated
-    ~src.sdk.jobs.JobsSdk.on_job_launcher_results_downloaded
-    ~src.sdk.jobs.JobsSdk.on_station_job_updated
-    ~src.sdk.jobs.JobsSdk.on_job_top
-    ~src.sdk.jobs.JobsSdk.on_job_log
-    ~src.sdk.jobs.JobsSdk.request_stop_job
-    ~src.sdk.jobs.JobsSdk.request_pause_job
-    ~src.sdk.jobs.JobsSdk.request_start_job
-    ~src.sdk.jobs.JobsSdk.request_top_from_job
-    ~src.sdk.jobs.JobsSdk.request_logs_from_job
-    ~src.sdk.jobs.JobsSdk.list_jobs
-    ~src.sdk.jobs.JobsSdk.download_job_results
+    ~galileo_sdk.sdk.jobs.JobsSdk.request_stop_job
+    ~galileo_sdk.sdk.jobs.JobsSdk.request_pause_job
+    ~galileo_sdk.sdk.jobs.JobsSdk.request_start_job
+    ~galileo_sdk.sdk.jobs.JobsSdk.request_top_from_job
+    ~galileo_sdk.sdk.jobs.JobsSdk.request_logs_from_job
+    ~galileo_sdk.sdk.jobs.JobsSdk.list_jobs
+    ~galileo_sdk.sdk.jobs.JobsSdk.download_job_results
 Objects
 *******
 .. autosummary::
-    ~src.business.objects.jobs.Job
-    ~src.business.objects.jobs.EJobStatus
-    ~src.business.objects.jobs.EJobRunningStatus
-    ~src.business.objects.jobs.EPaymentStatus
+    ~galileo_sdk.business.objects.jobs.Job
+    ~galileo_sdk.business.objects.jobs.EJobStatus
+    ~galileo_sdk.business.objects.jobs.EJobRunningStatus
+    ~galileo_sdk.business.objects.jobs.EPaymentStatus
+    ~galileo_sdk.business.objects.jobs.JobLauncherUpdatedEvent
+    ~galileo_sdk.business.objects.jobs.JobLauncherResultsDownloadedEvent
+    ~galileo_sdk.business.objects.jobs.StationJobUpdatedEvent
+    ~galileo_sdk.business.objects.jobs.JobTopEvent
+    ~galileo_sdk.business.objects.jobs.JobLogEvent
 Events
 ******
 .. autosummary::
-    ~src.business.objects.jobs.JobLauncherUpdatedEvent
-    ~src.business.objects.jobs.JobLauncherResultsDownloadedEvent
-    ~src.business.objects.jobs.StationJobUpdatedEvent
-    ~src.business.objects.jobs.JobTopEvent
-    ~src.business.objects.jobs.JobLogEvent
+    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_launcher_updated
+    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_launcher_results_downloaded
+    ~galileo_sdk.sdk.jobs.JobsSdk.on_station_job_updated
+    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_top
+    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_log
+
 
 
 Machines
@@ -40,19 +41,20 @@ Machines
 API
 ****
 .. autosummary::
-    ~src.sdk.machines.MachinesSdk.on_machine_status_update
-    ~src.sdk.machines.MachinesSdk.get_machines_by_id
-    ~src.sdk.machines.MachinesSdk.list_machines
-    ~src.sdk.machines.MachinesSdk.update_concurrent_max_jobs
+    ~galileo_sdk.sdk.machines.MachinesSdk.get_machines_by_id
+    ~galileo_sdk.sdk.machines.MachinesSdk.list_machines
+    ~galileo_sdk.sdk.machines.MachinesSdk.update_concurrent_max_jobs
 Objects
 *******
 .. autosummary::
-    ~src.business.objects.machines.Machine
-    ~src.business.objects.machines.EMachineStatus
+    ~galileo_sdk.business.objects.machines.Machine
+    ~galileo_sdk.business.objects.machines.EMachineStatus
+    ~galileo_sdk.business.objects.machines.MachineStatusUpdateEvent
 Events
 *****
 .. autosummary::
-    ~src.business.objects.machines.MachineStatusUpdateEvent
+    ~galileo_sdk.sdk.machines.MachinesSdk.on_machine_status_update
+
 
 
 Profiles
@@ -60,24 +62,24 @@ Profiles
 API
 ****
 .. autosummary::
-    ~src.sdk.profiles.ProfilesSdk.self
-    ~src.sdk.profiles.ProfilesSdk.list_station_invites
-    ~src.sdk.profiles.ProfilesSdk.list_users
+    ~galileo_sdk.sdk.profiles.ProfilesSdk.self
+    ~galileo_sdk.sdk.profiles.ProfilesSdk.list_station_invites
+    ~galileo_sdk.sdk.profiles.ProfilesSdk.list_users
 Objects
 ****
 .. autosummary::
-    ~src.business.objects.profiles.Profile
-    ~src.business.objects.profiles.ProfileWallet
+    ~galileo_sdk.business.objects.profiles.Profile
+    ~galileo_sdk.business.objects.profiles.ProfileWallet
 
 Projects
 ~~~~~~~~
 API
 ****
 .. autosummary::
-    ~src.sdk.projects.ProjectsSdk.create_project
-    ~src.sdk.projects.ProjectsSdk.upload_single_file
-    ~src.sdk.projects.ProjectsSdk.run_job_on_station
-    ~src.sdk.projects.ProjectsSdk.run_job_on_machine
+    ~galileo_sdk.sdk.projects.ProjectsSdk.create_project
+    ~galileo_sdk.sdk.projects.ProjectsSdk.upload
+    ~galileo_sdk.sdk.projects.ProjectsSdk.run_job_on_station
+    ~galileo_sdk.sdk.projects.ProjectsSdk.run_job_on_machine
 
 
 Stations
@@ -85,98 +87,99 @@ Stations
 API
 ****
 .. autosummary::
-    ~src.sdk.stations.StationsSdk.on_new_station
-    ~src.sdk.stations.StationsSdk.on_station_admin_invite_sent
-    ~src.sdk.stations.StationsSdk.on_station_user_invite_received
-    ~src.sdk.stations.StationsSdk.on_station_admin_invite_accepted
-    ~src.sdk.stations.StationsSdk.on_station_member_member_added
-    ~src.sdk.stations.StationsSdk.on_station_user_invite_accepted
-    ~src.sdk.stations.StationsSdk.on_station_admin_invite_rejected
-    ~src.sdk.stations.StationsSdk.on_station_admin_request_received
-    ~src.sdk.stations.StationsSdk.on_station_user_request_sent
-    ~src.sdk.stations.StationsSdk.on_station_admin_request_accepted
-    ~src.sdk.stations.StationsSdk.on_station_user_request_accepted
-    ~src.sdk.stations.StationsSdk.on_station_admin_request_rejected
-    ~src.sdk.stations.StationsSdk.on_station_user_request_rejected
-    ~src.sdk.stations.StationsSdk.on_station_admin_member_removed
-    ~src.sdk.stations.StationsSdk.on_station_admin_machine_removed
-    ~src.sdk.stations.StationsSdk.on_station_member_member_removed
-    ~src.sdk.stations.StationsSdk.on_station_member_machine_removed
-    ~src.sdk.stations.StationsSdk.on_station_user_withdrawn
-    ~src.sdk.stations.StationsSdk.on_station_user_expelled
-    ~src.sdk.stations.StationsSdk.on_station_admin_destroyed
-    ~src.sdk.stations.StationsSdk.on_station_member_destroyed
-    ~src.sdk.stations.StationsSdk.on_station_user_invite_destroyed
-    ~src.sdk.stations.StationsSdk.on_station_user_request_destroyed
-    ~src.sdk.stations.StationsSdk.on_station_admin_machine_added
-    ~src.sdk.stations.StationsSdk.on_station_member_machine_added
-    ~src.sdk.stations.StationsSdk.on_station_admin_volume_added
-    ~src.sdk.stations.StationsSdk.on_station_member_volume_added
-    ~src.sdk.stations.StationsSdk.on_station_admin_volume_host_path_added
-    ~src.sdk.stations.StationsSdk.on_station_member_volume_host_path_added
-    ~src.sdk.stations.StationsSdk.on_station_admin_volume_host_path_removed
-    ~src.sdk.stations.StationsSdk.on_station_member_volume_host_path_removed
-    ~src.sdk.stations.StationsSdk.on_station_admin_volume_removed
-    ~src.sdk.stations.StationsSdk.on_station_member_volume_removed
-    ~src.sdk.stations.StationsSdk.list_stations
-    ~src.sdk.stations.StationsSdk.create_station
-    ~src.sdk.stations.StationsSdk.invite_to_station
-    ~src.sdk.stations.StationsSdk.accept_station_invite
-    ~src.sdk.stations.StationsSdk.reject_station_invite
-    ~src.sdk.stations.StationsSdk.request_to_join
-    ~src.sdk.stations.StationsSdk.approve_request_to_join
-    ~src.sdk.stations.StationsSdk.reject_request_to_join
-    ~src.sdk.stations.StationsSdk.leave_station
-    ~src.sdk.stations.StationsSdk.remove_member_from_station
-    ~src.sdk.stations.StationsSdk.delete_station
-    ~src.sdk.stations.StationsSdk.add_machines_to_station
-    ~src.sdk.stations.StationsSdk.remove_machines_from_station
-    ~src.sdk.stations.StationsSdk.add_volumes_to_station
-    ~src.sdk.stations.StationsSdk.add_host_path_to_volume
-    ~src.sdk.stations.StationsSdk.delete_host_path_from_volume
-    ~src.sdk.stations.StationsSdk.remove_volume_from_station
+    ~galileo_sdk.sdk.stations.StationsSdk.list_stations
+    ~galileo_sdk.sdk.stations.StationsSdk.create_station
+    ~galileo_sdk.sdk.stations.StationsSdk.invite_to_station
+    ~galileo_sdk.sdk.stations.StationsSdk.accept_station_invite
+    ~galileo_sdk.sdk.stations.StationsSdk.reject_station_invite
+    ~galileo_sdk.sdk.stations.StationsSdk.request_to_join
+    ~galileo_sdk.sdk.stations.StationsSdk.approve_request_to_join
+    ~galileo_sdk.sdk.stations.StationsSdk.reject_request_to_join
+    ~galileo_sdk.sdk.stations.StationsSdk.leave_station
+    ~galileo_sdk.sdk.stations.StationsSdk.remove_member_from_station
+    ~galileo_sdk.sdk.stations.StationsSdk.delete_station
+    ~galileo_sdk.sdk.stations.StationsSdk.add_machines_to_station
+    ~galileo_sdk.sdk.stations.StationsSdk.remove_machines_from_station
+    ~galileo_sdk.sdk.stations.StationsSdk.add_volumes_to_station
+    ~galileo_sdk.sdk.stations.StationsSdk.add_host_path_to_volume
+    ~galileo_sdk.sdk.stations.StationsSdk.delete_host_path_from_volume
+    ~galileo_sdk.sdk.stations.StationsSdk.remove_volume_from_station
 Objects
 *******
 .. autosummary::
-    ~src.business.objects.stations.Station
-    ~src.business.objects.stations.StationUser
-    ~src.business.objects.stations.Volume
-    ~src.business.objects.stations.VolumeHostPath
-    ~src.business.objects.stations.EStationUserRole
-    ~src.business.objects.stations.EVolumeAccess
+    ~galileo_sdk.business.objects.stations.Station
+    ~galileo_sdk.business.objects.stations.StationUser
+    ~galileo_sdk.business.objects.stations.Volume
+    ~galileo_sdk.business.objects.stations.VolumeHostPath
+    ~galileo_sdk.business.objects.stations.EStationUserRole
+    ~galileo_sdk.business.objects.stations.EVolumeAccess
+    ~galileo_sdk.business.objects.stations.NewStationEvent
+    ~galileo_sdk.business.objects.stations.StationAdminInviteSentEvent
+    ~galileo_sdk.business.objects.stations.StationUserInviteReceivedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminInviteAcceptedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberMemberEvent
+    ~galileo_sdk.business.objects.stations.StationUserInviteAcceptedEvent
+    ~galileo_sdk.business.objects.stations.StationUserInviteRejectedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminRequestReceivedEvent
+    ~galileo_sdk.business.objects.stations.StationUserRequestSentEvent
+    ~galileo_sdk.business.objects.stations.StationAdminRequestAcceptedEvent
+    ~galileo_sdk.business.objects.stations.StationUserRequestAcceptedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminRequestRejectedEvent
+    ~galileo_sdk.business.objects.stations.StationUserRequestRejectedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminMemberRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminMachineRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberMemberRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberMachineRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationUserWithdrawnEvent
+    ~galileo_sdk.business.objects.stations.StationUserExpelledEvent
+    ~galileo_sdk.business.objects.stations.StationAdminDestroyedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberDestroyedEvent
+    ~galileo_sdk.business.objects.stations.StationUserInviteDestroyedEvent
+    ~galileo_sdk.business.objects.stations.StationUserRequestDestroyedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminMachineAddedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberMachineAddedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminVolumeAddedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberVolumeAddedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminVolumeHostPathAddedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberVolumeHostPathAddedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminVolumeHostPathRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberVolumeHostPathRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminVolumeRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberVolumeRemovedEvent
+
 Events
 ******
 .. autosummary::
-    ~src.business.objects.stations.NewStationEvent
-    ~src.business.objects.stations.StationAdminInviteSentEvent
-    ~src.business.objects.stations.StationUserInviteReceivedEvent
-    ~src.business.objects.stations.StationAdminInviteAcceptedEvent
-    ~src.business.objects.stations.StationMemberMemberEvent
-    ~src.business.objects.stations.StationUserInviteAcceptedEvent
-    ~src.business.objects.stations.StationUserInviteRejectedEvent
-    ~src.business.objects.stations.StationAdminRequestReceivedEvent
-    ~src.business.objects.stations.StationUserRequestSentEvent
-    ~src.business.objects.stations.StationAdminRequestAcceptedEvent
-    ~src.business.objects.stations.StationUserRequestAcceptedEvent
-    ~src.business.objects.stations.StationAdminRequestRejectedEvent
-    ~src.business.objects.stations.StationUserRequestRejectedEvent
-    ~src.business.objects.stations.StationAdminMemberRemovedEvent
-    ~src.business.objects.stations.StationAdminMachineRemovedEvent
-    ~src.business.objects.stations.StationMemberMemberRemovedEvent
-    ~src.business.objects.stations.StationMemberMachineRemovedEvent
-    ~src.business.objects.stations.StationUserWithdrawnEvent
-    ~src.business.objects.stations.StationUserExpelledEvent
-    ~src.business.objects.stations.StationAdminDestroyedEvent
-    ~src.business.objects.stations.StationMemberDestroyedEvent
-    ~src.business.objects.stations.StationUserInviteDestroyedEvent
-    ~src.business.objects.stations.StationUserRequestDestroyedEvent
-    ~src.business.objects.stations.StationAdminMachineAddedEvent
-    ~src.business.objects.stations.StationMemberMachineAddedEvent
-    ~src.business.objects.stations.StationAdminVolumeAddedEvent
-    ~src.business.objects.stations.StationMemberVolumeAddedEvent
-    ~src.business.objects.stations.StationAdminVolumeHostPathAddedEvent
-    ~src.business.objects.stations.StationMemberVolumeHostPathAddedEvent
-    ~src.business.objects.stations.StationAdminVolumeHostPathRemovedEvent
-    ~src.business.objects.stations.StationMemberVolumeHostPathRemovedEvent
-    ~src.business.objects.stations.StationAdminVolumeRemovedEvent
-    ~src.business.objects.stations.StationMemberVolumeRemovedEvent
+    ~galileo_sdk.sdk.stations.StationsSdk.on_new_station
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_invite_sent
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_invite_received
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_invite_accepted
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_member_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_invite_accepted
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_invite_rejected
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_request_received
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_request_sent
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_request_accepted
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_request_accepted
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_request_rejected
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_request_rejected
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_member_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_machine_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_member_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_machine_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_withdrawn
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_expelled
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_destroyed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_destroyed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_invite_destroyed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_request_destroyed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_machine_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_machine_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_volume_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_volume_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_volume_host_path_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_volume_host_path_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_volume_host_path_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_volume_host_path_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_volume_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_volume_removed
