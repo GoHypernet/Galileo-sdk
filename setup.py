@@ -1,9 +1,8 @@
-from setuptools import find_packages, setup
-import glob
+from setuptools import setup
 
 setup(
     name="galileo_sdk",
-    version="0.0.13",
+    version="0.0.14",
     license="MIT",
     author="Hypernet Labs",
     author_email="hypernet@hypernetlabs.io",
