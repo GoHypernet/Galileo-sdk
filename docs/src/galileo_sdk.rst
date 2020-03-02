@@ -32,7 +32,6 @@ Writing your first script
         refresh_token="REFRESH_TOKEN",
         username="user@galileoapp.io", # optional, must also provide a password
         password="*****",
-        config="development"
     )
 
 Alternatively, you can set the environment variables instead of passing in the parameters:
@@ -47,7 +46,6 @@ An example of exporting your environment variable on MacOS:
 .. code-block:: bash
 
     $ export GALILEO_USER=user@galileoapp.io
-    $ export GALILEO_CONFIG=development
 
 :code:`GalileoSdk` exposes the Jobs, Machines, Profiles, Projects, and Stations APIs
 
