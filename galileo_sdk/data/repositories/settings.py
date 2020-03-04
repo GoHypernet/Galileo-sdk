@@ -15,7 +15,7 @@ class SettingsRepository:
         elif "development" == config:
             self._settings.backend = development.BACKEND
         else:
-            self._settings.backend = local.BACKEND
+            self._settings.backend = config
 
     def get_settings(self):
         return self._settings

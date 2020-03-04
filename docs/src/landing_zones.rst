@@ -57,12 +57,12 @@ Make sure you have `installed Docker <https://docs.docker.com/install/>`_. To pu
 
 .. code-block:: bash
 
-    $  docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v ~/.docker/config.json:/root/.docker/config.json hypernetlabs/landing-zone-daemon'
+    $  docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v ~/.docker/config.json:/root/.docker/config.json hypernetlabs/landing-zone-daemon --machine-name 'yourmachinename' --machine-id 'yourmachineid'
 
 Take a look at the docker logs by:
 
 .. code-block:: bash
 
-    $ docker container <container-id>
+    $ docker container logs <container-id>
 
 The landing zone daemon will give you instructions for registering your machine as a landing zone on Galileo.

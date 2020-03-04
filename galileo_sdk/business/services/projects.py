@@ -44,7 +44,8 @@ class ProjectsService:
                     filename = os.path.join(os.path.basename(root), file)
 
                 filepath = os.path.join(os.path.abspath(root), file)
-                self._projects_repo.upload_single_file(project_id, filepath, filename)
+                f = open(filepath, "rb").read()
+                self._projects_repo.upload_single_file(project_id, f, filename)
         return True
 
     def run_job_on_station(self, project_id: str, station_id: str):

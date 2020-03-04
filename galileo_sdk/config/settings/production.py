@@ -1,1 +1,1 @@
-BACKEND = "http://api.galileoapp.io"
+BACKEND = "https://api.galileoapp.io"

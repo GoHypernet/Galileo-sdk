@@ -290,3 +290,6 @@ class GalileoConnector:
             self.stations_events.station_member_volume_removed(
                 StationMemberVolumeRemovedEvent(data["stationid"], data["volume_names"])
             )
+
+    def disconnect(self):
+        self._socket.disconnect()

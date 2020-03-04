@@ -1,5 +1,6 @@
 import os
 from typing import Optional
+import atexit
 
 from .business.services.jobs import JobsService
 from .business.services.log import LogService
@@ -37,6 +38,15 @@ class GalileoSdk:
         password: Optional[str] = None,
         config: Optional[str] = None,
     ):
+        """
+        Galileo SDK object.
+
+        :param auth_token: authentication token
+        :param refresh_token: refresh token
+        :param username: Galileo username
+        :param password: Galileo password
+        :param config: production or development
+        """
         self.log = LogService()
 
         if "GALILEO_CONFIG" in os.environ:
@@ -101,3 +111,10 @@ class GalileoSdk:
         self._projects_repo = ProjectsRepository(self._settings, self._auth_provider)
         self._projects_service = ProjectsService(self._projects_repo)
         self.projects = ProjectsSdk(self._projects_service)
+
+    def disconnect(self):
+        """
+        Call disconnect before your application or script ends.
+        :return: None
+        """
+        self._events.disconnect()

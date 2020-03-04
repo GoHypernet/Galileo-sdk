@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="galileo_sdk",
-    version="0.0.14",
+    version="0.0.15",
     license="MIT",
     author="Hypernet Labs",
     author_email="hypernet@hypernetlabs.io",
