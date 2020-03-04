@@ -58,9 +58,9 @@ Examples of using each of the APIs:
     galileo = GalileoSdk()
     jobs = galileo.jobs.list_jobs()
     stations = galileo.stations.list_stations()
-    users = galileo.stations.list_users()
-    machines = galileo.stations.list_machines()
-    project = galileo.project.create_project()
+    users = galileo.profiles.list_users()
+    machines = galileo.machines.list_machines()
+    project = galileo.projects.create_project()
 
 You can also write callbacks that will execute upon events. The example below is a script that allows an admin of stations to automatically accept all requests to join a station:
 
@@ -80,6 +80,13 @@ You can also write callbacks that will execute upon events. The example below is
         approve_request_to_join(stationid, [userid])
 
     galileo.station.on_station_admin_request_received(on_request_received)
+
+
+Before you end your script, you must disconnect the Galileo object via:
+
+.. code-block:: python
+
+    galileo.disconnect()
 
 
 Using the Galileo Command Line Interface

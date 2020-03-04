@@ -1,4 +1,4 @@
-from ...config.settings import development, local, production
+from ...config.settings import development, production
 
 
 class Settings:
