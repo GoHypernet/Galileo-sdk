@@ -1,8 +1,8 @@
 from unittest import mock
 
-from src.business.utils.generate_query_str import generate_query_str
-from src.data.repositories.profiles import ProfilesRepository
-from src.mock_response import MockResponse
+from galileo_sdk.business.utils.generate_query_str import generate_query_str
+from galileo_sdk.data.repositories.profiles import ProfilesRepository
+from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"

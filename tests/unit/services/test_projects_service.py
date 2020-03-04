@@ -1,7 +1,7 @@
 from unittest import mock
 
-from src.business.services.projects import ProjectsService
-from src.mock_response import MockResponse
+from galileo_sdk.business.services.projects import ProjectsService
+from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAME = "test_name"

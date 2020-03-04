@@ -1,6 +1,6 @@
 import os
 
-from src import GalileoSdk
+from galileo_sdk import GalileoSdk
 
 # Must set env variables before running tests
 CONFIG = "development"

@@ -1,7 +1,7 @@
 from unittest import mock
 
-from src.data.repositories.machines import MachinesRepository
-from src.mock_response import MockResponse
+from galileo_sdk.data.repositories.machines import MachinesRepository
+from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
