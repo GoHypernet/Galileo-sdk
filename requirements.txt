@@ -6,3 +6,4 @@ pytest-runner
 black
 isort
 pytest
+objectmapper
