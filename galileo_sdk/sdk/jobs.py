@@ -6,6 +6,10 @@ from ..business.objects.jobs import (JobLauncherResultsDownloadedEvent,
                                      StationJobUpdatedEvent)
 from ..business.services.jobs import JobsService
 
+class UpdateJobRequest:
+    def __init__(self, job_id: str, archived: Optional[bool] = None):
+        self.job_id = job_id
+        self.archived = archived
 
 class JobsSdk:
     _jobs_service: JobsService
@@ -151,3 +155,10 @@ class JobsSdk:
         :return: None
         """
         return self._jobs_service.download_job_results(job_id, path)
+
+    def update_job(self, request: UpdateJobRequest):
+        """ Updates an existing job
+
+        :param reuest: An UpdateJobRequest object
+        return 
+        """

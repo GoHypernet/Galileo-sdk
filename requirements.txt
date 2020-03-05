@@ -1,0 +1,9 @@
+requests>=2.21.0
+python-socketio
+sphinx>=2.2.0
+sphinx-material
+pytest-runner
+black
+isort
+pytest
+objectmapper
