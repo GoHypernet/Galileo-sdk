@@ -1,4 +1,5 @@
 import enum
+import objectmapper
 from datetime import datetime
 from typing import Callable, List, Optional
 
@@ -6,26 +7,31 @@ from ...business.objects.event import EventEmitter
 
 
 class EJobStatus(enum.Enum):
-    uploaded = 0  # job has been uploaded
-    submitted = 1  # LZ has been or is cleared to download job
-    downloaded = 2  # Job has been downloaded by LZ
-    building_image = 3  # Building docker image
-    building_container = 4  # Buiding docker container
-    start_requested = 5  # Start
-    running = 6
-    pause_requested = 7
-    paused = 8
-    stop_requested = 9
-    stopped = 10
-    exited = 11
-    collecting_results = 12
-    posting_results = 13
-    terminated = 14
-    completed = 15
-    removed_by_host = 16
-    unknown = 17  # Just in case arbitrary update occurs
-    post_processing = 18
-    started = 19
+    uploaded            = 0  # job has been uploaded
+    submitted           = 1  # LZ has been or is cleared to download job
+    downloaded          = 2  # Job has been downloaded by LZ
+    building_image      = 3  # Building docker image
+    building_container  = 4  # Buiding docker container
+    start_requested     = 5  # Start
+    running             = 6
+    pause_requested     = 7
+    paused              = 8
+    stop_requested      = 9
+    stopped             = 10
+    exited              = 11
+    collecting_results  = 12
+    posting_results     = 13
+    terminated          = 14
+    completed           = 15
+    removed_by_host     = 16
+    unknown             = 17  # Just in case arbitrary update occurs
+    post_processing     = 18
+    started             = 19
+    built_image         = 20
+    built_container     = 21
+    results_posted      = 22
+    error               = 23
+    build_error         = 24
 
 
 class EJobRunningStatus(enum.Enum):

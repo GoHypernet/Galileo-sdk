@@ -5,6 +5,7 @@ from typing import List, Optional
 from ...data.repositories.jobs import JobsRepository
 from ..utils.generate_query_str import generate_query_str
 from ..objects.exceptions import JobsException
+from galileo_sdk.business.objects import Job
 
 
 class JobsService:
@@ -65,7 +66,7 @@ class JobsService:
         statuses: Optional[List[str]] = None,
         page: Optional[int] = 1,
         items: Optional[int] = 25,
-    ):
+    ) -> List[Job]:
         query = generate_query_str(
             {
                 "page": page,
@@ -78,8 +79,8 @@ class JobsService:
                 "statuses": statuses,
             },
         )
-        r = self._jobs_repo.list_jobs(query)
-        return r.json()
+        jobs = self._jobs_repo.list_jobs(query)
+        return jobs
 
     def download_job_results(self, job_id: str, path: str):
         r = self._jobs_repo.get_results_url(job_id)
