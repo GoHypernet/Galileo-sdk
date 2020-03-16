@@ -29,3 +29,6 @@ def test_list_station_invites():
     station_invites = galileo.profiles.list_station_invites()
     assert not station_invites == None
     assert "stations" in station_invites
+
+
+galileo.disconnect()

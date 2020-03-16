@@ -96,3 +96,6 @@ def test_add_and_delete_host_path_to_volume():
     assert [] == volumes["volumes"]["host_paths"]
     assert "host_path" == host_path["volume"]["host_paths"][0]["host_path"]
     assert deleted_host_path == True
+
+
+galileo.disconnect()

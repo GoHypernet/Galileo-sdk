@@ -41,13 +41,13 @@ def test_create_project():
     assert r["project"]["description"] == DESCRIPTION
 
 
-def test_upload_single_file():
+def test_upload():
     projects_repo.upload_single_file.return_value = MockResponse(None, 200)
     filename = "test_upload_file.txt"
-    file = {"upload_file": open(filename, "rb")}
-    r = projects_service.upload_single_file(PROJECT_ID, file, filename)
+    dir = "."
+    r = projects_service.upload(PROJECT_ID, dir, filename)
 
-    assert r is None
+    assert r is True
 
 
 def test_run_job_on_station():

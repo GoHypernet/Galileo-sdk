@@ -92,18 +92,6 @@ def tests_upload_file(mocked_requests):
     file = {"upload_file": open(filename, "rb")}
     r = projects_repo.upload_single_file(PROJECT_ID, file, filename)
 
-    # Act
-    # mocked_requests.assert_called_once_with(
-    #     f"{BACKEND}{NAMESPACE}/projects/{PROJECT_ID}/files",
-    #     headers={
-    #         'Authorization': 'Bearer ACCESS_TOKEN',
-    #         'filename': 'test_upload_file.txt',
-    #         'Content-Type': 'application/octet-stream'
-    #     },
-    #     json=None,
-    #     data={'upload_file': open(filename, "rb")},
-    # )
-
     assert r.json() is None
     assert r.status_code == 200
 

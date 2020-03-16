@@ -24,8 +24,4 @@ def test_get_machines_by_id():
     assert "name" in machine
 
 
-def test_update_concurrent_max_jobs():
-    r = galileo.machines.update_concurrent_max_jobs(
-        machine_list["machines"][0]["mid"], 10
-    )
-    assert r == True
+galileo.disconnect()

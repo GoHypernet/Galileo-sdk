@@ -52,13 +52,3 @@ class MachinesSdk:
         return self._machines_service.list_machines(
             mids=mids, userids=userids, page=page, items=items
         )
-
-    def update_concurrent_max_jobs(self, mid: str, amount: int):
-        """
-        Update the number of allowed concurrent jobs for a machine
-
-        :param mid: machine's id
-        :param amount: number of allowed concurrent jobs
-        :return: boolean
-        """
-        return self._machines_service.update_max_concurrent_jobs(mid, amount)

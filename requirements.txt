@@ -6,4 +6,4 @@ pytest-runner
 black
 isort
 pytest
-objectmapper
+objectmapper==0.0.7

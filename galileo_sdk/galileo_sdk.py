@@ -48,13 +48,13 @@ class GalileoSdk:
         :param config: production or development
         """
         self.log = LogService()
-
         if "GALILEO_CONFIG" in os.environ:
+            print(str(os.environ["GALILEO_CONFIG"]))
             self._settings = SettingsRepository(str(os.environ["GALILEO_CONFIG"]))
-        elif config is None:
-            self._settings = SettingsRepository("production")
-        else:
+        elif config:
             self._settings = SettingsRepository(config)
+        else:
+            self._settings = SettingsRepository("production")
 
         settings = self._settings.get_settings()
         self.backend = settings.backend

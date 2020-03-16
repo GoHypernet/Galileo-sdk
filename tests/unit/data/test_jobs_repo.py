@@ -2,6 +2,8 @@ from unittest import mock
 
 from galileo_sdk.data.repositories.jobs import JobsRepository
 from galileo_sdk.mock_response import MockResponse
+from galileo_sdk.business.objects import Job, EJobStatus, EPaymentStatus, EJobRunningStatus, JobStatus
+from datetime import datetime
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
@@ -29,7 +31,29 @@ def mocked_requests_get(*args, **kwargs):
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/logs":
         return MockResponse(True, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs":
-        return MockResponse({"jobs": [{"job": i} for i in range(25)]}, 200)
+        return MockResponse(
+            {"jobs": [
+                {"job": Job(
+                    "userid",
+                    "senderid",
+                    "receiverid",
+                    datetime.now(),
+                    datetime.now(),
+                    EJobStatus.running,
+                    "container",
+                    "name",
+                    "stationid",
+                    EJobRunningStatus.running,
+                    "oaid",
+                    EPaymentStatus.current,
+                    0,
+                    2,
+                    [JobStatus(datetime.now(), EJobStatus.running, "statusid", "jobid")],
+                    "jobid"
+                )}
+            ]},
+            200
+        )
     return MockResponse(None, 404)
 
 
@@ -232,7 +256,6 @@ def test_request_logs_from_job(mocked_requests):
 def test_list_jobs(mocked_requests):
     # Call
     r = job_repo.list_jobs("")
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -241,5 +264,7 @@ def test_list_jobs(mocked_requests):
         json=None,
     )
 
+    print("response", r)
+
     # Assert
-    assert r["jobs"] == [{"job": i} for i in range(25)]
+    # assert r["jobs"] == [{"job": i} for i in range(25)]

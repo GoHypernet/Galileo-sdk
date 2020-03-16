@@ -1,7 +1,7 @@
 from galileo_sdk import GalileoSdk
 
 # Must set env variables before running tests
-CONFIG = "local"
+CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)
 
@@ -23,26 +23,9 @@ def test_list_projects():
 def test_upload_file():
     project = galileo.projects.create_project("project", "upload single file")
     project = project["project"]
-    filename_a = "funny/a.png"
-    filename_b = "funny/subfunny/b.jpg"
-    filename_c = "funny/a.txt"
-    filename_d = "funny/subfunny/b.txt"
+    response = galileo.projects.upload(project["id"], "funny", "funny")
 
-    print(project["id"])
+    assert response == True
 
-    file_a = open(filename_a, "rb").read()
-    a_r = galileo.projects.upload_single_file(project["id"], file_a, filename_a[6:])
 
-    file_b = open(filename_b, "rb").read()
-    b_r = galileo.projects.upload_single_file(project["id"], file_b, filename_b[6:])
-
-    file_c = open(filename_c, "rb").read()
-    c_r = galileo.projects.upload_single_file(project["id"], file_c, filename_c[6:])
-
-    file_d = open(filename_d, "rb").read()
-    d_r = galileo.projects.upload_single_file(project["id"], file_d, filename_d[6:])
-
-    assert a_r == True
-    assert b_r == True
-    assert c_r == True
-    assert d_r == True
+galileo.disconnect()
