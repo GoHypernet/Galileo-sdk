@@ -4,4 +4,11 @@ from galileo_sdk.business.objects.jobs import (
     EJobStatus,
     EPaymentStatus,
     EJobRunningStatus,
+    UpdateJobRequest,
+    JobLauncherResultsDownloadedEvent,
+    JobLauncherUpdatedEvent,
+    JobLogEvent,
+    JobsEvents,
+    JobTopEvent,
+    StationJobUpdatedEvent,
 )

@@ -1,4 +1,4 @@
-def generate_query_str(*args, **kwargs):
+def generate_query_str(*args, **kwargs) -> str:
     params = args[0]
     param_str = ""
     for key in params:

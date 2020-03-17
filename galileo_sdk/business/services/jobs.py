@@ -1,11 +1,10 @@
 import os
-import requests
 from typing import List, Optional
 
 from ...data.repositories.jobs import JobsRepository
 from ..utils.generate_query_str import generate_query_str
 from ..objects.exceptions import JobsException
-from galileo_sdk.business.objects import Job
+from galileo_sdk.business.objects import Job, UpdateJobRequest
 
 
 class JobsService:
@@ -67,7 +66,7 @@ class JobsService:
         page: Optional[int] = 1,
         items: Optional[int] = 25,
     ) -> List[Job]:
-        query = generate_query_str(
+        query: str = generate_query_str(
             {
                 "page": page,
                 "items": items,
@@ -79,8 +78,7 @@ class JobsService:
                 "statuses": statuses,
             },
         )
-        jobs = self._jobs_repo.list_jobs(query)
-        return jobs
+        return self._jobs_repo.list_jobs(query)
 
     def download_job_results(self, job_id: str, path: str):
         r = self._jobs_repo.get_results_url(job_id)
@@ -99,3 +97,6 @@ class JobsService:
             open(os.path.join(path, url["filename"]), "wb").write(results.content)
 
         return True
+
+    def update_job(self, request: UpdateJobRequest) -> Job:
+        return self._jobs_repo.update_job(request)

@@ -4,7 +4,7 @@ from urllib.parse import urlunparse
 import requests
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
-from galileo_sdk.business.objects import Job, JobStatus, EJobStatus
+from galileo_sdk.business.objects import Job, JobStatus, EJobStatus, UpdateJobRequest
 from datetime import datetime
 
 
@@ -115,6 +115,12 @@ class JobsRepository:
     def download_results(self, job_id: str, query: str):
         return self._get(f"/jobs/{job_id}/results", query=query)
 
+    def update_job(self, request: UpdateJobRequest) -> Job:
+        response = self._put(f"/jobs/{request.job_id}", {"archived": request.archived})
+        json: dict = response.json()
+        job: dict = json["job"]
+        return job_dict_to_job(job)
+
 
 def job_dict_to_job(job: dict) -> Job:
     return Job(
@@ -143,9 +149,11 @@ def job_dict_to_job(job: dict) -> Job:
 
 def job_status_dict_to_job_status(job_status: dict) -> JobStatus:
     status = JobStatus(
-        datetime.fromtimestamp(job_status["time"]), EJobStatus[job_status["status"]],
+        datetime.fromtimestamp(job_status["timestamp"]),
+        EJobStatus[job_status["status"]],
     )
     status.jobstatusid = (
         job_status["jobstatusid"] if "jobstatusid" in job_status else None
     )
     status.jobid = job_status["jobid"] if "jobid" in job_status else None
+    return status

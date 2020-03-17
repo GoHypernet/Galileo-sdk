@@ -1,9 +1,8 @@
 import enum
-import objectmapper
 from datetime import datetime
 from typing import Callable, List, Optional
 
-from ...business.objects.event import EventEmitter
+from galileo_sdk.business.objects.event import EventEmitter
 
 
 class EJobStatus(enum.Enum):
@@ -32,6 +31,7 @@ class EJobStatus(enum.Enum):
     results_posted = 22
     error = 23
     build_error = 24
+    kill_requested = 25
 
 
 class EJobRunningStatus(enum.Enum):
@@ -44,6 +44,12 @@ class EPaymentStatus(enum.Enum):
     payment_due = 1  # Missing a payment
     delinquent = 2  # Delinquent on payments
     missing_offer = 3  # No valid offer found
+
+
+class UpdateJobRequest:
+    def __init__(self, job_id: str, archived: Optional[bool] = None):
+        self.job_id = job_id
+        self.archived = archived
 
 
 class JobStatus:
@@ -85,7 +91,7 @@ class Job:
         archived: bool,
         status_history: List[JobStatus],
     ):
-        self.jobid = jobid
+        self.job_id = jobid
         self.receiver_id = receiverid
         self.project_id = project_id
         self.time_created = time_created

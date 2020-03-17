@@ -45,7 +45,9 @@ job = {
     "pay_interval": 1,
     "total_runtime": 10000,
     "archived": False,
-    "status_history": [{"time": int(datetime.now().timestamp()), "status": "uploaded"}],
+    "status_history": [
+        {"timestamp": int(datetime.now().timestamp()), "status": "uploaded"}
+    ],
 }
 
 jobObject = job_dict_to_job(job)
@@ -273,4 +275,4 @@ def test_list_jobs(mocked_requests):
     )
 
     # Assert
-    assert r[0].jobid == jobObject.jobid
+    assert r[0].job_id == jobObject.job_id

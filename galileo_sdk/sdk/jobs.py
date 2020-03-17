@@ -1,20 +1,16 @@
 from typing import Callable, List, Optional
 
-from ..business.objects.jobs import (
+from galileo_sdk.business.objects import (
+    Job,
     JobLauncherResultsDownloadedEvent,
     JobLauncherUpdatedEvent,
     JobLogEvent,
     JobsEvents,
     JobTopEvent,
     StationJobUpdatedEvent,
+    UpdateJobRequest,
 )
 from ..business.services.jobs import JobsService
-
-
-class UpdateJobRequest:
-    def __init__(self, job_id: str, archived: Optional[bool] = None):
-        self.job_id = job_id
-        self.archived = archived
 
 
 class JobsSdk:
@@ -127,7 +123,7 @@ class JobsSdk:
         statuses: Optional[List[str]] = None,
         page: Optional[int] = 1,
         items: Optional[int] = 25,
-    ):
+    ) -> List[Job]:
         """
         List of your jobs
 
@@ -139,7 +135,7 @@ class JobsSdk:
         :param statuses: Filter by statuses
         :param page: Filter by page
         :param items: Filter by items
-        :return: {"jobs": [Jobs]}
+        :return: List[Job]
         """
         return self._jobs_service.list_jobs(
             jobids=jobids,
@@ -162,9 +158,11 @@ class JobsSdk:
         """
         return self._jobs_service.download_job_results(job_id, path)
 
-    def update_job(self, request: UpdateJobRequest):
+    def update_job(self, request: UpdateJobRequest) -> Job:
         """ Updates an existing job
 
-        :param reuest: An UpdateJobRequest object
-        return 
+        :param request: An UpdateJobRequest object
+        return: Job
         """
+
+        return self._jobs_service.update_job(request)
