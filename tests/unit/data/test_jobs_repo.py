@@ -2,7 +2,15 @@ from unittest import mock
 
 from galileo_sdk.data.repositories.jobs import JobsRepository
 from galileo_sdk.mock_response import MockResponse
-from galileo_sdk.business.objects import Job, EJobStatus, EPaymentStatus, EJobRunningStatus, JobStatus
+from galileo_sdk.business.objects import (
+    Job,
+    EJobStatus,
+    EPaymentStatus,
+    EJobRunningStatus,
+    JobStatus,
+)
+
+from galileo_sdk.data.repositories.jobs import job_dict_to_job
 from datetime import datetime
 
 BACKEND = "http://BACKEND"
@@ -20,6 +28,28 @@ auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 job_repo = JobsRepository(settings_repo, auth_provider)
 
+job = {
+    "jobid": "jobid",
+    "receiverid": "receiverid",
+    "project_id": "project_id",
+    "time_created": int(datetime.now().timestamp()),
+    "last_updated": int(datetime.now().timestamp()),
+    "status": "uploaded",
+    "container": "container",
+    "name": "name",
+    "stationid": "stationid",
+    "userid": "userid",
+    "state": "state",
+    "oaid": "oaid",
+    "pay_status": "pay_status",
+    "pay_interval": 1,
+    "total_runtime": 10000,
+    "archived": False,
+    "status_history": [{"time": int(datetime.now().timestamp()), "status": "uploaded"}],
+}
+
+jobObject = job_dict_to_job(job)
+
 
 def mocked_requests_get(*args, **kwargs):
     if args[0] == f"{BACKEND}{NAMESPACE}/job/upload_request":
@@ -31,29 +61,7 @@ def mocked_requests_get(*args, **kwargs):
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/logs":
         return MockResponse(True, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs":
-        return MockResponse(
-            {"jobs": [
-                {"job": Job(
-                    "userid",
-                    "senderid",
-                    "receiverid",
-                    datetime.now(),
-                    datetime.now(),
-                    EJobStatus.running,
-                    "container",
-                    "name",
-                    "stationid",
-                    EJobRunningStatus.running,
-                    "oaid",
-                    EPaymentStatus.current,
-                    0,
-                    2,
-                    [JobStatus(datetime.now(), EJobStatus.running, "statusid", "jobid")],
-                    "jobid"
-                )}
-            ]},
-            200
-        )
+        return MockResponse({"jobs": [job]}, 200)
     return MockResponse(None, 404)
 
 
@@ -264,7 +272,5 @@ def test_list_jobs(mocked_requests):
         json=None,
     )
 
-    print("response", r)
-
     # Assert
-    # assert r["jobs"] == [{"job": i} for i in range(25)]
+    assert r[0].jobid == jobObject.jobid

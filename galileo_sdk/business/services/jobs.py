@@ -92,10 +92,10 @@ class JobsService:
             raise JobsException(job_id, "No files to download")
 
         for url in url_list:
-            results = self._jobs_repo.download_results(job_id, generate_query_str({
-                "filename": url["filename"],
-                "path": url["path"]
-            }))
+            results = self._jobs_repo.download_results(
+                job_id,
+                generate_query_str({"filename": url["filename"], "path": url["path"]}),
+            )
             open(os.path.join(path, url["filename"]), "wb").write(results.content)
 
         return True

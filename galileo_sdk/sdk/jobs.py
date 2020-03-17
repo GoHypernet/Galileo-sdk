@@ -1,15 +1,21 @@
 from typing import Callable, List, Optional
 
-from ..business.objects.jobs import (JobLauncherResultsDownloadedEvent,
-                                     JobLauncherUpdatedEvent, JobLogEvent,
-                                     JobsEvents, JobTopEvent,
-                                     StationJobUpdatedEvent)
+from ..business.objects.jobs import (
+    JobLauncherResultsDownloadedEvent,
+    JobLauncherUpdatedEvent,
+    JobLogEvent,
+    JobsEvents,
+    JobTopEvent,
+    StationJobUpdatedEvent,
+)
 from ..business.services.jobs import JobsService
+
 
 class UpdateJobRequest:
     def __init__(self, job_id: str, archived: Optional[bool] = None):
         self.job_id = job_id
         self.archived = archived
+
 
 class JobsSdk:
     _jobs_service: JobsService

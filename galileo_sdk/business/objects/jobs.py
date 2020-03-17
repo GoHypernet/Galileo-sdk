@@ -7,31 +7,31 @@ from ...business.objects.event import EventEmitter
 
 
 class EJobStatus(enum.Enum):
-    uploaded            = 0  # job has been uploaded
-    submitted           = 1  # LZ has been or is cleared to download job
-    downloaded          = 2  # Job has been downloaded by LZ
-    building_image      = 3  # Building docker image
-    building_container  = 4  # Buiding docker container
-    start_requested     = 5  # Start
-    running             = 6
-    pause_requested     = 7
-    paused              = 8
-    stop_requested      = 9
-    stopped             = 10
-    exited              = 11
-    collecting_results  = 12
-    posting_results     = 13
-    terminated          = 14
-    completed           = 15
-    removed_by_host     = 16
-    unknown             = 17  # Just in case arbitrary update occurs
-    post_processing     = 18
-    started             = 19
-    built_image         = 20
-    built_container     = 21
-    results_posted      = 22
-    error               = 23
-    build_error         = 24
+    uploaded = 0  # job has been uploaded
+    submitted = 1  # LZ has been or is cleared to download job
+    downloaded = 2  # Job has been downloaded by LZ
+    building_image = 3  # Building docker image
+    building_container = 4  # Buiding docker container
+    start_requested = 5  # Start
+    running = 6
+    pause_requested = 7
+    paused = 8
+    stop_requested = 9
+    stopped = 10
+    exited = 11
+    collecting_results = 12
+    posting_results = 13
+    terminated = 14
+    completed = 15
+    removed_by_host = 16
+    unknown = 17  # Just in case arbitrary update occurs
+    post_processing = 18
+    started = 19
+    built_image = 20
+    built_container = 21
+    results_posted = 22
+    error = 23
+    build_error = 24
 
 
 class EJobRunningStatus(enum.Enum):
@@ -67,39 +67,41 @@ class Job:
 
     def __init__(
         self,
-        userid: str,
-        senderid: str,
+        jobid: str,
         receiverid: str,
-        time_created: datetime = datetime.now(),
-        last_updated: datetime = datetime.now(),
-        status: EJobStatus = EJobStatus.uploaded,
-        container: str = "",
-        name: str = "",
-        stationid: Optional[str] = None,
-        state: EJobRunningStatus = EJobRunningStatus.not_running,
-        oaid: Optional[str] = None,
-        pay_status: EPaymentStatus = EPaymentStatus.current,
-        pay_interval: int = 0,
-        total_runtime: int = 0,
-        status_history: List[JobStatus] = [],
-        jobid: Optional[str] = None,
+        project_id: str,
+        time_created: datetime,
+        last_updated: datetime,
+        status: str,
+        container: str,
+        name: str,
+        stationid: str,
+        userid: str,
+        state: str,
+        oaid: str,
+        pay_status: str,
+        pay_interval: int,
+        total_runtime: int,
+        archived: bool,
+        status_history: List[JobStatus],
     ):
         self.jobid = jobid
-        self.senderid = senderid
-        self.receiverid = receiverid
+        self.receiver_id = receiverid
+        self.project_id = project_id
         self.time_created = time_created
         self.last_updated = last_updated
         self.status = status
         self.container = container
         self.name = name
-        self.stationid = stationid
-        self.userid = userid
+        self.station_id = stationid
+        self.user_id = userid
         self.state = state
         self.oaid = oaid
         self.pay_status = pay_status
         self.pay_interval = pay_interval
         self.total_runtime = total_runtime
         self.status_history = status_history
+        self.archived = archived
 
 
 class JobLauncherUpdatedEvent:

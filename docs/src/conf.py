@@ -97,9 +97,7 @@ html_theme_options = {
     "version_dropdown": False,
 }
 
-html_sidebars = {
-    "**": ["globaltoc.html"]
-}
+html_sidebars = {"**": ["globaltoc.html"]}
 
 html_logo = "images/galileo-logo.png"
 
