@@ -64,7 +64,18 @@ def mocked_requests_get(*args, **kwargs):
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results":
         return MockResponse({"files": [{"path": LOCATION, "filename": FILENAME}]}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/top":
-        return MockResponse({"top": "top"}, 200)
+        return MockResponse(
+            {
+                "top": {
+                    "Processes": [
+                        ["process11", "process12"],
+                        ["process21", "process22"],
+                    ],
+                    "Titles": ["title1", "title2"],
+                }
+            },
+            200,
+        )
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/logs":
         return MockResponse({"logs": "logs"}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs":
@@ -254,8 +265,17 @@ def test_request_top_from_job(mocked_requests):
         json=None,
     )
 
+    print(r)
     # Assert
-    assert r == "top"
+    assert len(r) == 2
+    assert r[0].items[0].title == "title1"
+    assert r[0].items[0].detail == "process11"
+    assert r[0].items[1].title == "title2"
+    assert r[0].items[1].detail == "process12"
+    assert r[1].items[0].title == "title1"
+    assert r[1].items[0].detail == "process21"
+    assert r[1].items[1].title == "title2"
+    assert r[1].items[1].detail == "process22"
 
 
 @mock.patch("requests.get", side_effect=mocked_requests_get)

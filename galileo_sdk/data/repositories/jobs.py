@@ -3,7 +3,7 @@ from urllib.parse import urlunparse
 
 import requests
 
-from galileo_sdk.business.objects.jobs import FileListing
+from galileo_sdk.business.objects.jobs import FileListing, TopProcess, TopDetails
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 from galileo_sdk.business.objects import Job, JobStatus, EJobStatus, UpdateJobRequest
@@ -90,31 +90,33 @@ class JobsRepository:
     def submit_job(self, job_id: str):
         return self._put(f"/jobs/{job_id}/run")
 
-    def request_stop_job(self, job_id: str):
+    def request_stop_job(self, job_id: str) -> Job:
         response = self._put(f"/jobs/{job_id}/stop")
         json: dict = response.json()
         job: dict = json["job"]
         return job_dict_to_job(job)
 
-    def request_pause_job(self, job_id: str):
+    def request_pause_job(self, job_id: str) -> Job:
         response = self._put(f"/jobs/{job_id}/pause")
         json: dict = response.json()
         job: dict = json["job"]
         return job_dict_to_job(job)
 
-    def request_start_job(self, job_id: str):
+    def request_start_job(self, job_id: str) -> Job:
         response = self._put(f"/jobs/{job_id}/start")
         json: dict = response.json()
         job: dict = json["job"]
         return job_dict_to_job(job)
 
-    def request_top_from_job(self, job_id: str):
+    def request_top_from_job(self, job_id: str) -> List[TopProcess]:
         response = self._get(f"/jobs/{job_id}/top")
         json: dict = response.json()
-        top = json["top"]
-        return top
+        top: dict = json["top"]
+        return [
+            top_dict_to_jobs_top(process, top["Titles"]) for process in top["Processes"]
+        ]
 
-    def request_logs_from_jobs(self, job_id: str):
+    def request_logs_from_jobs(self, job_id: str) -> str:
         response = self._get(f"/jobs/{job_id}/logs")
         json: dict = response.json()
         logs: str = json["logs"]
@@ -151,6 +153,12 @@ class JobsRepository:
         json: dict = response.json()
         job: dict = json["job"]
         return job_dict_to_job(job)
+
+
+def top_dict_to_jobs_top(process: List[str], titles: List[str]) -> TopProcess:
+    return TopProcess(
+        [TopDetails(title, detail) for detail, title in zip(process, titles)]
+    )
 
 
 def file_dict_to_file_listing(file: dict) -> FileListing:

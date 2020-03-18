@@ -144,6 +144,17 @@ class FileListing:
         self.path = path
 
 
+class TopDetails:
+    def __init__(self, title: str, detail: str):
+        self.title = title
+        self.detail = detail
+
+
+class TopProcess:
+    def __init__(self, items: List[TopDetails]):
+        self.items = items
+
+
 class JobsEvents:
     _events: EventEmitter
 

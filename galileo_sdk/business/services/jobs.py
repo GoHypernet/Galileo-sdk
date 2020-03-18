@@ -1,7 +1,7 @@
 import os
 from typing import List, Optional
 
-from galileo_sdk.business.objects.jobs import FileListing
+from galileo_sdk.business.objects.jobs import FileListing, TopProcess
 from ...data.repositories.jobs import JobsRepository
 from ..utils.generate_query_str import generate_query_str
 from ..objects.exceptions import JobsException
@@ -45,7 +45,7 @@ class JobsService:
     def request_start_job(self, job_id: str):
         return self._jobs_repo.request_start_job(job_id)
 
-    def request_top_from_job(self, job_id: str):
+    def request_top_from_job(self, job_id: str) -> List[TopProcess]:
         return self._jobs_repo.request_top_from_job(job_id)
 
     def request_logs_from_job(self, job_id: str):

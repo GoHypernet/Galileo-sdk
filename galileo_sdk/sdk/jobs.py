@@ -10,6 +10,7 @@ from galileo_sdk.business.objects import (
     StationJobUpdatedEvent,
     UpdateJobRequest,
 )
+from galileo_sdk.business.objects.jobs import TopProcess
 from ..business.services.jobs import JobsService
 
 
@@ -95,12 +96,12 @@ class JobsSdk:
         """
         return self._jobs_service.request_start_job(job_id)
 
-    def request_top_from_job(self, job_id: str):
+    def request_top_from_job(self, job_id: str) -> List[TopProcess]:
         """
         Request results of Top from docker - sent by launcher
 
         :param job_id: job's id
-        :return: string
+        :return: List[TopProcess]: list of top processes
         """
         return self._jobs_service.request_top_from_job(job_id)
 
