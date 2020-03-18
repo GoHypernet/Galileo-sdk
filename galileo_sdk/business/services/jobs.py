@@ -36,19 +36,19 @@ class JobsService:
         r = self._jobs_repo.submit_job(job_id)
         return r.json()
 
-    def request_stop_job(self, job_id: str):
+    def request_stop_job(self, job_id: str) -> Job:
         return self._jobs_repo.request_stop_job(job_id)
 
-    def request_pause_job(self, job_id: str):
+    def request_pause_job(self, job_id: str) -> Job:
         return self._jobs_repo.request_pause_job(job_id)
 
-    def request_start_job(self, job_id: str):
+    def request_start_job(self, job_id: str) -> Job:
         return self._jobs_repo.request_start_job(job_id)
 
     def request_top_from_job(self, job_id: str) -> List[TopProcess]:
         return self._jobs_repo.request_top_from_job(job_id)
 
-    def request_logs_from_job(self, job_id: str):
+    def request_logs_from_job(self, job_id: str) -> str:
         return self._jobs_repo.request_logs_from_jobs(job_id)
 
     def list_jobs(

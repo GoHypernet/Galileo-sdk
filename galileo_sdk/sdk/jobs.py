@@ -69,7 +69,7 @@ class JobsSdk:
     #     """
     #     self._events.on_job_log(func)
 
-    def request_stop_job(self, job_id: str):
+    def request_stop_job(self, job_id: str) -> Job:
         """
         Request to stop job - sent by launcher
 
@@ -78,7 +78,7 @@ class JobsSdk:
         """
         return self._jobs_service.request_stop_job(job_id)
 
-    def request_pause_job(self, job_id: str):
+    def request_pause_job(self, job_id: str) -> Job:
         """
         Request to pause job - sent by launcher
 
@@ -87,7 +87,7 @@ class JobsSdk:
         """
         return self._jobs_service.request_pause_job(job_id)
 
-    def request_start_job(self, job_id: str):
+    def request_start_job(self, job_id: str) -> Job:
         """
         Start running the job
 
@@ -105,7 +105,7 @@ class JobsSdk:
         """
         return self._jobs_service.request_top_from_job(job_id)
 
-    def request_logs_from_job(self, job_id: str):
+    def request_logs_from_job(self, job_id: str) -> str:
         """
         Request results of logs from docker - sent by launcher
 
