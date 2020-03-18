@@ -16,17 +16,14 @@ class Machine:
         name: str,
         userid: str,
         status: EMachineStatus,
+        mid: str,
         gpu: str,
         cpu: str,
         os: str,
         arch: str,
         memory: str,
-        jobs_in_queue: int = 0,
-        running_jobs_limit: int = 1,
-        running_jobs: int = 0,
-        mid: Optional[str] = None,
+        running_jobs_limit: int,
     ):
-        # Defaults
         self.mid = mid
         self.name = name
         self.userid = userid
@@ -36,15 +33,37 @@ class Machine:
         self.os = os
         self.arch = arch
         self.memory = memory
-        self.jobs_in_queue = jobs_in_queue
         self.running_jobs_limit = running_jobs_limit
-        self.running_jobs = running_jobs
 
 
 class MachineStatusUpdateEvent:
     def __init__(self, mid: str, status: str):
         self.mid = mid
         self.status = status
+
+
+class UpdateMachineRequest:
+    def __init__(
+        self,
+        mid: str,
+        name: Optional[str] = None,
+        gpu: Optional[str] = None,
+        cpu: Optional[str] = None,
+        os: Optional[str] = None,
+        arch: Optional[str] = None,
+        memory: Optional[str] = None,
+        running_jobs_limit: Optional[int] = None,
+        active: Optional[str] = None,
+    ):
+        self.mid = mid
+        self.name = name
+        self.gpu = gpu
+        self.cpu = cpu
+        self.os = os
+        self.arch = arch
+        self.memory = memory
+        self.running_jobs_limit = running_jobs_limit
+        self.active = active
 
 
 class MachinesEvents:

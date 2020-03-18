@@ -1,8 +1,9 @@
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, List
 from urllib.parse import urlunparse
 
 import requests
 
+from galileo_sdk.business.objects.machines import UpdateMachineRequest, Machine, EMachineStatus
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 
@@ -51,12 +52,46 @@ class MachinesRepository:
     def _put(self, *args, **kwargs):
         return self._request(requests.put, *args, **kwargs)
 
-    def get_machine_by_id(self, machine_id: str):
-        return self._get(f"/machines/{machine_id}")
+    def get_machine_by_id(self, machine_id: str) -> Machine:
+        response = self._get(f"/machines/{machine_id}")
+        json: dict = response.json()
+        return machine_dict_to_machine(json)
 
-    def list_machines(self, query: str):
-        return self._get("/machines", query=query)
+    def list_machines(self, query: str) -> List[Machine]:
+        response = self._get("/machines", query=query)
+        json: dict = response.json()
+        machines: List[dict] = json["machines"]
+        return [machine_dict_to_machine(machine) for machine in machines]
 
-    def update_max_concurrent_jobs(self, mid: str, amount: int):
+    def update(self, request: UpdateMachineRequest) -> Machine:
+        response = self._put(
+            f"/machines/{request.mid}",
+            {
+                "name": request.name,
+                "gpu": request.gpu,
+                "cpu": request.cpu,
+                "os": request.os,
+                "arch": request.arch,
+                "memory": request.memory,
+                "running_jobs_limit": request.running_jobs_limit,
+                "active": request.active,
+            },
+        )
+        json: dict = response.json()
+        machine = json["machine"]
+        return machine_dict_to_machine(machine)
 
-        return self._put(f"/machines/{mid}/update_max", {"amount": amount})
+
+def machine_dict_to_machine(machine: dict):
+    return Machine(
+        machine["name"],
+        machine["userid"],
+        EMachineStatus[machine["status"]],
+        machine["mid"],
+        machine["gpu"],
+        machine["cpu"],
+        machine["os"],
+        machine["arch"],
+        machine["memory"],
+        machine["running_jobs_limit"],
+    )

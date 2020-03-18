@@ -10,18 +10,18 @@ machine_list = galileo.machines.list_machines()
 
 
 def test_list_machines():
-    assert not machine_list == None
-    assert "arch" in machine_list["machines"][0]
-    assert "cpu" in machine_list["machines"][0]
-    assert "gpu" in machine_list["machines"][0]
+    assert machine_list
+    assert machine_list[0].arch
+    assert machine_list[0].cpu
+    assert machine_list[0].gpu
 
 
 def test_get_machines_by_id():
-    machine = galileo.machines.get_machines_by_id(machine_list["machines"][0]["mid"])
+    machine = galileo.machines.get_machines_by_id(machine_list[0].mid)
     assert not machine == None
-    assert "arch" in machine
-    assert "cpu" in machine
-    assert "name" in machine
+    assert machine.arch
+    assert machine.cpu
+    assert machine.name
 
 
 galileo.disconnect()

@@ -1,5 +1,10 @@
 from unittest import mock
 
+from galileo_sdk.business.objects.machines import (
+    Machine,
+    EMachineStatus,
+    UpdateMachineRequest,
+)
 from galileo_sdk.business.services.machines import MachinesService
 from galileo_sdk.mock_response import MockResponse
 
@@ -17,36 +22,69 @@ machines_service = MachinesService(machines_repo)
 
 
 def test_get_machine_by_id():
-    machines_repo.get_machine_by_id.return_value = MockResponse(
-        {"machine_info": "machine_info"}, 200
+    x = 1
+    machines_repo.get_machine_by_id.return_value = Machine(
+        mid=str(x),
+        gpu=str(x),
+        cpu=str(x),
+        arch=str(x),
+        memory=str(x),
+        name=str(x),
+        os=str(x),
+        running_jobs_limit=x,
+        status=EMachineStatus.online,
+        userid=str(x),
     )
 
     # Call
     r = machines_service.get_machine_by_id(MID)
 
     # Assert
-    assert r["machine_info"] == "machine_info"
+    assert r.userid == str(x)
 
 
 def test_list_machines():
-    machines_repo.list_machines.return_value = MockResponse(
-        {"machines": [{"machine": i} for i in range(10)]}, 200
-    )
+    machines_repo.list_machines.return_value = [
+        Machine(
+            mid=str(x),
+            gpu=str(x),
+            cpu=str(x),
+            arch=str(x),
+            memory=str(x),
+            name=str(x),
+            os=str(x),
+            running_jobs_limit=x,
+            status=EMachineStatus.online,
+            userid=str(x),
+        )
+        for x in range(5)
+    ]
 
     # Call
     r = machines_service.list_machines()
 
     # Assert
-    assert len(r["machines"]) == 10
-    assert r["machines"][5] == {"machine": 5}
+    for i in range(5):
+        assert r[i].userid == str(i)
 
 
-def test_update_max_concurrent_jobs():
-    machines_repo.update_max_concurrent_jobs.return_value = MockResponse(True, 200)
+def test_update():
+    x = 1
+    machines_repo.update.return_value = Machine(
+        mid=str(x),
+        gpu=str(x),
+        cpu=str(x),
+        arch=str(x),
+        memory=str(x),
+        name=str(x),
+        os=str(x),
+        running_jobs_limit=x,
+        status=EMachineStatus.online,
+        userid=str(x),
+    )
 
     # Call
-    r = machines_service.update_max_concurrent_jobs(MID, AMOUNT)
+    r = machines_service.update(UpdateMachineRequest(mid=MID))
 
     # Assert
-    assert isinstance(r, bool)
-    assert r == True
+    assert r.userid == str(x)

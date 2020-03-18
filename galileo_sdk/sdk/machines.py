@@ -1,6 +1,11 @@
 from typing import Callable, List, Optional
 
-from ..business.objects.machines import MachinesEvents, MachineStatusUpdateEvent
+from ..business.objects.machines import (
+    MachinesEvents,
+    MachineStatusUpdateEvent,
+    Machine,
+    UpdateMachineRequest,
+)
 from ..business.services.machines import MachinesService
 
 
@@ -23,7 +28,7 @@ class MachinesSdk:
         """
         self._events.on_machine_status_update(func)
 
-    def get_machines_by_id(self, machine_id: str):
+    def get_machines_by_id(self, machine_id: str) -> Machine:
         """
         Get machine's info by its id
 
@@ -38,7 +43,7 @@ class MachinesSdk:
         userids: Optional[List[str]] = None,
         page: Optional[int] = 1,
         items: Optional[int] = 25,
-    ):
+    ) -> List[Machine]:
         """
         List all machines
 
@@ -46,8 +51,17 @@ class MachinesSdk:
         :param userids: Filter by user id
         :param page: Page #
         :param items: Items per page
-        :return: {"machines": [Machine]}
+        :return: List[Machine]
         """
         return self._machines_service.list_machines(
             mids=mids, userids=userids, page=page, items=items
         )
+
+    def update(self, request: UpdateMachineRequest) -> Machine:
+        """
+
+        :param request:
+        :return:
+        """
+
+        return self._machines_service.update(request)
