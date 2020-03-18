@@ -1,6 +1,7 @@
 import os
 from typing import List, Optional
 
+from galileo_sdk.business.objects.jobs import FileListing
 from ...data.repositories.jobs import JobsRepository
 from ..utils.generate_query_str import generate_query_str
 from ..objects.exceptions import JobsException
@@ -75,23 +76,23 @@ class JobsService:
         )
         return self._jobs_repo.list_jobs(query)
 
-    def download_job_results(self, job_id: str, path: str):
-        r = self._jobs_repo.get_results_url(job_id)
-        r = r.json()
+    def download_job_results(self, job_id: str, path: str) -> List[str]:
+        files: List[FileListing] = self._jobs_repo.get_results_url(job_id)
 
-        url_list: List = r["files"]
-
-        if not url_list:
+        if not files:
             raise JobsException(job_id, "No files to download")
 
-        for url in url_list:
-            results = self._jobs_repo.download_results(
-                job_id,
-                generate_query_str({"filename": url["filename"], "path": url["path"]}),
-            )
-            open(os.path.join(path, url["filename"]), "wb").write(results.content)
+        files_downloaded: List[str] = []
 
-        return True
+        for file in files:
+            response = self._jobs_repo.download_results(
+                job_id,
+                generate_query_str({"filename": file.filename, "path": file.path}),
+                os.path.join(path, file.filename),
+            )
+            files_downloaded.append(response)
+
+        return files_downloaded
 
     def update_job(self, request: UpdateJobRequest) -> Job:
         return self._jobs_repo.update_job(request)

@@ -148,13 +148,13 @@ class JobsSdk:
             items=items,
         )
 
-    def download_job_results(self, job_id: str, path: str):
+    def download_job_results(self, job_id: str, path: str) -> List[str]:
         """
         Download your job results when job is completed
 
         :param job_id: job's id
         :param path: path to directory, where results will be saved
-        :return: None
+        :return: List[str]: list of filenames that were downloaded
         """
         return self._jobs_service.download_job_results(job_id, path)
 

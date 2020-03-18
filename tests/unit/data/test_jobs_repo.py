@@ -1,3 +1,4 @@
+import os
 from unittest import mock
 
 from galileo_sdk.data.repositories.jobs import JobsRepository
@@ -12,14 +13,16 @@ from galileo_sdk.business.objects import (
 
 from galileo_sdk.data.repositories.jobs import job_dict_to_job
 from datetime import datetime
+from galileo_sdk.business.utils.generate_query_str import generate_query_str
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
-RETURN_URL = "GOOGLE"
 FILENAME = "filename"
+LOCATION = os.path.join("", FILENAME)
 JOB_ID = "job_id"
 DEST_MID = "dest_mid"
 STATION_ID = "station_id"
+QUERY = generate_query_str({"filename": FILENAME, "path": LOCATION})
 
 # Arrange
 settings_repo = mock.Mock()
@@ -55,9 +58,11 @@ jobObject = job_dict_to_job(job)
 
 def mocked_requests_get(*args, **kwargs):
     if args[0] == f"{BACKEND}{NAMESPACE}/job/upload_request":
-        return MockResponse({"location": RETURN_URL, "filename": FILENAME}, 200)
+        return MockResponse({"location": LOCATION, "filename": FILENAME}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results/location":
-        return MockResponse({"location": RETURN_URL, "filename": FILENAME}, 200)
+        return MockResponse({"location": LOCATION, "filename": FILENAME}, 200)
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results":
+        return MockResponse({"files": [{"path": LOCATION, "filename": FILENAME}]}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/top":
         return MockResponse({"top": "top"}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/logs":
@@ -113,7 +118,7 @@ def test_request_send_job(mocked_requests):
     )
 
     # Assert
-    assert r == {"location": RETURN_URL, "filename": FILENAME}
+    assert r == {"location": LOCATION, "filename": FILENAME}
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
@@ -151,7 +156,7 @@ def test_request_receive_job(mocked_requests):
     )
 
     # Assert
-    assert r["location"] == RETURN_URL
+    assert r["location"] == LOCATION
     assert r["filename"] == FILENAME
 
 
@@ -296,3 +301,18 @@ def test_kill_request(mocked_requests):
     )
 
     assert r.status == "kill"
+
+
+@mock.patch("requests.get", side_effect=mocked_requests_get)
+def test_get_results_url(mocked_requests):
+    r = job_repo.get_results_url(JOB_ID)
+
+    mocked_requests.assert_called_once_with(
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results",
+        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        json=None,
+    )
+
+    assert len(r) == 1
+    assert r[0].filename == FILENAME
+    assert r[0].path == LOCATION

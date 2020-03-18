@@ -2,6 +2,8 @@ from typing import Any, Callable, Optional, List
 from urllib.parse import urlunparse
 
 import requests
+
+from galileo_sdk.business.objects.jobs import FileListing
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 from galileo_sdk.business.objects import Job, JobStatus, EJobStatus, UpdateJobRequest
@@ -124,11 +126,19 @@ class JobsRepository:
         jobs: List[dict] = json["jobs"]
         return [job_dict_to_job(job) for job in jobs]
 
-    def get_results_url(self, job_id: str):
-        return self._get(f"/jobs/{job_id}/results")
+    def get_results_url(self, job_id: str) -> List[FileListing]:
+        response = self._get(f"/jobs/{job_id}/results")
+        json: dict = response.json()
+        files: List[dict] = json["files"]
+        return [file_dict_to_file_listing(file) for file in files]
 
-    def download_results(self, job_id: str, query: str):
-        return self._get(f"/jobs/{job_id}/results", query=query)
+    def download_results(self, job_id: str, query: str, filename: str) -> str:
+        with self._get(f"/jobs/{job_id}/results", query=query) as r:
+            with open(filename, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+        return filename
 
     def update_job(self, request: UpdateJobRequest) -> Job:
         response = self._put(f"/jobs/{request.job_id}", {"archived": request.archived})
@@ -141,6 +151,10 @@ class JobsRepository:
         json: dict = response.json()
         job: dict = json["job"]
         return job_dict_to_job(job)
+
+
+def file_dict_to_file_listing(file: dict) -> FileListing:
+    return FileListing(file["filename"], file["path"])
 
 
 def job_dict_to_job(job: dict) -> Job:
