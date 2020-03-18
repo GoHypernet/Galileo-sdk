@@ -10,6 +10,7 @@ CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)
 job_list = galileo.jobs.list_jobs()
+jobid = ""
 
 
 def test_list_jobs():

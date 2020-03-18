@@ -89,19 +89,34 @@ class JobsRepository:
         return self._put(f"/jobs/{job_id}/run")
 
     def request_stop_job(self, job_id: str):
-        return self._put(f"/jobs/{job_id}/stop")
+        response = self._put(f"/jobs/{job_id}/stop")
+        json: dict = response.json()
+        job: dict = json["job"]
+        return job_dict_to_job(job)
 
     def request_pause_job(self, job_id: str):
-        return self._put(f"/jobs/{job_id}/pause")
+        response = self._put(f"/jobs/{job_id}/pause")
+        json: dict = response.json()
+        job: dict = json["job"]
+        return job_dict_to_job(job)
 
     def request_start_job(self, job_id: str):
-        return self._put(f"/jobs/{job_id}/start")
+        response = self._put(f"/jobs/{job_id}/start")
+        json: dict = response.json()
+        job: dict = json["job"]
+        return job_dict_to_job(job)
 
     def request_top_from_job(self, job_id: str):
-        return self._get(f"/jobs/{job_id}/top")
+        response = self._get(f"/jobs/{job_id}/top")
+        json: dict = response.json()
+        top = json["top"]
+        return top
 
     def request_logs_from_jobs(self, job_id: str):
-        return self._get(f"/jobs/{job_id}/logs")
+        response = self._get(f"/jobs/{job_id}/logs")
+        json: dict = response.json()
+        logs: str = json["logs"]
+        return logs
 
     def list_jobs(self, query: str) -> List[Job]:
         response = self._get("/jobs", query=query)

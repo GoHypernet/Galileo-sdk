@@ -50,30 +50,30 @@ class JobsSdk:
         """
         self._events.on_station_job_updated(func)
 
-    def on_job_top(self, func: Callable[[JobTopEvent], None]):
-        """
-        Callback will execute upon a job top event
-
-        :param func: Callback
-        :return: None
-        """
-        self._events.on_job_top(func)
-
-    def on_job_log(self, func: Callable[[JobLogEvent], None]):
-        """
-        Callback will execute upon a job log event
-
-        :param func:
-        :return: None
-        """
-        self._events.on_job_log(func)
+    # def on_job_top(self, func: Callable[[JobTopEvent], None]):
+    #     """
+    #     Callback will execute upon a job top event
+    #
+    #     :param func: Callback
+    #     :return: None
+    #     """
+    #     self._events.on_job_top(func)
+    #
+    # def on_job_log(self, func: Callable[[JobLogEvent], None]):
+    #     """
+    #     Callback will execute upon a job log event
+    #
+    #     :param func:
+    #     :return: None
+    #     """
+    #     self._events.on_job_log(func)
 
     def request_stop_job(self, job_id: str):
         """
         Request to stop job - sent by launcher
 
         :param job_id: job's id
-        :return: {"job": Job}
+        :return: Job
         """
         return self._jobs_service.request_stop_job(job_id)
 
@@ -82,7 +82,7 @@ class JobsSdk:
         Request to pause job - sent by launcher
 
         :param job_id: job's id
-        :return: {"job": Job}
+        :return: Job
         """
         return self._jobs_service.request_pause_job(job_id)
 
@@ -91,7 +91,7 @@ class JobsSdk:
         Start running the job
 
         :param job_id: job's id
-        :return: {"job": Job}
+        :return: Job
         """
         return self._jobs_service.request_start_job(job_id)
 
@@ -100,7 +100,7 @@ class JobsSdk:
         Request results of Top from docker - sent by launcher
 
         :param job_id: job's id
-        :return: boolean
+        :return: string
         """
         return self._jobs_service.request_top_from_job(job_id)
 
@@ -109,7 +109,7 @@ class JobsSdk:
         Request results of logs from docker - sent by launcher
 
         :param job_id: job id
-        :return: boolean
+        :return: string
         """
         return self._jobs_service.request_logs_from_job(job_id)
 

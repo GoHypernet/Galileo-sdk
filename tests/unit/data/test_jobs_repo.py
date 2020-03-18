@@ -59,9 +59,9 @@ def mocked_requests_get(*args, **kwargs):
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results/location":
         return MockResponse({"location": RETURN_URL, "filename": FILENAME}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/top":
-        return MockResponse(True, 200)
+        return MockResponse({"top": "top"}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/logs":
-        return MockResponse(True, 200)
+        return MockResponse({"logs": "logs"}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs":
         return MockResponse({"jobs": [job]}, 200)
     return MockResponse(None, 404)
@@ -77,13 +77,21 @@ def mocked_requests_put(*args, **kwargs):
     if args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/results/download_complete":
         return MockResponse(True, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/run":
-        return MockResponse({"job": {"status": "submit"}}, 200)
+        job_copy = job.copy()
+        job_copy["status"] = "submit"
+        return MockResponse({"job": job_copy}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/stop":
-        return MockResponse({"job": {"status": "stop"}}, 200)
+        job_copy = job.copy()
+        job_copy["status"] = "stop"
+        return MockResponse({"job": job_copy}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/pause":
-        return MockResponse({"job": {"status": "pause"}}, 200)
+        job_copy = job.copy()
+        job_copy["status"] = "pause"
+        return MockResponse({"job": job_copy}, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/start":
-        return MockResponse({"job": {"status": "start"}}, 200)
+        job_copy = job.copy()
+        job_copy["status"] = "start"
+        return MockResponse({"job": job_copy}, 200)
     return MockResponse(None, 404)
 
 
@@ -174,14 +182,13 @@ def test_submit_job(mocked_requests):
     )
 
     # Assert
-    assert r["job"] == {"status": "submit"}
+    assert r["job"]["status"] == "submit"
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
 def test_request_stop_job(mocked_requests):
     # Call
     r = job_repo.request_stop_job(JOB_ID)
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -191,14 +198,13 @@ def test_request_stop_job(mocked_requests):
     )
 
     # Assert
-    assert r["job"] == {"status": "stop"}
+    assert r.status == "stop"
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
 def test_request_pause_job(mocked_requests):
     # Call
     r = job_repo.request_pause_job(JOB_ID)
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -208,14 +214,13 @@ def test_request_pause_job(mocked_requests):
     )
 
     # Assert
-    assert r["job"] == {"status": "pause"}
+    assert r.status == "pause"
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
 def test_request_start_job(mocked_requests):
     # Call
     r = job_repo.request_start_job(JOB_ID)
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -225,7 +230,7 @@ def test_request_start_job(mocked_requests):
     )
 
     # Assert
-    assert r["job"] == {"status": "start"}
+    assert r.status == "start"
 
 
 @mock.patch("requests.get", side_effect=mocked_requests_get)
@@ -241,8 +246,7 @@ def test_request_top_from_job(mocked_requests):
     )
 
     # Assert
-    assert r.json() == True
-    assert r.status_code == 200
+    assert r == "top"
 
 
 @mock.patch("requests.get", side_effect=mocked_requests_get)
@@ -258,8 +262,7 @@ def test_request_logs_from_job(mocked_requests):
     )
 
     # Assert
-    assert r.json() == True
-    assert r.status_code == 200
+    assert r == "logs"
 
 
 @mock.patch("requests.get", side_effect=mocked_requests_get)
