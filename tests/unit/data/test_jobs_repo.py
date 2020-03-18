@@ -92,6 +92,10 @@ def mocked_requests_put(*args, **kwargs):
         job_copy = job.copy()
         job_copy["status"] = "start"
         return MockResponse({"job": job_copy}, 200)
+    elif args[0] == f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/kill":
+        job_copy = job.copy()
+        job_copy["status"] = "kill"
+        return MockResponse({"job": job_copy}, 200)
     return MockResponse(None, 404)
 
 
@@ -279,3 +283,16 @@ def test_list_jobs(mocked_requests):
 
     # Assert
     assert r[0].job_id == jobObject.job_id
+
+
+@mock.patch("requests.put", side_effect=mocked_requests_put)
+def test_kill_request(mocked_requests):
+    r = job_repo.request_kill_job(JOB_ID)
+
+    mocked_requests.assert_called_once_with(
+        f"{BACKEND}{NAMESPACE}/jobs/{JOB_ID}/kill",
+        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        json=None,
+    )
+
+    assert r.status == "kill"

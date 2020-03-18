@@ -136,6 +136,12 @@ class JobsRepository:
         job: dict = json["job"]
         return job_dict_to_job(job)
 
+    def request_kill_job(self, job_id: str) -> Job:
+        response = self._put(f"/jobs/{job_id}/kill")
+        json: dict = response.json()
+        job: dict = json["job"]
+        return job_dict_to_job(job)
+
 
 def job_dict_to_job(job: dict) -> Job:
     return Job(

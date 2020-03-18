@@ -95,3 +95,6 @@ class JobsService:
 
     def update_job(self, request: UpdateJobRequest) -> Job:
         return self._jobs_repo.update_job(request)
+
+    def request_kill_job(self, job_id: str) -> Job:
+        return self._jobs_repo.request_kill_job(job_id)

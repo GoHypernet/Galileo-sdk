@@ -166,3 +166,12 @@ class JobsSdk:
         """
 
         return self._jobs_service.update_job(request)
+
+    def request_kill_job(self, job_id: str) -> Job:
+        """
+        Request to kill a job
+
+        :param job_id: job's id
+        :return: Job
+        """
+        return self._jobs_service.request_kill_job(job_id)
