@@ -4,16 +4,17 @@ from galileo_sdk.data.repositories.stations import UpdateStationRequest
 
 from ..business.objects.stations import (
     NewStationEvent, Station, StationAdminDestroyedEvent,
-    StationAdminInviteAcceptedEvent, StationAdminInviteSentEvent,
-    StationAdminMachineAddedEvent, StationAdminMachineRemovedEvent,
-    StationAdminMemberRemovedEvent, StationAdminRequestAcceptedEvent,
-    StationAdminRequestReceivedEvent, StationAdminRequestRejectedEvent,
+    StationAdminInviteAcceptedEvent, StationAdminInviteRejectedEvent,
+    StationAdminInviteSentEvent, StationAdminMachineAddedEvent,
+    StationAdminMachineRemovedEvent, StationAdminMemberRemovedEvent,
+    StationAdminRequestAcceptedEvent, StationAdminRequestReceivedEvent,
+    StationAdminRequestRejectedEvent, StationAdminStationUpdated,
     StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
     StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
     StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
     StationMemberMachineRemovedEvent, StationMemberMemberEvent,
-    StationMemberMemberRemovedEvent, StationMemberVolumeAddedEvent,
-    StationMemberVolumeHostPathAddedEvent,
+    StationMemberMemberRemovedEvent, StationMemberStationUpdated,
+    StationMemberVolumeAddedEvent, StationMemberVolumeHostPathAddedEvent,
     StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
     StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
     StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
@@ -35,7 +36,7 @@ class StationsSdk:
         """
         Callback will execute upon a creation of a new station
 
-        :param func: Callback
+        :param func: Callable[[NewStationEvent], None]
         :return: None
         """
         self._events.on_new_station(func)
@@ -47,7 +48,7 @@ class StationsSdk:
         Callback will execute upon an invite sent
         Emitted to admin of a station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminInviteSentEvent], None]
         :return: None
         """
         self._events.on_station_admin_invite_sent(func)
@@ -59,7 +60,7 @@ class StationsSdk:
         Callback will execute upon a user receiving an invite to a station
         Emitted to the user that receives the invite
 
-        :param func: Callback
+        :param func: Callable[[StationUserInviteReceivedEvent], None]
         :return: None
         """
         self._events.on_station_user_invite_received(func)
@@ -71,7 +72,7 @@ class StationsSdk:
         Callback will execute upon an invite to a station being accepted
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminInviteAcceptedEvent], None]
         :return: None
         """
         self._events.on_station_admin_invite_accepted(func)
@@ -83,7 +84,7 @@ class StationsSdk:
         Callback will execute upon a member has been added (request has been approved or invitation has been accepted)
         Emitted to all members of a station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberMemberEvent], None]
         :return: None
         """
         self._events.on_station_member_member_added(func)
@@ -95,22 +96,34 @@ class StationsSdk:
         Callback will execute upon a user accepting an invite to a station
         Emitted to user who has accepted the invitation
 
-        :param func: Callback
+        :param func: Callable[[StationUserInviteAcceptedEvent], None]
         :return: None
         """
         self._events.on_station_user_invite_accepted(func)
 
     def on_station_admin_invite_rejected(
+        self, func: Callable[[StationAdminInviteRejectedEvent], None]
+    ):
+        """
+        Callback will execute when an invite to a station has been rejected
+        Emitted to admin of station
+
+        :param func: Callable[[StationAdminInviteRejectedEvent], None]
+        :return: None
+        """
+        self._events.on_station_admin_invite_rejected(func)
+
+    def on_station_user_invite_rejected(
         self, func: Callable[[StationUserInviteRejectedEvent], None]
     ):
         """
         Callback will execute when an invite to a station has been rejected
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationUserInviteRejectedEvent], None]
         :return: None
         """
-        self._events.on_station_admin_invite_rejected(func)
+        self._events.on_station_user_invite_rejected(func)
 
     def on_station_admin_request_received(
         self, func: Callable[[StationAdminRequestReceivedEvent], None]
@@ -119,7 +132,7 @@ class StationsSdk:
         Callback will execute when a request to join the station has been received
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminRequestReceivedEvent], None]
         :return: None
         """
         self._events.on_station_admin_request_received(func)
@@ -131,7 +144,7 @@ class StationsSdk:
         Callback will execute when a request to join the station has been sent
         Emitted to user requesting to join the station
 
-        :param func: Callback
+        :param func: Callable[[StationUserRequestSentEvent], None]
         :return: None
         """
         self._events.on_station_user_request_sent(func)
@@ -143,7 +156,7 @@ class StationsSdk:
         Callback will execute when a request to join a station has been accepted
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminRequestAcceptedEvent], None]
         :return: None
         """
         self._events.on_station_admin_request_accepted(func)
@@ -155,7 +168,7 @@ class StationsSdk:
         Callback will execute when a request to join a station has been accepted
         Emitted to user who sent the request
 
-        :param func: Callback
+        :param func: Callable[[StationUserRequestAcceptedEvent], None]
         :return: None
         """
         self._events.on_station_user_request_accepted(func)
@@ -167,7 +180,7 @@ class StationsSdk:
         Callback will execute when a request to join a station has been rejected
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminRequestRejectedEvent], None]
         :return: None
         """
         self._events.on_station_admin_request_rejected(func)
@@ -179,7 +192,7 @@ class StationsSdk:
         Callback will execute when a request to join a station has been rejected
         Emitted to user who sent the request
 
-        :param func: Callback
+        :param func: Callable[[StationUserRequestRejectedEvent], None]
         :return: None
         """
         self._events.on_station_user_request_rejected(func)
@@ -191,7 +204,7 @@ class StationsSdk:
         Callback will execute when a member has been removed from a station
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminMemberRemovedEvent], None]
         :return: None
         """
         self._events.on_station_admin_member_removed(func)
@@ -203,7 +216,7 @@ class StationsSdk:
         Callback will execute when a machine has been removed from a station
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminMachineRemovedEvent], None]
         :return: None
         """
         self._events.on_station_admin_machine_removed(func)
@@ -215,7 +228,7 @@ class StationsSdk:
         Callback will execute when a member has been removed from a station
         Emitted to members of a station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberMemberRemovedEvent], None]
         :return: None
         """
         self._events.on_station_member_member_removed(func)
@@ -227,7 +240,7 @@ class StationsSdk:
         Callback will execute when a machine has been removed from a station
         Emitted to members of a station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberMachineRemovedEvent], None]
         :return: None
         """
         self._events.on_station_member_machine_removed(func)
@@ -239,7 +252,7 @@ class StationsSdk:
         Callback will execute when a user has withdrawn from the station
         Emitted to user that is withdrawing
 
-        :param func: Callback
+        :param func: Callable[[StationUserWithdrawnEvent], None]
         :return: None
         """
         self._events.on_station_user_withdrawn(func)
@@ -251,7 +264,7 @@ class StationsSdk:
         Callback will execute when a user has been expelled from the station
         Emitted to user that has been expelled
 
-        :param func: Callback
+        :param func: Callable[[StationUserExpelledEvent], None]
         :return: None
         """
         self._events.on_station_user_expelled(func)
@@ -263,7 +276,7 @@ class StationsSdk:
         Callback will execute when a station has been destroyed
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminDestroyedEvent], None]
         :return: None
         """
         self._events.on_station_admin_destroyed(func)
@@ -275,7 +288,7 @@ class StationsSdk:
         Callback will execute when a station has been destroyed
         Emitted to member of station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberDestroyedEvent], None]
         :return: None
         """
         self._events.on_station_member_destroyed(func)
@@ -287,7 +300,7 @@ class StationsSdk:
         Callback will execute when a station has been destroyed
         Emitted to anyone who received an invite to join the station
 
-        :param func: Callback
+        :param func: Callable[[StationUserInviteDestroyedEvent], None]
         :return: None
         """
         self._events.on_station_user_invite_destroyed(func)
@@ -299,7 +312,7 @@ class StationsSdk:
         Callback will execute when a station has been destroyed
         Emitted to anyone who sent a request to join to the station
 
-        :param func: Callback
+        :param func: Callable[[StationUserRequestDestroyedEvent], None]
         :return: None
         """
         self._events.on_station_user_request_destroyed(func)
@@ -311,7 +324,7 @@ class StationsSdk:
         Callback will execute when a machine has been added to the station
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminMachineAddedEvent], None]
         :return: None
         """
         self._events.on_station_admin_machine_added(func)
@@ -323,7 +336,7 @@ class StationsSdk:
         Callback will execute when a machine has been added to the station
         Emitted to members of station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberMachineAddedEvent], None]
         :return: None
         """
         self._events.on_station_member_machine_added(func)
@@ -335,7 +348,7 @@ class StationsSdk:
         Callback will execute when a volume has been added to the station
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminVolumeAddedEvent], None]
         :return: None
         """
         self._events.on_station_admin_volume_added(func)
@@ -347,7 +360,7 @@ class StationsSdk:
         Callback will execute when a volume has been added to the station
         Emitted to members of station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberVolumeAddedEvent], None]
         :return: None
         """
         self._events.on_station_member_volume_added(func)
@@ -359,7 +372,7 @@ class StationsSdk:
         Callback will execute when a volume host path has been added
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminVolumeHostPathAddedEvent], None]
         :return: None
         """
         self._events.on_station_admin_volume_host_path_added(func)
@@ -371,7 +384,7 @@ class StationsSdk:
         Callback will execute when a volume host path has been added
         Emitted to members of station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberVolumeHostPathAddedEvent], None]
         :return: None
         """
         self._events.on_station_member_volume_host_path_added(func)
@@ -383,7 +396,7 @@ class StationsSdk:
         Callback will execute when a volume host path has been removed
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminVolumeHostPathRemovedEvent], None]
         :return: None
         """
         self._events.on_station_admin_volume_host_path_removed(func)
@@ -395,7 +408,7 @@ class StationsSdk:
         Callback will execute when a volume host path has been removed
         Emitted to members of station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberVolumeHostPathRemovedEvent], None]
         :return: None
         """
         self._events.on_station_member_volume_host_path_removed(func)
@@ -407,7 +420,7 @@ class StationsSdk:
         Callback will execute when a volume has been removed
         Emitted to admin of station
 
-        :param func: Callback
+        :param func: Callable[[StationAdminVolumeRemovedEvent], None]
         :return: None
         """
         self._events.on_station_admin_volume_removed(func)
@@ -419,10 +432,34 @@ class StationsSdk:
         Callback will execute when a volume has been removed
         Emitted to members of station
 
-        :param func: Callback
+        :param func: Callable[[StationMemberVolumeRemovedEvent], None]
         :return: None
         """
         self._events.on_station_member_volume_removed(func)
+
+    def on_station_admin_station_updated(
+        self, func: Callable[[StationAdminStationUpdated], None]
+    ):
+        """
+        Callback will execute when a station has been updated
+        Emitted to admin
+
+        :param func: Callable[[StationAdminStationUpdated], None]
+        :return: None
+        """
+        self._events.on_station_admin_station_updated(func)
+
+    def on_station_member_station_updated(
+        self, func: Callable[[StationMemberStationUpdated], None]
+    ):
+        """
+        Callback will execute when a station has been updated
+        Emitted to members of the station
+
+        :param func: Callable[[StationMemberStationUpdated], None]
+        :return: None
+        """
+        self._events.on_station_member_station_updated(func)
 
     def list_stations(
         self,

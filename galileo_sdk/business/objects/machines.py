@@ -42,6 +42,16 @@ class MachineStatusUpdateEvent:
         self.status = status
 
 
+class MachineRegisteredEvent:
+    def __init__(self, machine: Machine):
+        self.machine = machine
+
+
+class MachineHardwareUpdateEvent:
+    def __init__(self, machine: Machine):
+        self.machine = machine
+
+
 class UpdateMachineRequest:
     def __init__(
         self,
@@ -79,3 +89,17 @@ class MachinesEvents:
 
     def machine_status_update(self, event: MachineStatusUpdateEvent):
         self._events.emit("machine/status_updated", event)
+
+    def on_machine_registered(self, func: Callable[[MachineRegisteredEvent], None]):
+        self._events.on("machine/registered", func)
+
+    def machine_registered(self, event: MachineRegisteredEvent):
+        self._events.emit("machine/registered", event)
+
+    def on_machine_hardware_update(
+        self, func: Callable[[MachineHardwareUpdateEvent], None]
+    ):
+        self._events.on("machine/hardware_updated", func)
+
+    def machine_hardware_update(self, event: MachineHardwareUpdateEvent):
+        self._events.emit("machine/hardware_updated", event)

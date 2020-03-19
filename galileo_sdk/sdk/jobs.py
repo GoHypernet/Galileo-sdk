@@ -1,12 +1,10 @@
 from typing import Callable, List, Optional
 
-from galileo_sdk.business.objects import (Job,
-                                          JobLauncherResultsDownloadedEvent,
-                                          JobLauncherUpdatedEvent, JobLogEvent,
-                                          JobsEvents, JobTopEvent,
-                                          StationJobUpdatedEvent,
+from galileo_sdk.business.objects import (Job, JobLauncherUpdatedEvent,
+                                          JobsEvents, StationJobUpdatedEvent,
                                           UpdateJobRequest)
-from galileo_sdk.business.objects.jobs import TopProcess
+from galileo_sdk.business.objects.jobs import (JobLauncherSubmittedEvent,
+                                               TopProcess)
 
 from ..business.services.jobs import JobsService
 
@@ -23,48 +21,29 @@ class JobsSdk:
         """
         Callback will execute upon a job launcher updated event
 
-        :param func: Callback
+        :param func: Callable[[JobLauncherUpdatedEvent], None]
         :return: None
         """
         self._events.on_job_launcher_updated(func)
 
-    def on_job_launcher_results_downloaded(
-        self, func: Callable[[JobLauncherResultsDownloadedEvent], None]
+    def on_job_launcher_submitted(
+        self, func: Callable[[JobLauncherSubmittedEvent], None]
     ):
         """
-        Callback will execute upon a job launcher results downloaded event
 
-        :param func: Callback
+        :param func: Callable[[JobLauncherSubmittedEvent]
         :return: None
         """
-        self._events.on_job_launcher_results_downloaded(func)
+        self._events.on_job_launcher_submitted(func)
 
     def on_station_job_updated(self, func: Callable[[StationJobUpdatedEvent], None]):
         """
         Callback will execute upon a station job updated event
 
-        :param func: Callback
+        :param func: Callable[[StationJobUpdatedEvent], None]
         :return: None
         """
         self._events.on_station_job_updated(func)
-
-    # def on_job_top(self, func: Callable[[JobTopEvent], None]):
-    #     """
-    #     Callback will execute upon a job top event
-    #
-    #     :param func: Callback
-    #     :return: None
-    #     """
-    #     self._events.on_job_top(func)
-    #
-    # def on_job_log(self, func: Callable[[JobLogEvent], None]):
-    #     """
-    #     Callback will execute upon a job log event
-    #
-    #     :param func:
-    #     :return: None
-    #     """
-    #     self._events.on_job_log(func)
 
     def request_stop_job(self, job_id: str) -> Job:
         """

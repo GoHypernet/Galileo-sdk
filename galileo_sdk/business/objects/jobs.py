@@ -138,6 +138,11 @@ class JobLogEvent:
         self.log = log
 
 
+class JobLauncherSubmittedEvent:
+    def __init__(self, job: Job):
+        self.job = job
+
+
 class FileListing:
     def __init__(self, filename: str, path: str):
         self.filename = filename
@@ -192,3 +197,11 @@ class JobsEvents:
 
     def job_log(self, event: JobLogEvent):
         self._events.emit("log", event)
+
+    def on_job_launcher_submitted(
+        self, func: Callable[[JobLauncherSubmittedEvent], None]
+    ):
+        self._events.on("job_launcher_submitted", func)
+
+    def job_launcher_submitted(self, event: JobLauncherSubmittedEvent):
+        self._events.emit("job_launcher_submitted", event)

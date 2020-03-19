@@ -84,8 +84,7 @@ class Station:
 
 
 class NewStationEvent:
-    def __init__(self, station):
-        # TODO: need to type
+    def __init__(self, station: Station):
         self.station = station
 
 
@@ -101,9 +100,9 @@ class StationUserInviteReceivedEvent:
 
 
 class StationAdminInviteAcceptedEvent:
-    def __init__(self, stationid: str, userids: List[str]):
+    def __init__(self, stationid: str, userid: str):
         self.stationid: str = stationid
-        self.userids: List[str] = userids
+        self.userid: str = userid
 
 
 class StationMemberMemberEvent:
@@ -113,14 +112,21 @@ class StationMemberMemberEvent:
 
 
 class StationUserInviteAcceptedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
-
-
-class StationUserInviteRejectedEvent:
     def __init__(self, stationid: str, userid: str):
         self.stationid: str = stationid
         self.userid: str = userid
+
+
+class StationAdminInviteRejectedEvent:
+    def __init__(self, stationid: str, userids: List[str]):
+        self.stationid: str = stationid
+        self.userids: List[str] = userids
+
+
+class StationUserInviteRejectedEvent:
+    def __init__(self, stationid: str, userids: List[str]):
+        self.stationid: str = stationid
+        self.userids: List[str] = userids
 
 
 class StationAdminRequestReceivedEvent:
@@ -158,9 +164,9 @@ class StationUserRequestRejectedEvent:
 
 
 class StationAdminMemberRemovedEvent:
-    def __init__(self, stationid: str, userid: str):
+    def __init__(self, stationid: str, userids: List[str]):
         self.stationid: str = stationid
-        self.userid: str = userid
+        self.userids: List[str] = userids
 
 
 class StationAdminMachineRemovedEvent:
@@ -225,39 +231,39 @@ class StationMemberMachineAddedEvent:
 
 
 class StationAdminVolumeAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
+    def __init__(self, stationid: str, volumes: List[Volume]):
         self.stationid: str = stationid
         self.volumes: List[str] = volumes
 
 
 class StationMemberVolumeAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
+    def __init__(self, stationid: str, volumes: List[Volume]):
         self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+        self.volumes: List[Volume] = volumes
 
 
 class StationAdminVolumeHostPathAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
+    def __init__(self, stationid: str, volumes: List[Volume]):
         self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+        self.volumes: List[Volume] = volumes
 
 
 class StationMemberVolumeHostPathAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
+    def __init__(self, stationid: str, volumes: List[Volume]):
         self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+        self.volumes: List[Volume] = volumes
 
 
 class StationAdminVolumeHostPathRemovedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
+    def __init__(self, stationid: str, volumes: List[Volume]):
         self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+        self.volumes: List[Volume] = volumes
 
 
 class StationMemberVolumeHostPathRemovedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
+    def __init__(self, stationid: str, volumes: List[Volume]):
         self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+        self.volumes: List[Volume] = volumes
 
 
 class StationAdminVolumeRemovedEvent:
@@ -270,6 +276,16 @@ class StationMemberVolumeRemovedEvent:
     def __init__(self, stationid: str, volume_names: List[str]):
         self.stationid: str = stationid
         self.volume_names: List[str] = volume_names
+
+
+class StationAdminStationUpdated:
+    def __init__(self, station: Station):
+        self.station = station
+
+
+class StationMemberStationUpdated:
+    def __init__(self, station: Station):
+        self.station = station
 
 
 class StationsEvents:
@@ -325,12 +341,20 @@ class StationsEvents:
         self._event.emit("station_user_invite_accept", event)
 
     def on_station_admin_invite_rejected(
-        self, func: Callable[[StationUserInviteRejectedEvent], None]
+        self, func: Callable[[StationAdminInviteRejectedEvent], None]
     ):
         self._event.emit("station_admin_invite_rejected", func)
 
-    def station_admin_invite_rejected(self, event: StationUserInviteRejectedEvent):
+    def station_admin_invite_rejected(self, event: StationAdminInviteRejectedEvent):
         self._event.emit("station_admin_invite_rejected", event)
+
+    def on_station_user_invite_rejected(
+        self, func: Callable[[StationUserInviteRejectedEvent], None]
+    ):
+        self._event.emit("station_user_invite_rejected", func)
+
+    def station_user_invite_rejected(self, event: StationUserInviteRejectedEvent):
+        self._event.emit("station_user_invite_rejected", event)
 
     def on_station_admin_request_received(
         self, func: Callable[[StationAdminRequestReceivedEvent], None]
@@ -547,3 +571,19 @@ class StationsEvents:
 
     def station_member_volume_removed(self, event: StationMemberVolumeRemovedEvent):
         self._event.emit("station_member_volume_removed", event)
+
+    def on_station_admin_station_updated(
+        self, func: Callable[[StationAdminStationUpdated], None]
+    ):
+        self._event.on("station_admin_station_updated", func)
+
+    def station_admin_station_updated(self, event: StationAdminStationUpdated):
+        self._event.emit("station_admin_station_updated", event)
+
+    def on_station_member_station_updated(
+        self, func: Callable[[StationMemberStationUpdated], None]
+    ):
+        self._event.on("station_member_station_updated", func)
+
+    def station_member_station_updated(self, event: StationMemberStationUpdated):
+        self._event.emit("station_admin_station_updated", event)

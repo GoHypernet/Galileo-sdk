@@ -2,25 +2,32 @@ from typing import Any
 
 import socketio
 
-from ...business.objects.jobs import (JobLauncherResultsDownloadedEvent,
-                                      JobLauncherUpdatedEvent, JobLogEvent,
-                                      JobsEvents, JobTopEvent,
+from galileo_sdk.data.repositories.jobs import job_dict_to_job
+from galileo_sdk.data.repositories.machines import machine_dict_to_machine
+from galileo_sdk.data.repositories.stations import (station_dict_to_station,
+                                                    volume_dict_to_volume)
+
+from ...business.objects.jobs import (JobLauncherSubmittedEvent,
+                                      JobLauncherUpdatedEvent, JobsEvents,
                                       StationJobUpdatedEvent)
-from ...business.objects.machines import (MachinesEvents,
+from ...business.objects.machines import (MachineHardwareUpdateEvent,
+                                          MachineRegisteredEvent,
+                                          MachinesEvents,
                                           MachineStatusUpdateEvent)
 from ...business.objects.projects import ProjectsEvents
 from ...business.objects.stations import (
     NewStationEvent, StationAdminDestroyedEvent,
-    StationAdminInviteAcceptedEvent, StationAdminInviteSentEvent,
-    StationAdminMachineAddedEvent, StationAdminMachineRemovedEvent,
-    StationAdminMemberRemovedEvent, StationAdminRequestAcceptedEvent,
-    StationAdminRequestReceivedEvent, StationAdminRequestRejectedEvent,
+    StationAdminInviteAcceptedEvent, StationAdminInviteRejectedEvent,
+    StationAdminInviteSentEvent, StationAdminMachineAddedEvent,
+    StationAdminMachineRemovedEvent, StationAdminMemberRemovedEvent,
+    StationAdminRequestAcceptedEvent, StationAdminRequestReceivedEvent,
+    StationAdminRequestRejectedEvent, StationAdminStationUpdated,
     StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
     StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
     StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
     StationMemberMachineRemovedEvent, StationMemberMemberEvent,
-    StationMemberMemberRemovedEvent, StationMemberVolumeAddedEvent,
-    StationMemberVolumeHostPathAddedEvent,
+    StationMemberMemberRemovedEvent, StationMemberStationUpdated,
+    StationMemberVolumeAddedEvent, StationMemberVolumeHostPathAddedEvent,
     StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
     StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
     StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
@@ -63,35 +70,45 @@ class GalileoConnector:
                 MachineStatusUpdateEvent(mid=data["mid"], status=data["status"])
             )
 
+        @self._socket.on("machine/registered")
+        def on_machine_registered(data: Any):
+            self.machines_events.machine_registered(
+                MachineRegisteredEvent(machine_dict_to_machine(data["machine"]))
+            )
+
+        @self._socket.on("machine/hardware_updated")
+        def on_machine_hardware_updated(data: Any):
+            self.machines_events.machine_hardware_update(
+                MachineHardwareUpdateEvent(machine_dict_to_machine(data["machine"]))
+            )
+
     def _register_jobs_listeners(self):
         # Jobs
         @self._socket.on("job_launcher_updated")
         def on_job_launcher_updated(data: Any):
-            self.jobs_events.job_launcher_updated(JobLauncherUpdatedEvent(data["job"]))
-
-        @self._socket.on("job_launcher_results_downloaded")
-        def on_job_launcher_results_downloaded(resultsid, status):
-            self.jobs_events.job_launcher_results_downloaded(
-                JobLauncherResultsDownloadedEvent(resultsid, status)
+            self.jobs_events.job_launcher_updated(
+                JobLauncherUpdatedEvent(job_dict_to_job(data["job"]))
             )
 
         @self._socket.on("station_job_updated")
         def on_station_job_updated(data: Any):
-            self.jobs_events.station_job_updated(StationJobUpdatedEvent(data["job"]))
+            self.jobs_events.station_job_updated(
+                StationJobUpdatedEvent(job_dict_to_job(data["job"]))
+            )
 
-        @self._socket.on("top")
-        def on_job_top(data: Any):
-            self.jobs_events.job_top(JobTopEvent(data["job"], data["top"]))
-
-        @self._socket.on("log")
-        def on_job_log(data: Any):
-            self.jobs_events.job_log(JobLogEvent(data["job"], data["log"]))
+        @self._socket.on("job_launcher_submitted")
+        def on_job_launcher_submitted(data: Any):
+            self.jobs_events.job_launcher_submitted(
+                JobLauncherSubmittedEvent(job_dict_to_job(data["job"]))
+            )
 
     def _register_stations_listeners(self):
         # Stations
         @self._socket.on("new_station")
         def on_new_station(data: Any):
-            self.stations_events.new_station(NewStationEvent(data["station"]))
+            self.stations_events.new_station(
+                NewStationEvent(station_dict_to_station(data["station"]))
+            )
 
         @self._socket.on("station_admin_invite_sent")
         def on_station_admin_invite_sent(data: Any):
@@ -102,13 +119,13 @@ class GalileoConnector:
         @self._socket.on("station_user_invite_received")
         def on_station_user_invite_received(data: Any):
             self.stations_events.station_user_invite_received(
-                StationUserInviteReceivedEvent(data["station"])
+                StationUserInviteReceivedEvent(station_dict_to_station(data["station"]))
             )
 
         @self._socket.on("station_admin_invite_accepted")
         def on_station_admin_invite_accepted(data: Any):
             self.stations_events.station_admin_invite_accepted(
-                StationAdminInviteAcceptedEvent(data["stationid"], data["userids"])
+                StationAdminInviteAcceptedEvent(data["stationid"], data["userid"])
             )
 
         @self._socket.on("station_member_member_added")
@@ -120,13 +137,19 @@ class GalileoConnector:
         @self._socket.on("station_user_invite_accepted")
         def on_station_user_invite_accepted(data: Any):
             self.stations_events.station_user_invite_accepted(
-                StationUserInviteAcceptedEvent(data["stationid"])
+                StationUserInviteAcceptedEvent(data["stationid"], data["userid"])
             )
 
         @self._socket.on("station_admin_invite_rejected")
         def on_station_admin_invite_rejected(data: Any):
-            self.station_events.station_admin_invite_rejected(
-                StationUserInviteRejectedEvent(data["stationid"])
+            self.stations_events.station_admin_invite_rejected(
+                StationAdminInviteRejectedEvent(data["stationid"], data["userids"])
+            )
+
+        @self._socket.on("station_user_invite_rejected")
+        def on_station_user_invite_rejected(data: Any):
+            self.stations_events.station_user_invite_rejected(
+                StationUserInviteRejectedEvent(data["stationid"], data["userids"])
             )
 
         @self._socket.on("station_admin_request_received")
@@ -168,7 +191,7 @@ class GalileoConnector:
         @self._socket.on("station_admin_member_removed")
         def on_station_admin_member_removed(data: Any):
             self.stations_events.station_admin_member_removed(
-                StationAdminMemberRemovedEvent(data["stationid"], data["userid"])
+                StationAdminMemberRemovedEvent(data["stationid"], data["userids"])
             )
 
         @self._socket.on("station_admin_machine_removed")
@@ -180,7 +203,7 @@ class GalileoConnector:
         @self._socket.on("station_member_member_removed")
         def on_station_member_member_removed(data: Any):
             self.stations_events.station_member_member_removed(
-                StationMemberMemberRemovedEvent(data["stationid"], data["mids"])
+                StationMemberMemberRemovedEvent(data["stationid"], data["userids"])
             )
 
         @self._socket.on("station_member_machine_removed")
@@ -240,26 +263,48 @@ class GalileoConnector:
         @self._socket.on("station_admin_volume_added")
         def on_station_admin_volume_added(data: Any):
             self.stations_events.station_admin_volume_added(
-                StationAdminVolumeAddedEvent(data["stationid"], data["volumes"])
+                StationAdminVolumeAddedEvent(
+                    data["stationid"],
+                    [
+                        volume_dict_to_volume(value)
+                        for key, value in data["volumes"].items()
+                    ],
+                )
             )
 
         @self._socket.on("station_member_volume_added")
         def on_station_member_volume_added(data: Any):
             self.stations_events.station_member_volume_added(
-                StationMemberVolumeAddedEvent(data["stationid"], data["volumes"])
+                StationMemberVolumeAddedEvent(
+                    data["stationid"],
+                    [
+                        volume_dict_to_volume(value)
+                        for key, value in data["volumes"].items()
+                    ],
+                )
             )
 
         @self._socket.on("station_admin_volume_host_path_added")
         def on_station_admin_volume_host_path_added(data: Any):
             self.stations_events.station_admin_volume_host_path_added(
-                StationAdminVolumeHostPathAddedEvent(data["stationid"], data["volumes"])
+                StationAdminVolumeHostPathAddedEvent(
+                    data["stationid"],
+                    [
+                        volume_dict_to_volume(value)
+                        for key, value in data["volumes"].items()
+                    ],
+                )
             )
 
         @self._socket.on("station_member_volume_host_path_added")
         def on_station_member_volume_host_path_added(data: Any):
             self.stations_events.station_member_volume_host_path_added(
                 StationMemberVolumeHostPathAddedEvent(
-                    data["stationid"], data["volumes"]
+                    data["stationid"],
+                    [
+                        volume_dict_to_volume(value)
+                        for key, value in data["volumes"].items()
+                    ],
                 )
             )
 
@@ -267,7 +312,11 @@ class GalileoConnector:
         def on_station_admin_volume_host_path_removed(data: Any):
             self.stations_events.station_admin_volume_host_path_removed(
                 StationAdminVolumeHostPathRemovedEvent(
-                    data["stationid"], data["volumes"]
+                    data["stationid"],
+                    [
+                        volume_dict_to_volume(value)
+                        for key, value in data["volumes"].items()
+                    ],
                 )
             )
 
@@ -275,7 +324,11 @@ class GalileoConnector:
         def on_station_member_volume_host_path_removed(data: Any):
             self.stations_events.station_member_volume_host_path_removed(
                 StationMemberVolumeHostPathRemovedEvent(
-                    data["stationid"], data["volumes"]
+                    data["stationid"],
+                    [
+                        volume_dict_to_volume(value)
+                        for key, value in data["volumes"].items()
+                    ],
                 )
             )
 
@@ -289,6 +342,18 @@ class GalileoConnector:
         def on_station_member_volume_removed(data: Any):
             self.stations_events.station_member_volume_removed(
                 StationMemberVolumeRemovedEvent(data["stationid"], data["volume_names"])
+            )
+
+        @self._socket.on("station_admin_station_updated")
+        def on_station_admin_station_updated(data: Any):
+            self.stations_events.station_admin_station_updated(
+                StationAdminStationUpdated(station_dict_to_station(data["station"]))
+            )
+
+        @self._socket.on("station_member_station_updated")
+        def on_station_member_station_updated(data: Any):
+            self.stations_events.station_member_station_updated(
+                StationMemberStationUpdated(station_dict_to_station(data["station"]))
             )
 
     def disconnect(self):

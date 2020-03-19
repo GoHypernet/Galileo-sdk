@@ -1,6 +1,8 @@
 from typing import Callable, List, Optional
 
-from ..business.objects.machines import (Machine, MachinesEvents,
+from ..business.objects.machines import (Machine, MachineHardwareUpdateEvent,
+                                         MachineRegisteredEvent,
+                                         MachinesEvents,
                                          MachineStatusUpdateEvent,
                                          UpdateMachineRequest)
 from ..business.services.machines import MachinesService
@@ -20,10 +22,30 @@ class MachinesSdk:
         """
         Callback will execute upon a machine status update event
 
-        :param func: Callback
+        :param func: Callable[[MachineStatusUpdateEvent], None]
         :return: None
         """
         self._events.on_machine_status_update(func)
+
+    def on_machine_hardware_update(
+        self, func: Callable[[MachineHardwareUpdateEvent], None]
+    ):
+        """
+        Callback will execute upon a machine hardware update event
+
+        :param func: Callable[[MachineHardwareUpdateEvent], None]
+        :return: None
+        """
+        self._events.on_machine_hardware_update(func)
+
+    def on_machine_registered(self, func: Callable[[MachineRegisteredEvent], None]):
+        """
+        Callback will execute upon a machine hardware update event
+
+        :param func: Callable[[MachineRegisteredEvent], None]
+        :return: None
+        """
+        self._events.on_machine_registered(func)
 
     def get_machines_by_id(self, machine_id: str) -> Machine:
         """
