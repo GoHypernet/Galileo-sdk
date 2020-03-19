@@ -4,37 +4,39 @@ from typing import Callable, List, Optional
 from ...business.objects.event import EventEmitter
 
 
+class UpdateStationRequest:
+    def __init__(
+        self,
+        station_id: str,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+    ):
+        self.station_id = station_id
+        self.name = name
+        self.description = description
+
+
 class EVolumeAccess(enum.Enum):
     READ = "r"
     READWRITE = "rw"
 
 
 class VolumeHostPath:
-    def __init__(
-        self, volumehostpathid: Optional[str], volumeid: str, mid: str, host_path: str
-    ):
+    def __init__(self, volumehostpathid: str, mid: str, host_path: str):
         self.volumehostpathid = volumehostpathid
-        self.volumeid = volumeid
         self.mid = mid
         self.host_path = host_path
 
 
 class Volume:
-    volumeid: Optional[str]
-    stationid: Optional[str]
-    name: Optional[str]
-    mount_point: Optional[str]
-    access: Optional[EVolumeAccess]
-    host_paths: Optional[List[VolumeHostPath]]
-
     def __init__(
         self,
-        stationid: str = None,
-        name: str = None,
-        mount_point: str = None,
-        access: EVolumeAccess = EVolumeAccess.READ,
-        host_paths: List[VolumeHostPath] = None,
-        volumeid: str = None,
+        stationid: str,
+        name: str,
+        mount_point: str,
+        access: EVolumeAccess,
+        host_paths: List[VolumeHostPath],
+        volumeid: str,
     ):
 
         self.volumeid = volumeid

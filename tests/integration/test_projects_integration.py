@@ -33,7 +33,7 @@ def test_upload_file():
 def test_create_and_run():
     stations_list = galileo.stations.list_stations()
     job = galileo.projects.create_project_and_run_job(
-        "sdk_project", "flatplate", stations_list["stations"][0]["stationid"]
+        "sdk_project", "flatplate", stations_list[0].stationid
     )
 
     assert job is not None

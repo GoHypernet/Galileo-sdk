@@ -27,7 +27,28 @@ stations_repo = StationsRepository(settings_repo, auth_provider)
 
 def mocked_requests_get(*args, **kwargs):
     if args[0] == f"{BACKEND}{NAMESPACE}/stations":
-        return MockResponse({"stations": [{"stations": i} for i in range(10)]}, 200)
+        return MockResponse(
+            {
+                "stations": [
+                    {
+                        "name": "name",
+                        "stationid": "stationid",
+                        "description": "description",
+                        "users": [
+                            {
+                                "stationuserid": "stationuserid",
+                                "userid": "userid",
+                                "status": "OWNER",
+                            }
+                        ],
+                        "mids": ["mid"],
+                        "volumes": ["volumes"],
+                    }
+                    for _ in range(5)
+                ]
+            },
+            200,
+        )
 
     return MockResponse(None, 404)
 
@@ -40,9 +61,20 @@ def mocked_requests_post(*args, **kwargs):
                     "name": kwargs["json"]["name"],
                     "stationid": "stationid",
                     "description": kwargs["json"]["description"],
-                    "users": kwargs["json"]["usernames"],
+                    "users": [
+                        {
+                            "userid": kwargs["json"]["usernames"][0],
+                            "stationuserid": "stationuserid",
+                            "status": "OWNER",
+                        },
+                        {
+                            "userid": kwargs["json"]["usernames"][1],
+                            "stationuserid": "stationuserid",
+                            "status": "OWNER",
+                        },
+                    ],
                     "mids": ["mid"],
-                    "volumes": [],
+                    "volumes": ["volumes"],
                 }
             },
             200,
@@ -54,12 +86,36 @@ def mocked_requests_post(*args, **kwargs):
     elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/machines":
         return MockResponse(True, 200)
     elif args[0] == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes":
-        return MockResponse({"volumes": "volume"}, 200)
+        return MockResponse(
+            {
+                "volumes": {
+                    "stationid": "stationid",
+                    "name": NAME,
+                    "mount_point": "mount_point",
+                    "access": "rw",
+                    "host_paths": [],
+                    "volumeid": "volumeid",
+                }
+            },
+            200,
+        )
     elif (
         args[0]
         == f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes/{VOLUMES_ID}/host_paths"
     ):
-        return MockResponse({"volume": "volume"}, 200)
+        return MockResponse(
+            {
+                "volume": {
+                    "stationid": "stationid",
+                    "name": NAME,
+                    "mount_point": "mount_point",
+                    "access": "rw",
+                    "host_paths": [],
+                    "volumeid": "volumeid",
+                }
+            },
+            200,
+        )
 
     return MockResponse(None, 404)
 
@@ -101,7 +157,6 @@ def mocked_requests_delete(*args, **kwargs):
 def test_list_stations(mocked_requests):
     # Call
     r = stations_repo.list_stations("")
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -109,16 +164,15 @@ def test_list_stations(mocked_requests):
     )
 
     # Assert
-    assert r["stations"] == [{"stations": i} for i in range(10)]
-    assert r["stations"][0] == {"stations": 0}
-    assert len(r["stations"]) == 10
+    assert len(r) == 5
+    assert len(r[0].volume_ids) == 1
+    assert r[0].volume_ids[0] == "volumes"
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
 def test_create_station(mocked_requests):
     # Call
     r = stations_repo.create_station(NAME, DESCRIPTION, USERNAMES)
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -128,9 +182,10 @@ def test_create_station(mocked_requests):
     )
 
     # Assert
-    assert r["station"]["name"] == NAME
-    assert r["station"]["description"] == DESCRIPTION
-    assert r["station"]["users"] == USERNAMES
+    assert r.name == NAME
+    assert r.description == DESCRIPTION
+    assert r.users[0].userid == USERNAMES[0]
+    assert r.users[1].userid == USERNAMES[1]
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
@@ -146,8 +201,7 @@ def test_invite_to_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
@@ -163,8 +217,7 @@ def test_accept_station_invite(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
@@ -180,8 +233,7 @@ def test_reject_station_invite(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
@@ -195,8 +247,7 @@ def test_request_to_join(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
@@ -212,8 +263,7 @@ def test_approve_request_to_join(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
@@ -229,8 +279,7 @@ def test_reject_request_to_join(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
@@ -246,8 +295,7 @@ def test_leave_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.delete", side_effect=mocked_requests_delete)
@@ -263,8 +311,7 @@ def test_remove_member_from_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.delete", side_effect=mocked_requests_delete)
@@ -278,8 +325,7 @@ def test_delete_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
@@ -295,8 +341,7 @@ def test_add_machines_to_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.delete", side_effect=mocked_requests_delete)
@@ -312,15 +357,13 @@ def test_remove_machines_from_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
 def test_add_volumes_to_station(mocked_requests):
     # Call
     r = stations_repo.add_volumes_to_station(STATION_ID, NAME, MOUNT_POINT, ACCESS)
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -330,7 +373,7 @@ def test_add_volumes_to_station(mocked_requests):
     )
 
     # Assert
-    assert r["volumes"] == "volume"
+    assert r.name == NAME
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
@@ -339,7 +382,6 @@ def test_add_host_path_to_station(mocked_requests):
     r = stations_repo.add_host_path_to_volume(
         STATION_ID, VOLUMES_ID, MIDS[0], HOST_PATH
     )
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -349,7 +391,7 @@ def test_add_host_path_to_station(mocked_requests):
     )
 
     # Assert
-    assert r["volume"] == "volume"
+    assert r.name == NAME
 
 
 @mock.patch("requests.delete", side_effect=mocked_requests_delete)
@@ -365,8 +407,7 @@ def test_delete_host_path_from_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True
 
 
 @mock.patch("requests.delete", side_effect=mocked_requests_delete)
@@ -382,5 +423,4 @@ def test_remove_volume_from_station(mocked_requests):
     )
 
     # Assert
-    assert r.status_code == 200
-    assert r.json() == True
+    assert r is True

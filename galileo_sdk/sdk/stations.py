@@ -1,7 +1,9 @@
 from typing import Callable, List, Optional
 
+from galileo_sdk.data.repositories.stations import UpdateStationRequest
+
 from ..business.objects.stations import (
-    NewStationEvent, StationAdminDestroyedEvent,
+    NewStationEvent, Station, StationAdminDestroyedEvent,
     StationAdminInviteAcceptedEvent, StationAdminInviteSentEvent,
     StationAdminMachineAddedEvent, StationAdminMachineRemovedEvent,
     StationAdminMemberRemovedEvent, StationAdminRequestAcceptedEvent,
@@ -17,7 +19,7 @@ from ..business.objects.stations import (
     StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
     StationUserInviteRejectedEvent, StationUserRequestAcceptedEvent,
     StationUserRequestDestroyedEvent, StationUserRequestRejectedEvent,
-    StationUserRequestSentEvent, StationUserWithdrawnEvent)
+    StationUserRequestSentEvent, StationUserWithdrawnEvent, Volume)
 from ..business.services.stations import StationsService
 
 
@@ -432,7 +434,7 @@ class StationsSdk:
         descriptions: Optional[List[str]] = None,
         page: Optional[int] = 1,
         items: Optional[int] = 25,
-    ):
+    ) -> List[Station]:
         """
         List of your Galileo stations
 
@@ -444,7 +446,7 @@ class StationsSdk:
         :param descriptions: Filter based on descriptions
         :param page: Page #
         :param items: Items per page
-        :return: {'stations': [Stations]}
+        :return: List[Station]
         """
         return self._stations_service.list_stations(
             stationids=stationids,
@@ -459,18 +461,18 @@ class StationsSdk:
 
     def create_station(
         self, name: str, description: str, userids: Optional[List[str]] = None
-    ):
+    ) -> Station:
         """
         Create a new station
 
         :param name: name of station
         :param userids: list of members's user ids to invite
         :param description: description of station
-        :return: {"station": Station}
+        :return: Station
         """
         return self._stations_service.create_station(name, description, userids)
 
-    def invite_to_station(self, station_id: str, userids: List[str]):
+    def invite_to_station(self, station_id: str, userids: List[str]) -> bool:
         """
         Invite user(s) to a station
 
@@ -480,7 +482,7 @@ class StationsSdk:
         """
         return self._stations_service.invite_to_station(station_id, userids)
 
-    def accept_station_invite(self, station_id: str):
+    def accept_station_invite(self, station_id: str) -> bool:
         """
         Accept an invitation to join a station
 
@@ -489,7 +491,7 @@ class StationsSdk:
         """
         return self._stations_service.accept_station_invite(station_id)
 
-    def reject_station_invite(self, station_id: str):
+    def reject_station_invite(self, station_id: str) -> bool:
         """
         Reject an invitation to join a station
 
@@ -498,7 +500,7 @@ class StationsSdk:
         """
         return self._stations_service.reject_station_invite(station_id)
 
-    def request_to_join(self, station_id: str):
+    def request_to_join(self, station_id: str) -> bool:
         """
         Request to join a station
 
@@ -507,7 +509,7 @@ class StationsSdk:
         """
         return self._stations_service.request_to_join(station_id)
 
-    def approve_request_to_join(self, station_id: str, userids: List[str]):
+    def approve_request_to_join(self, station_id: str, userids: List[str]) -> bool:
         """
         Admins and owners can approve members to join a station
 
@@ -517,7 +519,7 @@ class StationsSdk:
         """
         return self._stations_service.approve_request_to_join(station_id, userids)
 
-    def reject_request_to_join(self, station_id: str, userids: List[str]):
+    def reject_request_to_join(self, station_id: str, userids: List[str]) -> bool:
         """
         Admins and owners can reject members that want to join a station
 
@@ -527,7 +529,7 @@ class StationsSdk:
         """
         return self._stations_service.reject_request_to_join(station_id, userids)
 
-    def leave_station(self, station_id: str):
+    def leave_station(self, station_id: str) -> bool:
         """
         Leave a station as a member
 
@@ -536,7 +538,7 @@ class StationsSdk:
         """
         return self._stations_service.leave_station(station_id)
 
-    def remove_member_from_station(self, station_id: str, userid: str):
+    def remove_member_from_station(self, station_id: str, userid: str) -> bool:
         """
         Remove a member from a station
 
@@ -546,7 +548,7 @@ class StationsSdk:
         """
         return self._stations_service.remove_member_from_station(station_id, userid)
 
-    def delete_station(self, station_id: str):
+    def delete_station(self, station_id: str) -> bool:
         """
         Permanently delete a station
 
@@ -555,7 +557,7 @@ class StationsSdk:
         """
         return self._stations_service.delete_station(station_id)
 
-    def add_machines_to_station(self, station_id: str, mids: List[str]):
+    def add_machines_to_station(self, station_id: str, mids: List[str]) -> bool:
         """
         Add machines to a station
 
@@ -565,7 +567,7 @@ class StationsSdk:
         """
         return self._stations_service.add_machines_to_station(station_id, mids)
 
-    def remove_machines_from_station(self, station_id: str, mids: List[str]):
+    def remove_machines_from_station(self, station_id: str, mids: List[str]) -> bool:
         """
         Remove machines from a station
 
@@ -577,7 +579,7 @@ class StationsSdk:
 
     def add_volumes_to_station(
         self, station_id: str, name: str, mount_point: str, access: str
-    ):
+    ) -> Volume:
         """
         Add volumes to a station
 
@@ -585,7 +587,7 @@ class StationsSdk:
         :param name: volume name
         :param mount_point: directory path from inside the container
         :param access: read/write access: either 'r' or 'rw'
-        :return: {"volumes": Volume}
+        :return: Volume
         """
         return self._stations_service.add_volumes_to_station(
             station_id, name, mount_point, access
@@ -593,7 +595,7 @@ class StationsSdk:
 
     def add_host_path_to_volume(
         self, station_id: str, volume_id: str, mid: str, host_path: str
-    ):
+    ) -> Volume:
         """
         Add host path to volume before running a job
         Host path is where the landing zone will store the results of a job
@@ -602,7 +604,7 @@ class StationsSdk:
         :param volume_id: volume's id
         :param mid: machine id
         :param host_path: directory path for landing zone
-        :return: {"volume": Volume}
+        :return: Volume
         """
         return self._stations_service.add_host_path_to_volume(
             station_id, volume_id, mid, host_path
@@ -610,7 +612,7 @@ class StationsSdk:
 
     def delete_host_path_from_volume(
         self, station_id: str, volume_id: str, host_path_id: str
-    ):
+    ) -> bool:
         """
         Remove a host path
         Host path is where the landing zone will store the results of a job
@@ -624,7 +626,7 @@ class StationsSdk:
             station_id, volume_id, host_path_id
         )
 
-    def remove_volume_from_station(self, station_id: str, volume_id):
+    def remove_volume_from_station(self, station_id: str, volume_id) -> bool:
         """
         Remove a volume from station
 
@@ -633,3 +635,6 @@ class StationsSdk:
         :return: boolean
         """
         return self._stations_service.remove_volume_from_station(station_id, volume_id)
+
+    def update_station(self, request: UpdateStationRequest) -> Station:
+        return self._stations_service.update_station(request)
