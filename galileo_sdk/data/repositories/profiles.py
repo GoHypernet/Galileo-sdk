@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, List
+from typing import Any, Callable, List, Optional
 from urllib.parse import urlunparse
 
 import requests
@@ -6,6 +6,7 @@ import requests
 from galileo_sdk.business.objects.profiles import Profile, ProfileWallet
 from galileo_sdk.business.objects.stations import Station
 from galileo_sdk.data.repositories.stations import station_dict_to_station
+
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 

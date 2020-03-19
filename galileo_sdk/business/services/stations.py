@@ -1,4 +1,5 @@
 from typing import List, Optional
+
 import requests
 
 from ...data.repositories.stations import StationsRepository

@@ -1,19 +1,12 @@
 import os
+from datetime import datetime
 from unittest import mock
 
-from galileo_sdk.data.repositories.jobs import JobsRepository
-from galileo_sdk.mock_response import MockResponse
-from galileo_sdk.business.objects import (
-    Job,
-    EJobStatus,
-    EPaymentStatus,
-    EJobRunningStatus,
-    JobStatus,
-)
-
-from galileo_sdk.data.repositories.jobs import job_dict_to_job
-from datetime import datetime
+from galileo_sdk.business.objects import (EJobRunningStatus, EJobStatus,
+                                          EPaymentStatus, Job, JobStatus)
 from galileo_sdk.business.utils.generate_query_str import generate_query_str
+from galileo_sdk.data.repositories.jobs import JobsRepository, job_dict_to_job
+from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"

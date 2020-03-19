@@ -1,13 +1,16 @@
-from typing import Any, Callable, Optional, List
+from datetime import datetime
+from typing import Any, Callable, List, Optional
 from urllib.parse import urlunparse
 
 import requests
 
-from galileo_sdk.business.objects.jobs import FileListing, TopProcess, TopDetails
+from galileo_sdk.business.objects import (EJobStatus, Job, JobStatus,
+                                          UpdateJobRequest)
+from galileo_sdk.business.objects.jobs import (FileListing, TopDetails,
+                                               TopProcess)
+
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
-from galileo_sdk.business.objects import Job, JobStatus, EJobStatus, UpdateJobRequest
-from datetime import datetime
 
 
 class JobsRepository:

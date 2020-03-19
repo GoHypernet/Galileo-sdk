@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from galileo_sdk.business.objects.profiles import Profile
 from galileo_sdk.business.objects.stations import Station
+
 from ..business.services.profiles import ProfilesService
 
 

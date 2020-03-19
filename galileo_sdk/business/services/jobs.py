@@ -1,11 +1,12 @@
 import os
 from typing import List, Optional
 
-from galileo_sdk.business.objects.jobs import FileListing, TopProcess
-from ...data.repositories.jobs import JobsRepository
-from ..utils.generate_query_str import generate_query_str
-from ..objects.exceptions import JobsException
 from galileo_sdk.business.objects import Job, UpdateJobRequest
+from galileo_sdk.business.objects.jobs import FileListing, TopProcess
+
+from ...data.repositories.jobs import JobsRepository
+from ..objects.exceptions import JobsException
+from ..utils.generate_query_str import generate_query_str
 
 
 class JobsService:

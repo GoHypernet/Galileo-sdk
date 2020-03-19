@@ -1,16 +1,13 @@
 from typing import Callable, List, Optional
 
-from galileo_sdk.business.objects import (
-    Job,
-    JobLauncherResultsDownloadedEvent,
-    JobLauncherUpdatedEvent,
-    JobLogEvent,
-    JobsEvents,
-    JobTopEvent,
-    StationJobUpdatedEvent,
-    UpdateJobRequest,
-)
+from galileo_sdk.business.objects import (Job,
+                                          JobLauncherResultsDownloadedEvent,
+                                          JobLauncherUpdatedEvent, JobLogEvent,
+                                          JobsEvents, JobTopEvent,
+                                          StationJobUpdatedEvent,
+                                          UpdateJobRequest)
 from galileo_sdk.business.objects.jobs import TopProcess
+
 from ..business.services.jobs import JobsService
 
 

@@ -1,10 +1,7 @@
 from unittest import mock
 
-from galileo_sdk.business.objects.machines import (
-    Machine,
-    EMachineStatus,
-    UpdateMachineRequest,
-)
+from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
+                                                   UpdateMachineRequest)
 from galileo_sdk.business.services.machines import MachinesService
 from galileo_sdk.mock_response import MockResponse
 

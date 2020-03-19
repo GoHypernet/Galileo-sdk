@@ -13,8 +13,8 @@
 import os
 import sys
 
-import sphinx_material
 import galileo_sdk
+import sphinx_material
 
 # -- Python specific configuration -------------------------------------------
 

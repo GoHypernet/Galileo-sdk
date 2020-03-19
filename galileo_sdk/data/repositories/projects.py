@@ -3,6 +3,11 @@ from urllib.parse import urlunparse
 
 import requests
 
+from galileo_sdk.business.objects.jobs import Job
+from galileo_sdk.business.objects.projects import (DirectoryListing,
+                                                   FileListing, Project)
+from galileo_sdk.data.repositories.jobs import job_dict_to_job
+
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 
@@ -60,24 +65,79 @@ class ProjectsRepository:
     def _post(self, *args, **kwargs):
         return self._request(requests.post, *args, **kwargs)
 
-    def list_projects(self, query: str):
-        return self._get("/projects", query=query)
+    def list_projects(self, query: str) -> List[Project]:
+        response = self._get("/projects", query=query)
+        json: dict = response.json()
+        projects: List[dict] = json["projects"]
+        return [project_dict_to_project(project) for project in projects]
 
-    def create_project(self, name: str, description: str):
-        return self._post("/projects", {"name": name, "description": description})
+    def create_project(self, name: str, description: str) -> Project:
+        response = self._post("/projects", {"name": name, "description": description})
+        json: dict = response.json()
+        project: dict = json["project"]
+        return project_dict_to_project(project)
 
-    def upload_single_file(self, project_id: str, file: Any, filename: str):
-        return self._post(
-            f"/projects/{project_id}/files", files=file, filename=filename
-        )
+    def upload_single_file(self, project_id: str, file: Any, filename: str) -> bool:
+        r = self._post(f"/projects/{project_id}/files", files=file, filename=filename)
+        return r.json()
 
-    def run_job_on_station(self, project_id: str, station_id: str):
-        return self._post(
+    def run_job_on_station(self, project_id: str, station_id: str) -> Job:
+        response = self._post(
             f"/projects/{project_id}/jobs", data={"station_id": station_id}
         )
+        json: dict = response.json()
+        job: dict = json["job"]
+        return job_dict_to_job(job)
 
-    def run_job_on_machine(self, project_id: str, station_id: str, machine_id: str):
-        return self._post(
+    def run_job_on_machine(
+        self, project_id: str, station_id: str, machine_id: str
+    ) -> Job:
+        response = self._post(
             f"/projects/{project_id}/jobs",
             data={"station_id": station_id, "machine_id": machine_id},
         )
+        json: dict = response.json()
+        job: dict = json["job"]
+        return job_dict_to_job(job)
+
+    def inspect_project(self, project_id: str) -> DirectoryListing:
+        response = self._get(f"/projects/{project_id}")
+        json: dict = response.json()
+        return directory_dict_to_directory_listing(json)
+
+
+def directory_dict_to_directory_listing(directory: dict):
+    return DirectoryListing(
+        directory["storage_id"],
+        directory["path"],
+        [
+            directory_dict_to_directory_listing(listing)
+            if "storage_id" in listing
+            else file_dict_to_file_listing(listing)
+            for listing in directory["listings"]
+        ],
+    )
+
+
+def file_dict_to_file_listing(file: dict):
+    return FileListing(
+        file["filename"],
+        file["modification_date"],
+        file["creation_date"],
+        file["file_size"],
+        file["nonce"],
+    )
+
+
+def project_dict_to_project(project: dict):
+    return Project(
+        project["id"],
+        project["name"],
+        project["description"],
+        project["source_storage_id"],
+        project["source_path"],
+        project["destination_storage_id"],
+        project["destination_path"],
+        project["user_id"],
+        project["creation_timestamp"],
+    )

@@ -4,9 +4,11 @@ from urllib.parse import urlencode, urlunparse
 
 import requests
 
+from galileo_sdk.business.objects.stations import (EStationUserRole, Station,
+                                                   StationUser)
+
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
-from galileo_sdk.business.objects.stations import Station, StationUser, EStationUserRole
 
 
 class StationsRepository:

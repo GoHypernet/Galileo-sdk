@@ -1,13 +1,11 @@
-from typing import Any, Callable, Optional, List
+from typing import Any, Callable, List, Optional
 from urllib.parse import urlunparse
 
 import requests
 
-from galileo_sdk.business.objects.machines import (
-    UpdateMachineRequest,
-    Machine,
-    EMachineStatus,
-)
+from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
+                                                   UpdateMachineRequest)
+
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 
