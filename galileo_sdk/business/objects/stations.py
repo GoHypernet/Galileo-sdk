@@ -57,11 +57,8 @@ class EStationUserRole(enum.Enum):
 
 
 class StationUser:
-    def __init__(
-        self, stationuserid: str, stationid: str, userid: str, status: EStationUserRole
-    ):
+    def __init__(self, stationuserid: str, userid: str, status: EStationUserRole):
         self.stationuserid = stationuserid
-        self.stationid = stationid
         self.userid = userid
         self.status = status
 

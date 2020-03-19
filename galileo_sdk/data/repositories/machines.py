@@ -3,7 +3,11 @@ from urllib.parse import urlunparse
 
 import requests
 
-from galileo_sdk.business.objects.machines import UpdateMachineRequest, Machine, EMachineStatus
+from galileo_sdk.business.objects.machines import (
+    UpdateMachineRequest,
+    Machine,
+    EMachineStatus,
+)
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 

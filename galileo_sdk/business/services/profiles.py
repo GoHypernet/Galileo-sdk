@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+from galileo_sdk.business.objects.profiles import Profile
+from galileo_sdk.business.objects.stations import Station
 from ...data.repositories.profiles import ProfilesRepository
 from ..utils.generate_query_str import generate_query_str
 
@@ -17,7 +19,7 @@ class ProfilesService:
         public_keys: Optional[List[str]] = None,
         page: Optional[int] = None,
         items: Optional[int] = None,
-    ):
+    ) -> List[Profile]:
         query = generate_query_str(
             {
                 "page": page,
@@ -29,13 +31,10 @@ class ProfilesService:
                 "public_keys": public_keys,
             }
         )
-        r = self._profile_repo.list_users(query)
-        return r.json()
+        return self._profile_repo.list_users(query)
 
-    def self(self):
-        r = self._profile_repo.self()
-        return r.json()
+    def self(self) -> Profile:
+        return self._profile_repo.self()
 
-    def list_station_invites(self):
-        r = self._profile_repo.list_station_invites()
-        return r.json()
+    def list_station_invites(self) -> List[Station]:
+        return self._profile_repo.list_station_invites()

@@ -1,8 +1,11 @@
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, List
 from urllib.parse import urlunparse
 
 import requests
 
+from galileo_sdk.business.objects.profiles import Profile, ProfileWallet
+from galileo_sdk.business.objects.stations import Station
+from galileo_sdk.data.repositories.stations import station_dict_to_station
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
 
@@ -57,11 +60,36 @@ class ProfilesRepository:
     def _post(self, *args, **kwargs):
         return self._request(requests.post, *args, **kwargs)
 
-    def self(self):
-        return self._get("/users/self")
+    def self(self) -> Profile:
+        response = self._get("/users/self")
+        json: dict = response.json()
+        return user_dict_to_profile(json)
 
-    def list_users(self, query: str):
-        return self._get("/users", query=query)
+    def list_users(self, query: str) -> List[Profile]:
+        response = self._get("/users", query=query)
+        json: dict = response.json()
+        users: List[dict] = json["users"]
+        return [user_dict_to_profile(user) for user in users]
 
-    def list_station_invites(self):
-        return self._get("/users/invites")
+    def list_station_invites(self) -> List[Station]:
+        response = self._get("/users/invites")
+        json: dict = response.json()
+        stations: List[dict] = json["stations"]
+        return [station_dict_to_station(station) for station in stations]
+
+
+def wallet_dict_to_wallet(wallet: dict):
+    return ProfileWallet(
+        wallet=wallet["wallet"],
+        public_key=wallet["public_key"],
+        profilewalletid=wallet["profilewalletid"],
+    )
+
+
+def user_dict_to_profile(profile: dict):
+    return Profile(
+        userid=profile["userid"],
+        username=profile["username"],
+        mids=profile["mids"],
+        wallets=[wallet_dict_to_wallet(wallet) for wallet in profile["wallets"]],
+    )

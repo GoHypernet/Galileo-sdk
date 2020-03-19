@@ -6,6 +6,7 @@ import requests
 
 from ..providers.auth import AuthProvider
 from .settings import SettingsRepository
+from galileo_sdk.business.objects.stations import Station, StationUser, EStationUserRole
 
 
 class StationsRepository:
@@ -119,3 +120,22 @@ class StationsRepository:
 
     def remove_volume_from_station(self, station_id: str, volume_id: str):
         return self._delete(f"/station/{station_id}/volumes/{volume_id}")
+
+
+def station_dict_to_station(station: dict):
+    return Station(
+        stationid=station["stationid"],
+        name=station["name"],
+        description=station["description"],
+        users=[user_dict_to_station_user(user) for user in station["users"]],
+        machine_ids=station["mids"],
+        volume_ids=station["volumes"],
+    )
+
+
+def user_dict_to_station_user(user: dict):
+    return StationUser(
+        stationuserid=user["stationuserid"],
+        userid=user["userid"],
+        status=EStationUserRole[user["status"]],
+    )

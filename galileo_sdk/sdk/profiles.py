@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+from galileo_sdk.business.objects.profiles import Profile
+from galileo_sdk.business.objects.stations import Station
 from ..business.services.profiles import ProfilesService
 
 
@@ -16,7 +18,7 @@ class ProfilesSdk:
         public_keys: Optional[List[str]] = None,
         page: Optional[int] = None,
         items: Optional[int] = None,
-    ):
+    ) -> List[Profile]:
         """
         Get all Galileo users and their profiles
 
@@ -39,7 +41,7 @@ class ProfilesSdk:
             items=items,
         )
 
-    def self(self):
+    def self(self) -> Profile:
         """
         Get your Galileo profile
 
@@ -47,10 +49,10 @@ class ProfilesSdk:
         """
         return self._profile_service.self()
 
-    def list_station_invites(self):
+    def list_station_invites(self) -> List[Station]:
         """
         Get all your station invites
 
-        :return: {"stations": [Station]}
+        :return: List[Station]
         """
         return self._profile_service.list_station_invites()

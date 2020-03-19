@@ -10,25 +10,27 @@ galileo = GalileoSdk(config=CONFIG)
 
 def test_list_users():
     users = galileo.profiles.list_users()
-    assert not users == None
-    assert "users" in users
-    assert "userid" in users["users"][0]
-    assert "username" in users["users"][0]
-    assert "wallets" in users["users"][0]
+    assert users is not None
+    assert users[0].userid is not None
+    assert users[0].username is not None
+    assert users[0].mids is not None
+    assert users[0].wallets is not None
 
 
 def test_get_profile():
     self = galileo.profiles.self()
-    print(self)
-    assert not self == None
-    assert "mids" in self
-    assert "wallets" in self
+    assert self is not None
+    assert self.mids is not None
+    assert self.wallets is not None
 
 
 def test_list_station_invites():
     station_invites = galileo.profiles.list_station_invites()
-    assert not station_invites == None
-    assert "stations" in station_invites
+    assert station_invites is not None
+    assert station_invites[0].mids is not None
+    assert station_invites[0].description is not None
+    assert station_invites[0].users is not None
+    assert station_invites[0].volume_ids is not None
 
 
 galileo.disconnect()
