@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from galileo_sdk.business.objects.stations import (Station,
+from galileo_sdk.business.objects.stations import (EVolumeAccess, Station,
                                                    UpdateStationRequest,
                                                    Volume)
 
@@ -77,7 +77,7 @@ class StationsService:
         return self._stations_repo.remove_machines_from_station(station_id, mids)
 
     def add_volumes_to_station(
-        self, station_id: str, name: str, mount_point: str, access: str
+        self, station_id: str, name: str, mount_point: str, access: EVolumeAccess
     ) -> Volume:
         return self._stations_repo.add_volumes_to_station(
             station_id, name, mount_point, access

@@ -22,7 +22,7 @@ settings_repo = mock.Mock()
 settings_repo.get_settings().backend = f"{BACKEND}"
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
-job_repo = JobsRepository(settings_repo, auth_provider)
+job_repo = JobsRepository(settings_repo, auth_provider, NAMESPACE)
 
 job = {
     "jobid": "jobid",

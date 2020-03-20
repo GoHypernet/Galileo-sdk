@@ -37,7 +37,7 @@ class Machine:
 
 
 class MachineStatusUpdateEvent:
-    def __init__(self, mid: str, status: str):
+    def __init__(self, mid: str, status: EMachineStatus):
         self.mid = mid
         self.status = status
 
@@ -63,7 +63,7 @@ class UpdateMachineRequest:
         arch: Optional[str] = None,
         memory: Optional[str] = None,
         running_jobs_limit: Optional[int] = None,
-        active: Optional[str] = None,
+        active: Optional[bool] = None,
     ):
         self.mid = mid
         self.name = name

@@ -15,10 +15,14 @@ from .settings import SettingsRepository
 
 class JobsRepository:
     def __init__(
-        self, settings_repository: SettingsRepository, auth_provider: AuthProvider,
+        self,
+        settings_repository: SettingsRepository,
+        auth_provider: AuthProvider,
+        namespace: str,
     ):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
+        self._namespace = namespace
 
     def _make_url(
         self,
@@ -31,14 +35,7 @@ class JobsRepository:
         backend = settings.backend
         schema, addr = backend.split("://")
         return urlunparse(
-            (
-                schema,
-                f"{addr}/galileo/user_interface/v1",
-                endpoint,
-                params,
-                query,
-                fragment,
-            )
+            (schema, f"{addr}{self._namespace}", endpoint, params, query, fragment,)
         )
 
     def _request(

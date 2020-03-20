@@ -76,11 +76,12 @@ class MachinesSdk:
             mids=mids, userids=userids, page=page, items=items
         )
 
-    def update(self, request: UpdateMachineRequest) -> Machine:
+    def update_machine(self, request: UpdateMachineRequest) -> Machine:
         """
+        Update info about machine
 
-        :param request:
-        :return:
+        :param request: UpdateMachineRequest
+        :return: Machine
         """
 
         return self._machines_service.update(request)

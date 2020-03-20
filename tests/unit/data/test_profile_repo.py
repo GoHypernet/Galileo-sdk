@@ -23,7 +23,7 @@ settings_repo = mock.Mock()
 settings_repo.get_settings().backend = f"{BACKEND}"
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
-profile_repo = ProfilesRepository(settings_repo, auth_provider)
+profile_repo = ProfilesRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):
@@ -76,7 +76,22 @@ def mocked_requests_get(*args, **kwargs):
                             }
                         ],
                         "mids": ["1", "2"],
-                        "volumes": ["3", "4"],
+                        "volumes": [
+                            {
+                                "volumeid": "id",
+                                "name": "name",
+                                "mount_point": "mount_point",
+                                "stationid": "stationid",
+                                "access": "rw",
+                                "host_paths": [
+                                    {
+                                        "volumehostpathid": "volumehostpathid",
+                                        "mid": "mid",
+                                        "host_path": "hostpath",
+                                    }
+                                ],
+                            }
+                        ],
                     }
                 ]
             },

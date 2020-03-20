@@ -21,7 +21,7 @@ settings_repo = mock.Mock()
 settings_repo.get_settings().backend = f"{BACKEND}"
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
-projects_repo = ProjectsRepository(settings_repo, auth_provider)
+projects_repo = ProjectsRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):

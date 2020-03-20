@@ -73,14 +73,14 @@ class Station:
         description: str,
         users: List[StationUser],
         machine_ids: Optional[List[str]] = None,
-        volume_ids: Optional[List[str]] = None,
+        volumes: Optional[List[Volume]] = None,
     ):
         self.stationid = stationid
         self.name = name
         self.description = description
         self.users = users
         self.mids = machine_ids
-        self.volume_ids = volume_ids
+        self.volumes = volumes
 
 
 class NewStationEvent:
@@ -311,7 +311,7 @@ class StationsEvents:
     def on_station_user_invite_received(
         self, func: Callable[[StationUserInviteReceivedEvent], None]
     ):
-        self._event.emit("station_user_invite_received", func)
+        self._event.on("station_user_invite_received", func)
 
     def station_user_invite_received(self, event: StationUserInviteReceivedEvent):
         self._event.emit("station_user_invite_received", event)
@@ -343,7 +343,7 @@ class StationsEvents:
     def on_station_admin_invite_rejected(
         self, func: Callable[[StationAdminInviteRejectedEvent], None]
     ):
-        self._event.emit("station_admin_invite_rejected", func)
+        self._event.on("station_admin_invite_rejected", func)
 
     def station_admin_invite_rejected(self, event: StationAdminInviteRejectedEvent):
         self._event.emit("station_admin_invite_rejected", event)
@@ -351,7 +351,7 @@ class StationsEvents:
     def on_station_user_invite_rejected(
         self, func: Callable[[StationUserInviteRejectedEvent], None]
     ):
-        self._event.emit("station_user_invite_rejected", func)
+        self._event.on("station_user_invite_rejected", func)
 
     def station_user_invite_rejected(self, event: StationUserInviteRejectedEvent):
         self._event.emit("station_user_invite_rejected", event)

@@ -41,7 +41,7 @@ def test_add_and_remove_volumes_to_station():
         station_id=station.stationid,
         name="volume",
         mount_point="mount_point",
-        access="rw",
+        access=EVolumeAccess.READWRITE,
     )
     r_remove_volume = galileo.stations.remove_volume_from_station(
         station_id=station.stationid, volume_id=volumes.volumeid
@@ -69,7 +69,10 @@ def test_add_and_delete_host_path_to_volume():
             station_id = station.stationid
 
     volumes = galileo.stations.add_volumes_to_station(
-        station_id=station_id, name="volume", mount_point="mount_point", access="rw"
+        station_id=station_id,
+        name="volume",
+        mount_point="mount_point",
+        access=EVolumeAccess.READWRITE,
     )
 
     volume_host_path = galileo.stations.add_host_path_to_volume(

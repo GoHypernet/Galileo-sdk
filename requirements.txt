@@ -1,5 +1,5 @@
 requests>=2.21.0
-python-socketio
+python-socketio[client]
 sphinx>=2.2.0
 sphinx-material
 pytest-runner

@@ -14,24 +14,21 @@ from .settings import SettingsRepository
 
 class ProjectsRepository:
     def __init__(
-        self, settings_repository: SettingsRepository, auth_provider: AuthProvider
+        self,
+        settings_repository: SettingsRepository,
+        auth_provider: AuthProvider,
+        namespace: str,
     ):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
+        self._namespace = namespace
 
     def _make_url(self, endpoint, params="", query="", fragment=""):
         settings = self._settings_repository.get_settings()
         backend = settings.backend
         schema, addr = backend.split("://")
         return urlunparse(
-            (
-                schema,
-                f"{addr}/galileo/user_interface/v1",
-                endpoint,
-                params,
-                query,
-                fragment,
-            )
+            (schema, f"{addr}{self._namespace}", endpoint, params, query, fragment,)
         )
 
     def _request(

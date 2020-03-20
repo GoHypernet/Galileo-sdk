@@ -30,7 +30,7 @@ def test_list_station_invites():
     assert station_invites[0].mids is not None
     assert station_invites[0].description is not None
     assert station_invites[0].users is not None
-    assert station_invites[0].volume_ids is not None
+    assert station_invites[0].volumes is not None
 
 
 galileo.disconnect()

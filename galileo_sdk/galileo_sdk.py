@@ -22,6 +22,8 @@ from .sdk.profiles import ProfilesSdk
 from .sdk.projects import ProjectsSdk
 from .sdk.stations import StationsSdk
 
+NAMESPACE = "/galileo/user_interface/v1"
+
 
 class GalileoSdk:
     jobs: JobsSdk
@@ -86,29 +88,37 @@ class GalileoSdk:
                 "Authentication token AND refresh token (OR) username AND password, must be provided"
             )
 
-        self._events = GalileoConnector(self._settings, self._auth_provider)
+        self._events = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
 
-        self._jobs_repo = JobsRepository(self._settings, self._auth_provider)
+        self._jobs_repo = JobsRepository(self._settings, self._auth_provider, NAMESPACE)
         self._jobs_service = JobsService(self._jobs_repo)
         self.jobs = JobsSdk(self._jobs_service, self._events.jobs_events)
 
-        self._stations_repo = StationsRepository(self._settings, self._auth_provider)
+        self._stations_repo = StationsRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
         self._stations_service = StationsService(self._stations_repo)
         self.stations = StationsSdk(
             self._stations_service, self._events.stations_events
         )
 
-        self._profiles_repo = ProfilesRepository(self._settings, self._auth_provider)
+        self._profiles_repo = ProfilesRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
         self._profiles_service = ProfilesService(self._profiles_repo)
         self.profiles = ProfilesSdk(self._profiles_service)
 
-        self._machines_repo = MachinesRepository(self._settings, self._auth_provider)
+        self._machines_repo = MachinesRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
         self._machines_service = MachinesService(self._machines_repo)
         self.machines = MachinesSdk(
             self._machines_service, self._events.machines_events
         )
 
-        self._projects_repo = ProjectsRepository(self._settings, self._auth_provider)
+        self._projects_repo = ProjectsRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
         self._projects_service = ProjectsService(self._projects_repo)
         self.projects = ProjectsSdk(self._projects_service)
 

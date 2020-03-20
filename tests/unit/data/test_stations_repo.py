@@ -1,5 +1,6 @@
 from unittest import mock
 
+from galileo_sdk.business.objects.stations import EVolumeAccess
 from galileo_sdk.data.repositories.stations import StationsRepository
 from galileo_sdk.mock_response import MockResponse
 
@@ -15,14 +16,14 @@ USERNAMES = ["USERNAME1", "USERNAME2"]
 DESCRIPTION = "description"
 MIDS = ["mid1", "mid2"]
 MOUNT_POINT = "MOUNT_POINT"
-ACCESS = "rw"
+ACCESS = EVolumeAccess.READWRITE
 
 # Arrange
 settings_repo = mock.Mock()
 settings_repo.get_settings().backend = f"{BACKEND}"
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
-stations_repo = StationsRepository(settings_repo, auth_provider)
+stations_repo = StationsRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):
@@ -42,7 +43,16 @@ def mocked_requests_get(*args, **kwargs):
                             }
                         ],
                         "mids": ["mid"],
-                        "volumes": ["volumes"],
+                        "volumes": [
+                            {
+                                "stationid": "stationid",
+                                "name": NAME,
+                                "mount_point": "mount_point",
+                                "access": "rw",
+                                "host_paths": [],
+                                "volumeid": "volumeid",
+                            }
+                        ],
                     }
                     for _ in range(5)
                 ]
@@ -74,7 +84,16 @@ def mocked_requests_post(*args, **kwargs):
                         },
                     ],
                     "mids": ["mid"],
-                    "volumes": ["volumes"],
+                    "volumes": [
+                        {
+                            "stationid": "stationid",
+                            "name": NAME,
+                            "mount_point": "mount_point",
+                            "access": "rw",
+                            "host_paths": [],
+                            "volumeid": "volumeid",
+                        }
+                    ],
                 }
             },
             200,
@@ -165,8 +184,8 @@ def test_list_stations(mocked_requests):
 
     # Assert
     assert len(r) == 5
-    assert len(r[0].volume_ids) == 1
-    assert r[0].volume_ids[0] == "volumes"
+    assert len(r[0].volumes) == 1
+    assert r[0].volumes[0].name == NAME
 
 
 @mock.patch("requests.post", side_effect=mocked_requests_post)
@@ -178,7 +197,7 @@ def test_create_station(mocked_requests):
     mocked_requests.assert_called_once_with(
         f"{BACKEND}{NAMESPACE}/station",
         headers=HEADERS,
-        json={"name": NAME, "usernames": USERNAMES, "description": DESCRIPTION,},
+        json={"name": NAME, "usernames": USERNAMES, "description": DESCRIPTION},
     )
 
     # Assert
@@ -369,7 +388,7 @@ def test_add_volumes_to_station(mocked_requests):
     mocked_requests.assert_called_once_with(
         f"{BACKEND}{NAMESPACE}/station/{STATION_ID}/volumes",
         headers=HEADERS,
-        json={"name": NAME, "mount_point": MOUNT_POINT, "access": ACCESS},
+        json={"name": NAME, "mount_point": MOUNT_POINT, "access": ACCESS.value},
     )
 
     # Assert

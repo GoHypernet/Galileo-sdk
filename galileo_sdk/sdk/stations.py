@@ -3,7 +3,7 @@ from typing import Callable, List, Optional
 from galileo_sdk.data.repositories.stations import UpdateStationRequest
 
 from ..business.objects.stations import (
-    NewStationEvent, Station, StationAdminDestroyedEvent,
+    EVolumeAccess, NewStationEvent, Station, StationAdminDestroyedEvent,
     StationAdminInviteAcceptedEvent, StationAdminInviteRejectedEvent,
     StationAdminInviteSentEvent, StationAdminMachineAddedEvent,
     StationAdminMachineRemovedEvent, StationAdminMemberRemovedEvent,
@@ -615,7 +615,7 @@ class StationsSdk:
         return self._stations_service.remove_machines_from_station(station_id, mids)
 
     def add_volumes_to_station(
-        self, station_id: str, name: str, mount_point: str, access: str
+        self, station_id: str, name: str, mount_point: str, access: EVolumeAccess
     ) -> Volume:
         """
         Add volumes to a station
