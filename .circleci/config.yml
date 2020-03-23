@@ -5,7 +5,7 @@ orbs:
 
 jobs:
   build-and-test:
-    executor: 2.7
+    executor: circleci/python:2.7
     steps:
       - checkout
       - python/load-cache
