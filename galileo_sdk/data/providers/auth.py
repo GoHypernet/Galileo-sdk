@@ -1,5 +1,3 @@
-from typing import Optional
-
 import requests
 
 from ..repositories.settings import SettingsRepository
@@ -8,11 +6,11 @@ from ..repositories.settings import SettingsRepository
 class AuthProvider:
     def __init__(
         self,
-        settings_repository: SettingsRepository,
-        auth_token: Optional[str] = None,
-        refresh_token: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
+        settings_repository,
+        auth_token=None,
+        refresh_token=None,
+        username=None,
+        password=None,
     ):
         self._settings_repository = settings_repository
         settings = self._settings_repository.get_settings()
@@ -22,7 +20,9 @@ class AuthProvider:
             self._refresh_token = refresh_token
         elif username and password:
             r = requests.post(
-                f"{settings.backend}/galileo/landing_zone/v1/oauth/token",
+                "{backend}/galileo/landing_zone/v1/oauth/token".format(
+                    backend=settings.backend
+                ),
                 json={
                     "username": username,
                     "password": password,

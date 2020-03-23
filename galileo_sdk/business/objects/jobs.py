@@ -1,6 +1,4 @@
 import enum
-from datetime import datetime
-from typing import Callable, List, Optional
 
 from galileo_sdk.business.objects.event import EventEmitter
 
@@ -47,18 +45,14 @@ class EPaymentStatus(enum.Enum):
 
 
 class UpdateJobRequest:
-    def __init__(self, job_id: str, archived: Optional[bool] = None):
+    def __init__(self, job_id, archived):
         self.job_id = job_id
         self.archived = archived
 
 
 class JobStatus:
     def __init__(
-        self,
-        timestamp: datetime,
-        status: EJobStatus,
-        jobstatusid: Optional[str] = None,
-        jobid: Optional[str] = None,
+        self, timestamp, status, jobstatusid=None, jobid=None,
     ):
         self.jobstatusid = jobstatusid
         self.jobid = jobid
@@ -73,23 +67,23 @@ class Job:
 
     def __init__(
         self,
-        jobid: str,
-        receiverid: str,
-        project_id: str,
-        time_created: datetime,
-        last_updated: datetime,
-        status: str,
-        container: str,
-        name: str,
-        stationid: str,
-        userid: str,
-        state: str,
-        oaid: str,
-        pay_status: str,
-        pay_interval: int,
-        total_runtime: int,
-        archived: bool,
-        status_history: List[JobStatus],
+        jobid,
+        receiverid,
+        project_id,
+        time_created,
+        last_updated,
+        status,
+        container,
+        name,
+        stationid,
+        userid,
+        state,
+        oaid,
+        pay_status,
+        pay_interval,
+        total_runtime,
+        archived,
+        status_history,
     ):
         self.job_id = jobid
         self.receiver_id = receiverid
@@ -111,97 +105,91 @@ class Job:
 
 
 class JobLauncherUpdatedEvent:
-    def __init__(self, job: Job):
+    def __init__(self, job):
         self.job = job
 
 
 class JobLauncherResultsDownloadedEvent:
-    def __init__(self, resultsid: str, status: str):
-        self.resultsid: str = resultsid
-        self.status: str = status
+    def __init__(self, resultsid, status):
+        self.resultsid = resultsid
+        self.status = status
 
 
 class StationJobUpdatedEvent:
-    def __init__(self, job: Job):
+    def __init__(self, job):
         self.job = job
 
 
 class JobTopEvent:
-    def __init__(self, job: Job, top):
+    def __init__(self, job, top):
         self.job = job
         self.top = top
 
 
 class JobLogEvent:
-    def __init__(self, job: Job, log):
+    def __init__(self, job, log):
         self.job = job
         self.log = log
 
 
 class JobLauncherSubmittedEvent:
-    def __init__(self, job: Job):
+    def __init__(self, job):
         self.job = job
 
 
 class FileListing:
-    def __init__(self, filename: str, path: str):
+    def __init__(self, filename, path):
         self.filename = filename
         self.path = path
 
 
 class TopDetails:
-    def __init__(self, title: str, detail: str):
+    def __init__(self, title, detail):
         self.title = title
         self.detail = detail
 
 
 class TopProcess:
-    def __init__(self, items: List[TopDetails]):
+    def __init__(self, items):
         self.items = items
 
 
 class JobsEvents:
-    _events: EventEmitter
-
     def __init__(self):
         self._events = EventEmitter()
 
-    def on_job_launcher_updated(self, func: Callable[[JobLauncherUpdatedEvent], None]):
+    def on_job_launcher_updated(self, func):
         self._events.on("job_launcher_updated", func)
 
-    def job_launcher_updated(self, event: JobLauncherUpdatedEvent):
+    def job_launcher_updated(self, event):
         self._events.emit("job_launcher_updated", event)
 
-    def on_job_launcher_results_downloaded(
-        self, func: Callable[[JobLauncherResultsDownloadedEvent], None]
-    ):
+    def on_job_launcher_results_downloaded(self, func):
         self._events.on("job_launcher_results_downloaded", func)
 
-    def job_launcher_results_downloaded(self, event: JobLauncherResultsDownloadedEvent):
+    def job_launcher_results_downloaded(self, event):
         self._events.emit("job_launcher_results_downloaded", event)
 
-    def on_station_job_updated(self, func: Callable[[StationJobUpdatedEvent], None]):
+    def on_station_job_updated(self, func):
         self._events.on("station_job_updated", func)
 
-    def station_job_updated(self, event: StationJobUpdatedEvent):
+    def station_job_updated(self, event):
         self._events.emit("station_job_updated", event)
 
-    def on_job_top(self, func: Callable[[JobTopEvent], None]):
+    def on_job_top(self, func):
         self._events.on("top", func)
 
-    def job_top(self, event: JobTopEvent):
+    def job_top(self, event):
         self._events.emit("top", event)
 
-    def on_job_log(self, func: Callable[[JobLogEvent], None]):
+    def on_job_log(self, func):
         self._events.on("log", func)
 
-    def job_log(self, event: JobLogEvent):
+    def job_log(self, event):
         self._events.emit("log", event)
 
-    def on_job_launcher_submitted(
-        self, func: Callable[[JobLauncherSubmittedEvent], None]
-    ):
+    def on_job_launcher_submitted(self, func):
         self._events.on("job_launcher_submitted", func)
 
-    def job_launcher_submitted(self, event: JobLauncherSubmittedEvent):
+    def job_launcher_submitted(self, event):
         self._events.emit("job_launcher_submitted", event)

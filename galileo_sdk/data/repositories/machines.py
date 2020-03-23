@@ -1,21 +1,13 @@
-from typing import Any, Callable, List, Optional
-from urllib.parse import urlunparse
+from urlparse import urlunparse
 
 import requests
 
-from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
-                                                   UpdateMachineRequest)
-
-from ..providers.auth import AuthProvider
-from .settings import SettingsRepository
+from galileo_sdk.business.objects.machines import EMachineStatus, Machine
 
 
 class MachinesRepository:
     def __init__(
-        self,
-        settings_repository: SettingsRepository,
-        auth_provider: AuthProvider,
-        namespace: str,
+        self, settings_repository, auth_provider, namespace,
     ):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
@@ -26,21 +18,24 @@ class MachinesRepository:
         backend = settings.backend
         schema, addr = backend.split("://")
         return urlunparse(
-            (schema, f"{addr}{self._namespace}", endpoint, params, query, fragment,)
+            (
+                schema,
+                "{addr}{namespace}".format(addr=addr, namespace=self._namespace),
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
         )
 
     def _request(
-        self,
-        request: Callable,
-        endpoint: str,
-        data: Optional[Any] = None,
-        params: Optional[str] = None,
-        query: Optional[str] = None,
-        fragment: Optional[str] = None,
+        self, request, endpoint, data=None, params=None, query=None, fragment=None,
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {
+            "Authorization": "Bearer {access_token}".format(access_token=access_token)
+        }
         r = request(url, json=data, headers=headers)
         r.raise_for_status()
         return r
@@ -51,20 +46,20 @@ class MachinesRepository:
     def _put(self, *args, **kwargs):
         return self._request(requests.put, *args, **kwargs)
 
-    def get_machine_by_id(self, machine_id: str) -> Machine:
-        response = self._get(f"/machines/{machine_id}")
-        json: dict = response.json()
+    def get_machine_by_id(self, machine_id):
+        response = self._get("/machines/{machine_id}".format(machine_id=machine_id))
+        json = response.json()
         return machine_dict_to_machine(json)
 
-    def list_machines(self, query: str) -> List[Machine]:
+    def list_machines(self, query):
         response = self._get("/machines", query=query)
-        json: dict = response.json()
-        machines: List[dict] = json["machines"]
+        json = response.json()
+        machines = json["machines"]
         return [machine_dict_to_machine(machine) for machine in machines]
 
-    def update(self, request: UpdateMachineRequest) -> Machine:
+    def update(self, request):
         response = self._put(
-            f"/machines/{request.mid}",
+            "/machines/{mid}".format(mid=request.mid),
             {
                 "name": request.name,
                 "gpu": request.gpu,
@@ -76,12 +71,12 @@ class MachinesRepository:
                 "active": request.active,
             },
         )
-        json: dict = response.json()
+        json = response.json()
         machine = json["machine"]
         return machine_dict_to_machine(machine)
 
 
-def machine_dict_to_machine(machine: dict):
+def machine_dict_to_machine(machine):
     return Machine(
         machine["name"],
         machine["userid"],

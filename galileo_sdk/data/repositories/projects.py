@@ -1,23 +1,15 @@
-from typing import Any, Callable, List, Optional
-from urllib.parse import urlunparse
+from urlparse import urlunparse
 
 import requests
 
-from galileo_sdk.business.objects.jobs import Job
 from galileo_sdk.business.objects.projects import (DirectoryListing,
                                                    FileListing, Project)
 from galileo_sdk.data.repositories.jobs import job_dict_to_job
 
-from ..providers.auth import AuthProvider
-from .settings import SettingsRepository
-
 
 class ProjectsRepository:
     def __init__(
-        self,
-        settings_repository: SettingsRepository,
-        auth_provider: AuthProvider,
-        namespace: str,
+        self, settings_repository, auth_provider, namespace,
     ):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
@@ -28,23 +20,32 @@ class ProjectsRepository:
         backend = settings.backend
         schema, addr = backend.split("://")
         return urlunparse(
-            (schema, f"{addr}{self._namespace}", endpoint, params, query, fragment,)
+            (
+                schema,
+                "{addr}{namespace}".format(addr=addr, namespace=self._namespace),
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
         )
 
     def _request(
         self,
-        request: Callable,
-        endpoint: str,
-        data: Optional[Any] = None,
-        params: Optional[str] = None,
-        query: Optional[str] = None,
-        fragment: Optional[str] = None,
-        files: Optional[Any] = None,
-        filename: Optional[str] = None,
+        request,
+        endpoint,
+        data=None,
+        params=None,
+        query=None,
+        fragment=None,
+        files=None,
+        filename=None,
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {
+            "Authorization": "Bearer {access_token}".format(access_token=access_token)
+        }
 
         if files is None:
             r = request(url, json=data, headers=headers)
@@ -62,48 +63,51 @@ class ProjectsRepository:
     def _post(self, *args, **kwargs):
         return self._request(requests.post, *args, **kwargs)
 
-    def list_projects(self, query: str) -> List[Project]:
+    def list_projects(self, query):
         response = self._get("/projects", query=query)
-        json: dict = response.json()
-        projects: List[dict] = json["projects"]
+        json = response.json()
+        projects = json["projects"]
         return [project_dict_to_project(project) for project in projects]
 
-    def create_project(self, name: str, description: str) -> Project:
+    def create_project(self, name, description):
         response = self._post("/projects", {"name": name, "description": description})
-        json: dict = response.json()
-        project: dict = json["project"]
+        json = response.json()
+        project = json["project"]
         return project_dict_to_project(project)
 
-    def upload_single_file(self, project_id: str, file: Any, filename: str) -> bool:
-        r = self._post(f"/projects/{project_id}/files", files=file, filename=filename)
+    def upload_single_file(self, project_id, file, filename):
+        r = self._post(
+            "/projects/{project_id}/files".format(project_id=project_id),
+            files=file,
+            filename=filename,
+        )
         return r.json()
 
-    def run_job_on_station(self, project_id: str, station_id: str) -> Job:
+    def run_job_on_station(self, project_id, station_id):
         response = self._post(
-            f"/projects/{project_id}/jobs", data={"station_id": station_id}
+            "/projects/{project_id}/jobs".format(project_id=project_id),
+            data={"station_id": station_id},
         )
-        json: dict = response.json()
-        job: dict = json["job"]
+        json = response.json()
+        job = json["job"]
         return job_dict_to_job(job)
 
-    def run_job_on_machine(
-        self, project_id: str, station_id: str, machine_id: str
-    ) -> Job:
+    def run_job_on_machine(self, project_id, station_id, machine_id):
         response = self._post(
-            f"/projects/{project_id}/jobs",
+            "/projects/{project_id}/jobs".format(project_id=project_id),
             data={"station_id": station_id, "machine_id": machine_id},
         )
-        json: dict = response.json()
-        job: dict = json["job"]
+        json = response.json()
+        job = json["job"]
         return job_dict_to_job(job)
 
-    def inspect_project(self, project_id: str) -> DirectoryListing:
-        response = self._get(f"/projects/{project_id}")
-        json: dict = response.json()
+    def inspect_project(self, project_id):
+        response = self._get("/projects/{project_id}".format(project_id=project_id))
+        json = response.json()
         return directory_dict_to_directory_listing(json)
 
 
-def directory_dict_to_directory_listing(directory: dict):
+def directory_dict_to_directory_listing(directory):
     return DirectoryListing(
         directory["storage_id"],
         directory["path"],
@@ -116,7 +120,7 @@ def directory_dict_to_directory_listing(directory: dict):
     )
 
 
-def file_dict_to_file_listing(file: dict):
+def file_dict_to_file_listing(file):
     return FileListing(
         file["filename"],
         file["modification_date"],
@@ -126,7 +130,7 @@ def file_dict_to_file_listing(file: dict):
     )
 
 
-def project_dict_to_project(project: dict):
+def project_dict_to_project(project):
     return Project(
         project["id"],
         project["name"],

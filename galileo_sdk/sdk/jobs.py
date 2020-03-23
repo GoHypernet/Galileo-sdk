@@ -1,23 +1,9 @@
-from typing import Callable, List, Optional
-
-from galileo_sdk.business.objects import (Job, JobLauncherUpdatedEvent,
-                                          JobsEvents, StationJobUpdatedEvent,
-                                          UpdateJobRequest)
-from galileo_sdk.business.objects.jobs import (JobLauncherSubmittedEvent,
-                                               TopProcess)
-
-from ..business.services.jobs import JobsService
-
-
 class JobsSdk:
-    _jobs_service: JobsService
-    _events: JobsEvents
-
-    def __init__(self, jobs_service: JobsService, events: JobsEvents):
+    def __init__(self, jobs_service, events):
         self._jobs_service = jobs_service
         self._events = events
 
-    def on_job_launcher_updated(self, func: Callable[[JobLauncherUpdatedEvent], None]):
+    def on_job_launcher_updated(self, func):
         """
         Callback will execute upon a job launcher updated event
 
@@ -26,9 +12,7 @@ class JobsSdk:
         """
         self._events.on_job_launcher_updated(func)
 
-    def on_job_launcher_submitted(
-        self, func: Callable[[JobLauncherSubmittedEvent], None]
-    ):
+    def on_job_launcher_submitted(self, func):
         """
 
         :param func: Callable[[JobLauncherSubmittedEvent]
@@ -36,7 +20,7 @@ class JobsSdk:
         """
         self._events.on_job_launcher_submitted(func)
 
-    def on_station_job_updated(self, func: Callable[[StationJobUpdatedEvent], None]):
+    def on_station_job_updated(self, func):
         """
         Callback will execute upon a station job updated event
 
@@ -45,7 +29,7 @@ class JobsSdk:
         """
         self._events.on_station_job_updated(func)
 
-    def request_stop_job(self, job_id: str) -> Job:
+    def request_stop_job(self, job_id):
         """
         Request to stop job - sent by launcher
 
@@ -54,7 +38,7 @@ class JobsSdk:
         """
         return self._jobs_service.request_stop_job(job_id)
 
-    def request_pause_job(self, job_id: str) -> Job:
+    def request_pause_job(self, job_id):
         """
         Request to pause job - sent by launcher
 
@@ -63,7 +47,7 @@ class JobsSdk:
         """
         return self._jobs_service.request_pause_job(job_id)
 
-    def request_start_job(self, job_id: str) -> Job:
+    def request_start_job(self, job_id):
         """
         Start running the job
 
@@ -72,7 +56,7 @@ class JobsSdk:
         """
         return self._jobs_service.request_start_job(job_id)
 
-    def request_top_from_job(self, job_id: str) -> List[TopProcess]:
+    def request_top_from_job(self, job_id):
         """
         Request results of Top from docker - sent by launcher
 
@@ -81,7 +65,7 @@ class JobsSdk:
         """
         return self._jobs_service.request_top_from_job(job_id)
 
-    def request_logs_from_job(self, job_id: str) -> str:
+    def request_logs_from_job(self, job_id):
         """
         Request results of logs from docker - sent by launcher
 
@@ -92,15 +76,15 @@ class JobsSdk:
 
     def list_jobs(
         self,
-        jobids: Optional[List[str]] = None,
-        receiverids: Optional[List[str]] = None,
-        oaids: Optional[List[str]] = None,
-        userids: Optional[List[str]] = None,
-        stationids: Optional[List[str]] = None,
-        statuses: Optional[List[str]] = None,
-        page: Optional[int] = 1,
-        items: Optional[int] = 25,
-    ) -> List[Job]:
+        jobids=None,
+        receiverids=None,
+        oaids=None,
+        userids=None,
+        stationids=None,
+        statuses=None,
+        page=1,
+        items=25,
+    ):
         """
         List of your jobs
 
@@ -125,7 +109,7 @@ class JobsSdk:
             items=items,
         )
 
-    def download_job_results(self, job_id: str, path: str) -> List[str]:
+    def download_job_results(self, job_id, path):
         """
         Download your job results when job is completed
 
@@ -135,7 +119,7 @@ class JobsSdk:
         """
         return self._jobs_service.download_job_results(job_id, path)
 
-    def update_job(self, request: UpdateJobRequest) -> Job:
+    def update_job(self, request):
         """ Updates an existing job
 
         :param request: An UpdateJobRequest object
@@ -144,7 +128,7 @@ class JobsSdk:
 
         return self._jobs_service.update_job(request)
 
-    def request_kill_job(self, job_id: str) -> Job:
+    def request_kill_job(self, job_id):
         """
         Request to kill a job
 

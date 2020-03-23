@@ -1,6 +1,5 @@
 from datetime import datetime
-from typing import Any, Callable, List, Optional
-from urllib.parse import urlunparse
+from urlparse import urlunparse
 
 import requests
 
@@ -9,47 +8,40 @@ from galileo_sdk.business.objects import (EJobStatus, Job, JobStatus,
 from galileo_sdk.business.objects.jobs import (FileListing, TopDetails,
                                                TopProcess)
 
-from ..providers.auth import AuthProvider
-from .settings import SettingsRepository
-
 
 class JobsRepository:
     def __init__(
-        self,
-        settings_repository: SettingsRepository,
-        auth_provider: AuthProvider,
-        namespace: str,
+        self, settings_repository, auth_provider, namespace,
     ):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
         self._namespace = namespace
 
     def _make_url(
-        self,
-        endpoint: str,
-        params: Optional[str] = "",
-        query: Optional[str] = "",
-        fragment: Optional[str] = "",
+        self, endpoint, params, query, fragment,
     ):
         settings = self._settings_repository.get_settings()
         backend = settings.backend
         schema, addr = backend.split("://")
         return urlunparse(
-            (schema, f"{addr}{self._namespace}", endpoint, params, query, fragment,)
+            (
+                schema,
+                "{addr}{namespace}".format(addr=addr, namespace=self._namespace),
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
         )
 
     def _request(
-        self,
-        request: Callable,
-        endpoint: str,
-        data: Optional[Any] = None,
-        params: Optional[str] = None,
-        query: Optional[str] = None,
-        fragment: Optional[str] = None,
+        self, request, endpoint, data=None, params=None, query=None, fragment=None,
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {
+            "Authorization": "Bearer {access_token}".format(access_token=access_token)
+        }
         r = request(url, json=data, headers=headers)
         r.raise_for_status()
         return r
@@ -69,103 +61,108 @@ class JobsRepository:
     def request_send_job(self):
         return self._get("/job/upload_request")
 
-    def request_send_job_completed(
-        self, destination_mid: str, file_name: str, station_id: str
-    ):
+    def request_send_job_completed(self, destination_mid, filename, station_id):
         return self._post(
             "/jobs",
             {
                 "destination_mid": destination_mid,
-                "filename": file_name,
+                "filename": filename,
                 "stationid": station_id,
             },
         )
 
-    def request_receive_job(self, job_id: str):
-        return self._get(f"/jobs/{job_id}/results/location")
+    def request_receive_job(self, job_id):
+        return self._get("/jobs/{job_id}/results/location".format(job_id=job_id))
 
-    def request_receive_job_completed(self, job_id: str):
-        return self._put(f"/jobs/{job_id}/results/download_complete")
+    def request_receive_job_completed(self, job_id):
+        return self._put(
+            "/jobs/{job_id}/results/download_complete".format(job_id=job_id)
+        )
 
-    def submit_job(self, job_id: str):
-        return self._put(f"/jobs/{job_id}/run")
+    def submit_job(self, job_id):
+        return self._put("/jobs/{job_id}/run".format(job_id=job_id))
 
-    def request_stop_job(self, job_id: str) -> Job:
-        response = self._put(f"/jobs/{job_id}/stop")
-        json: dict = response.json()
-        job: dict = json["job"]
+    def request_stop_job(self, job_id):
+        response = self._put("/jobs/{job_id}/stop".format(job_id=job_id))
+        json = response.json()
+        job = json["job"]
         return job_dict_to_job(job)
 
-    def request_pause_job(self, job_id: str) -> Job:
-        response = self._put(f"/jobs/{job_id}/pause")
-        json: dict = response.json()
-        job: dict = json["job"]
+    def request_pause_job(self, job_id):
+        response = self._put("/jobs/{job_id}/pause".format(job_id=job_id))
+        json = response.json()
+        job = json["job"]
         return job_dict_to_job(job)
 
-    def request_start_job(self, job_id: str) -> Job:
-        response = self._put(f"/jobs/{job_id}/start")
-        json: dict = response.json()
-        job: dict = json["job"]
+    def request_start_job(self, job_id):
+        response = self._put("/jobs/{job_id}/start".format(job_id=job_id))
+        json = response.json()
+        job = json["job"]
         return job_dict_to_job(job)
 
-    def request_top_from_job(self, job_id: str) -> List[TopProcess]:
-        response = self._get(f"/jobs/{job_id}/top")
-        json: dict = response.json()
-        top: dict = json["top"]
+    def request_top_from_job(self, job_id):
+        response = self._get("/jobs/{job_id}/top".format(job_id=job_id))
+        json = response.json()
+        top = json["top"]
         return [
             top_dict_to_jobs_top(process, top["Titles"]) for process in top["Processes"]
         ]
 
-    def request_logs_from_jobs(self, job_id: str) -> str:
-        response = self._get(f"/jobs/{job_id}/logs")
-        json: dict = response.json()
-        logs: str = json["logs"]
+    def request_logs_from_jobs(self, job_id):
+        response = self._get("/jobs/{job_id}/logs".format(job_id=job_id))
+        json = response.json()
+        logs = json["logs"]
         return logs
 
-    def list_jobs(self, query: str) -> List[Job]:
+    def list_jobs(self, query):
         response = self._get("/jobs", query=query)
-        json: dict = response.json()
-        jobs: List[dict] = json["jobs"]
+        json = response.json()
+        jobs = json["jobs"]
         return [job_dict_to_job(job) for job in jobs]
 
-    def get_results_url(self, job_id: str) -> List[FileListing]:
-        response = self._get(f"/jobs/{job_id}/results")
-        json: dict = response.json()
-        files: List[dict] = json["files"]
+    def get_results_url(self, job_id):
+        response = self._get("/jobs/{job_id}/results".format(job_id=job_id))
+        json = response.json()
+        files = json["files"]
         return [file_dict_to_file_listing(file) for file in files]
 
-    def download_results(self, job_id: str, query: str, filename: str) -> str:
-        with self._get(f"/jobs/{job_id}/results", query=query) as r:
+    def download_results(self, job_id, query, filename):
+        with self._get(
+            "/jobs/{job_id}/results".format(job_id=job_id), query=query
+        ) as r:
             with open(filename, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     if chunk:  # filter out keep-alive new chunks
                         f.write(chunk)
         return filename
 
-    def update_job(self, request: UpdateJobRequest) -> Job:
-        response = self._put(f"/jobs/{request.job_id}", {"archived": request.archived})
-        json: dict = response.json()
-        job: dict = json["job"]
+    def update_job(self, request):
+        response = self._put(
+            "/jobs/{job_id}".format(job_id=request.job_id),
+            {"archived": request.archived},
+        )
+        json = response.json()
+        job = json["job"]
         return job_dict_to_job(job)
 
-    def request_kill_job(self, job_id: str) -> Job:
-        response = self._put(f"/jobs/{job_id}/kill")
-        json: dict = response.json()
-        job: dict = json["job"]
+    def request_kill_job(self, job_id):
+        response = self._put("/jobs/{job_id}/kill".format(job_id=job_id))
+        json = response.json()
+        job = json["job"]
         return job_dict_to_job(job)
 
 
-def top_dict_to_jobs_top(process: List[str], titles: List[str]) -> TopProcess:
+def top_dict_to_jobs_top(process, titles):
     return TopProcess(
         [TopDetails(title, detail) for detail, title in zip(process, titles)]
     )
 
 
-def file_dict_to_file_listing(file: dict) -> FileListing:
+def file_dict_to_file_listing(file):
     return FileListing(file["filename"], file["path"])
 
 
-def job_dict_to_job(job: dict) -> Job:
+def job_dict_to_job(job):
     return Job(
         job["jobid"],
         job["receiverid"],
@@ -190,7 +187,7 @@ def job_dict_to_job(job: dict) -> Job:
     )
 
 
-def job_status_dict_to_job_status(job_status: dict) -> JobStatus:
+def job_status_dict_to_job_status(job_status):
     status = JobStatus(
         datetime.fromtimestamp(job_status["timestamp"]),
         EJobStatus[job_status["status"]],

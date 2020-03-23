@@ -1,25 +1,17 @@
-from typing import List, Optional
-
-from galileo_sdk.business.objects.profiles import Profile
-from galileo_sdk.business.objects.stations import Station
-
-from ..business.services.profiles import ProfilesService
-
-
 class ProfilesSdk:
-    def __init__(self, profiles_service: ProfilesService):
+    def __init__(self, profiles_service):
         self._profile_service = profiles_service
 
     def list_users(
         self,
-        userids: Optional[List[str]] = None,
-        usernames: Optional[List[str]] = None,
-        partial_usernames: Optional[List[str]] = None,
-        wallets: Optional[List[str]] = None,
-        public_keys: Optional[List[str]] = None,
-        page: Optional[int] = None,
-        items: Optional[int] = None,
-    ) -> List[Profile]:
+        userids=None,
+        usernames=None,
+        partial_usernames=None,
+        wallets=None,
+        public_keys=None,
+        page=None,
+        items=None,
+    ):
         """
         Get all Galileo users and their profiles
 
@@ -42,7 +34,7 @@ class ProfilesSdk:
             items=items,
         )
 
-    def self(self) -> Profile:
+    def self(self):
         """
         Get your Galileo profile
 
@@ -50,7 +42,7 @@ class ProfilesSdk:
         """
         return self._profile_service.self()
 
-    def list_station_invites(self) -> List[Station]:
+    def list_station_invites(self):
         """
         Get all your station invites
 

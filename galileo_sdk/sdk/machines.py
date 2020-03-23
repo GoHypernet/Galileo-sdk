@@ -1,24 +1,9 @@
-from typing import Callable, List, Optional
-
-from ..business.objects.machines import (Machine, MachineHardwareUpdateEvent,
-                                         MachineRegisteredEvent,
-                                         MachinesEvents,
-                                         MachineStatusUpdateEvent,
-                                         UpdateMachineRequest)
-from ..business.services.machines import MachinesService
-
-
 class MachinesSdk:
-    _machine_service: MachinesService
-    _events: MachinesEvents
-
-    def __init__(self, machines_service: MachinesService, events: MachinesEvents):
+    def __init__(self, machines_service, events):
         self._machines_service = machines_service
         self._events = events
 
-    def on_machine_status_update(
-        self, func: Callable[[MachineStatusUpdateEvent], None]
-    ):
+    def on_machine_status_update(self, func):
         """
         Callback will execute upon a machine status update event
 
@@ -27,9 +12,7 @@ class MachinesSdk:
         """
         self._events.on_machine_status_update(func)
 
-    def on_machine_hardware_update(
-        self, func: Callable[[MachineHardwareUpdateEvent], None]
-    ):
+    def on_machine_hardware_update(self, func):
         """
         Callback will execute upon a machine hardware update event
 
@@ -38,7 +21,7 @@ class MachinesSdk:
         """
         self._events.on_machine_hardware_update(func)
 
-    def on_machine_registered(self, func: Callable[[MachineRegisteredEvent], None]):
+    def on_machine_registered(self, func):
         """
         Callback will execute upon a machine hardware update event
 
@@ -47,7 +30,7 @@ class MachinesSdk:
         """
         self._events.on_machine_registered(func)
 
-    def get_machines_by_id(self, machine_id: str) -> Machine:
+    def get_machines_by_id(self, machine_id):
         """
         Get machine's info by its id
 
@@ -57,12 +40,8 @@ class MachinesSdk:
         return self._machines_service.get_machine_by_id(machine_id)
 
     def list_machines(
-        self,
-        mids: Optional[List[str]] = None,
-        userids: Optional[List[str]] = None,
-        page: Optional[int] = 1,
-        items: Optional[int] = 25,
-    ) -> List[Machine]:
+        self, mids=None, userids=None, page=1, items=25,
+    ):
         """
         List all machines
 
@@ -76,7 +55,7 @@ class MachinesSdk:
             mids=mids, userids=userids, page=page, items=items
         )
 
-    def update_machine(self, request: UpdateMachineRequest) -> Machine:
+    def update_machine(self, request):
         """
         Update info about machine
 

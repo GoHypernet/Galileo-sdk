@@ -1,38 +1,9 @@
-from typing import Callable, List, Optional
-
-from galileo_sdk.data.repositories.stations import UpdateStationRequest
-
-from ..business.objects.stations import (
-    EVolumeAccess, NewStationEvent, Station, StationAdminDestroyedEvent,
-    StationAdminInviteAcceptedEvent, StationAdminInviteRejectedEvent,
-    StationAdminInviteSentEvent, StationAdminMachineAddedEvent,
-    StationAdminMachineRemovedEvent, StationAdminMemberRemovedEvent,
-    StationAdminRequestAcceptedEvent, StationAdminRequestReceivedEvent,
-    StationAdminRequestRejectedEvent, StationAdminStationUpdated,
-    StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
-    StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
-    StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
-    StationMemberMachineRemovedEvent, StationMemberMemberEvent,
-    StationMemberMemberRemovedEvent, StationMemberStationUpdated,
-    StationMemberVolumeAddedEvent, StationMemberVolumeHostPathAddedEvent,
-    StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
-    StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
-    StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
-    StationUserInviteRejectedEvent, StationUserRequestAcceptedEvent,
-    StationUserRequestDestroyedEvent, StationUserRequestRejectedEvent,
-    StationUserRequestSentEvent, StationUserWithdrawnEvent, Volume)
-from ..business.services.stations import StationsService
-
-
 class StationsSdk:
-    _stations_service: StationsService
-    _events: StationsEvents
-
-    def __init__(self, stations_service: StationsService, events: StationsEvents):
+    def __init__(self, stations_service, events):
         self._stations_service = stations_service
         self._events = events
 
-    def on_new_station(self, func: Callable[[NewStationEvent], None]):
+    def on_new_station(self, func):
         """
         Callback will execute upon a creation of a new station
 
@@ -41,9 +12,7 @@ class StationsSdk:
         """
         self._events.on_new_station(func)
 
-    def on_station_admin_invite_sent(
-        self, func: Callable[[StationAdminInviteSentEvent], None]
-    ):
+    def on_station_admin_invite_sent(self, func):
         """
         Callback will execute upon an invite sent
         Emitted to admin of a station
@@ -53,9 +22,7 @@ class StationsSdk:
         """
         self._events.on_station_admin_invite_sent(func)
 
-    def on_station_user_invite_received(
-        self, func: Callable[[StationUserInviteReceivedEvent], None]
-    ):
+    def on_station_user_invite_received(self, func):
         """
         Callback will execute upon a user receiving an invite to a station
         Emitted to the user that receives the invite
@@ -65,9 +32,7 @@ class StationsSdk:
         """
         self._events.on_station_user_invite_received(func)
 
-    def on_station_admin_invite_accepted(
-        self, func: Callable[[StationAdminInviteAcceptedEvent], None]
-    ):
+    def on_station_admin_invite_accepted(self, func):
         """
         Callback will execute upon an invite to a station being accepted
         Emitted to admin of station
@@ -77,9 +42,7 @@ class StationsSdk:
         """
         self._events.on_station_admin_invite_accepted(func)
 
-    def on_station_member_member_added(
-        self, func: Callable[[StationMemberMemberEvent], None]
-    ):
+    def on_station_member_member_added(self, func):
         """
         Callback will execute upon a member has been added (request has been approved or invitation has been accepted)
         Emitted to all members of a station
@@ -89,9 +52,7 @@ class StationsSdk:
         """
         self._events.on_station_member_member_added(func)
 
-    def on_station_user_invite_accepted(
-        self, func: Callable[[StationUserInviteAcceptedEvent], None]
-    ):
+    def on_station_user_invite_accepted(self, func):
         """
         Callback will execute upon a user accepting an invite to a station
         Emitted to user who has accepted the invitation
@@ -101,9 +62,7 @@ class StationsSdk:
         """
         self._events.on_station_user_invite_accepted(func)
 
-    def on_station_admin_invite_rejected(
-        self, func: Callable[[StationAdminInviteRejectedEvent], None]
-    ):
+    def on_station_admin_invite_rejected(self, func):
         """
         Callback will execute when an invite to a station has been rejected
         Emitted to admin of station
@@ -113,9 +72,7 @@ class StationsSdk:
         """
         self._events.on_station_admin_invite_rejected(func)
 
-    def on_station_user_invite_rejected(
-        self, func: Callable[[StationUserInviteRejectedEvent], None]
-    ):
+    def on_station_user_invite_rejected(self, func):
         """
         Callback will execute when an invite to a station has been rejected
         Emitted to admin of station
@@ -125,9 +82,7 @@ class StationsSdk:
         """
         self._events.on_station_user_invite_rejected(func)
 
-    def on_station_admin_request_received(
-        self, func: Callable[[StationAdminRequestReceivedEvent], None]
-    ):
+    def on_station_admin_request_received(self, func):
         """
         Callback will execute when a request to join the station has been received
         Emitted to admin of station
@@ -137,9 +92,7 @@ class StationsSdk:
         """
         self._events.on_station_admin_request_received(func)
 
-    def on_station_user_request_sent(
-        self, func: Callable[[StationUserRequestSentEvent], None]
-    ):
+    def on_station_user_request_sent(self, func):
         """
         Callback will execute when a request to join the station has been sent
         Emitted to user requesting to join the station
@@ -149,9 +102,7 @@ class StationsSdk:
         """
         self._events.on_station_user_request_sent(func)
 
-    def on_station_admin_request_accepted(
-        self, func: Callable[[StationAdminRequestAcceptedEvent], None]
-    ):
+    def on_station_admin_request_accepted(self, func):
         """
         Callback will execute when a request to join a station has been accepted
         Emitted to admin of station
@@ -161,9 +112,7 @@ class StationsSdk:
         """
         self._events.on_station_admin_request_accepted(func)
 
-    def on_station_user_request_accepted(
-        self, func: Callable[[StationUserRequestAcceptedEvent], None]
-    ):
+    def on_station_user_request_accepted(self, func):
         """
         Callback will execute when a request to join a station has been accepted
         Emitted to user who sent the request
@@ -174,7 +123,7 @@ class StationsSdk:
         self._events.on_station_user_request_accepted(func)
 
     def on_station_admin_request_rejected(
-        self, func: Callable[[StationAdminRequestRejectedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a request to join a station has been rejected
@@ -186,7 +135,7 @@ class StationsSdk:
         self._events.on_station_admin_request_rejected(func)
 
     def on_station_user_request_rejected(
-        self, func: Callable[[StationUserRequestRejectedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a request to join a station has been rejected
@@ -198,7 +147,7 @@ class StationsSdk:
         self._events.on_station_user_request_rejected(func)
 
     def on_station_admin_member_removed(
-        self, func: Callable[[StationAdminMemberRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a member has been removed from a station
@@ -210,7 +159,7 @@ class StationsSdk:
         self._events.on_station_admin_member_removed(func)
 
     def on_station_admin_machine_removed(
-        self, func: Callable[[StationAdminMachineRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a machine has been removed from a station
@@ -222,7 +171,7 @@ class StationsSdk:
         self._events.on_station_admin_machine_removed(func)
 
     def on_station_member_member_removed(
-        self, func: Callable[[StationMemberMemberRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a member has been removed from a station
@@ -234,7 +183,7 @@ class StationsSdk:
         self._events.on_station_member_member_removed(func)
 
     def on_station_member_machine_removed(
-        self, func: Callable[[StationMemberMachineRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a machine has been removed from a station
@@ -246,7 +195,7 @@ class StationsSdk:
         self._events.on_station_member_machine_removed(func)
 
     def on_station_user_withdrawn(
-        self, func: Callable[[StationUserWithdrawnEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a user has withdrawn from the station
@@ -258,7 +207,7 @@ class StationsSdk:
         self._events.on_station_user_withdrawn(func)
 
     def on_station_user_expelled(
-        self, func: Callable[[StationUserExpelledEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a user has been expelled from the station
@@ -270,7 +219,7 @@ class StationsSdk:
         self._events.on_station_user_expelled(func)
 
     def on_station_admin_destroyed(
-        self, func: Callable[[StationAdminDestroyedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -282,7 +231,7 @@ class StationsSdk:
         self._events.on_station_admin_destroyed(func)
 
     def on_station_member_destroyed(
-        self, func: Callable[[StationMemberDestroyedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -294,7 +243,7 @@ class StationsSdk:
         self._events.on_station_member_destroyed(func)
 
     def on_station_user_invite_destroyed(
-        self, func: Callable[[StationUserInviteDestroyedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -306,7 +255,7 @@ class StationsSdk:
         self._events.on_station_user_invite_destroyed(func)
 
     def on_station_user_request_destroyed(
-        self, func: Callable[[StationUserRequestDestroyedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -318,7 +267,7 @@ class StationsSdk:
         self._events.on_station_user_request_destroyed(func)
 
     def on_station_admin_machine_added(
-        self, func: Callable[[StationAdminMachineAddedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a machine has been added to the station
@@ -330,7 +279,7 @@ class StationsSdk:
         self._events.on_station_admin_machine_added(func)
 
     def on_station_member_machine_added(
-        self, func: Callable[[StationMemberMachineAddedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a machine has been added to the station
@@ -341,9 +290,7 @@ class StationsSdk:
         """
         self._events.on_station_member_machine_added(func)
 
-    def on_station_admin_volume_added(
-        self, func: Callable[[StationAdminVolumeAddedEvent], None]
-    ):
+    def on_station_admin_volume_added(self, func):
         """
         Callback will execute when a volume has been added to the station
         Emitted to admin of station
@@ -354,7 +301,7 @@ class StationsSdk:
         self._events.on_station_admin_volume_added(func)
 
     def on_station_member_volume_added(
-        self, func: Callable[[StationMemberVolumeAddedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a volume has been added to the station
@@ -366,7 +313,7 @@ class StationsSdk:
         self._events.on_station_member_volume_added(func)
 
     def on_station_admin_volume_host_path_added(
-        self, func: Callable[[StationAdminVolumeHostPathAddedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a volume host path has been added
@@ -378,7 +325,7 @@ class StationsSdk:
         self._events.on_station_admin_volume_host_path_added(func)
 
     def on_station_member_volume_host_path_added(
-        self, func: Callable[[StationMemberVolumeHostPathAddedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a volume host path has been added
@@ -390,7 +337,7 @@ class StationsSdk:
         self._events.on_station_member_volume_host_path_added(func)
 
     def on_station_admin_volume_host_path_removed(
-        self, func: Callable[[StationAdminVolumeHostPathRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a volume host path has been removed
@@ -402,7 +349,7 @@ class StationsSdk:
         self._events.on_station_admin_volume_host_path_removed(func)
 
     def on_station_member_volume_host_path_removed(
-        self, func: Callable[[StationMemberVolumeHostPathRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a volume host path has been removed
@@ -414,7 +361,7 @@ class StationsSdk:
         self._events.on_station_member_volume_host_path_removed(func)
 
     def on_station_admin_volume_removed(
-        self, func: Callable[[StationAdminVolumeRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a volume has been removed
@@ -426,7 +373,7 @@ class StationsSdk:
         self._events.on_station_admin_volume_removed(func)
 
     def on_station_member_volume_removed(
-        self, func: Callable[[StationMemberVolumeRemovedEvent], None]
+        self, func,
     ):
         """
         Callback will execute when a volume has been removed
@@ -438,7 +385,7 @@ class StationsSdk:
         self._events.on_station_member_volume_removed(func)
 
     def on_station_admin_station_updated(
-        self, func: Callable[[StationAdminStationUpdated], None]
+        self, func,
     ):
         """
         Callback will execute when a station has been updated
@@ -450,7 +397,7 @@ class StationsSdk:
         self._events.on_station_admin_station_updated(func)
 
     def on_station_member_station_updated(
-        self, func: Callable[[StationMemberStationUpdated], None]
+        self, func,
     ):
         """
         Callback will execute when a station has been updated
@@ -463,15 +410,15 @@ class StationsSdk:
 
     def list_stations(
         self,
-        stationids: Optional[List[str]] = None,
-        names: Optional[List[str]] = None,
-        mids: Optional[List[str]] = None,
-        user_roles: Optional[List[str]] = None,
-        volumeids: Optional[List[str]] = None,
-        descriptions: Optional[List[str]] = None,
-        page: Optional[int] = 1,
-        items: Optional[int] = 25,
-    ) -> List[Station]:
+        stationids=None,
+        names=None,
+        mids=None,
+        user_roles=None,
+        volumeids=None,
+        descriptions=None,
+        page=1,
+        items=25,
+    ):
         """
         List of your Galileo stations
 
@@ -496,9 +443,7 @@ class StationsSdk:
             items=items,
         )
 
-    def create_station(
-        self, name: str, description: str, userids: Optional[List[str]] = None
-    ) -> Station:
+    def create_station(self, name, description="", userids=None):
         """
         Create a new station
 
@@ -509,7 +454,7 @@ class StationsSdk:
         """
         return self._stations_service.create_station(name, description, userids)
 
-    def invite_to_station(self, station_id: str, userids: List[str]) -> bool:
+    def invite_to_station(self, station_id, userids):
         """
         Invite user(s) to a station
 
@@ -519,7 +464,7 @@ class StationsSdk:
         """
         return self._stations_service.invite_to_station(station_id, userids)
 
-    def accept_station_invite(self, station_id: str) -> bool:
+    def accept_station_invite(self, station_id):
         """
         Accept an invitation to join a station
 
@@ -528,7 +473,7 @@ class StationsSdk:
         """
         return self._stations_service.accept_station_invite(station_id)
 
-    def reject_station_invite(self, station_id: str) -> bool:
+    def reject_station_invite(self, station_id):
         """
         Reject an invitation to join a station
 
@@ -537,7 +482,7 @@ class StationsSdk:
         """
         return self._stations_service.reject_station_invite(station_id)
 
-    def request_to_join(self, station_id: str) -> bool:
+    def request_to_join(self, station_id):
         """
         Request to join a station
 
@@ -546,7 +491,7 @@ class StationsSdk:
         """
         return self._stations_service.request_to_join(station_id)
 
-    def approve_request_to_join(self, station_id: str, userids: List[str]) -> bool:
+    def approve_request_to_join(self, station_id, userids):
         """
         Admins and owners can approve members to join a station
 
@@ -556,7 +501,7 @@ class StationsSdk:
         """
         return self._stations_service.approve_request_to_join(station_id, userids)
 
-    def reject_request_to_join(self, station_id: str, userids: List[str]) -> bool:
+    def reject_request_to_join(self, station_id, userids):
         """
         Admins and owners can reject members that want to join a station
 
@@ -566,7 +511,7 @@ class StationsSdk:
         """
         return self._stations_service.reject_request_to_join(station_id, userids)
 
-    def leave_station(self, station_id: str) -> bool:
+    def leave_station(self, station_id):
         """
         Leave a station as a member
 
@@ -575,7 +520,7 @@ class StationsSdk:
         """
         return self._stations_service.leave_station(station_id)
 
-    def remove_member_from_station(self, station_id: str, userid: str) -> bool:
+    def remove_member_from_station(self, station_id, userid):
         """
         Remove a member from a station
 
@@ -585,7 +530,7 @@ class StationsSdk:
         """
         return self._stations_service.remove_member_from_station(station_id, userid)
 
-    def delete_station(self, station_id: str) -> bool:
+    def delete_station(self, station_id):
         """
         Permanently delete a station
 
@@ -594,7 +539,7 @@ class StationsSdk:
         """
         return self._stations_service.delete_station(station_id)
 
-    def add_machines_to_station(self, station_id: str, mids: List[str]) -> bool:
+    def add_machines_to_station(self, station_id, mids):
         """
         Add machines to a station
 
@@ -604,7 +549,7 @@ class StationsSdk:
         """
         return self._stations_service.add_machines_to_station(station_id, mids)
 
-    def remove_machines_from_station(self, station_id: str, mids: List[str]) -> bool:
+    def remove_machines_from_station(self, station_id, mids):
         """
         Remove machines from a station
 
@@ -614,9 +559,7 @@ class StationsSdk:
         """
         return self._stations_service.remove_machines_from_station(station_id, mids)
 
-    def add_volumes_to_station(
-        self, station_id: str, name: str, mount_point: str, access: EVolumeAccess
-    ) -> Volume:
+    def add_volumes_to_station(self, station_id, name, mount_point, access):
         """
         Add volumes to a station
 
@@ -630,9 +573,7 @@ class StationsSdk:
             station_id, name, mount_point, access
         )
 
-    def add_host_path_to_volume(
-        self, station_id: str, volume_id: str, mid: str, host_path: str
-    ) -> Volume:
+    def add_host_path_to_volume(self, station_id, volume_id, mid, host_path):
         """
         Add host path to volume before running a job
         Host path is where the landing zone will store the results of a job
@@ -647,9 +588,7 @@ class StationsSdk:
             station_id, volume_id, mid, host_path
         )
 
-    def delete_host_path_from_volume(
-        self, station_id: str, volume_id: str, host_path_id: str
-    ) -> bool:
+    def delete_host_path_from_volume(self, station_id, volume_id, host_path_id):
         """
         Remove a host path
         Host path is where the landing zone will store the results of a job
@@ -663,7 +602,7 @@ class StationsSdk:
             station_id, volume_id, host_path_id
         )
 
-    def remove_volume_from_station(self, station_id: str, volume_id) -> bool:
+    def remove_volume_from_station(self, station_id, volume_id):
         """
         Remove a volume from station
 
@@ -673,5 +612,5 @@ class StationsSdk:
         """
         return self._stations_service.remove_volume_from_station(station_id, volume_id)
 
-    def update_station(self, request: UpdateStationRequest) -> Station:
+    def update_station(self, request):
         return self._stations_service.update_station(request)

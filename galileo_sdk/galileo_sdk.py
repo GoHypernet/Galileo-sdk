@@ -1,6 +1,4 @@
-import atexit
 import os
-from typing import Optional
 
 from .business.services.jobs import JobsService
 from .business.services.log import LogService
@@ -26,19 +24,13 @@ NAMESPACE = "/galileo/user_interface/v1"
 
 
 class GalileoSdk:
-    jobs: JobsSdk
-    stations: StationsSdk
-    profiles: ProfilesSdk
-    machines: MachinesSdk
-    projects: ProjectsSdk
-
     def __init__(
         self,
-        auth_token: Optional[str] = None,
-        refresh_token: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        config: Optional[str] = None,
+        auth_token=None,
+        refresh_token=None,
+        username=None,
+        password=None,
+        config=None,
     ):
         """
         Galileo SDK object.
@@ -51,7 +43,6 @@ class GalileoSdk:
         """
         self.log = LogService()
         if "GALILEO_CONFIG" in os.environ:
-            print(str(os.environ["GALILEO_CONFIG"]))
             self._settings = SettingsRepository(str(os.environ["GALILEO_CONFIG"]))
         elif config:
             self._settings = SettingsRepository(config)

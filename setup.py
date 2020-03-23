@@ -19,9 +19,15 @@ setup(
     package_data={
         "galileo_sdk": ["sdk/**", "business/**/*", "config/**/*", "data/**/*"]
     },
-    python_requires=">=3.6.7",
-    install_requires=["requests>=2.21.0", "python-socketio[client]"],
+    python_requires=">=2.7",
+    install_requires=[
+        "requests>=2.21.0",
+        "python-socketio[client]==4.3.1",
+        "enum34",
+        "python-engineio==3.9.0",
+        "mock"
+    ],
     extras_require={"docs": ["sphinx>=2.2.0", "sphinx-material"]},
-    setup_requires=["pytest-runner", "black", "isort"],
+    setup_requires=["pytest-runner"],
     tests_require=["pytest"],
 )

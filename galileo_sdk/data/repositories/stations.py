@@ -1,6 +1,4 @@
-import json
-from typing import List, Optional
-from urllib.parse import urlencode, urlunparse
+from urlparse import urlunparse
 
 import requests
 
@@ -16,10 +14,7 @@ from .settings import SettingsRepository
 
 class StationsRepository:
     def __init__(
-        self,
-        settings_repository: SettingsRepository,
-        auth_provider: AuthProvider,
-        namespace: str,
+        self, settings_repository, auth_provider, namespace,
     ):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
@@ -30,13 +25,22 @@ class StationsRepository:
         backend = settings.backend
         schema, addr = backend.split("://")
         return urlunparse(
-            (schema, f"{addr}{self._namespace}", endpoint, params, query, fragment,)
+            (
+                schema,
+                "{addr}{namespace}".format(addr=addr, namespace=self._namespace),
+                endpoint,
+                params,
+                query,
+                fragment,
+            )
         )
 
     def _request(self, request, endpoint, data=None, params="", query="", fragment=""):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {
+            "Authorization": "Bearer {access_token}".format(access_token=access_token)
+        }
         r = request(url, json=data, headers=headers)
         r.raise_for_status()
         return r
@@ -53,118 +57,139 @@ class StationsRepository:
     def _delete(self, *args, **kwargs):
         return self._request(requests.delete, *args, **kwargs)
 
-    def list_stations(self, query: str) -> List[Station]:
+    def list_stations(self, query):
         response = self._get("/stations", query=query)
-        json: dict = response.json()
-        stations: List[dict] = json["stations"]
+        json = response.json()
+        stations = json["stations"]
         return [station_dict_to_station(station) for station in stations]
 
-    def create_station(
-        self, name: str, description: str, userids: Optional[List[str]] = None
-    ) -> Station:
+    def create_station(self, name, description, userids=None):
         response = self._post(
             "/station",
             {"name": name, "usernames": userids, "description": description},
         )
-        json: dict = response.json()
-        station: dict = json["station"]
+        json = response.json()
+        station = json["station"]
         return station_dict_to_station(station)
 
-    def invite_to_station(self, station_id: str, userids: List[str]) -> bool:
+    def invite_to_station(self, station_id, userids):
         response = self._post(
-            f"/station/{station_id}/users/invite", {"userids": userids}
+            "/station/{station_id}/users/invite".format(station_id=station_id),
+            {"userids": userids},
         )
         return response.json()
 
-    def accept_station_invite(self, station_id: str) -> bool:
-        response = self._put(f"/station/{station_id}/users/accept")
-        return response.json()
-
-    def reject_station_invite(self, station_id: str) -> bool:
-        response = self._put(f"/station/{station_id}/users/reject")
-        return response.json()
-
-    def request_to_join(self, station_id: str) -> bool:
-        response = self._post(f"/station/{station_id}/users")
-        return response.json()
-
-    def approve_request_to_join(self, station_id: str, userids: List[str]) -> bool:
+    def accept_station_invite(self, station_id):
         response = self._put(
-            f"/station/{station_id}/users/approve", {"userids": userids}
+            "/station/{station_id}/users/accept".format(station_id=station_id)
         )
         return response.json()
 
-    def reject_request_to_join(self, station_id: str, userids: List[str]) -> bool:
+    def reject_station_invite(self, station_id):
         response = self._put(
-            f"/station/{station_id}/users/reject", {"userids": userids}
+            "/station/{station_id}/users/reject".format(station_id=station_id)
         )
         return response.json()
 
-    def leave_station(self, station_id: str) -> bool:
-        response = self._put(f"/station/{station_id}/user/withdraw")
-        return response.json()
-
-    def remove_member_from_station(self, station_id: str, userid: str) -> bool:
-        response = self._delete(f"/station/{station_id}/user/{userid}/delete")
-        return response.json()
-
-    def delete_station(self, station_id: str) -> bool:
-        response = self._delete(f"/station/{station_id}")
-        return response.json()
-
-    def add_machines_to_station(self, station_id: str, mids: List[str]) -> bool:
-        response = self._post(f"/station/{station_id}/machines", {"mids": mids})
-        return response.json()
-
-    def remove_machines_from_station(self, station_id: str, mids: List[str]) -> bool:
-        response = self._delete(f"/station/{station_id}/machines", {"mids": mids})
-        return response.json()
-
-    def add_volumes_to_station(
-        self, station_id: str, name: str, mount_point: str, access: EVolumeAccess
-    ) -> Volume:
+    def request_to_join(self, station_id):
         response = self._post(
-            f"/station/{station_id}/volumes",
+            "/station/{station_id}/users".format(station_id=station_id)
+        )
+        return response.json()
+
+    def approve_request_to_join(self, station_id, userids):
+        response = self._put(
+            "/station/{station_id}/users/approve".format(station_id=station_id),
+            {"userids": userids},
+        )
+        return response.json()
+
+    def reject_request_to_join(self, station_id, userids):
+        response = self._put(
+            "/station/{station_id}/users/reject".format(station_id=station_id),
+            {"userids": userids},
+        )
+        return response.json()
+
+    def leave_station(self, station_id):
+        response = self._put(
+            "/station/{station_id}/user/withdraw".format(station_id=station_id)
+        )
+        return response.json()
+
+    def remove_member_from_station(self, station_id, userid):
+        response = self._delete(
+            "/station/{station_id}/user/{userid}/delete".format(
+                station_id=station_id, userid=userid
+            )
+        )
+        return response.json()
+
+    def delete_station(self, station_id):
+        response = self._delete("/station/{station_id}".format(station_id=station_id))
+        return response.json()
+
+    def add_machines_to_station(self, station_id, mids):
+        response = self._post(
+            "/station/{station_id}/machines".format(station_id=station_id),
+            {"mids": mids},
+        )
+        return response.json()
+
+    def remove_machines_from_station(self, station_id, mids):
+        response = self._delete(
+            "/station/{station_id}/machines".format(station_id=station_id),
+            {"mids": mids},
+        )
+        return response.json()
+
+    def add_volumes_to_station(self, station_id, name, mount_point, access):
+        response = self._post(
+            "/station/{station_id}/volumes".format(station_id=station_id),
             {"name": name, "mount_point": mount_point, "access": access.value},
         )
-        json: dict = response.json()
-        volume: dict = json["volumes"]
+        json = response.json()
+        volume = json["volumes"]
         return volume_dict_to_volume(volume)
 
-    def add_host_path_to_volume(
-        self, station_id: str, volume_id: str, mid: str, host_path: str
-    ) -> Volume:
+    def add_host_path_to_volume(self, station_id, volume_id, mid, host_path):
         response = self._post(
-            f"/station/{station_id}/volumes/{volume_id}/host_paths",
+            "/station/{station_id}/volumes/{volume_id}/host_paths".format(
+                station_id=station_id, volume_id=volume_id
+            ),
             {"mid": mid, "host_path": host_path},
         )
-        json: dict = response.json()
-        volume: dict = json["volume"]
+        json = response.json()
+        volume = json["volume"]
         return volume_dict_to_volume(volume)
 
-    def delete_host_path_from_volume(
-        self, station_id: str, volume_id: str, host_path_id: str
-    ) -> bool:
+    def delete_host_path_from_volume(self, station_id, volume_id, host_path_id):
         response = self._delete(
-            f"/station/{station_id}/volumes/{volume_id}/host_paths/{host_path_id}"
+            "/station/{station_id}/volumes/{volume_id}/host_paths/{host_path_id}".format(
+                station_id=station_id, volume_id=volume_id, host_path_id=host_path_id
+            )
         )
         return response.json()
 
-    def remove_volume_from_station(self, station_id: str, volume_id: str) -> bool:
-        response = self._delete(f"/station/{station_id}/volumes/{volume_id}")
+    def remove_volume_from_station(self, station_id, volume_id):
+        response = self._delete(
+            "/station/{station_id}/volumes/{volume_id}".format(
+                station_id=station_id, volume_id=volume_id
+            )
+        )
         return response.json()
 
-    def update_station(self, request: UpdateStationRequest) -> Station:
+    def update_station(self, request):
         response = self._put(
-            f"/station/{request.station_id}",
+            "/station/{station_id}".format(station_id=request.station_id),
             {"name": request.name, "description": request.description},
         )
-        json: dict = response.json()
-        station: dict = json["station"]
+        json = response.json()
+        station = json["station"]
         return station_dict_to_station(station)
 
 
-def host_path_dict_to_host_path(hostpath: dict):
+def host_path_dict_to_host_path(hostpath):
     return VolumeHostPath(
         volumehostpathid=hostpath["volumehostpathid"],
         mid=hostpath["mid"],
@@ -172,7 +197,7 @@ def host_path_dict_to_host_path(hostpath: dict):
     )
 
 
-def volume_dict_to_volume(volume: dict):
+def volume_dict_to_volume(volume):
     return Volume(
         volumeid=volume["volumeid"],
         name=volume["name"],
@@ -185,7 +210,7 @@ def volume_dict_to_volume(volume: dict):
     )
 
 
-def station_dict_to_station(station: dict):
+def station_dict_to_station(station):
     return Station(
         stationid=station["stationid"],
         name=station["name"],
@@ -196,7 +221,7 @@ def station_dict_to_station(station: dict):
     )
 
 
-def user_dict_to_station_user(user: dict):
+def user_dict_to_station_user(user):
     return StationUser(
         stationuserid=user["stationuserid"],
         userid=user["userid"],
