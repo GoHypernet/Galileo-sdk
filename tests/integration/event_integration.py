@@ -1,166 +1,141 @@
 from galileo_sdk import GalileoSdk
-from galileo_sdk.business.objects import JobLauncherUpdatedEvent
-from galileo_sdk.business.objects.jobs import (JobLauncherSubmittedEvent,
-                                               StationJobUpdatedEvent)
-from galileo_sdk.business.objects.machines import (MachineHardwareUpdateEvent,
-                                                   MachineRegisteredEvent,
-                                                   MachineStatusUpdateEvent)
-from galileo_sdk.business.objects.stations import (
-    NewStationEvent, StationAdminDestroyedEvent,
-    StationAdminInviteAcceptedEvent, StationAdminInviteRejectedEvent,
-    StationAdminInviteSentEvent, StationAdminMachineAddedEvent,
-    StationAdminMachineRemovedEvent, StationAdminMemberRemovedEvent,
-    StationAdminRequestAcceptedEvent, StationAdminRequestReceivedEvent,
-    StationAdminRequestRejectedEvent, StationAdminStationUpdated,
-    StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
-    StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
-    StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
-    StationMemberMachineRemovedEvent, StationMemberMemberEvent,
-    StationMemberMemberRemovedEvent, StationMemberStationUpdated,
-    StationMemberVolumeAddedEvent, StationMemberVolumeHostPathAddedEvent,
-    StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
-    StationUserExpelledEvent, StationUserInviteAcceptedEvent,
-    StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
-    StationUserInviteRejectedEvent, StationUserRequestAcceptedEvent,
-    StationUserRequestDestroyedEvent, StationUserRequestRejectedEvent,
-    StationUserRequestSentEvent, StationUserWithdrawnEvent)
 
 CONFIG = "development"
 galileo = GalileoSdk(config=CONFIG)
 
 
 # Machines
-def on_machine_status_update(event: MachineStatusUpdateEvent):
-    print(f"\non_machine_status_update - ", event.mid, event.status)
+def on_machine_status_update(event):
+    print("\non_machine_status_update - ", event.mid, event.status)
 
 
-def on_hardware_update(event: MachineHardwareUpdateEvent):
+def on_hardware_update(event):
     print("\non_hardware_update - ", vars(event.machine))
 
 
-def on_machine_registered(event: MachineRegisteredEvent):
+def on_machine_registered(event):
     print("\non_machine_registered_event - ", vars(event.machine))
 
 
 # Jobs
-def on_job_launcher_updated(event: JobLauncherUpdatedEvent):
+def on_job_launcher_updated(event):
     print("\non_job_launcher_updated - ", vars(event.job))
 
 
-def on_job_launcher_submitted(event: JobLauncherSubmittedEvent):
+def on_job_launcher_submitted(event):
     print("\non_job_launcher_submitted - ", vars(event.job))
 
 
-def on_station_job_updated(event: StationJobUpdatedEvent):
+def on_station_job_updated(event):
     print("\non_station_job_updated - ", vars(event.job))
 
 
 # Station
-def on_new_station(event: NewStationEvent):
+def on_new_station(event):
     print("\non_new_station - ", vars(event.station))
 
 
-def on_station_admin_invite_sent(event: StationAdminInviteSentEvent):
+def on_station_admin_invite_sent(event):
     print("\non_station_admin_invite_sent - ", event.stationid, event.userids)
 
 
-def on_station_user_invite_received(event: StationUserInviteReceivedEvent):
+def on_station_user_invite_received(event):
     print("\non_station_user_invite_received - ", vars(event.station))
 
 
-def on_station_admin_invite_accepted(event: StationAdminInviteAcceptedEvent):
+def on_station_admin_invite_accepted(event):
     print("\non_station_admin_invite_accepted - ", event.stationid, event.userid)
 
 
-def on_station_member_member_added(event: StationMemberMemberEvent):
+def on_station_member_member_added(event):
     print("\non_station_member_member_added - ", event.stationid, event.userid)
 
 
-def on_station_user_invite_accepted(event: StationUserInviteAcceptedEvent):
+def on_station_user_invite_accepted(event):
     print("\non_station_user_invite_accepted - ", event.stationid, event.userid)
 
 
-def on_station_admin_invite_rejected(event: StationAdminInviteRejectedEvent):
+def on_station_admin_invite_rejected(event):
     print("\non_station_admin_invite_rejected - ", event.stationid, event.userids)
 
 
-def on_station_user_invite_rejected(event: StationUserInviteRejectedEvent):
+def on_station_user_invite_rejected(event):
     print("\non_station_user_invite_rejected - ", event.stationid, event.userids)
 
 
-def on_station_admin_request_received(event: StationAdminRequestReceivedEvent):
+def on_station_admin_request_received(event):
     print("\non_station_admin_request_received - ", event.stationid, event.userid)
 
 
-def on_station_user_request_sent(event: StationUserRequestSentEvent):
+def on_station_user_request_sent(event):
     print("\non_station_user_request_sent - ", event.stationid, event.userid)
 
 
-def on_station_admin_request_accepted(event: StationAdminRequestAcceptedEvent):
+def on_station_admin_request_accepted(event):
     print("\non_station_admin_request_accepted - ", event.stationid, event.userid)
 
 
-def on_station_user_request_accepted(event: StationUserRequestAcceptedEvent):
+def on_station_user_request_accepted(event):
     print("\non_station_user_request_accepted - ", event.stationid)
 
 
-def on_station_admin_request_rejected(event: StationAdminRequestRejectedEvent):
+def on_station_admin_request_rejected(event):
     print("\non_station_admin_request_rejected - ", event.stationid, event.userid)
 
 
-def on_station_user_request_rejected(event: StationUserRequestRejectedEvent):
+def on_station_user_request_rejected(event):
     print("\non_station_user_request_rejected - ", event.stationid)
 
 
-def on_station_admin_member_removed(event: StationAdminMemberRemovedEvent):
+def on_station_admin_member_removed(event):
     print("\non_station_admin_member_removed - ", event.stationid, event.userids)
 
 
-def on_station_admin_machine_removed(event: StationAdminMachineRemovedEvent):
+def on_station_admin_machine_removed(event):
     print("\non_station_admin_machine_removed - ", event.stationid, event.mids)
 
 
-def on_station_member_member_removed(event: StationMemberMemberRemovedEvent):
+def on_station_member_member_removed(event):
     print("\non_station_member_member_removed", event.stationid, event.userid)
 
 
-def on_station_member_machine_removed(event: StationMemberMachineRemovedEvent):
+def on_station_member_machine_removed(event):
     print("\non_station_member_machine_removed", event.stationid, event.mids)
 
 
-def on_station_user_withdrawn(event: StationUserWithdrawnEvent):
+def on_station_user_withdrawn(event):
     print("\non_station_user_withdrawn", event.stationid, event.mids)
 
 
-def on_station_user_expelled(event: StationUserExpelledEvent):
+def on_station_user_expelled(event):
     print("\non_station_user_expelled", event.stationid)
 
 
-def on_station_admin_destroyed(event: StationAdminDestroyedEvent):
+def on_station_admin_destroyed(event):
     print("\non_station_admin_destroyed", event.stationid)
 
 
-def on_station_member_destroyed(event: StationMemberDestroyedEvent):
+def on_station_member_destroyed(event):
     print("\non_station_member_destroyed", event.stationid)
 
 
-def on_station_user_invite_destroyed(event: StationUserInviteDestroyedEvent):
+def on_station_user_invite_destroyed(event):
     print("\non_station_user_invite_destroyed", event.stationid)
 
 
-def on_station_user_request_destroyed(event: StationUserRequestDestroyedEvent):
+def on_station_user_request_destroyed(event):
     print("\non_station_user_request_destroyed", event.stationid)
 
 
-def on_station_admin_machine_added(event: StationAdminMachineAddedEvent):
+def on_station_admin_machine_added(event):
     print("\non_station_admin_machine_added", event.stationid, event.mids)
 
 
-def on_station_member_machine_added(event: StationMemberMachineAddedEvent):
+def on_station_member_machine_added(event):
     print("\non_station_member_machine_added", event.stationid, event.mids)
 
 
-def on_station_admin_volume_added(event: StationAdminVolumeAddedEvent):
+def on_station_admin_volume_added(event):
     print(
         "\non_station_admin_volume_added",
         event.stationid,
@@ -168,7 +143,7 @@ def on_station_admin_volume_added(event: StationAdminVolumeAddedEvent):
     )
 
 
-def on_station_member_volume_added(event: StationMemberVolumeAddedEvent):
+def on_station_member_volume_added(event):
     print(
         "\non_station_member_volume_added",
         event.stationid,
@@ -176,9 +151,7 @@ def on_station_member_volume_added(event: StationMemberVolumeAddedEvent):
     )
 
 
-def on_station_admin_volume_host_path_added(
-    event: StationAdminVolumeHostPathAddedEvent,
-):
+def on_station_admin_volume_host_path_added(event):
     print(
         "\non_station_admin_volume_host_path_added",
         event.stationid,
@@ -186,9 +159,7 @@ def on_station_admin_volume_host_path_added(
     )
 
 
-def on_station_member_volume_host_path_added(
-    event: StationMemberVolumeHostPathAddedEvent,
-):
+def on_station_member_volume_host_path_added(event):
     print(
         "\non_station_member_volume_host_path_added",
         event.stationid,
@@ -196,9 +167,7 @@ def on_station_member_volume_host_path_added(
     )
 
 
-def on_station_admin_volume_host_path_removed(
-    event: StationAdminVolumeHostPathRemovedEvent,
-):
+def on_station_admin_volume_host_path_removed(event):
     print(
         "\non_station_admin_volume_host_path_removed",
         event.stationid,
@@ -206,9 +175,7 @@ def on_station_admin_volume_host_path_removed(
     )
 
 
-def on_station_member_volume_host_path_removed(
-    event: StationMemberVolumeHostPathRemovedEvent,
-):
+def on_station_member_volume_host_path_removed(event):
     print(
         "\non_station_member_volume_host_path_removed",
         event.stationid,
@@ -216,19 +183,19 @@ def on_station_member_volume_host_path_removed(
     )
 
 
-def on_station_admin_volume_removed(event: StationAdminVolumeRemovedEvent):
+def on_station_admin_volume_removed(event):
     print("\non_station_admin_volume_removed", event.stationid, event.volume_names)
 
 
-def on_station_member_volume_removed(event: StationMemberVolumeRemovedEvent):
+def on_station_member_volume_removed(event):
     print("\non_station_member_volume_removed", event.stationid, event.volume_names)
 
 
-def on_station_admin_station_updated(event: StationAdminStationUpdated):
+def on_station_admin_station_updated(event):
     print("\non_station_admin_station_updated", vars(event.station))
 
 
-def on_station_member_station_updated(event: StationMemberStationUpdated):
+def on_station_member_station_updated(event):
     print("\non_station_member_station_updated", vars(event.station))
 
 

@@ -1,16 +1,14 @@
 from galileo_sdk.compat import mock
-
 from galileo_sdk.business.objects.profiles import Profile, ProfileWallet
 from galileo_sdk.business.objects.stations import (EStationUserRole, Station,
                                                    StationUser)
 from galileo_sdk.business.services.profiles import ProfilesService
-from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 profile_repo = mock.Mock()

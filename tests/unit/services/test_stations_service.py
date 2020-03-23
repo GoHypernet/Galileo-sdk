@@ -1,17 +1,15 @@
 from galileo_sdk.compat import mock
-
 from galileo_sdk.business.objects.stations import (EStationUserRole,
                                                    EVolumeAccess, Station,
                                                    StationUser, Volume)
 from galileo_sdk.business.services.stations import StationsService
-from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 STATION_ID = "STATION_ID"
 USER_ID = "USER_ID"
 VOLUMES_ID = "VOLUMES_ID"
 HOST_PATH = "HOST_PATH"
-HEADERS = {"Authorization": f"Bearer ACCESS_TOKEN"}
+HEADERS = {"Authorization": "Bearer ACCESS_TOKEN"}
 NAME = "STATION_NAME"
 USERNAMES = ["USERNAME1", "USERNAME2"]
 DESCRIPTION = "description"
@@ -21,7 +19,7 @@ ACCESS = "rw"
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 stations_repo = mock.Mock()

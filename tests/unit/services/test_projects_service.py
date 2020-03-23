@@ -1,6 +1,6 @@
 from datetime import datetime
-from galileo_sdk.compat import mock
 
+from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.jobs import Job
 from galileo_sdk.business.objects.projects import Project
 from galileo_sdk.business.services.projects import ProjectsService
@@ -14,7 +14,7 @@ MACHINE_ID = "machine_id"
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = mock.Mock()

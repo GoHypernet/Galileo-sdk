@@ -1,5 +1,3 @@
-import os
-
 from galileo_sdk import GalileoSdk
 from galileo_sdk.business.objects.stations import EVolumeAccess
 

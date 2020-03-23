@@ -1,9 +1,7 @@
 from galileo_sdk.compat import mock
-
 from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
                                                    UpdateMachineRequest)
 from galileo_sdk.business.services.machines import MachinesService
-from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 MID = "machine_id"
@@ -11,7 +9,7 @@ AMOUNT = 10
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 machines_repo = mock.Mock()

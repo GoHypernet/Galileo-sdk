@@ -1,5 +1,4 @@
 from galileo_sdk.compat import mock
-
 from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
                                                    UpdateMachineRequest)
 from galileo_sdk.data.repositories.machines import MachinesRepository
@@ -12,14 +11,16 @@ AMOUNT = 10
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 machines_repo = MachinesRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):
-    if args[0] == f"{BACKEND}{NAMESPACE}/machines/{MID}":
+    if args[0] == "{backend}{namespace}/machines/{mid}".format(
+        backend=BACKEND, namespace=NAMESPACE, mid=MID
+    ):
         x = 1
         return MockResponse(
             {
@@ -38,7 +39,9 @@ def mocked_requests_get(*args, **kwargs):
             },
             200,
         )
-    elif args[0] == f"{BACKEND}{NAMESPACE}/machines":
+    elif args[0] == "{backend}{namespace}/machines".format(
+        backend=BACKEND, namespace=NAMESPACE
+    ):
         return MockResponse(
             {
                 "machines": [
@@ -63,7 +66,9 @@ def mocked_requests_get(*args, **kwargs):
 
 
 def mocked_requests_put(*args, **kwargs):
-    if args[0] == f"{BACKEND}{NAMESPACE}/machines/{MID}":
+    if args[0] == "{backend}{namespace}/machines/{mid}".format(
+        backend=BACKEND, namespace=NAMESPACE, mid=MID
+    ):
         x = 1
         return MockResponse(
             {
@@ -93,8 +98,10 @@ def get_machine_by_id(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/machines/{MID}",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/machines/{mid}".format(
+            backend=BACKEND, namespace=NAMESPACE, mid=MID
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
     )
 
@@ -109,8 +116,8 @@ def list_machines(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/machines",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/machines".format(backend=BACKEND, namespace=NAMESPACE),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"page": None, "items": None, "mids": None, "userids": None},
     )
 
@@ -128,8 +135,10 @@ def update_max_concurrent_jobs(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/machines/{MID}",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/machines/{mid}".format(
+            backend=BACKEND, namespace=NAMESPACE, mid=MID
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"amount": AMOUNT},
     )
 

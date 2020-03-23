@@ -1,5 +1,3 @@
-import os
-
 from galileo_sdk import GalileoSdk
 
 # Must set env variables before running tests

@@ -1,5 +1,4 @@
 from galileo_sdk.compat import mock
-
 from galileo_sdk.business.utils.generate_query_str import generate_query_str
 from galileo_sdk.data.repositories.profiles import ProfilesRepository
 from galileo_sdk.mock_response import MockResponse
@@ -20,35 +19,39 @@ QUERY = generate_query_str(
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 profile_repo = ProfilesRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):
-    if args[0] == f"{BACKEND}{NAMESPACE}/users":
+    if args[0] == "{backend}{namespace}/users".format(
+        backend=BACKEND, namespace=NAMESPACE
+    ):
         return MockResponse(
             {
                 "users": [
                     {
-                        "userid": f"user{i}",
-                        "username": f"username{i}",
+                        "userid": "user{i}".format(i=i),
+                        "username": "username{i}".format(i=i),
                         "wallets": [
                             {
-                                "wallet": f"{i}",
+                                "wallet": "{i}".format(i=i),
                                 "public_key": "x",
                                 "profilewalletid": "x",
                             }
                         ],
-                        "mids": [f"{i}"],
+                        "mids": ["{i}".format(i=i)],
                     }
                     for i in range(5)
                 ]
             },
             200,
         )
-    elif args[0] == f"{BACKEND}{NAMESPACE}/users/self":
+    elif args[0] == "{backend}{namespace}/users/self".format(
+        backend=BACKEND, namespace=NAMESPACE
+    ):
         return MockResponse(
             {
                 "userid": "userid",
@@ -60,7 +63,9 @@ def mocked_requests_get(*args, **kwargs):
             },
             200,
         )
-    elif args[0] == f"{BACKEND}{NAMESPACE}/users/invites":
+    elif args[0] == "{backend}{namespace}/users/invites".format(
+        backend=BACKEND, namespace=NAMESPACE
+    ):
         return MockResponse(
             {
                 "stations": [
@@ -108,8 +113,8 @@ def test_list_users(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/users",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/users".format(backend=BACKEND, namespace=NAMESPACE),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
     )
 
@@ -118,8 +123,8 @@ def test_list_users(mocked_requests):
     assert len(r[0].mids) == 1
     assert len(r[0].wallets) == 1
     for i in range(5):
-        assert r[i].userid == f"user{i}"
-        assert r[i].username == f"username{i}"
+        assert r[i].userid == "user{i}".format(i=i)
+        assert r[i].username == "username{i}".format(i=i)
 
 
 @mock.patch("requests.get", side_effect=mocked_requests_get)
@@ -129,8 +134,8 @@ def test_get_profile(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/users/self",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/users/self".format(backend=BACKEND, namespace=NAMESPACE),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
     )
 
@@ -148,8 +153,10 @@ def test_list_station_invites(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/users/invites",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/users/invites".format(
+            backend=BACKEND, namespace=NAMESPACE
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
     )
 

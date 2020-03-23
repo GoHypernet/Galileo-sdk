@@ -1,6 +1,4 @@
-from datetime import datetime
 from galileo_sdk.compat import mock
-
 from galileo_sdk.business.objects import Job
 from galileo_sdk.business.objects.jobs import EJobStatus
 from galileo_sdk.business.utils.generate_query_str import generate_query_str
@@ -15,17 +13,20 @@ MACHINE_ID = "machine_id"
 QUERY_STR = generate_query_str(
     {"ids": ["id"], "names": ["name"], "user_ids": ["user_id"], "page": 1, "items": 25,}
 )
+TIMESTAMP = 1584946381
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = ProjectsRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):
-    if args[0] == f"{BACKEND}{NAMESPACE}/projects?{QUERY_STR}":
+    if args[0] == "{backend}{namespace}/projects?{query}".format(
+        backend=BACKEND, namespace=NAMESPACE, query=QUERY_STR
+    ):
         return MockResponse(
             {
                 "projects": [
@@ -49,7 +50,9 @@ def mocked_requests_get(*args, **kwargs):
 
 
 def mocked_requests_post(*args, **kwargs):
-    if args[0] == f"{BACKEND}{NAMESPACE}/projects":
+    if args[0] == "{backend}{namespace}/projects".format(
+        backend=BACKEND, namespace=NAMESPACE, query=QUERY_STR
+    ):
         return MockResponse(
             {
                 "project": {
@@ -66,17 +69,21 @@ def mocked_requests_post(*args, **kwargs):
             },
             200,
         )
-    elif args[0] == f"{BACKEND}{NAMESPACE}/projects/{PROJECT_ID}/files":
+    elif args[0] == "{backend}{namespace}/projects/{project_id}/files".format(
+        backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
+    ):
         return MockResponse(True, 200)
-    elif args[0] == f"{BACKEND}{NAMESPACE}/projects/{PROJECT_ID}/jobs":
+    elif args[0] == "{backend}{namespace}/projects/{project_id}/jobs".format(
+        backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
+    ):
         return MockResponse(
             {
                 "job": {
                     "jobid": "jobid",
                     "receiverid": "receiverid",
                     "project_id": "project_id",
-                    "time_created": int(datetime.now().timestamp()),
-                    "last_updated": int(datetime.now().timestamp()),
+                    "time_created": TIMESTAMP,
+                    "last_updated": TIMESTAMP,
                     "status": "uploaded",
                     "container": "container",
                     "name": "name",
@@ -88,12 +95,7 @@ def mocked_requests_post(*args, **kwargs):
                     "pay_interval": 1,
                     "total_runtime": 10000,
                     "archived": False,
-                    "status_history": [
-                        {
-                            "timestamp": int(datetime.now().timestamp()),
-                            "status": "uploaded",
-                        }
-                    ],
+                    "status_history": [{"timestamp": TIMESTAMP, "status": "uploaded",}],
                 }
             },
             200,
@@ -108,8 +110,10 @@ def test_list_projects(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/projects?{QUERY_STR}",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/projects?{query}".format(
+            backend=BACKEND, namespace=NAMESPACE, query=QUERY_STR
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
     )
 
@@ -125,8 +129,8 @@ def tests_create_project(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/projects",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/projects".format(backend=BACKEND, namespace=NAMESPACE),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"name": "name", "description": "description"},
     )
 
@@ -151,8 +155,10 @@ def test_run_job_on_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/projects/{PROJECT_ID}/jobs",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/projects/{project_id}/jobs".format(
+            backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"station_id": STATION_ID},
     )
 
@@ -165,8 +171,10 @@ def test_run_job_on_machine(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/projects/{PROJECT_ID}/jobs",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/projects/{project_id}/jobs".format(
+            backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"station_id": STATION_ID, "machine_id": MACHINE_ID},
     )
 
