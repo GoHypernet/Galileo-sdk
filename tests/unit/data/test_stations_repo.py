@@ -1,4 +1,4 @@
-from unittest import mock
+from galileo_sdk.compat import mock
 
 from galileo_sdk.business.objects.stations import EVolumeAccess
 from galileo_sdk.data.repositories.stations import StationsRepository

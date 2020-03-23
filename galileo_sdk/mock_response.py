@@ -1,4 +1,4 @@
-import mock
+from .compat import mock
 
 
 class MockResponse:

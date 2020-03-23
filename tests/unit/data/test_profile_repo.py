@@ -1,4 +1,4 @@
-from unittest import mock
+from galileo_sdk.compat import mock
 
 from galileo_sdk.business.utils.generate_query_str import generate_query_str
 from galileo_sdk.data.repositories.profiles import ProfilesRepository

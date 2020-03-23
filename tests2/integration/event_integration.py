@@ -250,3 +250,5 @@ galileo.stations.on_station_admin_volume_removed(on_station_admin_volume_removed
 galileo.stations.on_station_member_volume_removed(on_station_member_volume_removed)
 galileo.stations.on_station_admin_station_updated(on_station_admin_station_updated)
 galileo.stations.on_station_member_station_updated(on_station_member_station_updated)
+
+galileo.disconnect()

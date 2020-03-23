@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from unittest import mock
+from galileo_sdk.compat import mock
 
 from galileo_sdk.business.objects import (EJobRunningStatus, EJobStatus,
                                           EPaymentStatus, Job, JobStatus)

@@ -1,4 +1,4 @@
-from unittest import mock
+from galileo_sdk.compat import mock
 
 from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
                                                    UpdateMachineRequest)

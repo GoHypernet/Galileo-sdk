@@ -1,5 +1,5 @@
 from datetime import datetime
-from urlparse import urlunparse
+from galileo_sdk.compat import urlunparse
 
 import requests
 

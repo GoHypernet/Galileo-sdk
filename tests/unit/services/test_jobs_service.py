@@ -1,4 +1,4 @@
-from unittest import mock
+from galileo_sdk.compat import mock
 
 from galileo_sdk.business.services.jobs import JobsService
 from galileo_sdk.mock_response import MockResponse

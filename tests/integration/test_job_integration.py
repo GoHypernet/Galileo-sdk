@@ -2,8 +2,7 @@ import os
 
 from galileo_sdk import GalileoSdk
 # Must set env variables before running tests
-from galileo_sdk.business.objects import Job
-from galileo_sdk.sdk.jobs import UpdateJobRequest
+from galileo_sdk.business.objects import Job, UpdateJobRequest
 
 CONFIG = "development"
 

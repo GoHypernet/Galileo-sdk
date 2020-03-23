@@ -1,5 +1,5 @@
 from datetime import datetime
-from unittest import mock
+from galileo_sdk.compat import mock
 
 from galileo_sdk.business.objects import Job
 from galileo_sdk.business.objects.jobs import EJobStatus
