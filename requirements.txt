@@ -1,10 +1,10 @@
-requests>=2.21.0
-python-engineio==3.9.0
-python-socketio[client]==4.3.1
-sphinx>=2.2.0
+requests
+python-engineio
+python-socketio[client]
+sphinx
 sphinx-material
 pytest-runner
 pytest
-objectmapper==0.0.7
+objectmapper
 enum34
 mock
