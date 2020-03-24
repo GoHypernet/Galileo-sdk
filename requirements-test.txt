@@ -1,0 +1,8 @@
+requests
+python-engineio
+python-socketio[client]
+pytest-runner
+pytest
+objectmapper
+enum34
+mock
