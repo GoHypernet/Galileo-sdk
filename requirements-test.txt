@@ -5,4 +5,3 @@ pytest-runner
 pytest
 enum34
 mock
-twine
