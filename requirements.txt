@@ -1,0 +1,9 @@
+requests>=2.21.0
+python-engineio==3.9.0
+python-socketio[client]==4.3.1
+sphinx>=2.2.0
+sphinx-material
+pytest-runner
+pytest
+enum34
+mock
