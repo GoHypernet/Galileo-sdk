@@ -1,6 +1,6 @@
-requests
-python-engineio
-python-socketio[client]
+requests>=2.21.0
+python-engineio==3.9.0
+python-socketio[client]==4.3.1
 pytest-runner
 pytest
 mock
