@@ -5,11 +5,15 @@ orbs:
 
 jobs:
   build-and-test:
-    executor: python/default
+    # executor: python/default
+    docker:
+      - image: circleci/python:2.7
     steps:
       - checkout
       - python/load-cache
-      - python/install-deps
+      - run: 
+          name: Install Dependencies
+          command: pip install -r requirements-test.txt
       - python/save-cache
       - run:
           command: python -m pytest

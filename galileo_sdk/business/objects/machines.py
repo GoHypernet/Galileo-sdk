@@ -1,5 +1,4 @@
 import enum
-from typing import Callable, Optional
 
 from ...business.objects.event import EventEmitter
 
@@ -12,21 +11,8 @@ class EMachineStatus(enum.Enum):
 
 class Machine:
     def __init__(
-        self,
-        name: str,
-        userid: str,
-        status: EMachineStatus,
-        gpu: str,
-        cpu: str,
-        os: str,
-        arch: str,
-        memory: str,
-        jobs_in_queue: int = 0,
-        running_jobs_limit: int = 1,
-        running_jobs: int = 0,
-        mid: Optional[str] = None,
+        self, name, userid, status, mid, gpu, cpu, os, arch, memory, running_jobs_limit,
     ):
-        # Defaults
         self.mid = mid
         self.name = name
         self.userid = userid
@@ -36,27 +22,67 @@ class Machine:
         self.os = os
         self.arch = arch
         self.memory = memory
-        self.jobs_in_queue = jobs_in_queue
         self.running_jobs_limit = running_jobs_limit
-        self.running_jobs = running_jobs
 
 
 class MachineStatusUpdateEvent:
-    def __init__(self, mid: str, status: str):
+    def __init__(self, mid, status):
         self.mid = mid
         self.status = status
 
 
-class MachinesEvents:
-    _events: EventEmitter
+class MachineRegisteredEvent:
+    def __init__(self, machine):
+        self.machine = machine
 
+
+class MachineHardwareUpdateEvent:
+    def __init__(self, machine):
+        self.machine = machine
+
+
+class UpdateMachineRequest:
+    def __init__(
+        self,
+        mid,
+        name=None,
+        gpu=None,
+        cpu=None,
+        os=None,
+        arch=None,
+        memory=None,
+        running_jobs_limit=None,
+        active=None,
+    ):
+        self.mid = mid
+        self.name = name
+        self.gpu = gpu
+        self.cpu = cpu
+        self.os = os
+        self.arch = arch
+        self.memory = memory
+        self.running_jobs_limit = running_jobs_limit
+        self.active = active
+
+
+class MachinesEvents:
     def __init__(self):
         self._events = EventEmitter()
 
-    def on_machine_status_update(
-        self, func: Callable[[MachineStatusUpdateEvent], None]
-    ):
+    def on_machine_status_update(self, func):
         self._events.on("machine/status_updated", func)
 
-    def machine_status_update(self, event: MachineStatusUpdateEvent):
+    def machine_status_update(self, event):
         self._events.emit("machine/status_updated", event)
+
+    def on_machine_registered(self, func):
+        self._events.on("machine/registered", func)
+
+    def machine_registered(self, event):
+        self._events.emit("machine/registered", event)
+
+    def on_machine_hardware_update(self, func):
+        self._events.on("machine/hardware_updated", func)
+
+    def machine_hardware_update(self, event):
+        self._events.emit("machine/hardware_updated", event)

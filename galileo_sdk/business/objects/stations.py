@@ -1,7 +1,15 @@
 import enum
-from typing import Callable, List, Optional
 
 from ...business.objects.event import EventEmitter
+
+
+class UpdateStationRequest:
+    def __init__(
+        self, station_id, name=None, description=None,
+    ):
+        self.station_id = station_id
+        self.name = name
+        self.description = description
 
 
 class EVolumeAccess(enum.Enum):
@@ -10,31 +18,15 @@ class EVolumeAccess(enum.Enum):
 
 
 class VolumeHostPath:
-    def __init__(
-        self, volumehostpathid: Optional[str], volumeid: str, mid: str, host_path: str
-    ):
+    def __init__(self, volumehostpathid, mid, host_path):
         self.volumehostpathid = volumehostpathid
-        self.volumeid = volumeid
         self.mid = mid
         self.host_path = host_path
 
 
 class Volume:
-    volumeid: Optional[str]
-    stationid: Optional[str]
-    name: Optional[str]
-    mount_point: Optional[str]
-    access: Optional[EVolumeAccess]
-    host_paths: Optional[List[VolumeHostPath]]
-
     def __init__(
-        self,
-        stationid: str = None,
-        name: str = None,
-        mount_point: str = None,
-        access: EVolumeAccess = EVolumeAccess.READ,
-        host_paths: List[VolumeHostPath] = None,
-        volumeid: str = None,
+        self, stationid, name, mount_point, access, host_paths, volumeid,
     ):
 
         self.volumeid = volumeid
@@ -57,43 +49,33 @@ class EStationUserRole(enum.Enum):
 
 
 class StationUser:
-    def __init__(
-        self, stationuserid: str, stationid: str, userid: str, status: EStationUserRole
-    ):
+    def __init__(self, stationuserid, userid, status):
         self.stationuserid = stationuserid
-        self.stationid = stationid
         self.userid = userid
         self.status = status
 
 
 class Station:
     def __init__(
-        self,
-        stationid: str,
-        name: str,
-        description: str,
-        users: List[StationUser],
-        machine_ids: Optional[List[str]] = None,
-        volume_ids: Optional[List[str]] = None,
+        self, stationid, name, description, users, machine_ids=None, volumes=None,
     ):
         self.stationid = stationid
         self.name = name
         self.description = description
         self.users = users
         self.mids = machine_ids
-        self.volume_ids = volume_ids
+        self.volumes = volumes
 
 
 class NewStationEvent:
     def __init__(self, station):
-        # TODO: need to type
         self.station = station
 
 
 class StationAdminInviteSentEvent:
-    def __init__(self, stationid: str, userids: List[str]):
-        self.stationid: str = stationid
-        self.userids: List[str] = userids
+    def __init__(self, stationid, userids):
+        self.stationid = stationid
+        self.userids = userids
 
 
 class StationUserInviteReceivedEvent:
@@ -102,449 +84,410 @@ class StationUserInviteReceivedEvent:
 
 
 class StationAdminInviteAcceptedEvent:
-    def __init__(self, stationid: str, userids: List[str]):
-        self.stationid: str = stationid
-        self.userids: List[str] = userids
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
 
 
 class StationMemberMemberEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
 
 
 class StationUserInviteAcceptedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
+
+
+class StationAdminInviteRejectedEvent:
+    def __init__(self, stationid, userids):
+        self.stationid = stationid
+        self.userids = userids
 
 
 class StationUserInviteRejectedEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userids):
+        self.stationid = stationid
+        self.userids = userids
 
 
 class StationAdminRequestReceivedEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
 
 
 class StationUserRequestSentEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
 
 
 class StationAdminRequestAcceptedEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
 
 
 class StationUserRequestAcceptedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid):
+        self.stationid = stationid
 
 
 class StationAdminRequestRejectedEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
 
 
 class StationUserRequestRejectedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid):
+        self.stationid = stationid
 
 
 class StationAdminMemberRemovedEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userids):
+        self.stationid = stationid
+        self.userids = userids
 
 
 class StationAdminMachineRemovedEvent:
-    def __init__(self, stationid: str, mids: List[str]):
-        self.stationid: str = stationid
-        self.mids: List[str] = mids
+    def __init__(self, stationid, mids):
+        self.stationid = stationid
+        self.mids = mids
 
 
 class StationMemberMemberRemovedEvent:
-    def __init__(self, stationid: str, userid: str):
-        self.stationid: str = stationid
-        self.userid: str = userid
+    def __init__(self, stationid, userid):
+        self.stationid = stationid
+        self.userid = userid
 
 
 class StationMemberMachineRemovedEvent:
-    def __init__(self, stationid: str, mids: List[str]):
-        self.stationid: str = stationid
-        self.mids: List[str] = mids
+    def __init__(self, stationid, mids):
+        self.stationid = stationid
+        self.mids = mids
 
 
 class StationUserWithdrawnEvent:
-    def __init__(self, stationid: str, mids: List[str]):
-        self.stationid: str = stationid
-        self.mids: List[str] = mids
+    def __init__(self, stationid, mids):
+        self.stationid = stationid
+        self.mids = mids
 
 
 class StationUserExpelledEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid):
+        self.stationid = stationid
 
 
 class StationAdminDestroyedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid):
+        self.stationid = stationid
 
 
 class StationMemberDestroyedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid):
+        self.stationid = stationid
 
 
 class StationUserInviteDestroyedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid):
+        self.stationid = stationid
 
 
 class StationUserRequestDestroyedEvent:
-    def __init__(self, stationid: str):
-        self.stationid: str = stationid
+    def __init__(self, stationid):
+        self.stationid = stationid
 
 
 class StationAdminMachineAddedEvent:
-    def __init__(self, stationid: str, mids: List[str]):
-        self.stationid: str = stationid
-        self.mids: List[str] = mids
+    def __init__(self, stationid, mids):
+        self.stationid = stationid
+        self.mids = mids
 
 
 class StationMemberMachineAddedEvent:
-    def __init__(self, stationid: str, mids: List[str]):
-        self.stationid: str = stationid
-        self.mids: List[str] = mids
+    def __init__(self, stationid, mids):
+        self.stationid = stationid
+        self.mids = mids
 
 
 class StationAdminVolumeAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
-        self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+    def __init__(self, stationid, volumes):
+        self.stationid = stationid
+        self.volumes = volumes
 
 
 class StationMemberVolumeAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
-        self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+    def __init__(self, stationid, volumes):
+        self.stationid = stationid
+        self.volumes = volumes
 
 
 class StationAdminVolumeHostPathAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
-        self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+    def __init__(self, stationid, volumes):
+        self.stationid = stationid
+        self.volumes = volumes
 
 
 class StationMemberVolumeHostPathAddedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
-        self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+    def __init__(self, stationid, volumes):
+        self.stationid = stationid
+        self.volumes = volumes
 
 
 class StationAdminVolumeHostPathRemovedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
-        self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+    def __init__(self, stationid, volumes):
+        self.stationid = stationid
+        self.volumes = volumes
 
 
 class StationMemberVolumeHostPathRemovedEvent:
-    def __init__(self, stationid: str, volumes: List[str]):
-        self.stationid: str = stationid
-        self.volumes: List[str] = volumes
+    def __init__(self, stationid, volumes):
+        self.stationid = stationid
+        self.volumes = volumes
 
 
 class StationAdminVolumeRemovedEvent:
-    def __init__(self, stationid: str, volume_names: List[str]):
-        self.stationid: str = stationid
-        self.volume_names: List[str] = volume_names
+    def __init__(self, stationid, volume_names):
+        self.stationid = stationid
+        self.volume_names = volume_names
 
 
 class StationMemberVolumeRemovedEvent:
-    def __init__(self, stationid: str, volume_names: List[str]):
-        self.stationid: str = stationid
-        self.volume_names: List[str] = volume_names
+    def __init__(self, stationid, volume_names):
+        self.stationid = stationid
+        self.volume_names = volume_names
+
+
+class StationAdminStationUpdated:
+    def __init__(self, station):
+        self.station = station
+
+
+class StationMemberStationUpdated:
+    def __init__(self, station):
+        self.station = station
 
 
 class StationsEvents:
-    _event: EventEmitter
-
     def __init__(self):
         self._event = EventEmitter()
 
-    def on_new_station(self, func: Callable[[NewStationEvent], None]):
+    def on_new_station(self, func):
         self._event.on("new_station", func)
 
-    def new_station(self, event: NewStationEvent):
+    def new_station(self, event):
         self._event.emit("new_station", event)
 
-    def on_station_admin_invite_sent(
-        self, func: Callable[[StationAdminInviteSentEvent], None]
-    ):
+    def on_station_admin_invite_sent(self, func):
         self._event.on("station_admin_invite_sent", func)
 
-    def station_admin_invite_sent(self, event: StationAdminInviteSentEvent):
+    def station_admin_invite_sent(self, event):
         self._event.emit("station_admin_invite_sent", event)
 
-    def on_station_user_invite_received(
-        self, func: Callable[[StationUserInviteReceivedEvent], None]
-    ):
-        self._event.emit("station_user_invite_received", func)
+    def on_station_user_invite_received(self, func):
+        self._event.on("station_user_invite_received", func)
 
-    def station_user_invite_received(self, event: StationUserInviteReceivedEvent):
+    def station_user_invite_received(self, event):
         self._event.emit("station_user_invite_received", event)
 
-    def on_station_admin_invite_accepted(
-        self, func: Callable[[StationAdminInviteAcceptedEvent], None]
-    ):
+    def on_station_admin_invite_accepted(self, func):
         self._event.on("station_admin_invite_accepted", func)
 
-    def station_admin_invite_accepted(self, event: StationAdminInviteAcceptedEvent):
+    def station_admin_invite_accepted(self, event):
         self._event.emit("station_admin_invite_accepted", event)
 
-    def on_station_member_member_added(
-        self, func: Callable[[StationMemberMemberEvent], None]
-    ):
+    def on_station_member_member_added(self, func):
         self._event.on("station_member_member_added", func)
 
-    def station_member_member_added(self, event: StationMemberMemberEvent):
+    def station_member_member_added(self, event):
         self._event.emit("station_member_member_added", event)
 
-    def on_station_user_invite_accepted(
-        self, func: Callable[[StationUserInviteAcceptedEvent], None]
-    ):
+    def on_station_user_invite_accepted(self, func):
         self._event.on("station_user_invite_accepted", func)
 
-    def station_user_invite_accepted(self, event: StationUserInviteAcceptedEvent):
+    def station_user_invite_accepted(self, event):
         self._event.emit("station_user_invite_accept", event)
 
-    def on_station_admin_invite_rejected(
-        self, func: Callable[[StationUserInviteRejectedEvent], None]
-    ):
-        self._event.emit("station_admin_invite_rejected", func)
+    def on_station_admin_invite_rejected(self, func):
+        self._event.on("station_admin_invite_rejected", func)
 
-    def station_admin_invite_rejected(self, event: StationUserInviteRejectedEvent):
+    def station_admin_invite_rejected(self, event):
         self._event.emit("station_admin_invite_rejected", event)
 
-    def on_station_admin_request_received(
-        self, func: Callable[[StationAdminRequestReceivedEvent], None]
-    ):
+    def on_station_user_invite_rejected(self, func):
+        self._event.on("station_user_invite_rejected", func)
+
+    def station_user_invite_rejected(self, event):
+        self._event.emit("station_user_invite_rejected", event)
+
+    def on_station_admin_request_received(self, func):
         self._event.on("station_admin_request_received", func)
 
-    def station_admin_request_received(self, event: StationAdminRequestReceivedEvent):
+    def station_admin_request_received(self, event):
         self._event.emit("station_admin_request_received", event)
 
-    def on_station_user_request_sent(
-        self, func: Callable[[StationUserRequestSentEvent], None]
-    ):
+    def on_station_user_request_sent(self, func):
         self._event.on("station_user_request_sent", func)
 
-    def station_user_request_sent(self, event: StationUserRequestSentEvent):
+    def station_user_request_sent(self, event):
         self._event.emit("station_user_request_sent", event)
 
-    def on_station_admin_request_accepted(
-        self, func: Callable[[StationAdminRequestAcceptedEvent], None]
-    ):
+    def on_station_admin_request_accepted(self, func):
         self._event.on("station_admin_request_accepted", func)
 
-    def station_admin_request_accepted(self, event: StationAdminRequestAcceptedEvent):
+    def station_admin_request_accepted(self, event):
         self._event.emit("station_admin_request_accepted", event)
 
-    def on_station_user_request_accepted(
-        self, func: Callable[[StationUserRequestAcceptedEvent], None]
-    ):
+    def on_station_user_request_accepted(self, func):
         self._event.on("station_user_request_accepted", func)
 
-    def station_user_request_accepted(self, event: StationUserRequestAcceptedEvent):
+    def station_user_request_accepted(self, event):
         self._event.emit("station_user_request_accepted", event)
 
-    def on_station_admin_request_rejected(
-        self, func: Callable[[StationAdminRequestRejectedEvent], None]
-    ):
+    def on_station_admin_request_rejected(self, func):
         self._event.on("station_admin_request_rejected", func)
 
-    def station_admin_request_rejected(self, event: StationAdminRequestRejectedEvent):
+    def station_admin_request_rejected(self, event):
         self._event.emit("station_admin_request_rejected", event)
 
-    def on_station_user_request_rejected(
-        self, func: Callable[[StationUserRequestRejectedEvent], None]
-    ):
+    def on_station_user_request_rejected(self, func):
         self._event.on("station_user_request_rejected", func)
 
-    def station_user_request_rejected(self, event: StationUserRequestRejectedEvent):
+    def station_user_request_rejected(self, event):
         self._event.emit("station_user_request_rejected", event)
 
-    def on_station_admin_member_removed(
-        self, func: Callable[[StationAdminMemberRemovedEvent], None]
-    ):
+    def on_station_admin_member_removed(self, func):
         self._event.on("station_admin_member_removed", func)
 
-    def station_admin_member_removed(self, event: StationAdminMemberRemovedEvent):
+    def station_admin_member_removed(self, event):
         self._event.emit("station_admin_member_removed", event)
 
-    def on_station_admin_machine_removed(
-        self, func: Callable[[StationAdminMachineRemovedEvent], None]
-    ):
+    def on_station_admin_machine_removed(self, func):
         self._event.on("station_admin_machine_removed", func)
 
-    def station_admin_machine_removed(self, event: StationAdminMachineRemovedEvent):
+    def station_admin_machine_removed(self, event):
         self._event.emit("station_admin_machine_removed", event)
 
-    def on_station_member_member_removed(
-        self, func: Callable[[StationMemberMemberRemovedEvent], None]
-    ):
+    def on_station_member_member_removed(self, func):
         self._event.on("station_member_member_removed", func)
 
-    def station_member_member_removed(self, event: StationMemberMemberRemovedEvent):
+    def station_member_member_removed(self, event):
         self._event.emit("station_member_member_removed", event)
 
-    def on_station_member_machine_removed(
-        self, func: Callable[[StationMemberMachineRemovedEvent], None]
-    ):
+    def on_station_member_machine_removed(self, func):
         self._event.on("station_member_machine_removed", func)
 
-    def station_member_machine_removed(self, event: StationMemberMachineRemovedEvent):
+    def station_member_machine_removed(self, event):
         self._event.emit("station_member_machine_removed", event)
 
-    def on_station_user_withdrawn(
-        self, func: Callable[[StationUserWithdrawnEvent], None]
-    ):
+    def on_station_user_withdrawn(self, func):
         self._event.on("station_user_withdrawn", func)
 
-    def station_user_withdrawn(self, event: StationUserWithdrawnEvent):
+    def station_user_withdrawn(self, event):
         self._event.emit("station_user_withdrawn", event)
 
-    def on_station_user_expelled(
-        self, func: Callable[[StationUserExpelledEvent], None]
-    ):
+    def on_station_user_expelled(self, func):
         self._event.on("station_user_expelled", func)
 
-    def station_user_expelled(self, event: StationUserExpelledEvent):
+    def station_user_expelled(self, event):
         self._event.emit("station_user_expelled", event)
 
-    def on_station_admin_destroyed(
-        self, func: Callable[[StationAdminDestroyedEvent], None]
-    ):
+    def on_station_admin_destroyed(self, func):
         self._event.on("station_admin_destroyed", func)
 
-    def station_admin_destroyed(self, event: StationAdminDestroyedEvent):
+    def station_admin_destroyed(self, event):
         self._event.emit("station_admin_destroyed", event)
 
-    def on_station_member_destroyed(
-        self, func: Callable[[StationMemberDestroyedEvent], None]
-    ):
+    def on_station_member_destroyed(self, func):
         self._event.on("station_member_destroyed", func)
 
-    def station_member_destroyed(self, event: StationMemberDestroyedEvent):
+    def station_member_destroyed(self, event):
         self._event.emit("station_member_destroyed", event)
 
-    def on_station_user_invite_destroyed(
-        self, func: Callable[[StationUserInviteDestroyedEvent], None]
-    ):
+    def on_station_user_invite_destroyed(self, func):
         self._event.on("station_user_invite_destroyed", func)
 
-    def station_user_invite_destroyed(self, event: StationUserInviteDestroyedEvent):
+    def station_user_invite_destroyed(self, event):
         self._event.emit("station_user_invite_destroyed", event)
 
-    def on_station_user_request_destroyed(
-        self, func: Callable[[StationUserRequestDestroyedEvent], None]
-    ):
+    def on_station_user_request_destroyed(self, func):
         self._event.on("station_user_request_destroyed", func)
 
-    def station_user_request_destroyed(self, event: StationUserRequestDestroyedEvent):
+    def station_user_request_destroyed(self, event):
         self._event.emit("station_user_request_destroyed", event)
 
-    def on_station_admin_machine_added(
-        self, func: Callable[[StationAdminMachineAddedEvent], None]
-    ):
+    def on_station_admin_machine_added(self, func):
         self._event.on("station_admin_machine_added", func)
 
-    def station_admin_machine_added(self, event: StationAdminMachineAddedEvent):
+    def station_admin_machine_added(self, event):
         self._event.emit("station_admin_machine_added", event)
 
-    def on_station_member_machine_added(
-        self, func: Callable[[StationMemberMachineAddedEvent], None]
-    ):
+    def on_station_member_machine_added(self, func):
         self._event.on("station_member_machine_added", func)
 
-    def station_member_machine_added(self, event: StationMemberMachineAddedEvent):
+    def station_member_machine_added(self, event):
         self._event.emit("station_member_machine_added", event)
 
-    def on_station_admin_volume_added(
-        self, func: Callable[[StationAdminVolumeAddedEvent], None]
-    ):
+    def on_station_admin_volume_added(self, func):
         self._event.on("station_admin_volume_added", func)
 
-    def station_admin_volume_added(self, event: StationAdminVolumeAddedEvent):
+    def station_admin_volume_added(self, event):
         self._event.emit("station_admin_volume_added", event)
 
-    def on_station_member_volume_added(
-        self, func: Callable[[StationMemberVolumeAddedEvent], None]
-    ):
+    def on_station_member_volume_added(self, func):
         self._event.on("station_member_volume_added", func)
 
-    def station_member_volume_added(self, event: StationMemberVolumeAddedEvent):
+    def station_member_volume_added(self, event):
         self._event.emit("station_member_volume_added", event)
 
-    def on_station_admin_volume_host_path_added(
-        self, func: Callable[[StationAdminVolumeHostPathAddedEvent], None]
-    ):
+    def on_station_admin_volume_host_path_added(self, func):
         self._event.on("station_admin_volume_host_path_added", func)
 
-    def station_admin_volume_host_path_added(
-        self, event: StationAdminVolumeHostPathAddedEvent
-    ):
+    def station_admin_volume_host_path_added(self, event):
         self._event.emit("station_admin_volume_host_path_added", event)
 
-    def on_station_member_volume_host_path_added(
-        self, func: Callable[[StationMemberVolumeHostPathAddedEvent], None]
-    ):
+    def on_station_member_volume_host_path_added(self, func):
         self._event.on("station_member_volume_host_path_added", func)
 
-    def station_member_volume_host_path_added(
-        self, event: StationMemberVolumeHostPathAddedEvent
-    ):
+    def station_member_volume_host_path_added(self, event):
         self._event.emit("station_member_volume_host_path_added", event)
 
-    def on_station_admin_volume_host_path_removed(
-        self, func: Callable[[StationAdminVolumeHostPathRemovedEvent], None]
-    ):
+    def on_station_admin_volume_host_path_removed(self, func):
         self._event.on("station_admin_volume_host_path_removed", func)
 
-    def station_admin_volume_host_path_removed(
-        self, event: StationAdminVolumeHostPathRemovedEvent
-    ):
+    def station_admin_volume_host_path_removed(self, event):
         self._event.emit("station_admin_volume_host_path_removed", event)
 
-    def on_station_member_volume_host_path_removed(
-        self, func: Callable[[StationMemberVolumeHostPathRemovedEvent], None]
-    ):
+    def on_station_member_volume_host_path_removed(self, func):
         self._event.on("station_member_volume_host_path_removed", func)
 
-    def station_member_volume_host_path_removed(
-        self, event: StationMemberVolumeHostPathRemovedEvent
-    ):
+    def station_member_volume_host_path_removed(self, event):
         self._event.emit("station_member_volume_host_path_removed", event)
 
-    def on_station_admin_volume_removed(
-        self, func: Callable[[StationAdminVolumeRemovedEvent], None]
-    ):
+    def on_station_admin_volume_removed(self, func):
         self._event.on("station_admin_volume_removed", func)
 
-    def station_admin_volume_removed(self, event: StationAdminVolumeRemovedEvent):
+    def station_admin_volume_removed(self, event):
         self._event.emit("station_admin_volume_removed", event)
 
-    def on_station_member_volume_removed(
-        self, func: Callable[[StationMemberVolumeRemovedEvent], None]
-    ):
+    def on_station_member_volume_removed(self, func):
         self._event.on("station_member_volume_removed", func)
 
-    def station_member_volume_removed(self, event: StationMemberVolumeRemovedEvent):
+    def station_member_volume_removed(self, event):
         self._event.emit("station_member_volume_removed", event)
+
+    def on_station_admin_station_updated(self, func):
+        self._event.on("station_admin_station_updated", func)
+
+    def station_admin_station_updated(self, event):
+        self._event.emit("station_admin_station_updated", event)
+
+    def on_station_member_station_updated(self, func):
+        self._event.on("station_member_station_updated", func)
+
+    def station_member_station_updated(self, event):
+        self._event.emit("station_admin_station_updated", event)

@@ -7,9 +7,11 @@ def generate_query_str(*args, **kwargs):
                 pass
             elif isinstance(params[key], list):
                 for list_item in params[key]:
-                    param_str += f"{key}={list_item}&"
+                    param_str += "{key}={list_item}&".format(
+                        key=key, list_item=list_item
+                    )
             else:
-                param_str += f"{key}={params[key]}&"
+                param_str += "{key}={param}&".format(key=key, param=params[key])
 
     param_str = param_str[:-1]
     return param_str

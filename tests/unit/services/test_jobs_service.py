@@ -1,5 +1,4 @@
-from unittest import mock
-
+from galileo_sdk.compat import mock
 from galileo_sdk.business.services.jobs import JobsService
 from galileo_sdk.mock_response import MockResponse
 
@@ -11,7 +10,7 @@ STATION_ID = "station_id"
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 jobs_repo = mock.Mock()

@@ -1,7 +1,9 @@
-from unittest import mock
+from datetime import datetime
 
+from galileo_sdk.compat import mock
+from galileo_sdk.business.objects.jobs import Job
+from galileo_sdk.business.objects.projects import Project
 from galileo_sdk.business.services.projects import ProjectsService
-from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAME = "test_name"
@@ -12,7 +14,7 @@ MACHINE_ID = "machine_id"
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = mock.Mock()
@@ -20,45 +22,101 @@ projects_service = ProjectsService(projects_repo)
 
 
 def test_list_projects():
-    projects_repo.list_projects.return_value = MockResponse(
-        {"projects": [{"project": i} for i in range(10)]}, 200
-    )
+    projects_repo.list_projects.return_value = [
+        Project(
+            "project_id",
+            "name",
+            "description",
+            "source_storage_id",
+            "source_path",
+            "destination_storage_id",
+            "destination_path",
+            "user_id",
+            datetime.now(),
+        )
+        for _ in range(5)
+    ]
 
     r = projects_service.list_projects()
 
-    assert len(r["projects"]) == 10
-    assert r["projects"][9] == {"project": 9}
+    assert len(r) == 5
+    assert r[0].project_id == "project_id"
 
 
 def test_create_project():
-    projects_repo.create_project.return_value = MockResponse(
-        {"project": {"name": NAME, "description": DESCRIPTION,}}, 200
+    projects_repo.create_project.return_value = Project(
+        "project_id",
+        NAME,
+        DESCRIPTION,
+        "source_storage_id",
+        "source_path",
+        "destination_storage_id",
+        "destination_path",
+        "user_id",
+        datetime.now(),
     )
 
     r = projects_service.create_project(NAME, DESCRIPTION)
 
-    assert r["project"]["name"] == NAME
-    assert r["project"]["description"] == DESCRIPTION
+    assert r.name == NAME
+    assert r.description == DESCRIPTION
 
 
-def test_upload_single_file():
-    projects_repo.upload_single_file.return_value = MockResponse(None, 200)
-    filename = "test_upload_file.txt"
-    file = {"upload_file": open(filename, "rb")}
-    r = projects_service.upload_single_file(PROJECT_ID, file, filename)
+def test_upload():
+    projects_repo.upload_single_file.return_value = True
+    r = projects_service.upload(PROJECT_ID, "flatplate")
 
-    assert r is None
+    assert r is True
 
 
 def test_run_job_on_station():
-    projects_repo.run_job_on_station.return_value = MockResponse(True, 200)
+    projects_repo.run_job_on_station.return_value = Job(
+        "jobid",
+        "receiverid",
+        "project_id",
+        datetime.now(),
+        datetime.now(),
+        "status",
+        "container",
+        "name",
+        "stationid",
+        "userid",
+        "state",
+        "oaid",
+        "pay_status",
+        1,
+        1,
+        True,
+        [],
+    )
     r = projects_service.run_job_on_station(PROJECT_ID, STATION_ID)
 
-    assert r == True
+    assert r.project_id == "project_id"
+    assert r.job_id == "jobid"
 
 
 def test_run_job_on_machine():
-    projects_repo.run_job_on_machine.return_value = MockResponse(True, 200)
+    projects_repo.run_job_on_machine.return_value = Job(
+        "jobid",
+        "receiverid",
+        "project_id",
+        datetime.now(),
+        datetime.now(),
+        "status",
+        "container",
+        "name",
+        "stationid",
+        "userid",
+        "state",
+        "oaid",
+        "pay_status",
+        1,
+        1,
+        True,
+        [],
+    )
+
     r = projects_service.run_job_on_machine(PROJECT_ID, STATION_ID, MACHINE_ID)
 
-    assert r == True
+    assert r.project_id == "project_id"
+    assert r.job_id == "jobid"

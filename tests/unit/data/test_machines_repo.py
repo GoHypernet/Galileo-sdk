@@ -1,5 +1,6 @@
-from unittest import mock
-
+from galileo_sdk.compat import mock
+from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
+                                                   UpdateMachineRequest)
 from galileo_sdk.data.repositories.machines import MachinesRepository
 from galileo_sdk.mock_response import MockResponse
 
@@ -10,23 +11,82 @@ AMOUNT = 10
 
 # Arrange
 settings_repo = mock.Mock()
-settings_repo.get_settings().backend = f"{BACKEND}"
+settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
-machines_repo = MachinesRepository(settings_repo, auth_provider)
+machines_repo = MachinesRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):
-    if args[0] == f"{BACKEND}{NAMESPACE}/machines/{MID}":
-        return MockResponse({"machine_info": "machine_info"}, 200)
-    elif args[0] == f"{BACKEND}{NAMESPACE}/machines":
-        return MockResponse({"machines": [{"machine": i} for i in range(10)]}, 200)
+    if args[0] == "{backend}{namespace}/machines/{mid}".format(
+        backend=BACKEND, namespace=NAMESPACE, mid=MID
+    ):
+        x = 1
+        return MockResponse(
+            {
+                "machine": {
+                    "mid": str(x),
+                    "gpu": str(x),
+                    "cpu": str(x),
+                    "arch": str(x),
+                    "memory": str(x),
+                    "name": str(x),
+                    "os": str(x),
+                    "running_jobs_limit": x,
+                    "status": "online",
+                    "userid": str(x),
+                }
+            },
+            200,
+        )
+    elif args[0] == "{backend}{namespace}/machines".format(
+        backend=BACKEND, namespace=NAMESPACE
+    ):
+        return MockResponse(
+            {
+                "machines": [
+                    {
+                        "mid": str(x),
+                        "gpu": str(x),
+                        "cpu": str(x),
+                        "arch": str(x),
+                        "memory": str(x),
+                        "name": str(x),
+                        "os": str(x),
+                        "running_jobs_limit": x,
+                        "status": "online",
+                        "userid": str(x),
+                    }
+                    for x in range(5)
+                ]
+            },
+            200,
+        )
     return MockResponse(None, 404)
 
 
 def mocked_requests_put(*args, **kwargs):
-    if args[0] == f"{BACKEND}{NAMESPACE}/machines/{MID}/update_max":
-        return MockResponse(True, 200)
+    if args[0] == "{backend}{namespace}/machines/{mid}".format(
+        backend=BACKEND, namespace=NAMESPACE, mid=MID
+    ):
+        x = 1
+        return MockResponse(
+            {
+                "machines": {
+                    "mid": str(x),
+                    "gpu": str(x),
+                    "cpu": str(x),
+                    "arch": str(x),
+                    "memory": str(x),
+                    "name": str(x),
+                    "os": str(x),
+                    "running_jobs_limit": x,
+                    "status": "online",
+                    "userid": str(x),
+                }
+            },
+            200,
+        )
 
     return MockResponse(None, 404)
 
@@ -35,12 +95,13 @@ def mocked_requests_put(*args, **kwargs):
 def get_machine_by_id(mocked_requests):
     # Call
     r = machines_repo.get_machine_by_id(MID)
-    r = r.json()
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/machines/{MID}",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/machines/{mid}".format(
+            backend=BACKEND, namespace=NAMESPACE, mid=MID
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
     )
 
@@ -55,28 +116,32 @@ def list_machines(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/machines",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/machines".format(backend=BACKEND, namespace=NAMESPACE),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"page": None, "items": None, "mids": None, "userids": None},
     )
 
     # Assert
-    assert len(r["machines"]) == 10
-    assert r["machines"][9] == {"machine": 9}
+    assert len(r) == 5
+    for i in range(5):
+        assert r[i].userid == i
+        assert r[i].status == EMachineStatus.online
 
 
 @mock.patch("requests.put", side_effect=mocked_requests_put)
 def update_max_concurrent_jobs(mocked_requests):
     # Call
-    r = machines_repo.update_max_concurrent_jobs(MID, AMOUNT)
+    r = machines_repo.update(UpdateMachineRequest(MID))
 
     # Act
     mocked_requests.assert_called_once_with(
-        f"{BACKEND}{NAMESPACE}/machines/{MID}/update_max",
-        headers={"Authorization": f"Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/machines/{mid}".format(
+            backend=BACKEND, namespace=NAMESPACE, mid=MID
+        ),
+        headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"amount": AMOUNT},
     )
 
     # Assert
-    assert isinstance(r, bool)
+    assert isinstance(r, Machine)
     assert r == True

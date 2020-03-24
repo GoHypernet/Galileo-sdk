@@ -1,18 +1,17 @@
-from typing import Any, Callable, Optional
-from urllib.parse import urlunparse
+from galileo_sdk.compat import urlunparse
 
 import requests
 
-from ..providers.auth import AuthProvider
-from .settings import SettingsRepository
+from galileo_sdk.business.objects.machines import EMachineStatus, Machine
 
 
 class MachinesRepository:
     def __init__(
-        self, settings_repository: SettingsRepository, auth_provider: AuthProvider
+        self, settings_repository, auth_provider, namespace,
     ):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
+        self._namespace = namespace
 
     def _make_url(self, endpoint, params="", query="", fragment=""):
         settings = self._settings_repository.get_settings()
@@ -21,7 +20,7 @@ class MachinesRepository:
         return urlunparse(
             (
                 schema,
-                f"{addr}/galileo/user_interface/v1",
+                "{addr}{namespace}".format(addr=addr, namespace=self._namespace),
                 endpoint,
                 params,
                 query,
@@ -30,17 +29,13 @@ class MachinesRepository:
         )
 
     def _request(
-        self,
-        request: Callable,
-        endpoint: str,
-        data: Optional[Any] = None,
-        params: Optional[str] = None,
-        query: Optional[str] = None,
-        fragment: Optional[str] = None,
+        self, request, endpoint, data=None, params=None, query=None, fragment=None,
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
-        headers = {"Authorization": f"Bearer {access_token}"}
+        headers = {
+            "Authorization": "Bearer {access_token}".format(access_token=access_token)
+        }
         r = request(url, json=data, headers=headers)
         r.raise_for_status()
         return r
@@ -51,12 +46,46 @@ class MachinesRepository:
     def _put(self, *args, **kwargs):
         return self._request(requests.put, *args, **kwargs)
 
-    def get_machine_by_id(self, machine_id: str):
-        return self._get(f"/machines/{machine_id}")
+    def get_machine_by_id(self, machine_id):
+        response = self._get("/machines/{machine_id}".format(machine_id=machine_id))
+        json = response.json()
+        return machine_dict_to_machine(json)
 
-    def list_machines(self, query: str):
-        return self._get("/machines", query=query)
+    def list_machines(self, query):
+        response = self._get("/machines", query=query)
+        json = response.json()
+        machines = json["machines"]
+        return [machine_dict_to_machine(machine) for machine in machines]
 
-    def update_max_concurrent_jobs(self, mid: str, amount: int):
+    def update(self, request):
+        response = self._put(
+            "/machines/{mid}".format(mid=request.mid),
+            {
+                "name": request.name,
+                "gpu": request.gpu,
+                "cpu": request.cpu,
+                "os": request.os,
+                "arch": request.arch,
+                "memory": request.memory,
+                "running_jobs_limit": request.running_jobs_limit,
+                "active": request.active,
+            },
+        )
+        json = response.json()
+        machine = json["machine"]
+        return machine_dict_to_machine(machine)
 
-        return self._put(f"/machines/{mid}/update_max", {"amount": amount})
+
+def machine_dict_to_machine(machine):
+    return Machine(
+        machine["name"],
+        machine["userid"],
+        EMachineStatus[machine["status"]],
+        machine["mid"],
+        machine["gpu"],
+        machine["cpu"],
+        machine["os"],
+        machine["arch"],
+        machine["memory"],
+        machine["running_jobs_limit"],
+    )

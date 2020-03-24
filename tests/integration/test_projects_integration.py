@@ -1,7 +1,9 @@
 from galileo_sdk import GalileoSdk
+from galileo_sdk.business.objects.jobs import Job
+from galileo_sdk.business.objects.projects import Project
 
 # Must set env variables before running tests
-CONFIG = "local"
+CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)
 
@@ -9,40 +11,40 @@ galileo = GalileoSdk(config=CONFIG)
 def test_create_project():
     project = galileo.projects.create_project("test_project", "description")
 
-    assert project["project"]["name"] == "test_project"
-    assert project["project"]["description"] == "description"
+    assert project.name == "test_project"
+    assert project.description == "description"
 
 
 def test_list_projects():
     project_list = galileo.projects.list_projects()
 
-    assert "creation_timestamp" in project_list["projects"][0]
-    assert "source_path" in project_list["projects"][0]
+    assert project_list[0].creation_timestamp is not None
+    assert project_list[0].source_path is not None
 
 
 def test_upload_file():
     project = galileo.projects.create_project("project", "upload single file")
-    project = project["project"]
-    filename_a = "funny/a.png"
-    filename_b = "funny/subfunny/b.jpg"
-    filename_c = "funny/a.txt"
-    filename_d = "funny/subfunny/b.txt"
+    response = galileo.projects.upload(project.project_id, "flatplate")
 
-    print(project["id"])
+    assert response == True
+    assert project is not None
 
-    file_a = open(filename_a, "rb").read()
-    a_r = galileo.projects.upload_single_file(project["id"], file_a, filename_a[6:])
 
-    file_b = open(filename_b, "rb").read()
-    b_r = galileo.projects.upload_single_file(project["id"], file_b, filename_b[6:])
+def test_create_and_run():
+    stations_list = galileo.stations.list_stations()
+    job = galileo.projects.create_project_and_run_job(
+        "sdk_project", "flatplate", stations_list[0].stationid
+    )
 
-    file_c = open(filename_c, "rb").read()
-    c_r = galileo.projects.upload_single_file(project["id"], file_c, filename_c[6:])
+    assert job is not None
+    assert isinstance(job, Job)
 
-    file_d = open(filename_d, "rb").read()
-    d_r = galileo.projects.upload_single_file(project["id"], file_d, filename_d[6:])
 
-    assert a_r == True
-    assert b_r == True
-    assert c_r == True
-    assert d_r == True
+def test_create_and_upload():
+    project = galileo.projects.create_and_upload_project("sdk_project2", "flatplate")
+
+    assert project is not None
+    assert isinstance(project, Project)
+
+
+galileo.disconnect()

@@ -13,8 +13,8 @@
 import os
 import sys
 
-import sphinx_material
 import galileo_sdk
+import sphinx_material
 
 # -- Python specific configuration -------------------------------------------
 
@@ -97,9 +97,7 @@ html_theme_options = {
     "version_dropdown": False,
 }
 
-html_sidebars = {
-    "**": ["globaltoc.html"]
-}
+html_sidebars = {"**": ["globaltoc.html"]}
 
 html_logo = "images/galileo-logo.png"
 
