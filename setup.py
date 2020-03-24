@@ -23,7 +23,7 @@ setup(
     install_requires=[
         "requests>=2.21.0",
         "python-socketio[client]==4.3.1",
-        "enum34",
+        # "enum34",
         "python-engineio==3.9.0",
         "mock"
     ],

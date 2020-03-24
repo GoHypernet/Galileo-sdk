@@ -5,6 +5,4 @@ sphinx
 sphinx-material
 pytest-runner
 pytest
-objectmapper
-enum34
 mock
