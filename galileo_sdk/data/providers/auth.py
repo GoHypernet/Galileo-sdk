@@ -1,7 +1,4 @@
-import requests
-
-from ..repositories.settings import SettingsRepository
-
+from galileo_sdk.compat import requests
 
 class AuthProvider:
     def __init__(

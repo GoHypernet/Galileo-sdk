@@ -130,7 +130,7 @@ def mocked_requests_put(*args, **kwargs):
     return MockResponse(None, 404)
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_request_send_job(mocked_requests):
     # Call
     r = job_repo.request_send_job()
@@ -149,7 +149,7 @@ def test_request_send_job(mocked_requests):
     assert r == {"location": LOCATION, "filename": FILENAME}
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_request_send_job_completed(mocked_requests):
     # Call
     r = job_repo.request_send_job_completed(DEST_MID, FILENAME, STATION_ID)
@@ -170,7 +170,7 @@ def test_request_send_job_completed(mocked_requests):
     assert r["job"] == {"jobinfo": "jobinfo"}
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_request_receive_job(mocked_requests):
     # Call
     r = job_repo.request_receive_job(JOB_ID)
@@ -190,7 +190,7 @@ def test_request_receive_job(mocked_requests):
     assert r["filename"] == FILENAME
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_request_receive_job_completed(mocked_requests):
     # Call
     r = job_repo.request_receive_job_completed(JOB_ID)
@@ -209,7 +209,7 @@ def test_request_receive_job_completed(mocked_requests):
     assert r.status_code == 200
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_submit_job(mocked_requests):
     # Call
     r = job_repo.submit_job(JOB_ID)
@@ -228,7 +228,7 @@ def test_submit_job(mocked_requests):
     assert r["job"]["status"] == "submit"
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_request_stop_job(mocked_requests):
     # Call
     r = job_repo.request_stop_job(JOB_ID)
@@ -246,7 +246,7 @@ def test_request_stop_job(mocked_requests):
     assert r.status == "stop"
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_request_pause_job(mocked_requests):
     # Call
     r = job_repo.request_pause_job(JOB_ID)
@@ -264,7 +264,7 @@ def test_request_pause_job(mocked_requests):
     assert r.status == "pause"
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_request_start_job(mocked_requests):
     # Call
     r = job_repo.request_start_job(JOB_ID)
@@ -282,7 +282,7 @@ def test_request_start_job(mocked_requests):
     assert r.status == "start"
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_request_top_from_job(mocked_requests):
     # Call
     r = job_repo.request_top_from_job(JOB_ID)
@@ -309,7 +309,7 @@ def test_request_top_from_job(mocked_requests):
     assert r[1].items[1].detail == "process22"
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_request_logs_from_job(mocked_requests):
     # Call
     r = job_repo.request_logs_from_jobs(JOB_ID)
@@ -327,7 +327,7 @@ def test_request_logs_from_job(mocked_requests):
     assert r == "logs"
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_jobs(mocked_requests):
     # Call
     r = job_repo.list_jobs("")
@@ -343,7 +343,7 @@ def test_list_jobs(mocked_requests):
     assert r[0].job_id == jobObject.job_id
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_kill_request(mocked_requests):
     r = job_repo.request_kill_job(JOB_ID)
 
@@ -358,7 +358,7 @@ def test_kill_request(mocked_requests):
     assert r.status == "kill"
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_get_results_url(mocked_requests):
     r = job_repo.get_results_url(JOB_ID)
 

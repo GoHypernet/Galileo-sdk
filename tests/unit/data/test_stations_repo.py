@@ -217,7 +217,7 @@ def mocked_requests_delete(*args, **kwargs):
     return MockResponse(None, 404)
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_stations(mocked_requests):
     # Call
     r = stations_repo.list_stations("")
@@ -235,7 +235,7 @@ def test_list_stations(mocked_requests):
     assert r[0].volumes[0].name == NAME
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_create_station(mocked_requests):
     # Call
     r = stations_repo.create_station(NAME, DESCRIPTION, USERNAMES)
@@ -254,7 +254,7 @@ def test_create_station(mocked_requests):
     assert r.users[1].userid == USERNAMES[1]
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_invite_to_station(mocked_requests):
     # Call
     r = stations_repo.invite_to_station(STATION_ID, USERNAMES)
@@ -272,7 +272,7 @@ def test_invite_to_station(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_accept_station_invite(mocked_requests):
     # Call
     r = stations_repo.accept_station_invite(STATION_ID)
@@ -290,7 +290,7 @@ def test_accept_station_invite(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_reject_station_invite(mocked_requests):
     # Call
     r = stations_repo.reject_station_invite(STATION_ID)
@@ -308,7 +308,7 @@ def test_reject_station_invite(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_request_to_join(mocked_requests):
     # Call
     r = stations_repo.request_to_join(STATION_ID)
@@ -326,7 +326,7 @@ def test_request_to_join(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_approve_request_to_join(mocked_requests):
     # Call
     r = stations_repo.approve_request_to_join(STATION_ID, USERNAMES)
@@ -344,7 +344,7 @@ def test_approve_request_to_join(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_reject_request_to_join(mocked_requests):
     # Call
     r = stations_repo.reject_request_to_join(STATION_ID, USERNAMES)
@@ -362,7 +362,7 @@ def test_reject_request_to_join(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_leave_station(mocked_requests):
     # Call
     r = stations_repo.leave_station(STATION_ID)
@@ -380,7 +380,7 @@ def test_leave_station(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.delete", side_effect=mocked_requests_delete)
+@mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
 def test_remove_member_from_station(mocked_requests):
     # Call
     r = stations_repo.remove_member_from_station(STATION_ID, USER_ID)
@@ -398,7 +398,7 @@ def test_remove_member_from_station(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.delete", side_effect=mocked_requests_delete)
+@mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
 def test_delete_station(mocked_requests):
     # Call
     r = stations_repo.delete_station(STATION_ID)
@@ -416,7 +416,7 @@ def test_delete_station(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_add_machines_to_station(mocked_requests):
     # Call
     r = stations_repo.add_machines_to_station(STATION_ID, MIDS)
@@ -434,7 +434,7 @@ def test_add_machines_to_station(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.delete", side_effect=mocked_requests_delete)
+@mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
 def test_remove_machines_from_station(mocked_requests):
     # Call
     r = stations_repo.remove_machines_from_station(STATION_ID, MIDS)
@@ -452,7 +452,7 @@ def test_remove_machines_from_station(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_add_volumes_to_station(mocked_requests):
     # Call
     r = stations_repo.add_volumes_to_station(STATION_ID, NAME, MOUNT_POINT, ACCESS)
@@ -470,7 +470,7 @@ def test_add_volumes_to_station(mocked_requests):
     assert r.name == NAME
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_add_host_path_to_station(mocked_requests):
     # Call
     r = stations_repo.add_host_path_to_volume(
@@ -493,7 +493,7 @@ def test_add_host_path_to_station(mocked_requests):
     assert r.name == NAME
 
 
-@mock.patch("requests.delete", side_effect=mocked_requests_delete)
+@mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
 def test_delete_host_path_from_station(mocked_requests):
     # Call
     r = stations_repo.delete_host_path_from_volume(STATION_ID, VOLUMES_ID, HOST_PATH)
@@ -515,7 +515,7 @@ def test_delete_host_path_from_station(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.delete", side_effect=mocked_requests_delete)
+@mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
 def test_remove_volume_from_station(mocked_requests):
     # Call
     r = stations_repo.remove_volume_from_station(STATION_ID, VOLUMES_ID)
