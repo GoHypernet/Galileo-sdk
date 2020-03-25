@@ -91,7 +91,7 @@ def mocked_requests_put(*args, **kwargs):
     return MockResponse(None, 404)
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def get_machine_by_id(mocked_requests):
     # Call
     r = machines_repo.get_machine_by_id(MID)
@@ -109,7 +109,7 @@ def get_machine_by_id(mocked_requests):
     assert r["machine_info"] == "machine_info"
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def list_machines(mocked_requests):
     # Call
     r = machines_repo.list_machines("")
@@ -128,7 +128,7 @@ def list_machines(mocked_requests):
         assert r[i].status == EMachineStatus.online
 
 
-@mock.patch("requests.put", side_effect=mocked_requests_put)
+@mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def update_max_concurrent_jobs(mocked_requests):
     # Call
     r = machines_repo.update(UpdateMachineRequest(MID))

@@ -104,7 +104,7 @@ def mocked_requests_post(*args, **kwargs):
     return MockResponse(None, 404)
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_projects(mocked_requests):
     r = projects_repo.list_projects(QUERY_STR)
 
@@ -123,7 +123,7 @@ def test_list_projects(mocked_requests):
     assert r[0].name == "name"
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def tests_create_project(mocked_requests):
     r = projects_repo.create_project("name", "description")
 
@@ -139,7 +139,7 @@ def tests_create_project(mocked_requests):
     assert r.description == "description"
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def tests_upload_file(mocked_requests):
     open("test_upload_file.txt", "wb")
     filename = "test_upload_file.txt"
@@ -149,7 +149,7 @@ def tests_upload_file(mocked_requests):
     assert r is True
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_station(mocked_requests):
     r = projects_repo.run_job_on_station(PROJECT_ID, STATION_ID)
 
@@ -165,7 +165,7 @@ def test_run_job_on_station(mocked_requests):
     assert isinstance(r, Job)
 
 
-@mock.patch("requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_machine(mocked_requests):
     r = projects_repo.run_job_on_machine(PROJECT_ID, STATION_ID, MACHINE_ID)
 

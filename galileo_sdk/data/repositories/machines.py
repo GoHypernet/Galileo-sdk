@@ -1,7 +1,4 @@
-from galileo_sdk.compat import urlunparse
-
-import requests
-
+from galileo_sdk.compat import urlunparse, requests
 from galileo_sdk.business.objects.machines import EMachineStatus, Machine
 
 
