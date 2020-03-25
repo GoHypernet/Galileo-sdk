@@ -1,6 +1,4 @@
-from galileo_sdk.compat import urlunparse
-
-import requests
+from galileo_sdk.compat import urlunparse, requests
 
 from galileo_sdk.business.objects.profiles import Profile, ProfileWallet
 from galileo_sdk.data.repositories.stations import station_dict_to_station

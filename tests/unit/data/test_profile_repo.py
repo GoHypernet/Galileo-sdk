@@ -106,7 +106,7 @@ def mocked_requests_get(*args, **kwargs):
     return MockResponse(None, 404)
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_users(mocked_requests):
     # Call
     r = profile_repo.list_users("")
@@ -127,7 +127,7 @@ def test_list_users(mocked_requests):
         assert r[i].username == "username{i}".format(i=i)
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_get_profile(mocked_requests):
     # Call
     r = profile_repo.self()
@@ -146,7 +146,7 @@ def test_get_profile(mocked_requests):
     assert r.mids == ["mids"]
 
 
-@mock.patch("requests.get", side_effect=mocked_requests_get)
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_station_invites(mocked_requests):
     # Call
     r = profile_repo.list_station_invites()
