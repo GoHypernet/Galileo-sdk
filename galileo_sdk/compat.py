@@ -37,11 +37,11 @@ if is_py2:
             self.elapsed = datetime.timedelta(0)
             self.request = None
             self.status_code = r.getcode()
-            self.json_obj = json_p.loads(r.read())
+            self.json_obj = r.read()
             self.url = r.geturl()
 
         def json(self):
-            return self.json_obj
+            return json_p.loads(self.json_obj)
 
         def raise_for_status(self):
             http_error_msg = ''
