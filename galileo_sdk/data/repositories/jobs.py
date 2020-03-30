@@ -6,6 +6,12 @@ from galileo_sdk.business.objects import (EJobStatus, Job, JobStatus,
 from galileo_sdk.business.objects.jobs import (FileListing, TopDetails,
                                                TopProcess)
 
+import sys
+
+_ver = sys.version_info
+
+is_py2 = (_ver[0] == 2)
+is_py3 = (_ver[0] == 3)
 
 class JobsRepository:
     def __init__(
@@ -125,13 +131,19 @@ class JobsRepository:
         return [file_dict_to_file_listing(file) for file in files]
 
     def download_results(self, job_id, query, filename):
-        with self._get(
-            "/jobs/{job_id}/results".format(job_id=job_id), query=query
-        ) as r:
-            with open(filename, "wb") as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
+        if is_py3:
+            with self._get(
+                "/jobs/{job_id}/results".format(job_id=job_id), query=query
+            ) as r:
+                with open(filename, "wb") as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        if chunk:  # filter out keep-alive new chunks
+                            f.write(chunk)
+        elif is_py2:
+            r = self._get("/jobs/{job_id}/results".format(job_id=job_id), query=query)
+            f = open(filename, "wb")
+            f.write(r.json_obj)
+            
         return filename
 
     def update_job(self, request):
