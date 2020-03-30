@@ -119,3 +119,11 @@ class GalileoSdk:
         :return: None
         """
         self._events.disconnect()
+
+    def update_auth_token(self, auth_token):
+        """
+
+        :param auth_token: str, new auth_token
+        :return: None
+        """
+        self._auth_provider.set_access_token(auth_token)

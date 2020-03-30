@@ -39,3 +39,6 @@ class AuthProvider:
 
     def get_refresh_token(self):
         return self._refresh_token
+
+    def set_access_token(self, auth_token):
+        self._access_token = auth_token
