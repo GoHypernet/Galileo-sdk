@@ -33,7 +33,7 @@ class JobsSdk:
         """
         Request to stop job - sent by launcher
 
-        :param job_id: job's id
+        :param job_id: str
         :return: Job
         """
         return self._jobs_service.request_stop_job(job_id)
@@ -42,7 +42,7 @@ class JobsSdk:
         """
         Request to pause job - sent by launcher
 
-        :param job_id: job's id
+        :param job_id: str
         :return: Job
         """
         return self._jobs_service.request_pause_job(job_id)
@@ -51,7 +51,7 @@ class JobsSdk:
         """
         Start running the job
 
-        :param job_id: job's id
+        :param job_id: str
         :return: Job
         """
         return self._jobs_service.request_start_job(job_id)
@@ -60,7 +60,7 @@ class JobsSdk:
         """
         Request results of Top from docker - sent by launcher
 
-        :param job_id: job's id
+        :param job_id: str
         :return: List[TopProcess]: list of top processes
         """
         return self._jobs_service.request_top_from_job(job_id)
@@ -69,7 +69,7 @@ class JobsSdk:
         """
         Request results of logs from docker - sent by launcher
 
-        :param job_id: job id
+        :param job_id: str
         :return: string
         """
         return self._jobs_service.request_logs_from_job(job_id)
@@ -88,14 +88,14 @@ class JobsSdk:
         """
         List of your jobs
 
-        :param jobids: Filter by job ids
-        :param receiverids: Filter by receiver ids
-        :param oaids: Filter by offer acceptance ids
-        :param userids: Filter by user ids
-        :param stationids: Filter by station ids
-        :param statuses: Filter by statuses
-        :param page: Filter by page
-        :param items: Filter by items
+        :param jobids: List[str]: Filter by job ids
+        :param receiverids: List[str]: Filter by receiver ids
+        :param oaids: List[str]: Filter by offer acceptance ids
+        :param userids: List[str]: Filter by user ids
+        :param stationids: List[str]: Filter by station ids
+        :param statuses: List[str]: Filter by statuses
+        :param page: int: Filter by page
+        :param items: int: Filter by items
         :return: List[Job]
         """
         return self._jobs_service.list_jobs(
@@ -113,8 +113,8 @@ class JobsSdk:
         """
         Download your job results when job is completed
 
-        :param job_id: job's id
-        :param path: path to directory, where results will be saved
+        :param job_id: str
+        :param path: str: path to directory, where results will be saved
         :return: List[str]: list of filenames that were downloaded
         """
         return self._jobs_service.download_job_results(job_id, path)
@@ -122,7 +122,7 @@ class JobsSdk:
     def update_job(self, request):
         """ Updates an existing job
 
-        :param request: An UpdateJobRequest object
+        :param request: UpdateJobRequest
         return: Job
         """
 
@@ -132,7 +132,7 @@ class JobsSdk:
         """
         Request to kill a job
 
-        :param job_id: job's id
+        :param job_id: str
         :return: Job
         """
         return self._jobs_service.request_kill_job(job_id)

@@ -8,11 +8,11 @@ class ProjectsSdk:
         """
         Get list of projects
 
-        :param ids: Filter by project id
-        :param names: Filter by project name
-        :param user_ids: Filter by user ids
-        :param page: Page #
-        :param items: # of items per page
+        :param ids: Optional[List[str]]: Filter by project id
+        :param names: Optional[List[str]]: Filter by project name
+        :param user_ids: Optional[List[str]]: Filter by user ids
+        :param page: Optional[int]: Page #
+        :param items: Optional[int]: # of items per page
         :return: List[Project]
         """
         return self._projects_service.list_projects(
@@ -31,8 +31,8 @@ class ProjectsSdk:
         """
         Upload a directory
 
-        :param project_id: Project you want to upload the file to
-        :param directory: Path to folder that you want to upload
+        :param project_id: str: Project you want to upload the file to
+        :param directory: str: Path to folder that you want to upload
         :return: bool
         """
         return self._projects_service.upload(project_id, directory)
@@ -41,8 +41,8 @@ class ProjectsSdk:
         """
         Run a job on a station
 
-        :param project_id: Project id
-        :param station_id: Station id
+        :param project_id: str
+        :param station_id: str
         :return: Job
         """
         return self._projects_service.run_job_on_station(project_id, station_id)
@@ -51,9 +51,9 @@ class ProjectsSdk:
         """
         Run a job on a machine
 
-        :param project_id: Project id
-        :param station_id: Station id
-        :param machine_id: Machine id
+        :param project_id: str
+        :param station_id: str
+        :param machine_id: str
         :return: Job
         """
         return self._projects_service.run_job_on_machine(
@@ -70,11 +70,11 @@ class ProjectsSdk:
     ):
         """
 
-        :param name: name of project
-        :param directory: filepath to the folder you want to upload
-        :param station_id: station id the project will be ran in
-        :param machine_id: Optional, if you want to run on a specific machine
-        :param description: Optional, description of project
+        :param name: str: name of project
+        :param directory: str: filepath to the folder you want to upload
+        :param station_id: str: station id the project will be ran in
+        :param machine_id: Optional[str] if you want to run on a specific machine
+        :param description: Optional[str] description of project
         :return: Job
         """
         project = self._projects_service.create_project(name, description)

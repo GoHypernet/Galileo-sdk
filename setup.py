@@ -6,6 +6,16 @@ from setuptools.command.install import install
 
 VERSION = "0.0.22"
 
+_ver = sys.version_info
+
+is_py2 = (_ver[0] == 2)
+is_py3 = (_ver[0] == 3)
+
+if is_py3:
+    install_requires = ["requests>=2.21.0", "python-socketio[client]==4.3.1", "python-engineio==3.9.0"]
+else:
+    install_requires = ["enum34"]
+
 
 class VerifyVersionCommand(install):
     """Custom command to verify that the git tag matches our version"""
@@ -50,15 +60,8 @@ setup(
         ]
     },
     python_requires=">=2.7",
-    install_requires=[
-        "requests>=2.21.0",
-        "python-socketio[client]==4.3.1",
-        "enum34",
-        "python-engineio==3.9.0",
-        "mock",
-    ],
+    install_requires=install_requires,
     extras_require={"docs": ["sphinx>=2.2.0", "sphinx-material"]},
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest"],
+    tests_require=["pytest-runner", "pytest", "mock"],
     cmdclass={"verify": VerifyVersionCommand,},
 )
