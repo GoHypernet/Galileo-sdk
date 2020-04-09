@@ -1,5 +1,5 @@
 class StationsSdk:
-    def __init__(self, stations_service, events):
+    def __init__(self, stations_service, events=None):
         self._stations_service = stations_service
         self._events = events
 

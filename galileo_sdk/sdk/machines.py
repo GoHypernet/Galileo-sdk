@@ -1,5 +1,5 @@
 class MachinesSdk:
-    def __init__(self, machines_service, events):
+    def __init__(self, machines_service, events=None):
         self._machines_service = machines_service
         self._events = events
 

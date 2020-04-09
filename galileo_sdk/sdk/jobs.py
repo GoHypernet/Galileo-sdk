@@ -1,5 +1,5 @@
 class JobsSdk:
-    def __init__(self, jobs_service, events):
+    def __init__(self, jobs_service, events=None):
         self._jobs_service = jobs_service
         self._events = events
 
