@@ -16,7 +16,7 @@ or if you have the code checked out locally:
 .. code-block:: bash
 
     $ python setup.py install
-
+|
 Writing your first script
 -------------------------
 :code:`GalileoSdk` takes in 5 optional parameters.
@@ -88,9 +88,9 @@ Before you end your script, you must disconnect the Galileo object via:
 
     galileo.disconnect()
 
-
+|
 Using the Galileo Command Line Interface
--------------------------
+-----------------------------------------
 The Galileo CLI is an application that utilizes the Galileo SDK to view jobs without a GUI.
 
 Install via pip:
