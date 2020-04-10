@@ -1,5 +1,5 @@
 class MachinesSdk:
-    def __init__(self, machines_service, events):
+    def __init__(self, machines_service, events=None):
         self._machines_service = machines_service
         self._events = events
 
@@ -34,7 +34,7 @@ class MachinesSdk:
         """
         Get machine's info by its id
 
-        :param machine_id: machines id
+        :param machine_id: str
         :return: Machine
         """
         return self._machines_service.get_machine_by_id(machine_id)
@@ -45,10 +45,10 @@ class MachinesSdk:
         """
         List all machines
 
-        :param mids: Filter by machine id
-        :param userids: Filter by user id
-        :param page: Page #
-        :param items: Items per page
+        :param mids: List[str]: Filter by machine id
+        :param userids: List[str]: Filter by user id
+        :param page: int: Page #
+        :param items: int: Items per page
         :return: List[Machine]
         """
         return self._machines_service.list_machines(

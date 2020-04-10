@@ -15,14 +15,14 @@ class ProfilesSdk:
         """
         Get all Galileo users and their profiles
 
-        :param userids: optional, filter by list of userids
-        :param usernames: optional, filter by list of usernames
-        :param partial_usernames: optional, filter by partial usernames
-        :param wallets: optional, filter by list of wallet ids
-        :param public_keys: optional, filter by public key
-        :param page: optional, page #
-        :param items: optional, items per page
-        :return: {"users": [Profile]}
+        :param userids: Optional[List[str]]: filter by list of userids
+        :param usernames: Optional[List[str]]: filter by list of usernames
+        :param partial_usernames: Optional[List[str]]: filter by partial usernames
+        :param wallets: Optional[List[Wallet]]: filter by list of wallet ids
+        :param public_keys: Optional[List[str]]: filter by public key
+        :param page: Optional[int]: page #
+        :param items: Optional[int]: items per page
+        :return: List[Profile]
         """
         return self._profile_service.list_users(
             userids=userids,
