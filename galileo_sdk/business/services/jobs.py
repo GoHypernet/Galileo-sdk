@@ -70,7 +70,7 @@ class JobsService:
         )
         return self._jobs_repo.list_jobs(query)
 
-    def download_job_results(self, job_id, path):
+    def download_job_results(self, job_id, path, nonce=None):
         files = self._jobs_repo.get_results_url(job_id)
 
         if not files:
@@ -81,7 +81,7 @@ class JobsService:
         for file in files:
             response = self._jobs_repo.download_results(
                 job_id,
-                generate_query_str({"filename": file.filename, "path": file.path}),
+                generate_query_str({"filename": file.filename, "path": file.path, "nonce": nonce}),
                 os.path.join(path, file.filename),
             )
             files_downloaded.append(response)
