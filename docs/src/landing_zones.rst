@@ -18,7 +18,7 @@ How to Run the Landing Zone Daemon
 ----------------------------------
 * Make sure that Docker is running.
 * Open a terminal
-    * Mac: Press Cmd+Space to open Spotlight Search, type “terminal”, and press Return.
+    * Mac: Press Cmd+Space to open Spotlight Search, type "terminal", and press Return.
     * Linux: You can try Ctrl+Alt+T. If that doesn’t work you should find instructions for your distribution.
 * This is a good time to `test your Docker installation <https://docs.docker.com/get-started/#test-docker-installation>`_.
 * Choose the name you’d like this Landing Zone to have and choose a unique ID Galileo should identify it by. We will refer to these values as :code:`$LZ_NAME` and :code:`$LZ_ID` respectively. When you see those references simply substitute your chosen values in their place.
@@ -26,7 +26,7 @@ How to Run the Landing Zone Daemon
 
 .. code-block:: bash
 
-    $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v “$HOME”/.galileo/tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --machine-id “$LZ_ID” --machine-name “$LZ_NAME” --refresh-token-file /tokens/token
+    $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME"/.galileo/tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --machine-id "$LZ_ID" --machine-name "$LZ_NAME" --refresh-token-file /tokens/token
 
 * Now that the LZ is running, we must authenticate it. Run this command in your terminal
 
@@ -102,7 +102,7 @@ Running the Landing Zone Daemon
           - ${HOME}/tokens:/tokens
         container_name: landing-zone-daemon
         # chose the name that appears in the Galileo UI and make a unique string that corresponds to it
-        command: --refresh-token-file /tokens/authfile.txt --backend 'https://api.galileoapp.io' --machine-id “$LZ_ID” --machine-name “$LZ_NAME”
+        command: --refresh-token-file /tokens/authfile.txt --backend 'https://api.galileoapp.io' --machine-id "$LZ_ID" --machine-name "$LZ_NAME"
         environment:
           DOCKER_HOST: unix:///var/run/docker.sock
 

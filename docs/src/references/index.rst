@@ -110,6 +110,7 @@ API
 .. autosummary::
     :toctree: Projects API
 
+    ~galileo_sdk.sdk.projects.ProjectsSdk.list_projects
     ~galileo_sdk.sdk.projects.ProjectsSdk.create_project
     ~galileo_sdk.sdk.projects.ProjectsSdk.upload
     ~galileo_sdk.sdk.projects.ProjectsSdk.run_job_on_station
