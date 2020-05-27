@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 
-VERSION = "0.0.25"
+VERSION = "0.0.26"
 
 _ver = sys.version_info
 

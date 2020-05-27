@@ -1,4 +1,4 @@
-from galileo_sdk.compat import requests, urlencode
+from galileo_sdk.compat import requests, urlencode, URLError
 from datetime import datetime, timedelta
 import os, urllib, json, webbrowser, time, tempfile
 
@@ -126,7 +126,7 @@ class AuthSdk:
                         'client_id': self.client_id
                     }, doseq=True)
                 )
-            except urllib.error.URLError as e:
+            except URLError as e:
                 if e.code == 429:
                     interval = interval * 2
                 continue

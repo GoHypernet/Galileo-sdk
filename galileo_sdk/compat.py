@@ -11,6 +11,7 @@ if is_py2:
     from urllib import urlencode
     import mock
     import urllib2
+    from urllib2 import URLError
     import json as json_p
     import datetime
 
@@ -99,5 +100,6 @@ if is_py2:
 
 elif is_py3:
     from urllib.parse import urlunparse, urlparse, urlencode
+    from urllib.error import URLError
     from unittest import mock
     import requests
