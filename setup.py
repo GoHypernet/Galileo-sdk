@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 
-VERSION = "0.0.26"
+VERSION = "0.0.27"
 
 _ver = sys.version_info
 
@@ -12,9 +12,9 @@ is_py2 = (_ver[0] == 2)
 is_py3 = (_ver[0] == 3)
 
 if is_py3:
-    install_requires = ["requests>=2.21.0", "python-socketio[client]==4.3.1", "python-engineio==3.9.0"]
+    install_requires = ["requests>=2.21.0", "python-socketio[client]==4.3.1", "python-engineio==3.9.0", "chardet", "mock"]
 else:
-    install_requires = ["enum34"]
+    install_requires = ["enum34", "chardet", "mock"]
 
 
 class VerifyVersionCommand(install):
@@ -62,6 +62,6 @@ setup(
     python_requires=">=2.7",
     install_requires=install_requires,
     extras_require={"docs": ["sphinx>=2.2.0", "sphinx-material"]},
-    tests_require=["pytest-runner", "pytest", "mock"],
+    tests_require=["pytest-runner", "pytest"],
     cmdclass={"verify": VerifyVersionCommand,},
 )
