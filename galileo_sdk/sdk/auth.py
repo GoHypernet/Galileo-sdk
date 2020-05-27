@@ -1,4 +1,4 @@
-from galileo_sdk.compat import requests
+from galileo_sdk.compat import requests, urlencode
 from datetime import datetime, timedelta
 import os, urllib, json, webbrowser, time, tempfile
 
@@ -93,7 +93,7 @@ class AuthSdk:
         r = requests.post(
             '{domain}/oauth/device/code'.format(domain=self.domain),
             headers=self.headers_default,
-            data=urllib.parse.urlencode({
+            data=urlencode({
                 'client_id': self.client_id,
                 'audience': self.audience,
                 'scope': 'email profile openid offline_access'
@@ -109,7 +109,7 @@ class AuthSdk:
 
     def _poll_for_tokens(self, interval, device_code):
         interval = interval * 2
-        url_str = urllib.parse.urlencode({
+        url_str = urlencode({
             'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
             'device_code': device_code,
             'client_id': self.client_id
@@ -120,7 +120,7 @@ class AuthSdk:
                 r = requests.post(
                     '{domain}/oauth/token'.format(domain=self.domain),
                     headers=self.headers_default,
-                    data=urllib.parse.urlencode({
+                    data=urlencode({
                         'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
                         'device_code': device_code,
                         'client_id': self.client_id
@@ -144,7 +144,7 @@ class AuthSdk:
         response = requests.post(
             '{domain}/oauth/token'.format(domain=self.domain),
             headers=self.headers_default,
-            data=urllib.parse.urlencode({
+            data=urlencode({
                 'client_id': self.client_id,
                 'grant_type': 'refresh_token',
                 'refresh_token': refresh_token,
