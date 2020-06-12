@@ -19,13 +19,13 @@ class ProjectsSdk:
             ids=ids, names=names, user_ids=user_ids, page=page, items=items
         )
 
-    def create_project(self, name, description=""):
+    def create_project(self, create_project_request):
         """
         Create a project
-
+        :param: CreateProjectRequest
         :return: Project
         """
-        return self._projects_service.create_project(name, description)
+        return self._projects_service.create_project(create_project_request)
 
     def upload(self, project_id, directory):
         """
@@ -60,24 +60,23 @@ class ProjectsSdk:
             project_id, station_id, machine_id
         )
 
-    def create_and_upload_project(self, name, directory, description=""):
-        project = self._projects_service.create_project(name, description)
+    def create_and_upload_project(self, create_project_request, directory):
+        project = self._projects_service.create_project(create_project_request)
         self._projects_service.upload(project.project_id, directory)
         return project
 
     def create_project_and_run_job(
-        self, name, directory, station_id, machine_id=None, description="",
+        self, create_project_request, directory, station_id, machine_id=None,
     ):
         """
 
-        :param name: str: name of project
+        :param create_project_request:
         :param directory: str: filepath to the folder you want to upload
         :param station_id: str: station id the project will be ran in
         :param machine_id: Optional[str] if you want to run on a specific machine
-        :param description: Optional[str] description of project
         :return: Job
         """
-        project = self._projects_service.create_project(name, description)
+        project = self._projects_service.create_project(create_project_request)
         self._projects_service.upload(project.project_id, directory)
         if machine_id:
             job = self._projects_service.run_job_on_machine(
@@ -98,3 +97,22 @@ class ProjectsSdk:
         """
 
         return self._projects_service.inspect_project(project_id)
+
+    def delete_file(self, project_id):
+        return self._projects_service.delete_file(project_id)
+
+    def update_project(self, project_id, update_project_request):
+        return self._projects_service.update_project(project_id, update_project_request)
+
+    def update_project_args(self, project_id, args):
+        return self._projects_service.update_project(project_id, args)
+
+    def delete_project_files(self, project_id):
+        return self._projects_service.delete_project_files(project_id)
+
+    def get_project_types(self):
+        """
+
+        :return:
+        """
+        return self._projects_service.get_project_types()
