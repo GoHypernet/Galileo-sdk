@@ -4,9 +4,10 @@ import enum
 
 class FileListing:
     def __init__(
-            self, filename, modification_date, creation_date, file_size, nonce=None,
+            self, filename, path, modification_date, creation_date, file_size, nonce=None,
     ):
         self.filename = filename
+        self.path = path
         self.modification_date = modification_date
         self.creation_date = creation_date
         self.file_size = file_size
@@ -455,7 +456,7 @@ class MatLabProject(CreateProjectRequest):
         self.filename = filename
 
 
-class Dependencies:
+class Dependency:
     def __init__(self, name, version):
         self.name = name
         self.version = version

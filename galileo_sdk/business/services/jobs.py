@@ -55,6 +55,7 @@ class JobsService:
         statuses=None,
         page=1,
         items=25,
+        projectids=None
     ):
         query = generate_query_str(
             {
@@ -66,6 +67,7 @@ class JobsService:
                 "userids": userids,
                 "stationids": stationids,
                 "statuses": statuses,
+                "projectids": projectids
             },
         )
         return self._jobs_repo.list_jobs(query)
@@ -79,12 +81,12 @@ class JobsService:
         files_downloaded = []
 
         for file in files:
-            response = self._jobs_repo.download_results(
+            self._jobs_repo.download_results(
                 job_id,
                 generate_query_str({"filename": file.filename, "path": file.path, "nonce": nonce}),
                 os.path.join(path, file.filename),
             )
-            files_downloaded.append(response)
+            files_downloaded.append(file.filename)
 
         return files_downloaded
 

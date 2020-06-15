@@ -84,6 +84,7 @@ class JobsSdk:
         statuses=None,
         page=1,
         items=25,
+        projectids=None
     ):
         """
         List of your jobs
@@ -107,6 +108,7 @@ class JobsSdk:
             statuses=statuses,
             page=page,
             items=items,
+            projectids=projectids
         )
 
     def download_job_results(self, job_id, path, nonce=None):

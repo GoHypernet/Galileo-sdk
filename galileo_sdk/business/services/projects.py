@@ -60,8 +60,8 @@ class ProjectsService:
             project_id, station_id, machine_id
         )
 
-    def inspect_project(self, project_id):
-        return self._projects_repo.inspect_project(project_id)
+    def get_project_files(self, project_id):
+        return self._projects_repo.get_project_files(project_id)
 
     def delete_project(self, project_id):
         return self._projects_repo.delete_project(project_id)

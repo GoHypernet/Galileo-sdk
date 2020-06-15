@@ -137,12 +137,6 @@ class JobLauncherSubmittedEvent:
         self.job = job
 
 
-class FileListing:
-    def __init__(self, filename, path):
-        self.filename = filename
-        self.path = path
-
-
 class TopDetails:
     def __init__(self, title, detail):
         self.title = title

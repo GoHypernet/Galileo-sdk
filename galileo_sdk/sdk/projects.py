@@ -89,14 +89,14 @@ class ProjectsSdk:
 
         return job
 
-    def inspect_project(self, project_id):
+    def get_project_files(self, project_id):
         """
         Provides the metadata of all files in a project
         :param project_id: project you want to inspect
         :return: DirectoryListing
         """
 
-        return self._projects_service.inspect_project(project_id)
+        return self._projects_service.get_project_files(project_id)
 
     def delete_file(self, project_id):
         return self._projects_service.delete_file(project_id)

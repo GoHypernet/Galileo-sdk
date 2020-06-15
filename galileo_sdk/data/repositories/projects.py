@@ -122,10 +122,11 @@ class ProjectsRepository:
         job = json["job"]
         return job_dict_to_job(job)
 
-    def inspect_project(self, project_id):
-        response = self._get("/projects/{project_id}".format(project_id=project_id))
+    def get_project_files(self, project_id):
+        response = self._get("/projects/{project_id}/files".format(project_id=project_id))
         json = response.json()
-        return directory_dict_to_directory_listing(json)
+        json = json["files"]
+        return [file_dict_to_file_listing(file) for file in json]
 
     def delete_project(self, project_id):
         self._delete("/projects/{project_id}".format(project_id=project_id))
@@ -219,10 +220,11 @@ def directory_dict_to_directory_listing(directory):
 def file_dict_to_file_listing(file):
     return FileListing(
         file["filename"],
+        file["path"],
         file["modification_date"],
         file["creation_date"],
         file["file_size"],
-        file["nonce"],
+        file["nonce"]
     )
 
 
