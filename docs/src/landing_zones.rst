@@ -7,6 +7,7 @@ Prerequisites
 
 Docker must be installed on the machine you wish to use as a landing zone. You can find those instructions here:
 
+* `Windows <https://docs.docker.com/docker-for-windows/install/>`_
 * `Mac <https://docs.docker.com/docker-for-mac/install/>`_
 * Linux
     * `CentOS <https://docs.docker.com/engine/install/centos/>`_
@@ -18,6 +19,7 @@ How to Run the Landing Zone Daemon
 ----------------------------------
 * Make sure that Docker is running.
 * Open a terminal
+    * Windows: open a cmd prompt or a Powershell 
     * Mac: Press Cmd+Space to open Spotlight Search, type "terminal", and press Return.
     * Linux: You can try Ctrl+Alt+T. If that doesn’t work you should find instructions for your distribution.
 * This is a good time to `test your Docker installation <https://docs.docker.com/get-started/#test-docker-installation>`_.
@@ -26,9 +28,9 @@ How to Run the Landing Zone Daemon
 
 .. code-block:: bash
 
-    $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME"/.galileo/tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --machine-id "$LZ_ID" --machine-name "$LZ_NAME" --refresh-token-file /tokens/token
+    $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --machine-id "$LZ_ID" --machine-name "$LZ_NAME" --refresh-token-file /tokens/token
 
-* Now that the LZ is running, we must authenticate it. Run this command in your terminal
+* Now that the LZ is running, we must authenticate it against your account. Run this command in your terminal
 
 .. code-block:: bash
 
@@ -72,7 +74,7 @@ Removing and Restarting the Landing Zone Daemon
 
     $ docker rm landing-zone-daemon
 
-* To install the Landing Zone Daemon again follow the instructions above. You may or may not need to reauthenticate depending on whether you delete or move the automatically generated .galileo folder.
+* To install the Landing Zone Daemon again follow the instructions above. You may or may not need to reauthenticate depending on whether you delete the Docker volume called "tokens" that was created when you started the landing zone.
 |
 How to Run, Stop, and Remove the Landing Zone Daemon using Docker Compose
 -------------------------------------------------------------------------
@@ -97,14 +99,16 @@ Running the Landing Zone Daemon
         image: hypernetlabs/landing-zone-daemon
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
-          - ${HOME}/.docker/config.json:/root/.docker/config.json
-          # make a folder in your home directory for auth tokens to persist
-          - ${HOME}/tokens:/tokens
+          # uncomment the following line if you need your LZ to have access to private Docker Hub repositories
+          #- ${HOME}/.docker/config.json:/root/.docker/config.json
+          - tokens:/tokens
         container_name: landing-zone-daemon
         # chose the name that appears in the Galileo UI and make a unique string that corresponds to it
         command: --refresh-token-file /tokens/authfile.txt --backend 'https://api.galileoapp.io' --machine-id "$LZ_ID" --machine-name "$LZ_NAME"
         environment:
           DOCKER_HOST: unix:///var/run/docker.sock
+    volumes:
+      tokens:
 
 * In the same folder as the .yml file, copy the commands below and paste in a terminal to pull the Landing Zone image and run the Landing Zone Daemon:
 
