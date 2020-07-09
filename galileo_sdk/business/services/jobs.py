@@ -1,4 +1,5 @@
 import os
+import zipfile
 
 from ..objects.exceptions import JobsException
 from ..utils.generate_query_str import generate_query_str
@@ -79,14 +80,24 @@ class JobsService:
         files_downloaded = []
 
         for file in files:
-            response = self._jobs_repo.download_results(
+            absolute_path = os.path.join(path, file.filename)
+            self._jobs_repo.download_results(
                 job_id,
                 generate_query_str({"filename": file.filename, "path": file.path}),
                 os.path.join(path, file.filename),
             )
-            files_downloaded.append(response)
+            files_downloaded.append(absolute_path)
 
         return files_downloaded
+
+    def download_and_extract_job_results(self, job_id, path):
+        files_downloaded = self.download_job_results(job_id, path)
+        for file in files_downloaded:
+            dir = file.rsplit(".zip", 1)[0]
+            if not os.path.exists(dir):
+                os.mkdir(dir)
+            with zipfile.ZipFile(file) as zf:
+                zf.extractall(dir)
 
     def update_job(self, request):
         return self._jobs_repo.update_job(request)

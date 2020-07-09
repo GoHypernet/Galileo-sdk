@@ -136,3 +136,6 @@ class JobsSdk:
         :return: Job
         """
         return self._jobs_service.request_kill_job(job_id)
+
+    def download_and_extract_job_results(self, job_id, path):
+        return self._jobs_service.download_and_extract_job_results(job_id, path)
