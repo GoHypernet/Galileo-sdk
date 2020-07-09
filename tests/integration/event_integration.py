@@ -1,5 +1,6 @@
 from galileo_sdk import GalileoSdk
 
+# CONFIG = "http://localhost:8080"
 CONFIG = "development"
 galileo = GalileoSdk(config=CONFIG)
 

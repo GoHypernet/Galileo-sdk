@@ -26,8 +26,6 @@ class ProjectsService:
         if not create_project_request.project_type_id:
             project_types = self.get_project_types()
             for project_type in project_types:
-                print("VERSION", project_type.version, create_project_request.version)
-                print("NAME", project_type.name, create_project_request.project_type_name)
                 if project_type.version == create_project_request.version and \
                         project_type.name == create_project_request.project_type_name:
                     create_project_request.project_type_id = project_type.id
@@ -47,10 +45,15 @@ class ProjectsService:
                 else:
                     filename = os.path.join(os.path.basename(root), file)
 
+                filename = filename.replace(" ", "_")
+
                 filepath = os.path.join(os.path.abspath(root), file)
                 f = open(filepath, "rb").read()
                 self._projects_repo.upload_single_file(project_id, f, filename)
         return True
+
+    def upload_single_file(self, project_id, f, filename):
+        self._projects_repo.upload_single_file(project_id, f, filename)
 
     def run_job_on_station(self, project_id, station_id):
         return self._projects_repo.run_job_on_station(project_id, station_id)

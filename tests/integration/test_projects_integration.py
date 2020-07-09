@@ -5,6 +5,7 @@ from galileo_sdk.business.objects.projects import Project, JuliaProject, HECRASP
     MatLabProject, FLO2DProject
 
 # Must set env variables before running tests
+# CONFIG = "http://localhost:8080"
 CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)

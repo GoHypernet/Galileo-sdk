@@ -3,6 +3,7 @@ from galileo_sdk.business.objects.stations import EVolumeAccess
 
 # Must set env variables before running tests
 
+# CONFIG = "http://localhost:8080"
 CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)

@@ -1,6 +1,7 @@
 from galileo_sdk import GalileoSdk
 
 # Must set env variables before running tests
+# CONFIG = "http://localhost:8080"
 CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)

@@ -37,6 +37,17 @@ class ProjectsSdk:
         """
         return self._projects_service.upload(project_id, directory)
 
+    def upload_single_file(self, project_id, file_path, filename):
+        """
+        Upload a directory
+
+        :param project_id: str: Project you want to upload the file to
+        :param file_path: str: Path to file that you want to upload
+        :param filename: Full filename including the project name (ex. project_root_dir/nested_folder/filename)
+        :return: bool
+        """
+        return self._projects_service.upload(project_id, file_path, filename)
+
     def run_job_on_station(self, project_id, station_id):
         """
         Run a job on a station

@@ -3,8 +3,8 @@ from galileo_sdk import GalileoSdk
 from galileo_sdk.business.objects import Job
 from galileo_sdk.business.objects.jobs import UpdateJobRequest
 
-CONFIG = "http://localhost:8080"
-
+# CONFIG = "http://localhost:8080"
+CONFIG = "development"
 galileo = GalileoSdk(config=CONFIG)
 job_list = galileo.jobs.list_jobs()
 jobid = ""
