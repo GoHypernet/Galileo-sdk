@@ -613,4 +613,193 @@ class StationsSdk:
         return self._stations_service.remove_volume_from_station(station_id, volume_id)
 
     def update_station(self, request):
+        """
+        Update a station
+
+        :param request: UpdateStationRequest object
+        :return: Station
+        """
         return self._stations_service.update_station(request)
+
+    def get_station_resource_policy(self, station_id):
+        """
+        Gets the resource policy for a station
+
+        :param station_id: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_resource_policy(station_id)
+
+    def update_station_resource_policy(self, request):
+        """
+        Updates an the resource policy attached to the station. Creates the policy if it does not exist.
+
+        :param request: UpdateResourcePolicyRequest
+        :return: ResourcePolicy
+        """
+        return self._stations_service.update_station_resource_policy(request)
+
+    def delete_station_resource_policy(self, station_id):
+        """
+        Deletes the resource policy associated with the station.
+
+        :param station_id: str
+        :return: boolean
+        """
+        return self._stations_service.delete_station_resource_policy(station_id)
+
+    def get_self_resource_limits(self, station_id):
+        """
+        Returns the user's calculated (or effective) resource policy in the station.
+
+        :param station_id: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_self_resource_limits(station_id)
+
+    def update_station_member(self, station_id, userid, role_id):
+        """
+        Updates a user in a station.
+
+        :param station_id: str
+        :param userid: str
+        :param role_id: str
+        :return: Station
+        """
+        return self._stations_service.update_station_member(station_id, userid, role_id)
+
+    def get_station_user_resource_policy(self, station_id, userid):
+        """
+        Gets the resource policy for a station user.
+
+        :param station_id: str
+        :param userid: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_resource_policy(station_id, userid)
+
+    def update_station_user_resource_policy(self, request):
+        """
+        Updates an the resource policy attached to the station user. Creates the policy if it does not exist.
+
+        :param request: UpdateResourcePolicyRequest
+        :return: ResourcePolicy
+        """
+        return self._stations_service.update_station_resource_policy(request)
+
+    def delete_station_user_resource_policy(self, station_id, userid):
+        """
+        Deletes the resource policy associated with the station user.
+
+        :param station_id: str
+        :param userid: str
+        :return: boolean
+        """
+        return self._stations_service.delete_station_user_resource_policy(station_id, userid)
+
+    def get_station_roles(self, page, items, names, role_types):
+        """
+        Returns a list of StationRole objects that match the query string
+
+        :param page: number
+        :param items: number
+        :param names: str
+        :param role_types: str
+        :return: List[StationRole]
+        """
+        return self._stations_service.get_station_roles(page, items, names,role_types)
+
+    def create_station_role(self, request):
+        """
+        Creates a new role in the station
+
+        :param request: CreateStationRoleRequest
+        :return: StationRole
+        """
+        return self._stations_service.create_station(request)
+
+    def update_station_role(self, request):
+        """
+        Updates an existing role
+
+        :param request: UpdateStationRoleRequest
+        :return: StationRole
+        """
+        return self._stations_service.update_station_role(request)
+
+    def delete_station_role(self, station_id):
+        """
+        Deletes an existing role. All users that have this role will automatically be given the Launcher role.
+
+        :param station_id: str
+        :return: boolean
+        """
+        return self._stations_service.delete_station_role(station_id)
+
+    def get_station_role_resource_policy(self, station_id, role_id):
+        """
+        Gets the resource policy for a station role.
+
+        :param station_id: str
+        :param role_id: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_role_resource_policy(station_id, role_id)
+
+    def update_station_role_resource_policy(self, request):
+        """
+        Updates an the resource policy attached to the station role. Creates the policy if it does not exist.
+
+        :param request: UpdateResourcePolicyRequest
+        :return: ResourcePolicy
+        """
+        return self._stations_service.update_station_role_resource_policy(request)
+
+    def delete_station_role_resource_policy(self, station_id, role_id):
+        """
+        Deletes the resource policy associated with the station role.
+
+        :param station_id:
+        :param role_id:
+        :return:
+        """
+        return self._stations_service.delete_station_role_resource_policy(station_id, role_id)
+
+    def get_station_machine_resource_policy(self, station_id, machine_id):
+        """
+        Gets the resource policy for a station machine.
+
+        :param station_id:
+        :param machine_id:
+        :return:
+        """
+        return self._stations_service.get_station_machine_resource_policy(station_id, machine_id)
+
+    def update_station_machine_resource_policy(self, request):
+        """
+        Updates an the resource policy attached to the station machine. Creates the policy if it does not exist.
+
+        :param request:
+        :return:
+        """
+        return self._stations_service.update_station_machine_resource_policy(request)
+
+    def delete_station_machine_resource_policy(self, station_id, machine_id):
+        """
+        Deletes the resource policy associated with the station machine.
+
+        :param station_id:
+        :param machine_id:
+        :return:
+        """
+        return self._stations_service.delete_station_machine_resource_policy(station_id, machine_id)
+
+    def get_station_machine_resource_limits(self, station_id, machine_id):
+        """
+        Returns the user's calculated (or effective) resource policy for this particular machine in a station
+
+        :param station_id:
+        :param machine_id:
+        :return:
+        """
+        return self._stations_service.get_station_machine_resource_limits(station_id, machine_id)
