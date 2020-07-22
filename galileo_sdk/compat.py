@@ -7,9 +7,11 @@ is_py2 = (_ver[0] == 2)
 is_py3 = (_ver[0] == 3)
 
 if is_py2:
-    from urlparse import urlunparse
+    from urlparse import urlunparse, urlparse
+    from urllib import urlencode
     import mock
     import urllib2
+    from urllib2 import URLError
     import json as json_p
     import datetime
 
@@ -97,6 +99,7 @@ if is_py2:
 
 
 elif is_py3:
-    from urllib.parse import urlunparse
+    from urllib.parse import urlunparse, urlparse, urlencode
+    from urllib.error import URLError
     from unittest import mock
     import requests

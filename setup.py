@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 
-VERSION = "0.0.29"
+VERSION = "0.0.31"
 
 _ver = sys.version_info
 
@@ -62,6 +62,5 @@ setup(
     python_requires=">=2.7",
     install_requires=install_requires,
     extras_require={"docs": ["sphinx>=2.2.0", "sphinx-material"]},
-    tests_require=["pytest-runner", "pytest", "mock"],
-    cmdclass={"verify": VerifyVersionCommand,},
+    cmdclass={"verify": VerifyVersionCommand},
 )
