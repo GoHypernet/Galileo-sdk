@@ -1,6 +1,20 @@
 References
 ----------
 
+Authentication
+~~~~
+.. autosummary::
+    :toctree: Authentication
+
+    ~galileo_sdk.sdk.auth.AuthSdk
+API
+****
+.. autosummary::
+    :toctree: Authentication API
+
+     ~galileo_sdk.sdk.auth.AuthSdk.initialize
+    
+
 Jobs
 ~~~~
 .. autosummary::

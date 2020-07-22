@@ -13,6 +13,7 @@ from .data.repositories.profiles import ProfilesRepository
 from .data.repositories.projects import ProjectsRepository
 from .data.repositories.settings import SettingsRepository
 from .data.repositories.stations import StationsRepository
+from .sdk.auth import AuthSdk
 from .sdk.jobs import JobsSdk
 from .sdk.machines import MachinesSdk
 from .sdk.profiles import ProfilesSdk

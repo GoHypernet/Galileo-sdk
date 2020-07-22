@@ -4,7 +4,16 @@ import os, urllib, json, webbrowser, time, tempfile
 
 # wrapper class for Galileo sdk authentication. It automatically handles authentication for the user via the default webbrowser
 class AuthSdk:
+    """Helper class for user authentication."""
     def __init__(self, client_id="oDmH6Nf4DN3oILcNk7cQqBchXUfv7fpD", mode='prod', audience=''):
+        """
+        Constructor for AuthSdk class. 
+
+        :param client_id: string: Optional argument for tracking which integration is calling the sdk. 
+        :param mode: string: Optional argument, can be prod (default) or dev. 
+        :param audience: string: Optional argument
+        :return: AuthSdk
+        """
         self.domain = "https://galileoapp.auth0.com"
         self.headers_default = {'content-type': 'application/x-www-form-urlencoded'}
         self.client_id = client_id
@@ -23,7 +32,11 @@ class AuthSdk:
                 exit()
 
     def initialize(self):
+        """
+        Automatically authenticate the user either through a webbrowser or auth-link printed to the terminal. 
 
+        :return: None
+        """
         refresh_token_path = os.path.join(os.path.expanduser('~'), '.galileo')
         if os.path.exists(refresh_token_path):
             access_token, refresh_token, expires_in = self.refresh_token_file_flow(refresh_token_path)
