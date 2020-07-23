@@ -1,12 +1,14 @@
 import os
+import zipfile
 
 from ..objects.exceptions import JobsException
 from ..utils.generate_query_str import generate_query_str
 
 
 class JobsService:
-    def __init__(self, jobs_repo):
+    def __init__(self, jobs_repo, profile_repo):
         self._jobs_repo = jobs_repo
+        self._profile_repo = profile_repo
 
     def request_send_job(self):
         r = self._jobs_repo.request_send_job()
@@ -46,17 +48,25 @@ class JobsService:
         return self._jobs_repo.request_logs_from_jobs(job_id)
 
     def list_jobs(
-        self,
-        jobids=None,
-        receiverids=None,
-        oaids=None,
-        userids=None,
-        stationids=None,
-        statuses=None,
-        page=1,
-        items=25,
-        projectids=None
+            self,
+            jobids=None,
+            receiverids=None,
+            oaids=None,
+            userids=None,
+            stationids=None,
+            statuses=None,
+            page=1,
+            items=25,
+            projectids=None,
+            archived=False,
+            receiver_archived=False,
+            partial_names=None,
+            machines=None,
+            ownerids=None
     ):
+        if userids is None:
+            self_profile = self._profile_repo.self()
+            userids = [self_profile.userid]
         query = generate_query_str(
             {
                 "page": page,
@@ -67,7 +77,12 @@ class JobsService:
                 "userids": userids,
                 "stationids": stationids,
                 "statuses": statuses,
-                "projectids": projectids
+                "projectids": projectids,
+                "archived": archived,
+                "receiver_archived": receiver_archived,
+                "partial_names": partial_names,
+                "machines": machines,
+                "ownerids": ownerids
             },
         )
         return self._jobs_repo.list_jobs(query)
@@ -81,14 +96,24 @@ class JobsService:
         files_downloaded = []
 
         for file in files:
+            absolute_path = os.path.join(path, file.filename)
             self._jobs_repo.download_results(
                 job_id,
-                generate_query_str({"filename": file.filename, "path": file.path, "nonce": nonce}),
+                generate_query_str({"filename": file.filename, "path": file.path}),
                 os.path.join(path, file.filename),
             )
-            files_downloaded.append(file.filename)
+            files_downloaded.append(absolute_path)
 
         return files_downloaded
+
+    def download_and_extract_job_results(self, job_id, path):
+        files_downloaded = self.download_job_results(job_id, path)
+        for file in files_downloaded:
+            dir = file.rsplit(".zip", 1)[0]
+            if not os.path.exists(dir):
+                os.mkdir(dir)
+            with zipfile.ZipFile(file) as zf:
+                zf.extractall(dir)
 
     def update_job(self, request):
         return self._jobs_repo.update_job(request)

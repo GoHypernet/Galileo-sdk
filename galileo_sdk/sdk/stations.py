@@ -418,10 +418,16 @@ class StationsSdk:
         descriptions=None,
         page=1,
         items=25,
+        active=True,
+        userids=None,
+        partial_names=None,
+        updated=None,
+        machine_count_min=None,
+        machine_count_max=None,
+        machine_status=None
     ):
         """
         List of your Galileo stations
-
         :param stationids: Optional[List[str]]: Filter based on station ids
         :param names: Optional[List[str]]: Filter based on names
         :param mids: Optional[List[str]]: Filter based on mids
@@ -430,7 +436,15 @@ class StationsSdk:
         :param descriptions: Optional[List[str]]: Filter based on descriptions
         :param page: Optional[int]: Page #
         :param items: Optional[int]: Items per page
+        :param active: Optional[bool]: Filter for all active stations
+        :param userids: Optional[List[str]]: Filter based on userid
+        :param machine_status: Optional[List[str]]
+        :param machine_count_max: Optional[int]
+        :param machine_count_min: Optional[int]
+        :param updated: Optional[str]
+        :param partial_names: Optional[List[str]]
         :return: List[Station]
+
         """
         return self._stations_service.list_stations(
             stationids=stationids,
@@ -441,6 +455,13 @@ class StationsSdk:
             descriptions=descriptions,
             page=page,
             items=items,
+            active=active,
+            userids=userids,
+            partial_names=partial_names,
+            updated=updated,
+            machine_count_min=machine_count_min,
+            machine_count_max=machine_count_max,
+            machine_status=machine_status
         )
 
     def create_station(self, name, description="", userids=None):

@@ -15,25 +15,19 @@ def test_list_stations():
 
 def test_create_and_delete_station():
     station_details = galileo.stations.create_station(
-        name="sdk_station", userids=[], description="for testing",
+        name="sdk_station_integration_test", userids=[], description="for testing",
     )
 
-    station_list = galileo.stations.list_stations()
-    sdk_station_id = ""
-    for station in station_list:
-        if station.name == "sdk_station":
-            sdk_station_id = station.stationid
+    r_delete_station = galileo.stations.delete_station(station_details.stationid)
 
-    r_delete_station = galileo.stations.delete_station(sdk_station_id)
-
-    assert "sdk_station" == station_details.name
-    assert sdk_station_id is not ""
+    assert "sdk_station_integration_test" == station_details.name
+    assert station_details.stationid is not ""
     assert r_delete_station is True
 
 
 def test_add_and_remove_volumes_to_station():
     station = galileo.stations.create_station(
-        name="sdk_station", userids=[], description="for testing",
+        name="sdk_station_integration_test", userids=[], description="for testing",
     )
     volumes = galileo.stations.add_volumes_to_station(
         station_id=station.stationid,
@@ -54,17 +48,13 @@ def test_add_and_remove_volumes_to_station():
 
 
 def test_add_and_delete_host_path_to_volume():
-    galileo.stations.create_station(
-        name="sdk_station", userids=[], description="for testing",
+    station = galileo.stations.create_station(
+        name="sdk_station_integration_test", userids=[], description="for testing",
     )
 
     self = galileo.profiles.self()
 
-    station_list = galileo.stations.list_stations()
-    station_id = ""
-    for station in station_list:
-        if station.name == "sdk_station":
-            station_id = station.stationid
+    station_id = station.stationid
 
     volumes = galileo.stations.add_volumes_to_station(
         station_id=station_id,
@@ -91,6 +81,5 @@ def test_add_and_delete_host_path_to_volume():
     assert [] == volumes.host_paths
     assert "host_path" == volume_host_path.host_paths[0].host_path
     assert deleted_host_path is True
-
 
 galileo.disconnect()

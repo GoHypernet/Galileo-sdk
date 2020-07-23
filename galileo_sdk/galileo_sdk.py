@@ -103,7 +103,7 @@ class GalileoSdk:
             self._settings, self._auth_provider, NAMESPACE
         )
 
-        self._jobs_service = JobsService(self._jobs_repo)
+        self._jobs_service = JobsService(self._jobs_repo, self._profiles_repo)
         self._stations_service = StationsService(self._stations_repo)
         self._profiles_service = ProfilesService(self._profiles_repo)
         self._machines_service = MachinesService(self._machines_repo)

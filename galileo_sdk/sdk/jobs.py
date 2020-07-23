@@ -84,11 +84,17 @@ class JobsSdk:
         statuses=None,
         page=1,
         items=25,
-        projectids=None
+        projectids=None,
+        archived=False,
+        receiver_archived=False,
+        partial_names=None,
+        machines=None,
+        ownerids=None,
+        sort_by=None,
+        sort_order=None
     ):
         """
         List of your jobs
-
         :param jobids: List[str]: Filter by job ids
         :param receiverids: List[str]: Filter by receiver ids
         :param oaids: List[str]: Filter by offer acceptance ids
@@ -97,6 +103,14 @@ class JobsSdk:
         :param statuses: List[str]: Filter by statuses
         :param page: int: Filter by page
         :param items: int: Filter by items
+        :param projectids: List[str]: Filter by projectid
+        :param archived: boolean: Filter by archived
+        :param receiver_archived: boolean: Filter by receiver archived
+        :param partial_names: List[str]: Filter by partial names
+        :param machines: List[str]: Filter by machines id
+        :param ownerids: List[str]: Filter by ownerid
+        :param sort_by: EJobSort
+        :param sort_order: str: "asc" or "desc"
         :return: List[Job]
         """
         return self._jobs_service.list_jobs(
@@ -108,7 +122,12 @@ class JobsSdk:
             statuses=statuses,
             page=page,
             items=items,
-            projectids=projectids
+            projectids=projectids,
+            archived=archived,
+            receiver_archived=receiver_archived,
+            partial_names=partial_names,
+            machines=machines,
+            ownerids=ownerids
         )
 
     def download_job_results(self, job_id, path, nonce=None):
@@ -139,3 +158,6 @@ class JobsSdk:
         :return: Job
         """
         return self._jobs_service.request_kill_job(job_id)
+
+    def download_and_extract_job_results(self, job_id, path):
+        return self._jobs_service.download_and_extract_job_results(job_id, path)
