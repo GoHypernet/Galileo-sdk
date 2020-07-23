@@ -184,10 +184,10 @@ def file_dict_to_file_listing(file):
     return FileListing(
         file["filename"],
         file["path"],
-        file["modification_date"],
-        file["creation_date"],
-        file["file_size"],
-        file["nonce"]
+        file.get("modification_date", None),
+        file.get("creation_date", None),
+        file.get("file_size", None),
+        file.get("nonce", None)
     )
 
 

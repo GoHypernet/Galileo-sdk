@@ -6,8 +6,9 @@ from ..utils.generate_query_str import generate_query_str
 
 
 class JobsService:
-    def __init__(self, jobs_repo):
+    def __init__(self, jobs_repo, profile_repo):
         self._jobs_repo = jobs_repo
+        self._profile_repo = profile_repo
 
     def request_send_job(self):
         r = self._jobs_repo.request_send_job()
@@ -47,17 +48,25 @@ class JobsService:
         return self._jobs_repo.request_logs_from_jobs(job_id)
 
     def list_jobs(
-        self,
-        jobids=None,
-        receiverids=None,
-        oaids=None,
-        userids=None,
-        stationids=None,
-        statuses=None,
-        page=1,
-        items=25,
-        projectids=None
+            self,
+            jobids=None,
+            receiverids=None,
+            oaids=None,
+            userids=None,
+            stationids=None,
+            statuses=None,
+            page=1,
+            items=25,
+            projectids=None,
+            archived=False,
+            receiver_archived=False,
+            partial_names=None,
+            machines=None,
+            ownerids=None
     ):
+        if userids is None:
+            self_profile = self._profile_repo.self()
+            userids = [self_profile.userid]
         query = generate_query_str(
             {
                 "page": page,
@@ -68,7 +77,12 @@ class JobsService:
                 "userids": userids,
                 "stationids": stationids,
                 "statuses": statuses,
-                "projectids": projectids
+                "projectids": projectids,
+                "archived": archived,
+                "receiver_archived": receiver_archived,
+                "partial_names": partial_names,
+                "machines": machines,
+                "ownerids": ownerids
             },
         )
         return self._jobs_repo.list_jobs(query)
