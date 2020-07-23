@@ -70,13 +70,89 @@ class AuthSdk:
         return access_token, refresh_token, data["expires_in"]
 
     def show_user_code(self, user_code):
-        html = '<html> <body> <h1> Make sure this code is the same as the one in the other window: </h1> <p style="font-size:25px;">'+ str(user_code) + '</p> <p> You may close this windows after confirmation. </p> </body> </html>'
+        html = '''<!DOCTYPE html> 
+<html> 
+<head>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="robots" content="noindex, nofollow">
+    
+    
+    <link rel="stylesheet" href="https://cdn.auth0.com/ulp/react-components/1.14.1/css/main.cdn.min.css">
+    <style id="custom-styles-container">
+      
+
+body {
+  background: #354962;
+  font-family: ulp-font, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, sans-serif;
+}
+.main-wrapper {
+  background: #354962;
+}
+.ulp-alert.danger {
+  background: #D00E17;
+}
+.ulp-alert.success {
+  background: #0A8852;
+}
+@supports (mask-image: url('/static/img/branding-generic/copy-icon.svg')) {
+  @supports not (-ms-ime-align: auto) {
+    .input-container.error::before {
+      background-color: #D00E17;
+    }
+  }
+}
+.input.ulp-input-error {
+  border-color: #D00E17;
+}
+.error-cloud {
+  background-color: #D00E17;
+}
+.error-fatal {
+  background-color: #D00E17;
+}
+    </style>
+    
+    <title>Connect to Galileo SDK/CLI</title>
+  </head> 
+
+<body>
+<main class="ulp-outer device-code-confirmation">
+  <section class="ulp-box   no-badge">
+    <div class="ulp-box-inner _prompt-box">
+      <div class="ulp-main">
+        <header class="ulp-header _prompt-header">
+          <img class="header-logo _header-logo" id="prompt-logo-center" src="https://galileoapp.io/wp-content/uploads/2019/02/galileo-icon-03.png" alt="Device Confirmation">
+        
+          <h1 class="header-title _header-title">Device Confirmation</h1>
+        
+          <div class="header-description _header-description">
+            <p class="text-simple _text  ">Please confirm this code in the other tab:</p>
+          </div>
+          <div class="header-description _header-description">
+            <p class="text-simple _text  " style="font-size:25px;">'''+ str(user_code) +'''</p>
+          </div>
+        </header>
+      
+      </div>
+    </div>
+</body>
+</html>
+  '''
         with tempfile.NamedTemporaryFile('w', delete=False, suffix='.html') as f:
             url = 'file://' + f.name
             f.write(html)
         webbrowser.open(url, new=1)
 
     def refresh_token_file_flow(self, refresh_token_file):
+        """
+        Refreshes access token if given the location of a refresh token file.  
+
+        :param refresh_token_file: string: File path for where auth token information is stored.  
+        :return: access_token, refresh_token, expiration
+        """
         if not os.path.exists(refresh_token_file):
             print('No refresh token file')
 
@@ -87,6 +163,17 @@ class AuthSdk:
         refresh_json["expires_in"] = datetime.strptime(refresh_json["expires_in"], "%Y-%m-%d %H:%M:%S.%f")
         access_token = self._get_new_access_token(refresh_json["refresh_token"],refresh_token_file)
         return access_token, refresh_json["refresh_token"], refresh_json["expires_in"]
+        
+    def refresh_token_flow(self, refresh_token, expires_in):
+        """
+        Refreshes access token if given a refresh token.  
+
+        :param refresh_token: string: String object representing the token. 
+        :param expires_in: string: String object representing the expiry date of the refresh token.         
+        :return: access_token, refresh_token, expiration
+        """
+        access_token = self._get_new_access_token(refresh_token,'')
+        return access_token, refresh_token, expires_in
 
     def datetime_converter(self, o):
         if isinstance(o, datetime):
