@@ -1,4 +1,6 @@
 from datetime import datetime
+import os
+
 from galileo_sdk.compat import urlunparse, requests
 
 from galileo_sdk.business.objects import (EJobStatus, Job, JobStatus,
@@ -137,6 +139,10 @@ class JobsRepository:
         return [file_dict_to_file_listing(file) for file in files]
 
     def download_results(self, job_id, query, filename):
+        dir = os.path.dirname(filename)
+        if not os.path.exists(dir):
+            os.mkdir(dir)
+
         if is_py3:
             with self._get(
                 "/jobs/{job_id}/results".format(job_id=job_id), query=query, filename=filename

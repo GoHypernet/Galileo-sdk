@@ -28,7 +28,7 @@ How to Run the Landing Zone Daemon
 
 .. code-block:: bash
 
-    $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --machine-id "$LZ_ID" --machine-name "$LZ_NAME" --refresh-token-file /tokens/token
+    $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --machine-name "$LZ_NAME" --refresh-token-file /tokens/token
 
 * Now that the LZ is running, we must authenticate it against your account. Run this command in your terminal
 
@@ -83,13 +83,14 @@ Running the Landing Zone Daemon
 
 * Make sure that Docker is running
 * Open a terminal as you did above
-* To install Docker Compose: copy the following command, paste it in the terminal, substitute your values, and run the command by pressing Enter or Return
+* To install Docker Compose: If you have python and pip installed on your machine, copy the following command, paste it in the terminal, and run the command by pressing Enter or Return.
 
 .. code-block:: bash
 
     $ pip install docker-compose
 
-* Download this .yml file `(download, right-click and save) <docker-compose.yml>`_:
+* Alternatively, follow the instructions for your operating system given `here <https://docs.docker.com/compose/install/>`_. 
+* If you are running linux containers, download this .yml file `(download, right-click and save) <docker-compose.yml>`_:
 
 .. code-block:: yaml
 
@@ -104,9 +105,30 @@ Running the Landing Zone Daemon
           - tokens:/tokens
         container_name: landing-zone-daemon
         # chose the name that appears in the Galileo UI and make a unique string that corresponds to it
-        command: --refresh-token-file /tokens/authfile.txt --backend 'https://api.galileoapp.io' --machine-id "$LZ_ID" --machine-name "$LZ_NAME"
+        command: --refresh-token-file /tokens/authfile.txt --backend 'https://api.galileoapp.io' --machine-name "$LZ_NAME"
         environment:
           DOCKER_HOST: unix:///var/run/docker.sock
+    volumes:
+      tokens:
+
+* If you are running windows containers, copy this into a text file named docker-compose.yml:
+
+.. code-block:: yaml
+
+    version: "3.3"
+    services:
+      landing-zone:
+        image: hypernetlabs/landing-zone-daemon:head-windowsservercore-1809
+        volumes:
+          - source: '\\.\pipe\docker_engine'
+            target: '\\.\pipe\docker_engine'
+            type: npipe
+          - tokens:C:\tokens
+          # uncomment the following line if you need to access private image repos with your Landing Zone
+          #- C:\$homepath\.docker:C:\Users\ContainerAdministrator\.docker
+        container_name: landing-zone-daemon
+        # chose the name that appears in the Galileo UI and make a unique string that corresponds to it
+        command: --log-file - --refresh-token-file C:\\tokens\\authfile.txt --backend 'https://api.galileoapp.io' --machine-name "$LZ_NAME"
     volumes:
       tokens:
 
@@ -136,7 +158,9 @@ Running the Landing Zone Daemon
 
 * Follow those instructions. Once you have confirmed your code at the provided URL you should see your new Landing Zone appear in Galileo!
 
-**Warning:** If you are using MacOS and you are having trouble, check your :code:`~/.docker/config.json` and delete :code:`"credsStore" : "osxkeychain"`.
+**Note:** If you are using MacOS and you are having trouble, check your :code:`~/.docker/config.json` and delete :code:`"credsStore" : "osxkeychain"`.
+
+**Note:** If you are using Windows 10 Desktop or Windows Server and you are trying to run jobs referencing private images, edit your :code:`C:\%homepath%\.docker\config.json` so that the credStore line is as follows: :code:`"credsStore" : ""`. Then re-authenticate your docker daemon by running :code:`docker login`. Be sure to uncomment the line in the .yml file that mounts :code:`C:\$homepath\config.json`
 
 Stopping and Restarting
 #######################
@@ -158,4 +182,4 @@ Stopping and Restarting
 Removing and Restarting
 #######################
 * By running the stop command above, you automatically remove the container
-* To install the Landing Zone Daemon again follow the instructions above. You may or may not need to reauthenticate depending on whether you delete or move the automatically generated .galileo folder.
+* To install the Landing Zone Daemon again follow the instructions above. You may or may not need to reauthenticate depending on whether you delete the landing-zone_tokens docker volume that stores your authentication token.

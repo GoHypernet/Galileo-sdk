@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 
-VERSION = "0.0.28"
+VERSION = "0.0.31"
 
 _ver = sys.version_info
 
@@ -14,7 +14,7 @@ is_py3 = (_ver[0] == 3)
 if is_py3:
     install_requires = ["requests>=2.21.0", "python-socketio[client]==4.3.1", "python-engineio==3.9.0", "chardet", "mock"]
 else:
-    install_requires = ["enum34", "chardet", "mock"]
+    install_requires = ["enum34"]
 
 
 class VerifyVersionCommand(install):

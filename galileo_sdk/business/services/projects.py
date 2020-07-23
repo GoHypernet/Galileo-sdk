@@ -47,6 +47,8 @@ class ProjectsService:
                 else:
                     filename = os.path.join(os.path.basename(root), file)
 
+                filename = filename.replace(" ", "_")
+
                 filepath = os.path.join(os.path.abspath(root), file)
                 f = open(filepath, "rb").read()
                 self._projects_repo.upload_single_file(project_id, f, filename)

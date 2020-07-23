@@ -36,6 +36,7 @@ galileo\_sdk.sdk.stations.StationsSdk
       ~StationsSdk.on_station_admin_request_accepted
       ~StationsSdk.on_station_admin_request_received
       ~StationsSdk.on_station_admin_request_rejected
+      ~StationsSdk.on_station_admin_station_updated
       ~StationsSdk.on_station_admin_volume_added
       ~StationsSdk.on_station_admin_volume_host_path_added
       ~StationsSdk.on_station_admin_volume_host_path_removed
@@ -45,6 +46,7 @@ galileo\_sdk.sdk.stations.StationsSdk
       ~StationsSdk.on_station_member_machine_removed
       ~StationsSdk.on_station_member_member_added
       ~StationsSdk.on_station_member_member_removed
+      ~StationsSdk.on_station_member_station_updated
       ~StationsSdk.on_station_member_volume_added
       ~StationsSdk.on_station_member_volume_host_path_added
       ~StationsSdk.on_station_member_volume_host_path_removed
@@ -53,6 +55,7 @@ galileo\_sdk.sdk.stations.StationsSdk
       ~StationsSdk.on_station_user_invite_accepted
       ~StationsSdk.on_station_user_invite_destroyed
       ~StationsSdk.on_station_user_invite_received
+      ~StationsSdk.on_station_user_invite_rejected
       ~StationsSdk.on_station_user_request_accepted
       ~StationsSdk.on_station_user_request_destroyed
       ~StationsSdk.on_station_user_request_rejected
@@ -64,6 +67,7 @@ galileo\_sdk.sdk.stations.StationsSdk
       ~StationsSdk.remove_member_from_station
       ~StationsSdk.remove_volume_from_station
       ~StationsSdk.request_to_join
+      ~StationsSdk.update_station
    
    
 
