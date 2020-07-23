@@ -15,6 +15,13 @@ class StationsService:
         descriptions=None,
         page=1,
         items=25,
+        active=True,
+        userids=None,
+        partial_names=None,
+        updated=None,
+        machine_count_min=None,
+        machine_count_max=None,
+        machine_status=None
     ):
         query = generate_query_str(
             {
@@ -26,6 +33,13 @@ class StationsService:
                 "user_roles": user_roles,
                 "volumeids": volumeids,
                 "descriptions": descriptions,
+                "active": active,
+                "userids": userids,
+                "partial_names": partial_names,
+                "updated": updated,
+                "machine_count_min": machine_count_min,
+                "machine_count_max": machine_count_max,
+                "machine_status": machine_status
             }
         )
 

@@ -9,7 +9,7 @@ from galileo_sdk.business.objects.projects import (DirectoryListing,
                                                    AutoDockVinaProject, BioconductorProject,
                                                    BlenderProject, QuantumEspressoProject,
                                                    MatLabProject, FLO2DProject)
-from galileo_sdk.data.repositories.jobs import job_dict_to_job
+from galileo_sdk.data.repositories.jobs import job_dict_to_job, file_dict_to_file_listing
 
 
 class ProjectsRepository:
@@ -91,6 +91,7 @@ class ProjectsRepository:
             "project_type_id": create_project_request.project_type_id
         }
         self._add_project_type_params(body, create_project_request)
+        print("BODY", body)
         response = self._post("/projects", body)
         json = response.json()
         project = json["project"]
@@ -180,12 +181,16 @@ class ProjectsRepository:
             body["cran_dependencies"] = {dependency.name: dependency.version for dependency in
                                          create_project_request.dependencies} if create_project_request.cran_dependencies else {}
             body["env"] = create_project_request.env
-        elif isinstance(create_project_request, OctaveProject) or \
-                isinstance(create_project_request, SWMM5Project) or \
+        elif isinstance(create_project_request, SWMM5Project) or \
                 isinstance(create_project_request, QuantumEspressoProject) or \
                 isinstance(create_project_request, MatLabProject) or \
                 isinstance(create_project_request, FLO2DProject):
             body["filename"] = create_project_request.filename
+        elif isinstance(create_project_request, OctaveProject):
+            body["filename"] = create_project_request.filename
+            body["dependencies"] = {dependency.name: dependency.version for dependency in
+                                    create_project_request.dependencies}
+            body["arg"] = create_project_request.arg
         elif isinstance(create_project_request, AutoDockVinaProject):
             body["FILENAME"] = create_project_request.filename
         elif isinstance(create_project_request, BioconductorProject):
@@ -216,16 +221,6 @@ def directory_dict_to_directory_listing(directory):
         ],
     )
 
-
-def file_dict_to_file_listing(file):
-    return FileListing(
-        file["filename"],
-        file["path"],
-        file["modification_date"],
-        file["creation_date"],
-        file["file_size"],
-        file["nonce"]
-    )
 
 
 def project_dict_to_project(project):

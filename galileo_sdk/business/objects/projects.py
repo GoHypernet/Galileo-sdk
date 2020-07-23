@@ -62,7 +62,7 @@ class ProjectType:
         self.version = version
 
 
-class CreateProjectRequest:
+class CreateProjectRequest(object):
     def __init__(self,
                  name,
                  description,
@@ -135,7 +135,7 @@ class PythonProject(CreateProjectRequest):
                  destination_path=None,  # default will be project_id
                  arg=[],
                  dependencies=[],
-                 env=None):
+                 env={}):
         if not version and not project_type_id:
             raise Exception("Either 'version' or 'project_type_id' parameter must be filled")
         super(PythonProject, self).__init__(name=name,
@@ -169,7 +169,7 @@ class JuliaProject(CreateProjectRequest):
                  destination_storage_id=None,
                  arg=[],
                  dependencies=[],
-                 env=None):
+                 env={}):
         if not version and not project_type_id:
             raise Exception("Either 'version' or 'project_type_id' parameter must be filled")
         super(JuliaProject, self).__init__(name=name,
@@ -203,7 +203,7 @@ class RProject(CreateProjectRequest):
                  arg=[],
                  dependencies=[],
                  cran_dependencies=[],
-                 env=None):
+                 env={}):
         if not version and not project_type_id:
             raise Exception("Either 'version' or 'project_type_id' parameter must be filled")
         super(RProject, self).__init__(name=name,
@@ -237,7 +237,7 @@ class STATAProject(CreateProjectRequest):
                  destination_storage_id=None,
                  arg=[],
                  dependencies=[],
-                 env=None):
+                 env={}):
         if not version and not project_type_id:
             raise Exception("Either 'version' or 'project_type_id' parameter must be filled")
         super(STATAProject, self).__init__(name=name,
@@ -266,7 +266,9 @@ class OctaveProject(CreateProjectRequest):
                  source_path=None,
                  destination_path=None,
                  source_storage_id=None,
-                 destination_storage_id=None):
+                 destination_storage_id=None,
+                 arg=[],
+                 dependencies=[]):
         if not version and not project_type_id:
             raise Exception("Either 'version' or 'project_type_id' parameter must be filled")
         super(OctaveProject, self).__init__(name=name,
@@ -276,9 +278,11 @@ class OctaveProject(CreateProjectRequest):
                                             project_type_name="Octave",
                                             source_path=source_path,
                                             destination_path=destination_path,
-                                            project_type_id=project_type_id)
+                                            project_type_id=project_type_id,)
         self.version = version
         self.filename = filename
+        self.dependencies = dependencies
+        self.arg = arg
 
 
 class SWMM5Project(CreateProjectRequest):
