@@ -13,6 +13,7 @@ API
     :toctree: Authentication API
 
      ~galileo_sdk.sdk.auth.AuthSdk.initialize
+     ~galileo_sdk.sdk.auth.AuthSdk.device_flow
     
 
 Jobs

@@ -31,21 +31,28 @@ class AuthSdk:
                 print('mode: ' + str(mode) + ' not recognized')
                 exit()
 
-    def initialize(self):
+    def initialize(self, refresh_token_path=os.path.join(os.path.expanduser('~'), '.galileo')):
         """
         Automatically authenticate the user either through a webbrowser or auth-link printed to the terminal. 
 
-        :return: None
+        :param refresh_token_path: string: An optional file path for where to store auth token information. If you don not want authentication info to be stored, pass an empty string, i.e. refresh_token_path=''. The default location is in you home directory in a file named .galileo.
+        :return: access_token, refresh_token, expiration
         """
-        refresh_token_path = os.path.join(os.path.expanduser('~'), '.galileo')
+
         if os.path.exists(refresh_token_path):
             access_token, refresh_token, expires_in = self.refresh_token_file_flow(refresh_token_path)
         else:
-            access_token, refresh_token, expires_in = self.device_flow()
+            access_token, refresh_token, expires_in = self.device_flow(refresh_token_path)
 
         return access_token, refresh_token, expires_in
 
-    def device_flow(self):
+    def device_flow(self,refresh_token_path=''):
+        """
+        Attempts to bring up a webbrowser for the user to authenticate. Otherwise, it will print a URL and access code to stdout. 
+
+        :param refresh_token_path: string: An optional file path for where to store auth token information. If you do not provide a file path, the programmer is responsible for handling persistence. 
+        :return: access_token, refresh_token, expiration
+        """
         user_url, user_code, device_code, interval, user_url_complete = self._request_device_authorization()
 
         # Try to open a window to the auth0 audience
@@ -59,7 +66,7 @@ class AuthSdk:
             print(mystring)
 
         access_token, refresh_token, expires_in = self._poll_for_tokens(interval, device_code)
-        data = self._store_token_info(refresh_token, expires_in)
+        data = self._store_token_info(refresh_token, expires_in, refresh_token_path)
         return access_token, refresh_token, data["expires_in"]
 
     def show_user_code(self, user_code):
@@ -78,27 +85,28 @@ class AuthSdk:
 
         refresh_json = json.loads(refresh_token)
         refresh_json["expires_in"] = datetime.strptime(refresh_json["expires_in"], "%Y-%m-%d %H:%M:%S.%f")
-        access_token = self._get_new_access_token(refresh_json["refresh_token"])
+        access_token = self._get_new_access_token(refresh_json["refresh_token"],refresh_token_file)
         return access_token, refresh_json["refresh_token"], refresh_json["expires_in"]
 
     def datetime_converter(self, o):
         if isinstance(o, datetime):
             return o.__str__()
 
-    def _store_token_info(self, refresh_token, expires_in):
-        refresh_token_path = os.path.join(os.path.expanduser('~'), '.galileo')
+    def _store_token_info(self, refresh_token, expires_in, refresh_token_path):
+        
         tmp = None
         data = {
             "refresh_token": refresh_token,
             "expires_in": datetime.now() + timedelta(0, expires_in)
         }
 
-        try:
-            tmp = open(refresh_token_path, 'w')
-            tmp.write(json.dumps(data, default=self.datetime_converter))
-        finally:
-            if tmp:
-                tmp.close()
+        if len(refresh_token_path) > 0:
+            try:
+                tmp = open(refresh_token_path, 'w')
+                tmp.write(json.dumps(data, default=self.datetime_converter))
+            finally:
+                if tmp:
+                    tmp.close()
 
         return data
 
@@ -153,7 +161,7 @@ class AuthSdk:
 
         return r["access_token"], r["refresh_token"], r["expires_in"]
 
-    def _get_new_access_token(self, refresh_token):
+    def _get_new_access_token(self, refresh_token,refresh_token_file):
         response = requests.post(
             '{domain}/oauth/token'.format(domain=self.domain),
             headers=self.headers_default,
@@ -165,5 +173,5 @@ class AuthSdk:
         )
         response.raise_for_status()
         r = response.json()
-        self._store_token_info(refresh_token, r["expires_in"])
+        self._store_token_info(refresh_token, r["expires_in"],refresh_token_file)
         return r['access_token']
