@@ -5,8 +5,9 @@ from galileo_sdk.compat import urlunparse, requests
 
 from galileo_sdk.business.objects import (EJobStatus, Job, JobStatus,
                                           UpdateJobRequest)
-from galileo_sdk.business.objects.jobs import (FileListing, TopDetails,
-                                               TopProcess)
+from galileo_sdk.business.objects.jobs import (TopDetails, TopProcess)
+from galileo_sdk.business.objects.projects import FileListing
+
 
 import sys
 
@@ -41,13 +42,18 @@ class JobsRepository:
         )
 
     def _request(
-        self, request, endpoint, data=None, params=None, query=None, fragment=None,
+        self, request, endpoint, data=None, params=None, query=None, fragment=None, filename=None
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
         headers = {
             "Authorization": "Bearer {access_token}".format(access_token=access_token)
         }
+
+        if filename:
+            headers["filename"] = filename
+            headers["Content-Type"] = "application/octet-stream"
+
         r = request(url, json=data, headers=headers)
         r.raise_for_status()
         return r
@@ -126,7 +132,7 @@ class JobsRepository:
         jobs = json["jobs"]
         return [job_dict_to_job(job) for job in jobs]
 
-    def get_results_url(self, job_id):
+    def get_results_metadata(self, job_id):
         response = self._get("/jobs/{job_id}/results".format(job_id=job_id))
         json = response.json()
         files = json["files"]
@@ -139,7 +145,7 @@ class JobsRepository:
 
         if is_py3:
             with self._get(
-                "/jobs/{job_id}/results".format(job_id=job_id), query=query
+                "/jobs/{job_id}/results".format(job_id=job_id), query=query, filename=filename
             ) as r:
                 with open(filename, "wb") as f:
                     for chunk in r.iter_content(chunk_size=8192):
@@ -175,7 +181,14 @@ def top_dict_to_jobs_top(process, titles):
 
 
 def file_dict_to_file_listing(file):
-    return FileListing(file["filename"], file["path"])
+    return FileListing(
+        file["filename"],
+        file["path"],
+        file["modification_date"],
+        file["creation_date"],
+        file["file_size"],
+        file["nonce"]
+    )
 
 
 def job_dict_to_job(job):

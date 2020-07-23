@@ -84,6 +84,7 @@ class JobsSdk:
         statuses=None,
         page=1,
         items=25,
+        projectids=None
     ):
         """
         List of your jobs
@@ -107,17 +108,19 @@ class JobsSdk:
             statuses=statuses,
             page=page,
             items=items,
+            projectids=projectids
         )
 
-    def download_job_results(self, job_id, path):
+    def download_job_results(self, job_id, path, nonce=None):
         """
         Download your job results when job is completed
 
         :param job_id: str
         :param path: str: path to directory, where results will be saved
+        :param nonce: str: can still download the file if provide an auth token
         :return: List[str]: list of filenames that were downloaded
         """
-        return self._jobs_service.download_job_results(job_id, path)
+        return self._jobs_service.download_job_results(job_id, path, nonce)
 
     def update_job(self, request):
         """ Updates an existing job

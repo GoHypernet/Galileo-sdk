@@ -1,7 +1,7 @@
 import os
 
 from ..utils.generate_query_str import generate_query_str
-
+from ..objects import UpdateProjectRequest
 
 class ProjectsService:
     def __init__(self, projects_repo):
@@ -22,8 +22,20 @@ class ProjectsService:
 
         return self._projects_repo.list_projects(query)
 
-    def create_project(self, name, description):
-        return self._projects_repo.create_project(name, description)
+    def create_project(self, create_project_request):
+        if not create_project_request.project_type_id:
+            project_types = self.get_project_types()
+            for project_type in project_types:
+                print("VERSION", project_type.version, create_project_request.version)
+                print("NAME", project_type.name, create_project_request.project_type_name)
+                if project_type.version == create_project_request.version and \
+                        project_type.name == create_project_request.project_type_name:
+                    create_project_request.project_type_id = project_type.id
+
+            if not create_project_request.project_type_id:
+                raise Exception("Version of this project type is not found")
+
+        return self._projects_repo.create_project(create_project_request)
 
     def upload(self, project_id, dir):
         name = os.path.basename(dir)
@@ -50,5 +62,28 @@ class ProjectsService:
             project_id, station_id, machine_id
         )
 
-    def inspect_project(self, project_id):
-        return self._projects_repo.inspect_project(project_id)
+    def get_project_files(self, project_id):
+        return self._projects_repo.get_project_files(project_id)
+
+    def delete_project(self, project_id):
+        return self._projects_repo.delete_project(project_id)
+
+    def update_project(self, project_id, update_project_request):
+        return self._projects_repo.update_project(project_id, update_project_request)
+
+    def update_project_args(self, project_id, args):
+        update_project_request = UpdateProjectRequest(
+            None,
+            None,
+            None,
+            None,
+            None,
+            args
+        )
+        return self._projects_repo.update_project(project_id, update_project_request)
+
+    def delete_project_files(self, project_id):
+        return self._projects_repo.delete_project_files(project_id)
+
+    def get_project_types(self):
+        return self._projects_repo.get_project_types()

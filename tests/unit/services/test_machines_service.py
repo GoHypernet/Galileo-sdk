@@ -20,15 +20,17 @@ def test_get_machine_by_id():
     x = 1
     machines_repo.get_machine_by_id.return_value = Machine(
         mid=str(x),
-        gpu=str(x),
-        cpu=str(x),
+        gpu_count=str(x),
+        cpu_count=str(x),
         arch=str(x),
         memory=str(x),
         name=str(x),
-        os=str(x),
-        running_jobs_limit=x,
+        operating_system=str(x),
         status=EMachineStatus.online,
         userid=str(x),
+        container_technology="container_tech",
+        job_runner="job runner",
+        memory_amount=str(x)
     )
 
     # Call
@@ -42,15 +44,17 @@ def test_list_machines():
     machines_repo.list_machines.return_value = [
         Machine(
             mid=str(x),
-            gpu=str(x),
-            cpu=str(x),
+            gpu_count=str(x),
+            cpu_count=str(x),
             arch=str(x),
             memory=str(x),
             name=str(x),
-            os=str(x),
-            running_jobs_limit=x,
+            operating_system=str(x),
             status=EMachineStatus.online,
             userid=str(x),
+            container_technology="container_tech",
+            job_runner="job runner",
+            memory_amount=str(x)
         )
         for x in range(5)
     ]
@@ -67,15 +71,17 @@ def test_update():
     x = 1
     machines_repo.update.return_value = Machine(
         mid=str(x),
-        gpu=str(x),
-        cpu=str(x),
+        gpu_count=str(x),
+        cpu_count=str(x),
         arch=str(x),
         memory=str(x),
         name=str(x),
-        os=str(x),
-        running_jobs_limit=x,
+        operating_system=str(x),
         status=EMachineStatus.online,
         userid=str(x),
+        container_technology="container_tech",
+        job_runner="job runner",
+        memory_amount=str(x)
     )
 
     # Call

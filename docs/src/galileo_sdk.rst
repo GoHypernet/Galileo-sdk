@@ -16,7 +16,7 @@ or if you have the code checked out locally:
 .. code-block:: bash
 
     $ python setup.py install
-
+|
 Writing your first script
 -------------------------
 :code:`GalileoSdk` takes in 5 optional parameters.
@@ -46,6 +46,18 @@ An example of exporting your environment variable on MacOS:
 .. code-block:: bash
 
     $ export GALILEO_USER=user@galileoapp.io
+
+The most convenient and secure method for authentication is to use our AuthSdk helper class. 
+
+.. code-block:: python
+
+    from galileo_sdk import GalileoSdk, AuthSdk
+
+    myauth = AuthSdk()
+    # On your first time using the sdk, this will open a web browser and ask you to sign in,
+    # or if you are in a headless environment, it will print an activation link to visit.
+    access_token, refresh_token, expiry_time = myauth.initialize()
+    galileo = GalileoSdk(auth_token=access_token, refresh_token=refresh_token)
 
 :code:`GalileoSdk` exposes the Jobs, Machines, Profiles, Projects, and Stations APIs
 
@@ -88,9 +100,9 @@ Before you end your script, you must disconnect the Galileo object via:
 
     galileo.disconnect()
 
-
+|
 Using the Galileo Command Line Interface
--------------------------
+-----------------------------------------
 The Galileo CLI is an application that utilizes the Galileo SDK to view jobs without a GUI.
 
 Install via pip:

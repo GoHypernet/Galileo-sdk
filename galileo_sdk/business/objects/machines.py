@@ -11,18 +11,21 @@ class EMachineStatus(enum.Enum):
 
 class Machine:
     def __init__(
-        self, name, userid, status, mid, gpu, cpu, os, arch, memory, running_jobs_limit,
+        self, name, userid, status, mid, gpu_count, cpu_count, operating_system, arch, memory_amount, memory,
+            job_runner, container_technology
     ):
         self.mid = mid
         self.name = name
         self.userid = userid
         self.status = status
-        self.gpu = gpu
-        self.cpu = cpu
-        self.os = os
+        self.gpu_count = gpu_count
+        self.cpu_count = cpu_count
+        self.operating_system = operating_system
+        self.job_runner = job_runner
         self.arch = arch
         self.memory = memory
-        self.running_jobs_limit = running_jobs_limit
+        self.memory_amount = memory_amount
+        self.container_technology = container_technology
 
 
 class MachineStatusUpdateEvent:

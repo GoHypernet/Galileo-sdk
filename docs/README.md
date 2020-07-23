@@ -19,3 +19,9 @@ from the root of the project. Then you can make the distributable by:
 sphinx-build -b html ./docs/src ./docs/build/
 
 ```
+
+To generate stub pages:
+
+```bash
+sphinx-autogen -o docs/src/references/generated docs/src/references/*.rst
+```

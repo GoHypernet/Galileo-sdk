@@ -56,6 +56,7 @@ class JobsService:
         statuses=None,
         page=1,
         items=25,
+        projectids=None
     ):
         query = generate_query_str(
             {
@@ -67,11 +68,12 @@ class JobsService:
                 "userids": userids,
                 "stationids": stationids,
                 "statuses": statuses,
+                "projectids": projectids
             },
         )
         return self._jobs_repo.list_jobs(query)
 
-    def download_job_results(self, job_id, path):
+    def download_job_results(self, job_id, path, nonce=None):
         files = self._jobs_repo.get_results_url(job_id)
 
         if not files:

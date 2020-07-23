@@ -75,14 +75,16 @@ class MachinesRepository:
 
 def machine_dict_to_machine(machine):
     return Machine(
-        machine["name"],
-        machine["userid"],
-        EMachineStatus[machine["status"]],
-        machine["mid"],
-        machine["gpu"],
-        machine["cpu"],
-        machine["os"],
-        machine["arch"],
-        machine["memory"],
-        machine["running_jobs_limit"],
+        name=machine["name"],
+        userid=machine["userid"],
+        status=EMachineStatus[machine["status"]],
+        mid=machine["mid"],
+        gpu_count=machine["gpu_count"],
+        cpu_count=machine["cpu_count"],
+        operating_system=machine["operating_system"],
+        arch=machine["arch"],
+        memory_amount=machine["memory_amount"],
+        memory=machine["memory"],
+        job_runner=machine["job_runner"],
+        container_technology=machine["container_technology"]
     )

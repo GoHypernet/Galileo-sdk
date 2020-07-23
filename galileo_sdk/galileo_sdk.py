@@ -6,7 +6,6 @@ from .business.services.machines import MachinesService
 from .business.services.profiles import ProfilesService
 from .business.services.projects import ProjectsService
 from .business.services.stations import StationsService
-from .data.events.connector import GalileoConnector
 from .data.providers.auth import AuthProvider
 from .data.repositories.jobs import JobsRepository
 from .data.repositories.machines import MachinesRepository
@@ -14,6 +13,7 @@ from .data.repositories.profiles import ProfilesRepository
 from .data.repositories.projects import ProjectsRepository
 from .data.repositories.settings import SettingsRepository
 from .data.repositories.stations import StationsRepository
+from .sdk.auth import AuthSdk
 from .sdk.jobs import JobsSdk
 from .sdk.machines import MachinesSdk
 from .sdk.profiles import ProfilesSdk
@@ -26,6 +26,9 @@ _ver = sys.version_info
 
 is_py2 = (_ver[0] == 2)
 is_py3 = (_ver[0] == 3)
+
+if is_py3:
+    from .data.events.connector import GalileoConnector
 
 NAMESPACE = "/galileo/user_interface/v1"
 
