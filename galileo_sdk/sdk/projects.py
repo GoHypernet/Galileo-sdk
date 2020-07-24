@@ -3,7 +3,7 @@ class ProjectsSdk:
         self._projects_service = projects_service
 
     def list_projects(
-        self, ids=None, names=None, user_ids=None, page=1, items=25,
+            self, ids=None, names=None, user_ids=None, page=1, items=25,
     ):
         """
         Get list of projects
@@ -19,13 +19,30 @@ class ProjectsSdk:
             ids=ids, names=names, user_ids=user_ids, page=page, items=items
         )
 
-    def create_project(self, create_project_request):
+    def create_project(self,
+                       name,
+                       description="",
+                       source_storage_id=None,
+                       destination_storage_id=None,
+                       project_type_name=None,
+                       source_path=None,
+                       destination_path=None,
+                       project_type_id=None):
         """
         Create a project
         :param: CreateProjectRequest
         :return: Project
         """
-        return self._projects_service.create_project(create_project_request)
+        return self._projects_service.create_project(
+            name,
+            description,
+            source_storage_id,
+            destination_storage_id,
+            project_type_name,
+            source_path,
+            destination_path,
+            project_type_id
+        )
 
     def upload(self, project_id, directory):
         """
@@ -60,23 +77,63 @@ class ProjectsSdk:
             project_id, station_id, machine_id
         )
 
-    def create_and_upload_project(self, create_project_request, directory):
-        project = self._projects_service.create_project(create_project_request)
+    def create_and_upload_project(self,
+                                  name,
+                                  directory,
+                                  description="",
+                                  source_storage_id=None,
+                                  destination_storage_id=None,
+                                  project_type_name=None,
+                                  source_path=None,
+                                  destination_path=None,
+                                  project_type_id=None):
+        project = self._projects_service.create_project(name,
+                                                        description,
+                                                        source_storage_id,
+                                                        destination_storage_id,
+                                                        project_type_name,
+                                                        source_path,
+                                                        destination_path,
+                                                        project_type_id)
         self._projects_service.upload(project.project_id, directory)
         return project
 
     def create_project_and_run_job(
-        self, create_project_request, directory, station_id, machine_id=None,
+            self,
+            name,
+            directory,
+            station_id,
+            machine_id=None,
+            description="",
+            source_storage_id=None,
+            destination_storage_id=None,
+            project_type_name=None,
+            source_path=None,
+            destination_path=None,
+            project_type_id=None
     ):
         """
-
-        :param create_project_request:
+        :param name:
         :param directory: str: filepath to the folder you want to upload
         :param station_id: str: station id the project will be ran in
         :param machine_id: Optional[str] if you want to run on a specific machine
+        :param project_type_id: str
+        :param destination_path: str
+        :param source_path: str
+        :param project_type_name: str
+        :param destination_storage_id: str
+        :param source_storage_id: str
+        :param description: str
         :return: Job
         """
-        project = self._projects_service.create_project(create_project_request)
+        project = self._projects_service.create_project(name,
+                                                        description,
+                                                        source_storage_id,
+                                                        destination_storage_id,
+                                                        project_type_name,
+                                                        source_path,
+                                                        destination_path,
+                                                        project_type_id)
         self._projects_service.upload(project.project_id, directory)
         if machine_id:
             job = self._projects_service.run_job_on_machine(
