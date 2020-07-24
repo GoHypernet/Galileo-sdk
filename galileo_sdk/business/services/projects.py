@@ -1,7 +1,7 @@
 import os
 
 from ..utils.generate_query_str import generate_query_str
-from ..objects import UpdateProjectRequest
+from ..objects import UpdateProjectRequest, CreateProjectRequest
 
 class ProjectsService:
     def __init__(self, projects_repo):
@@ -22,20 +22,37 @@ class ProjectsService:
 
         return self._projects_repo.list_projects(query)
 
-    def create_project(self, create_project_request):
-        if not create_project_request.project_type_id:
-            project_types = self.get_project_types()
-            for project_type in project_types:
-                print("VERSION", project_type.version, create_project_request.version)
-                print("NAME", project_type.name, create_project_request.project_type_name)
-                if project_type.version == create_project_request.version and \
-                        project_type.name == create_project_request.project_type_name:
-                    create_project_request.project_type_id = project_type.id
+    def create_project(self,
+                       name,
+                       description="",
+                       source_storage_id=None,
+                       destination_storage_id=None,
+                       project_type_name=None,
+                       source_path=None,
+                       destination_path=None,
+                       project_type_id=None):
 
-            if not create_project_request.project_type_id:
-                raise Exception("Version of this project type is not found")
 
-        return self._projects_repo.create_project(create_project_request)
+        # if not project_type_id:
+        #     project_types = self.get_project_types()
+        #     for project_type in project_types:
+        #         if project_type.version == create_project_request.version and \
+        #                 project_type.name == create_project_request.project_type_name:
+        #             create_project_request.project_type_id = project_type.id
+        #
+        #     if not create_project_request.project_type_id:
+        #         raise Exception("Version of this project type is not found")
+
+        return self._projects_repo.create_project(CreateProjectRequest(
+            name,
+            description,
+            source_storage_id,
+            destination_storage_id,
+            project_type_name,
+            source_path,
+            destination_path,
+            project_type_id
+        ))
 
     def upload(self, project_id, dir):
         name = os.path.basename(dir)

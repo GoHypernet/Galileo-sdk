@@ -4,4 +4,4 @@ from galileo_sdk.business.objects.jobs import (
     JobsEvents, JobStatus, JobTopEvent, StationJobUpdatedEvent,
     UpdateJobRequest)
 
-from galileo_sdk.business.objects.projects import UpdateProjectRequest
+from galileo_sdk.business.objects.projects import UpdateProjectRequest, CreateProjectRequest
