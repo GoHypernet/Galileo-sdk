@@ -91,7 +91,6 @@ class ProjectsRepository:
             "project_type_id": create_project_request.project_type_id
         }
         self._add_project_type_params(body, create_project_request)
-        print("BODY", body)
         response = self._post("/projects", body)
         json = response.json()
         project = json["project"]
@@ -198,8 +197,6 @@ class ProjectsRepository:
         elif isinstance(create_project_request, BlenderProject):
             body["copy_in_path"] = create_project_request.copy_in_path
             body["copy_container_path"] = create_project_request.copy_container_path
-        else:
-            raise Exception("Project type not supported")
 
 
 def projecttype_dict_to_projecttype(projecttype):

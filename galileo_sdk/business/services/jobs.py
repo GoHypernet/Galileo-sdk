@@ -88,7 +88,7 @@ class JobsService:
         return self._jobs_repo.list_jobs(query)
 
     def download_job_results(self, job_id, path, nonce=None):
-        files = self._jobs_repo.get_results_url(job_id)
+        files = self._jobs_repo.get_results_metadata(job_id)
 
         if not files:
             raise JobsException(job_id, "No files to download")
