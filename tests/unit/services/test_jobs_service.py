@@ -14,7 +14,8 @@ settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 jobs_repo = mock.Mock()
-jobs_service = JobsService(jobs_repo)
+profile_repo = mock.Mock()
+jobs_service = JobsService(jobs_repo, profile_repo)
 
 
 def test_request_send_job():

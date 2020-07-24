@@ -16,8 +16,10 @@ galileo\_sdk.sdk.machines.MachinesSdk
       ~MachinesSdk.__init__
       ~MachinesSdk.get_machines_by_id
       ~MachinesSdk.list_machines
+      ~MachinesSdk.on_machine_hardware_update
+      ~MachinesSdk.on_machine_registered
       ~MachinesSdk.on_machine_status_update
-      ~MachinesSdk.update_concurrent_max_jobs
+      ~MachinesSdk.update_machine
    
    
 

@@ -360,7 +360,7 @@ def test_kill_request(mocked_requests):
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_get_results_url(mocked_requests):
-    r = job_repo.get_results_url(JOB_ID)
+    r = job_repo.get_results_metadata(JOB_ID)
 
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs/{job_id}/results".format(

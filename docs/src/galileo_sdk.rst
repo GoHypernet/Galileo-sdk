@@ -47,6 +47,18 @@ An example of exporting your environment variable on MacOS:
 
     $ export GALILEO_USER=user@galileoapp.io
 
+The most convenient and secure method for authentication is to use our AuthSdk helper class. 
+
+.. code-block:: python
+
+    from galileo_sdk import GalileoSdk, AuthSdk
+
+    myauth = AuthSdk()
+    # On your first time using the sdk, this will open a web browser and ask you to sign in,
+    # or if you are in a headless environment, it will print an activation link to visit.
+    access_token, refresh_token, expiry_time = myauth.initialize()
+    galileo = GalileoSdk(auth_token=access_token, refresh_token=refresh_token)
+
 :code:`GalileoSdk` exposes the Jobs, Machines, Profiles, Projects, and Stations APIs
 
 Examples of using each of the APIs:
