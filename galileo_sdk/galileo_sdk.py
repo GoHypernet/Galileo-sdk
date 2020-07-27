@@ -13,12 +13,7 @@ from .data.repositories.profiles import ProfilesRepository
 from .data.repositories.projects import ProjectsRepository
 from .data.repositories.settings import SettingsRepository
 from .data.repositories.stations import StationsRepository
-from .sdk.auth import AuthSdk
-from .sdk.jobs import JobsSdk
-from .sdk.machines import MachinesSdk
-from .sdk.profiles import ProfilesSdk
-from .sdk.projects import ProjectsSdk
-from .sdk.stations import StationsSdk
+from .sdk import JobsSdk, MachinesSdk, ProfilesSdk, ProjectsSdk, StationsSdk
 
 import sys
 
@@ -26,9 +21,6 @@ _ver = sys.version_info
 
 is_py2 = (_ver[0] == 2)
 is_py3 = (_ver[0] == 3)
-
-if is_py3:
-    from .data.events.connector import GalileoConnector
 
 NAMESPACE = "/galileo/user_interface/v1"
 
@@ -112,19 +104,9 @@ class GalileoSdk:
         self.profiles = ProfilesSdk(self._profiles_service)
         self.projects = ProjectsSdk(self._projects_service)
 
-        if is_py3:
-            self._events = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
-            self.jobs = JobsSdk(self._jobs_service, self._events.jobs_events)
-            self.stations = StationsSdk(
-                self._stations_service, self._events.stations_events
-            )
-            self.machines = MachinesSdk(
-                self._machines_service, self._events.machines_events
-            )
-        elif is_py2:
-            self.jobs = JobsSdk(self._jobs_service)
-            self.stations = StationsSdk(self._stations_service)
-            self.machines = MachinesSdk(self._machines_service)
+        self.jobs = JobsSdk(self._jobs_service, self._settings, self._auth_provider, NAMESPACE)
+        self.stations = StationsSdk(self._stations_service, self._settings, self._auth_provider, NAMESPACE)
+        self.machines = MachinesSdk(self._machines_service, self._settings, self._auth_provider, NAMESPACE)
 
     def disconnect(self):
         """
@@ -132,7 +114,9 @@ class GalileoSdk:
         :return: None
         """
         if is_py3:
-            self._events.disconnect()
+            self.jobs.disconnect()
+            self.stations.disconnect()
+            self.machines.disconnect()
 
     def update_auth_token(self, auth_token):
         """

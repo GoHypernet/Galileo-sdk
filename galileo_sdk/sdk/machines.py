@@ -1,7 +1,15 @@
-class MachinesSdk:
-    def __init__(self, machines_service, events=None):
+from .event import EventsSdk
+
+
+class MachinesSdk(EventsSdk):
+    def __init__(self, machines_service, settings, auth_provider, namespace, events=None):
         self._machines_service = machines_service
-        self._events = events
+        super(MachinesSdk, self).__init__(
+            settings=settings,
+            auth_provider=auth_provider,
+            namespace=namespace,
+            events=events
+        )
 
     def on_machine_status_update(self, func):
         """
@@ -10,6 +18,7 @@ class MachinesSdk:
         :param func: Callable[[MachineStatusUpdateEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_machine_status_update(func)
 
     def on_machine_hardware_update(self, func):
@@ -19,6 +28,7 @@ class MachinesSdk:
         :param func: Callable[[MachineHardwareUpdateEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_machine_hardware_update(func)
 
     def on_machine_registered(self, func):
@@ -28,6 +38,7 @@ class MachinesSdk:
         :param func: Callable[[MachineRegisteredEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_machine_registered(func)
 
     def get_machines_by_id(self, machine_id):

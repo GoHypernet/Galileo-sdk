@@ -1,7 +1,15 @@
-class StationsSdk:
-    def __init__(self, stations_service, events=None):
+from .event import EventsSdk
+
+
+class StationsSdk(EventsSdk):
+    def __init__(self, stations_service, settings, auth_provider, namespace, events=None):
         self._stations_service = stations_service
-        self._events = events
+        super(StationsSdk, self).__init__(
+            settings=settings,
+            auth_provider=auth_provider,
+            namespace=namespace,
+            events=events
+        )
 
     def on_new_station(self, func):
         """
@@ -10,6 +18,7 @@ class StationsSdk:
         :param func: Callable[[NewStationEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_new_station(func)
 
     def on_station_admin_invite_sent(self, func):
@@ -20,6 +29,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminInviteSentEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_invite_sent(func)
 
     def on_station_user_invite_received(self, func):
@@ -30,6 +40,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteReceivedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_invite_received(func)
 
     def on_station_admin_invite_accepted(self, func):
@@ -40,6 +51,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminInviteAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_invite_accepted(func)
 
     def on_station_member_member_added(self, func):
@@ -50,6 +62,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMemberEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_member_added(func)
 
     def on_station_user_invite_accepted(self, func):
@@ -60,6 +73,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_invite_accepted(func)
 
     def on_station_admin_invite_rejected(self, func):
@@ -70,6 +84,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminInviteRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_invite_rejected(func)
 
     def on_station_user_invite_rejected(self, func):
@@ -80,6 +95,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_invite_rejected(func)
 
     def on_station_admin_request_received(self, func):
@@ -90,6 +106,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminRequestReceivedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_request_received(func)
 
     def on_station_user_request_sent(self, func):
@@ -100,6 +117,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestSentEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_request_sent(func)
 
     def on_station_admin_request_accepted(self, func):
@@ -110,6 +128,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminRequestAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_request_accepted(func)
 
     def on_station_user_request_accepted(self, func):
@@ -120,6 +139,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_request_accepted(func)
 
     def on_station_admin_request_rejected(
@@ -132,6 +152,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminRequestRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_request_rejected(func)
 
     def on_station_user_request_rejected(
@@ -144,6 +165,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_request_rejected(func)
 
     def on_station_admin_member_removed(
@@ -156,6 +178,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminMemberRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_member_removed(func)
 
     def on_station_admin_machine_removed(
@@ -168,6 +191,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminMachineRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_machine_removed(func)
 
     def on_station_member_member_removed(
@@ -180,6 +204,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMemberRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_member_removed(func)
 
     def on_station_member_machine_removed(
@@ -192,6 +217,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMachineRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_machine_removed(func)
 
     def on_station_user_withdrawn(
@@ -204,6 +230,7 @@ class StationsSdk:
         :param func: Callable[[StationUserWithdrawnEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_withdrawn(func)
 
     def on_station_user_expelled(
@@ -216,6 +243,7 @@ class StationsSdk:
         :param func: Callable[[StationUserExpelledEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_expelled(func)
 
     def on_station_admin_destroyed(
@@ -228,6 +256,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_destroyed(func)
 
     def on_station_member_destroyed(
@@ -240,6 +269,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_destroyed(func)
 
     def on_station_user_invite_destroyed(
@@ -252,6 +282,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_invite_destroyed(func)
 
     def on_station_user_request_destroyed(
@@ -264,6 +295,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_user_request_destroyed(func)
 
     def on_station_admin_machine_added(
@@ -276,6 +308,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminMachineAddedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_machine_added(func)
 
     def on_station_member_machine_added(
@@ -288,6 +321,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMachineAddedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_machine_added(func)
 
     def on_station_admin_volume_added(self, func):
@@ -298,6 +332,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeAddedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_volume_added(func)
 
     def on_station_member_volume_added(
@@ -310,6 +345,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeAddedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_volume_added(func)
 
     def on_station_admin_volume_host_path_added(
@@ -322,6 +358,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeHostPathAddedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_volume_host_path_added(func)
 
     def on_station_member_volume_host_path_added(
@@ -334,6 +371,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeHostPathAddedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_volume_host_path_added(func)
 
     def on_station_admin_volume_host_path_removed(
@@ -346,6 +384,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeHostPathRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_volume_host_path_removed(func)
 
     def on_station_member_volume_host_path_removed(
@@ -358,6 +397,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeHostPathRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_volume_host_path_removed(func)
 
     def on_station_admin_volume_removed(
@@ -370,6 +410,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_volume_removed(func)
 
     def on_station_member_volume_removed(
@@ -382,6 +423,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_volume_removed(func)
 
     def on_station_admin_station_updated(
@@ -394,6 +436,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminStationUpdated], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_admin_station_updated(func)
 
     def on_station_member_station_updated(
@@ -406,6 +449,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberStationUpdated], None]
         :return: None
         """
+        self._set_event_handler()
         self._events.on_station_member_station_updated(func)
 
     def list_stations(
