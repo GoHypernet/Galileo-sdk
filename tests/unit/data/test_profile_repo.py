@@ -78,6 +78,10 @@ def mocked_requests_get(*args, **kwargs):
                                 "stationuserid": "stationuserid",
                                 "userid": "userid",
                                 "status": "ADMIN",
+                                "creation_timestamp": "date",
+                                "updated_timestamp": "date",
+                                "station_id": "station_id",
+                                "role_id": "role_id"
                             }
                         ],
                         "mids": ["1", "2"],
@@ -97,6 +101,10 @@ def mocked_requests_get(*args, **kwargs):
                                 ],
                             }
                         ],
+                        "creation_timestamp": "creation_timestamp",
+                        "updated_timestamp": "updated_timestamp",
+                        "organization_id": "organization_id",
+                        "status": "stable"
                     }
                 ]
             },

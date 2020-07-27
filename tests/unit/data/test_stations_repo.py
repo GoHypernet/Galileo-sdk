@@ -16,6 +16,7 @@ DESCRIPTION = "description"
 MIDS = ["mid1", "mid2"]
 MOUNT_POINT = "MOUNT_POINT"
 ACCESS = EVolumeAccess.READWRITE
+ROLE_ID = "role_id"
 
 # Arrange
 settings_repo = mock.Mock()
@@ -41,6 +42,10 @@ def mocked_requests_get(*args, **kwargs):
                                 "stationuserid": "stationuserid",
                                 "userid": "userid",
                                 "status": "OWNER",
+                                "creation_timestamp": "date",
+                                "updated_timestamp": "date",
+                                "station_id": "station_id",
+                                "role_id": "role_id"
                             }
                         ],
                         "mids": ["mid"],
@@ -54,6 +59,10 @@ def mocked_requests_get(*args, **kwargs):
                                 "volumeid": "volumeid",
                             }
                         ],
+                        "creation_timestamp": "creation_timestamp",
+                        "updated_timestamp": "updated_timestamp",
+                        "organization_id": "organization_id",
+                        "status": "stable"
                     }
                     for _ in range(5)
                 ]
@@ -76,14 +85,22 @@ def mocked_requests_post(*args, **kwargs):
                     "description": kwargs["json"]["description"],
                     "users": [
                         {
-                            "userid": kwargs["json"]["usernames"][0],
+                            "userid": kwargs["json"]["user_ids"][0],
                             "stationuserid": "stationuserid",
                             "status": "OWNER",
+                            "creation_timestamp": "date",
+                            "updated_timestamp": "date",
+                            "station_id": "station_id",
+                            "role_id": "role_id"
                         },
                         {
-                            "userid": kwargs["json"]["usernames"][1],
+                            "userid": kwargs["json"]["user_ids"][1],
                             "stationuserid": "stationuserid",
                             "status": "OWNER",
+                            "creation_timestamp": "date",
+                            "updated_timestamp": "date",
+                            "station_id": "station_id",
+                            "role_id": "role_id"
                         },
                     ],
                     "mids": ["mid"],
@@ -97,6 +114,10 @@ def mocked_requests_post(*args, **kwargs):
                             "volumeid": "volumeid",
                         }
                     ],
+                    "creation_timestamp": "creation_timestamp",
+                    "updated_timestamp": "updated_timestamp",
+                    "organization_id": "organization_id",
+                    "status": "stable"
                 }
             },
             200,
@@ -105,7 +126,7 @@ def mocked_requests_post(*args, **kwargs):
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
     ):
         return MockResponse(True, 200)
-    elif args[0] == "{backend}{namespace}/station/{station_id}/users".format(
+    elif args[0] == "{backend}{namespace}/station/{station_id}/requests".format(
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
     ):
         return MockResponse(True, 200)
@@ -163,11 +184,11 @@ def mocked_requests_put(*args, **kwargs):
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
     ):
         return MockResponse(True, 200)
-    elif args[0] == "{backend}{namespace}/station/{station_id}/users/approve".format(
+    elif args[0] == "{backend}{namespace}/station/{station_id}/requests/approve".format(
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
     ):
         return MockResponse(True, 200)
-    elif args[0] == "{backend}{namespace}/station/{station_id}/users/reject".format(
+    elif args[0] == "{backend}{namespace}/station/{station_id}/requests/reject".format(
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
     ):
         return MockResponse(True, 200)
@@ -182,7 +203,7 @@ def mocked_requests_put(*args, **kwargs):
 def mocked_requests_delete(*args, **kwargs):
     if args[
         0
-    ] == "{backend}{namespace}/station/{station_id}/user/{user_id}/delete".format(
+    ] == "{backend}{namespace}/station/{station_id}/user/{user_id}".format(
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID, user_id=USER_ID
     ):
         return MockResponse(True, 200)
@@ -244,7 +265,7 @@ def test_create_station(mocked_requests):
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/station".format(backend=BACKEND, namespace=NAMESPACE),
         headers=HEADERS,
-        json={"name": NAME, "usernames": USERNAMES, "description": DESCRIPTION},
+        json={"name": NAME, "user_ids": USERNAMES, "description": DESCRIPTION},
     )
 
     # Assert
@@ -257,7 +278,7 @@ def test_create_station(mocked_requests):
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_invite_to_station(mocked_requests):
     # Call
-    r = stations_repo.invite_to_station(STATION_ID, USERNAMES)
+    r = stations_repo.invite_to_station(STATION_ID, USERNAMES, ROLE_ID)
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -265,7 +286,7 @@ def test_invite_to_station(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
         ),
         headers=HEADERS,
-        json={"userids": USERNAMES},
+        json={"userids": USERNAMES, 'role_id': 'role_id'},
     )
 
     # Assert
@@ -315,7 +336,7 @@ def test_request_to_join(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/station/{station_id}/users".format(
+        "{backend}{namespace}/station/{station_id}/requests".format(
             backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
         ),
         headers=HEADERS,
@@ -333,7 +354,7 @@ def test_approve_request_to_join(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/station/{station_id}/users/approve".format(
+        "{backend}{namespace}/station/{station_id}/requests/approve".format(
             backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
         ),
         headers=HEADERS,
@@ -351,7 +372,7 @@ def test_reject_request_to_join(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/station/{station_id}/users/reject".format(
+        "{backend}{namespace}/station/{station_id}/requests/reject".format(
             backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
         ),
         headers=HEADERS,
@@ -387,7 +408,7 @@ def test_remove_member_from_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/station/{station_id}/user/{user_id}/delete".format(
+        "{backend}{namespace}/station/{station_id}/user/{user_id}".format(
             backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID, user_id=USER_ID
         ),
         headers=HEADERS,

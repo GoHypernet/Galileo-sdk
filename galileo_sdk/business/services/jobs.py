@@ -99,7 +99,7 @@ class JobsService:
             absolute_path = os.path.join(path, file.filename)
             self._jobs_repo.download_results(
                 job_id,
-                generate_query_str({"filename": file.filename, "path": file.path}),
+                generate_query_str({"filename": file.filename, "path": file.path, "nonce": nonce}),
                 os.path.join(path, file.filename),
             )
             files_downloaded.append(absolute_path)

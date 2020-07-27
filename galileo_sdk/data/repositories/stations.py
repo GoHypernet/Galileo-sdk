@@ -497,6 +497,7 @@ def autoscale_settings_dict_to_autoscale_settings(settings):
 
 
 def station_dict_to_station(station):
+    autoscale_settings = station.get("autoscale_settings", None)
     return Station(
         stationid=station["stationid"],
         name=station["name"],
@@ -505,7 +506,7 @@ def station_dict_to_station(station):
         machine_ids=station["mids"],
         volumes=[volume_dict_to_volume(volume) for volume in station["volumes"]],
         organization_id=station["organization_id"],
-        autoscale_settings=autoscale_settings_dict_to_autoscale_settings(station["autoscale_settings"])
+        autoscale_settings=autoscale_settings_dict_to_autoscale_settings(autoscale_settings) if autoscale_settings else None
     )
 
 
@@ -515,7 +516,7 @@ def user_dict_to_station_user(user):
         userid=user["userid"],
         status=EStationUserRole[user["status"]],
         station_id=user["station_id"],
-        username=user["username"],
+        username=user.get("username", None),
         role_id=user["role_id"],
         creation_timestamp=user["creation_timestamp"],
         updated_timestamp=user["updated_timestamp"]

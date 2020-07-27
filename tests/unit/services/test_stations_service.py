@@ -16,6 +16,7 @@ DESCRIPTION = "description"
 MIDS = ["mid1", "mid2"]
 MOUNT_POINT = "MOUNT_POINT"
 ACCESS = "rw"
+ROLE_ID = "role_id"
 
 # Arrange
 settings_repo = mock.Mock()
@@ -32,7 +33,14 @@ def test_list_stations():
             "stationid",
             "name",
             "description",
-            [StationUser("stationuserid", "userid", EStationUserRole.ADMIN)],
+            [StationUser("stationuserid",
+                         "userid",
+                         EStationUserRole.ADMIN,
+                         "station_id",
+                         "username",
+                         "role_id",
+                         "creation_timestamp",
+                         "updated_timestamp")],
             ["machine_ids"],
             ["volume_ids"],
         )
@@ -53,7 +61,14 @@ def test_create_station():
         "stationid",
         "name",
         "description",
-        [StationUser("stationuserid", "userid", EStationUserRole.ADMIN)],
+        [StationUser("stationuserid",
+                     "userid",
+                     EStationUserRole.ADMIN,
+                     "station_id",
+                     "username",
+                     "role_id",
+                     "creation_timestamp",
+                     "updated_timestamp")],
         ["machine_ids"],
         ["volume_ids"],
     )
@@ -70,7 +85,7 @@ def test_invite_to_station():
     stations_repo.invite_to_station.return_value = True
 
     # Call
-    r = stations_service.invite_to_station(STATION_ID, USERNAMES)
+    r = stations_service.invite_to_station(STATION_ID, USERNAMES, ROLE_ID)
 
     # Assert
     print(r)

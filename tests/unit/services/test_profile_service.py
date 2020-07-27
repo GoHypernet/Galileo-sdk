@@ -53,7 +53,14 @@ def test_list_station_invites():
             stationid="stationid",
             description="description",
             name="name",
-            users=[StationUser("stationuserid", "userid", EStationUserRole.ADMIN)],
+            users=[StationUser("stationuserid",
+                               "userid",
+                               EStationUserRole.ADMIN,
+                               "station_id",
+                               "username",
+                               "role_id",
+                               "creation_timestamp",
+                               "updated_timestamp")],
         )
     ]
 
