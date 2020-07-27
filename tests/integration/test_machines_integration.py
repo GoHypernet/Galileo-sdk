@@ -4,7 +4,7 @@ from galileo_sdk import GalileoSdk
 CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)
-machine_list = galileo.machines.list_machines()
+machine_list = galileo.lz.list_lz()
 
 
 def test_list_machines():
@@ -16,7 +16,7 @@ def test_list_machines():
 
 
 def test_get_machines_by_id():
-    machine = galileo.machines.get_machines_by_id(machine_list[0].mid)
+    machine = galileo.lz.get_lz_by_id(machine_list[0].lz_id)
     assert not machine == None
     assert machine.arch
     assert machine.cpu_count

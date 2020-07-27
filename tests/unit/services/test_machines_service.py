@@ -1,7 +1,10 @@
 from galileo_sdk.compat import mock
-from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
-                                                   UpdateMachineRequest)
-from galileo_sdk.business.services.machines import MachinesService
+from galileo_sdk.business.objects.lz import (
+    EMachineStatus,
+    Lz,
+    UpdateMachineRequest,
+)
+from galileo_sdk.business import LzService
 
 BACKEND = "http://BACKEND"
 MID = "machine_id"
@@ -13,13 +16,13 @@ settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 machines_repo = mock.Mock()
-machines_service = MachinesService(machines_repo)
+machines_service = LzService(machines_repo)
 
 
 def test_get_machine_by_id():
     x = 1
-    machines_repo.get_machine_by_id.return_value = Machine(
-        mid=str(x),
+    machines_repo.get_lz_by_id.return_value = Lz(
+        lz_id=str(x),
         gpu_count=str(x),
         cpu_count=str(x),
         arch=str(x),
@@ -30,20 +33,20 @@ def test_get_machine_by_id():
         userid=str(x),
         container_technology="container_tech",
         job_runner="job runner",
-        memory_amount=str(x)
+        memory_amount=str(x),
     )
 
     # Call
-    r = machines_service.get_machine_by_id(MID)
+    r = machines_service.get_lz_by_id(MID)
 
     # Assert
     assert r.userid == str(x)
 
 
 def test_list_machines():
-    machines_repo.list_machines.return_value = [
-        Machine(
-            mid=str(x),
+    machines_repo.list_lz.return_value = [
+        Lz(
+            lz_id=str(x),
             gpu_count=str(x),
             cpu_count=str(x),
             arch=str(x),
@@ -54,13 +57,13 @@ def test_list_machines():
             userid=str(x),
             container_technology="container_tech",
             job_runner="job runner",
-            memory_amount=str(x)
+            memory_amount=str(x),
         )
         for x in range(5)
     ]
 
     # Call
-    r = machines_service.list_machines()
+    r = machines_service.list_lz()
 
     # Assert
     for i in range(5):
@@ -69,8 +72,8 @@ def test_list_machines():
 
 def test_update():
     x = 1
-    machines_repo.update.return_value = Machine(
-        mid=str(x),
+    machines_repo.update.return_value = Lz(
+        lz_id=str(x),
         gpu_count=str(x),
         cpu_count=str(x),
         arch=str(x),
@@ -81,7 +84,7 @@ def test_update():
         userid=str(x),
         container_technology="container_tech",
         job_runner="job runner",
-        memory_amount=str(x)
+        memory_amount=str(x),
     )
 
     # Call

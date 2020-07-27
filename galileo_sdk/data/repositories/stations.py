@@ -1,9 +1,13 @@
 from galileo_sdk.compat import urlunparse, requests
 
-from galileo_sdk.business.objects.stations import (EStationUserRole,
-                                                   EVolumeAccess, Station,
-                                                   StationUser,
-                                                   Volume, VolumeHostPath)
+from galileo_sdk.business.objects.stations import (
+    EStationUserRole,
+    EVolumeAccess,
+    Station,
+    StationUser,
+    Volume,
+    VolumeHostPath,
+)
 
 
 class StationsRepository:
@@ -210,7 +214,7 @@ def station_dict_to_station(station):
         name=station["name"],
         description=station["description"],
         users=[user_dict_to_station_user(user) for user in station["users"]],
-        machine_ids=station["mids"],
+        lz_ids=station["mids"],
         volumes=[volume_dict_to_volume(volume) for volume in station["volumes"]],
     )
 

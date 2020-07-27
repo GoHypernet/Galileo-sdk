@@ -1,8 +1,20 @@
 from galileo_sdk import GalileoSdk
 from galileo_sdk.business.objects.jobs import Job
-from galileo_sdk.business.objects.projects import Project, JuliaProject, HECRASProject, PythonProject, RProject, \
-    STATAProject, OctaveProject, SWMM5Project, AutoDockVinaProject, BlenderProject, QuantumEspressoProject, \
-    MatLabProject, FLO2DProject
+from galileo_sdk.business.objects.projects import (
+    Project,
+    JuliaProject,
+    HECRASProject,
+    PythonProject,
+    RProject,
+    STATAProject,
+    OctaveProject,
+    SWMM5Project,
+    AutoDockVinaProject,
+    BlenderProject,
+    QuantumEspressoProject,
+    MatLabProject,
+    FLO2DProject,
+)
 
 # Must set env variables before running tests
 CONFIG = "development"
@@ -56,14 +68,14 @@ def test_list_projects():
 
 def test_upload_file():
     project = galileo.projects.create_project(
-        name="project",
-        description="upload_single_file",
+        name="project", description="upload_single_file",
     )
 
     response = galileo.projects.upload(project.project_id, "flatplate/flatplate")
 
     assert response == True
     assert project is not None
+
 
 # Currently won't run without a station with an online machine
 # def test_create_and_run():
@@ -105,7 +117,9 @@ def test_upload_file():
 
 
 def test_create_and_upload():
-    project = galileo.projects.create_and_upload_project("sdk_project_test", "flatplate/flatplate")
+    project = galileo.projects.create_and_upload_project(
+        "sdk_project_test", "flatplate/flatplate"
+    )
 
     assert project is not None
     assert isinstance(project, Project)

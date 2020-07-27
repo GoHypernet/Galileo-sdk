@@ -1,56 +1,56 @@
 from .event import EventsSdk
 
 
-class MachinesSdk(EventsSdk):
-    def __init__(self, machines_service, settings, auth_provider, namespace, events=None):
-        self._machines_service = machines_service
-        super(MachinesSdk, self).__init__(
-            settings=settings,
-            auth_provider=auth_provider,
-            namespace=namespace,
-            events=events
+class LzSdk(EventsSdk):
+    def __init__(
+        self, lz_service, connector, events=None
+    ):
+        self._lz_service = lz_service
+        super(LzSdk, self).__init__(
+            connector=connector,
+            events=events,
         )
 
-    def on_machine_status_update(self, func):
+    def on_lz_status_update(self, func):
         """
         Callback will execute upon a machine status update event
 
         :param func: Callable[[MachineStatusUpdateEvent], None]
         :return: None
         """
-        self._set_event_handler()
-        self._events.on_machine_status_update(func)
+        self._set_event_handler("lz")
+        self._events.on_lz_status_update(func)
 
-    def on_machine_hardware_update(self, func):
+    def on_lz_hardware_update(self, func):
         """
         Callback will execute upon a machine hardware update event
 
         :param func: Callable[[MachineHardwareUpdateEvent], None]
         :return: None
         """
-        self._set_event_handler()
-        self._events.on_machine_hardware_update(func)
+        self._set_event_handler("lz")
+        self._events.on_lz_hardware_update(func)
 
-    def on_machine_registered(self, func):
+    def on_lz_registered(self, func):
         """
         Callback will execute upon a machine hardware update event
 
         :param func: Callable[[MachineRegisteredEvent], None]
         :return: None
         """
-        self._set_event_handler()
-        self._events.on_machine_registered(func)
+        self._set_event_handler("lz")
+        self._events.on_lz_registered(func)
 
-    def get_machines_by_id(self, machine_id):
+    def get_lz_by_id(self, machine_id):
         """
-        Get machine's info by its id
+        Get landing zone's info by its id
 
         :param machine_id: str
         :return: Machine
         """
-        return self._machines_service.get_machine_by_id(machine_id)
+        return self._lz_service.get_lz_by_id(machine_id)
 
-    def list_machines(
+    def list_lz(
         self, mids=None, userids=None, page=1, items=25,
     ):
         """
@@ -62,16 +62,16 @@ class MachinesSdk(EventsSdk):
         :param items: int: Items per page
         :return: List[Machine]
         """
-        return self._machines_service.list_machines(
+        return self._lz_service.list_lz(
             mids=mids, userids=userids, page=page, items=items
         )
 
-    def update_machine(self, request):
+    def update_lz(self, request):
         """
-        Update info about machine
+        Update info about landing zone
 
         :param request: UpdateMachineRequest
         :return: Machine
         """
 
-        return self._machines_service.update(request)
+        return self._lz_service.update(request)

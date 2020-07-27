@@ -1,7 +1,10 @@
 from galileo_sdk.compat import mock
-from galileo_sdk.business.objects.machines import (EMachineStatus, Machine,
-                                                   UpdateMachineRequest)
-from galileo_sdk.data.repositories.machines import MachinesRepository
+from galileo_sdk.business.objects.lz import (
+    EMachineStatus,
+    Lz,
+    UpdateMachineRequest,
+)
+from galileo_sdk.data.repositories.lz import LzRepository
 from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
@@ -14,7 +17,7 @@ settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
-machines_repo = MachinesRepository(settings_repo, auth_provider, NAMESPACE)
+machines_repo = LzRepository(settings_repo, auth_provider, NAMESPACE)
 
 
 def mocked_requests_get(*args, **kwargs):
@@ -143,5 +146,5 @@ def update_max_concurrent_jobs(mocked_requests):
     )
 
     # Assert
-    assert isinstance(r, Machine)
+    assert isinstance(r, Lz)
     assert r == True

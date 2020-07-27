@@ -57,13 +57,13 @@ class StationUser:
 
 class Station:
     def __init__(
-        self, stationid, name, description, users, machine_ids=None, volumes=None,
+        self, stationid, name, description, users, lz_ids=None, volumes=None,
     ):
         self.stationid = stationid
         self.name = name
         self.description = description
         self.users = users
-        self.mids = machine_ids
+        self.lz_ids = lz_ids
         self.volumes = volumes
 
 

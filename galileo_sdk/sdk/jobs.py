@@ -2,13 +2,11 @@ from .event import EventsSdk
 
 
 class JobsSdk(EventsSdk):
-    def __init__(self, jobs_service, settings, auth_provider, namespace, events=None):
+    def __init__(self, jobs_service, connector, events=None):
         self._jobs_service = jobs_service
         super(JobsSdk, self).__init__(
-            settings=settings,
-            auth_provider=auth_provider,
-            namespace=namespace,
-            events=events
+            connector=connector,
+            events=events,
         )
 
     def on_job_launcher_updated(self, func):
@@ -18,7 +16,7 @@ class JobsSdk(EventsSdk):
         :param func: Callable[[JobLauncherUpdatedEvent], None]
         :return: None
         """
-        self._set_event_handler()
+        self._set_event_handler("jobs")
         self._events.on_job_launcher_updated(func)
 
     def on_job_launcher_submitted(self, func):
@@ -27,7 +25,7 @@ class JobsSdk(EventsSdk):
         :param func: Callable[[JobLauncherSubmittedEvent]
         :return: None
         """
-        self._set_event_handler()
+        self._set_event_handler("jobs")
         self._events.on_job_launcher_submitted(func)
 
     def on_station_job_updated(self, func):
@@ -37,7 +35,7 @@ class JobsSdk(EventsSdk):
         :param func: Callable[[StationJobUpdatedEvent], None]
         :return: None
         """
-        self._set_event_handler()
+        self._set_event_handler("jobs")
         self._events.on_station_job_updated(func)
 
     def request_stop_job(self, job_id):
@@ -102,7 +100,7 @@ class JobsSdk(EventsSdk):
         machines=None,
         ownerids=None,
         sort_by=None,
-        sort_order=None
+        sort_order=None,
     ):
         """
         List of your jobs
@@ -137,8 +135,8 @@ class JobsSdk(EventsSdk):
             archived=archived,
             receiver_archived=receiver_archived,
             partial_names=partial_names,
-            machines=machines,
-            ownerids=ownerids
+            lz=machines,
+            ownerids=ownerids,
         )
 
     def download_job_results(self, job_id, path, nonce=None):

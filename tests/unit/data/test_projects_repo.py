@@ -41,7 +41,7 @@ def mocked_requests_get(*args, **kwargs):
                         "destination_path": "destination_path",
                         "user_id": "user_id",
                         "creation_timestamp": "creation_timestamp",
-                        "project_type_id": "project_type_id"
+                        "project_type_id": "project_type_id",
                     }
                 ]
             },
@@ -67,7 +67,7 @@ def mocked_requests_post(*args, **kwargs):
                     "destination_path": "destination_path",
                     "user_id": "user_id",
                     "creation_timestamp": "creation_timestamp",
-                    "project_type_id": "project_type_id"
+                    "project_type_id": "project_type_id",
                 }
             },
             200,
@@ -128,32 +128,37 @@ def test_list_projects(mocked_requests):
 
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def tests_create_project(mocked_requests):
-    r = projects_repo.create_project(HECRASProject(name="name",
-                                                   description="description",
-                                                   version="version",
-                                                   source_storage_id="source_storage_id",
-                                                   destination_storage_id="destination_storage_id",
-                                                   plan="plan",
-                                                   input_path="input_path",
-                                                   output_path="output_path"))
+    r = projects_repo.create_project(
+        HECRASProject(
+            name="name",
+            description="description",
+            version="version",
+            source_storage_id="source_storage_id",
+            destination_storage_id="destination_storage_id",
+            plan="plan",
+            input_path="input_path",
+            output_path="output_path",
+        )
+    )
 
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/projects".format(backend=BACKEND, namespace=NAMESPACE),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"name": "name",
-              "description": "description",
-              'source_storage_id': 'source_storage_id',
-              'destination_storage_id': 'destination_storage_id',
-              'source_path': None,
-              'destination_path': None,
-              'project_type_id': None,
-              'plan': 'plan',
-              'files_to_run': [],
-              'nfs': False,
-              'input_path': 'input_path',
-              'output_path': 'output_path'
-              },
+        json={
+            "name": "name",
+            "description": "description",
+            "source_storage_id": "source_storage_id",
+            "destination_storage_id": "destination_storage_id",
+            "source_path": None,
+            "destination_path": None,
+            "project_type_id": None,
+            "plan": "plan",
+            "files_to_run": [],
+            "nfs": False,
+            "input_path": "input_path",
+            "output_path": "output_path",
+        },
     )
 
     assert r.project_id == "id"
@@ -189,7 +194,7 @@ def test_run_job_on_station(mocked_requests):
 
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_machine(mocked_requests):
-    r = projects_repo.run_job_on_machine(PROJECT_ID, STATION_ID, MACHINE_ID)
+    r = projects_repo.run_job_on_lz(PROJECT_ID, STATION_ID, MACHINE_ID)
 
     # Act
     mocked_requests.assert_called_once_with(

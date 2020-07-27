@@ -48,21 +48,21 @@ class JobsService:
         return self._jobs_repo.request_logs_from_jobs(job_id)
 
     def list_jobs(
-            self,
-            jobids=None,
-            receiverids=None,
-            oaids=None,
-            userids=None,
-            stationids=None,
-            statuses=None,
-            page=1,
-            items=25,
-            projectids=None,
-            archived=False,
-            receiver_archived=False,
-            partial_names=None,
-            machines=None,
-            ownerids=None
+        self,
+        jobids=None,
+        receiverids=None,
+        oaids=None,
+        userids=None,
+        stationids=None,
+        statuses=None,
+        page=1,
+        items=25,
+        projectids=None,
+        archived=False,
+        receiver_archived=False,
+        partial_names=None,
+        lz=None,
+        ownerids=None,
     ):
         if userids is None:
             self_profile = self._profile_repo.self()
@@ -81,8 +81,8 @@ class JobsService:
                 "archived": archived,
                 "receiver_archived": receiver_archived,
                 "partial_names": partial_names,
-                "machines": machines,
-                "ownerids": ownerids
+                "machines": lz,
+                "ownerids": ownerids,
             },
         )
         return self._jobs_repo.list_jobs(query)

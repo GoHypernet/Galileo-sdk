@@ -9,12 +9,23 @@ class EMachineStatus(enum.Enum):
     default = offline
 
 
-class Machine:
+class Lz:
     def __init__(
-        self, name, userid, status, mid, gpu_count, cpu_count, operating_system, arch, memory_amount, memory,
-            job_runner, container_technology
+        self,
+        name,
+        userid,
+        status,
+        lz_id,
+        gpu_count,
+        cpu_count,
+        operating_system,
+        arch,
+        memory_amount,
+        memory,
+        job_runner,
+        container_technology,
     ):
-        self.mid = mid
+        self.lz_id = lz_id
         self.name = name
         self.userid = userid
         self.status = status
@@ -28,20 +39,20 @@ class Machine:
         self.container_technology = container_technology
 
 
-class MachineStatusUpdateEvent:
-    def __init__(self, mid, status):
-        self.mid = mid
+class LzStatusUpdateEvent:
+    def __init__(self, lz_id, status):
+        self.lz_id = lz_id
         self.status = status
 
 
-class MachineRegisteredEvent:
-    def __init__(self, machine):
-        self.machine = machine
+class LzRegisteredEvent:
+    def __init__(self, lz):
+        self.lz = lz
 
 
-class MachineHardwareUpdateEvent:
-    def __init__(self, machine):
-        self.machine = machine
+class LzHardwareUpdateEvent:
+    def __init__(self, lz):
+        self.lz = lz
 
 
 class UpdateMachineRequest:
@@ -68,24 +79,24 @@ class UpdateMachineRequest:
         self.active = active
 
 
-class MachinesEvents:
+class LzEvents:
     def __init__(self):
         self._events = EventEmitter()
 
-    def on_machine_status_update(self, func):
+    def on_lz_status_update(self, func):
         self._events.on("machine/status_updated", func)
 
-    def machine_status_update(self, event):
+    def lz_status_update(self, event):
         self._events.emit("machine/status_updated", event)
 
-    def on_machine_registered(self, func):
+    def on_lz_registered(self, func):
         self._events.on("machine/registered", func)
 
-    def machine_registered(self, event):
+    def lz_registered(self, event):
         self._events.emit("machine/registered", event)
 
-    def on_machine_hardware_update(self, func):
+    def on_lz_hardware_update(self, func):
         self._events.on("machine/hardware_updated", func)
 
-    def machine_hardware_update(self, event):
+    def lz_hardware_update(self, event):
         self._events.emit("machine/hardware_updated", event)

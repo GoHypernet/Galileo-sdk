@@ -3,9 +3,8 @@ import os
 
 from galileo_sdk.compat import urlunparse, requests
 
-from galileo_sdk.business.objects import (EJobStatus, Job, JobStatus,
-                                          UpdateJobRequest)
-from galileo_sdk.business.objects.jobs import (TopDetails, TopProcess)
+from galileo_sdk.business.objects import EJobStatus, Job, JobStatus, UpdateJobRequest
+from galileo_sdk.business.objects.jobs import TopDetails, TopProcess
 from galileo_sdk.business.objects.projects import FileListing
 
 
@@ -13,8 +12,9 @@ import sys
 
 _ver = sys.version_info
 
-is_py2 = (_ver[0] == 2)
-is_py3 = (_ver[0] == 3)
+is_py2 = _ver[0] == 2
+is_py3 = _ver[0] == 3
+
 
 class JobsRepository:
     def __init__(
@@ -42,7 +42,14 @@ class JobsRepository:
         )
 
     def _request(
-        self, request, endpoint, data=None, params=None, query=None, fragment=None, filename=None
+        self,
+        request,
+        endpoint,
+        data=None,
+        params=None,
+        query=None,
+        fragment=None,
+        filename=None,
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
@@ -145,7 +152,9 @@ class JobsRepository:
 
         if is_py3:
             with self._get(
-                "/jobs/{job_id}/results".format(job_id=job_id), query=query, filename=filename
+                "/jobs/{job_id}/results".format(job_id=job_id),
+                query=query,
+                filename=filename,
             ) as r:
                 with open(filename, "wb") as f:
                     for chunk in r.iter_content(chunk_size=8192):
@@ -187,7 +196,7 @@ def file_dict_to_file_listing(file):
         file.get("modification_date", None),
         file.get("creation_date", None),
         file.get("file_size", None),
-        file.get("nonce", None)
+        file.get("nonce", None),
     )
 
 

@@ -1,5 +1,6 @@
 from galileo_sdk.compat import requests
 
+
 class AuthProvider:
     def __init__(
         self,

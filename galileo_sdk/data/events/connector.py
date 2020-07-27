@@ -1,40 +1,66 @@
 import sys
-if (sys.version_info[0] == 3):
+
+if sys.version_info[0] == 3:
     import socketio
 
-    from galileo_sdk.business.objects.jobs import (JobLauncherSubmittedEvent,
-                                                   JobLauncherUpdatedEvent,
-                                                   JobsEvents,
-                                                   StationJobUpdatedEvent)
-    from galileo_sdk.business.objects.machines import (EMachineStatus,
-                                                       MachineHardwareUpdateEvent,
-                                                       MachineRegisteredEvent,
-                                                       MachinesEvents,
-                                                       MachineStatusUpdateEvent)
+    from galileo_sdk.business.objects.jobs import (
+        JobLauncherSubmittedEvent,
+        JobLauncherUpdatedEvent,
+        JobsEvents,
+        StationJobUpdatedEvent,
+    )
+    from galileo_sdk.business.objects.lz import (
+        EMachineStatus,
+        LzHardwareUpdateEvent,
+        LzRegisteredEvent,
+        LzEvents,
+        LzStatusUpdateEvent,
+    )
     from galileo_sdk.business.objects.stations import (
-        NewStationEvent, StationAdminDestroyedEvent,
-        StationAdminInviteAcceptedEvent, StationAdminInviteRejectedEvent,
-        StationAdminInviteSentEvent, StationAdminMachineAddedEvent,
-        StationAdminMachineRemovedEvent, StationAdminMemberRemovedEvent,
-        StationAdminRequestAcceptedEvent, StationAdminRequestReceivedEvent,
-        StationAdminRequestRejectedEvent, StationAdminStationUpdated,
-        StationAdminVolumeAddedEvent, StationAdminVolumeHostPathAddedEvent,
-        StationAdminVolumeHostPathRemovedEvent, StationAdminVolumeRemovedEvent,
-        StationMemberDestroyedEvent, StationMemberMachineAddedEvent,
-        StationMemberMachineRemovedEvent, StationMemberMemberEvent,
-        StationMemberMemberRemovedEvent, StationMemberStationUpdated,
-        StationMemberVolumeAddedEvent, StationMemberVolumeHostPathAddedEvent,
-        StationMemberVolumeHostPathRemovedEvent, StationMemberVolumeRemovedEvent,
-        StationsEvents, StationUserExpelledEvent, StationUserInviteAcceptedEvent,
-        StationUserInviteDestroyedEvent, StationUserInviteReceivedEvent,
-        StationUserInviteRejectedEvent, StationUserRequestAcceptedEvent,
-        StationUserRequestDestroyedEvent, StationUserRequestRejectedEvent,
-        StationUserRequestSentEvent, StationUserWithdrawnEvent)
+        NewStationEvent,
+        StationAdminDestroyedEvent,
+        StationAdminInviteAcceptedEvent,
+        StationAdminInviteRejectedEvent,
+        StationAdminInviteSentEvent,
+        StationAdminMachineAddedEvent,
+        StationAdminMachineRemovedEvent,
+        StationAdminMemberRemovedEvent,
+        StationAdminRequestAcceptedEvent,
+        StationAdminRequestReceivedEvent,
+        StationAdminRequestRejectedEvent,
+        StationAdminStationUpdated,
+        StationAdminVolumeAddedEvent,
+        StationAdminVolumeHostPathAddedEvent,
+        StationAdminVolumeHostPathRemovedEvent,
+        StationAdminVolumeRemovedEvent,
+        StationMemberDestroyedEvent,
+        StationMemberMachineAddedEvent,
+        StationMemberMachineRemovedEvent,
+        StationMemberMemberEvent,
+        StationMemberMemberRemovedEvent,
+        StationMemberStationUpdated,
+        StationMemberVolumeAddedEvent,
+        StationMemberVolumeHostPathAddedEvent,
+        StationMemberVolumeHostPathRemovedEvent,
+        StationMemberVolumeRemovedEvent,
+        StationsEvents,
+        StationUserExpelledEvent,
+        StationUserInviteAcceptedEvent,
+        StationUserInviteDestroyedEvent,
+        StationUserInviteReceivedEvent,
+        StationUserInviteRejectedEvent,
+        StationUserRequestAcceptedEvent,
+        StationUserRequestDestroyedEvent,
+        StationUserRequestRejectedEvent,
+        StationUserRequestSentEvent,
+        StationUserWithdrawnEvent,
+    )
     from galileo_sdk.data.repositories.jobs import job_dict_to_job
-    from galileo_sdk.data.repositories.machines import machine_dict_to_machine
-    from galileo_sdk.data.repositories.stations import (station_dict_to_station,
-                                                        volume_dict_to_volume)
-
+    from galileo_sdk.data.repositories.lz import machine_dict_to_machine
+    from galileo_sdk.data.repositories.stations import (
+        station_dict_to_station,
+        volume_dict_to_volume,
+    )
 
     class GalileoConnector:
         def __init__(
@@ -42,9 +68,9 @@ if (sys.version_info[0] == 3):
         ):
             self._settings_repo = settings_repo
             self._auth_provider = auth_provider
-            self.machines_events = MachinesEvents()
-            self.jobs_events = JobsEvents()
-            self.stations_events = StationsEvents()
+            self.lz_events = None
+            self.jobs_events = None
+            self.stations_events = None
             settings = self._settings_repo.get_settings()
             token = self._auth_provider.get_access_token()
             self.namespace = namespace
@@ -57,9 +83,6 @@ if (sys.version_info[0] == 3):
                 transports="websocket",
                 namespaces=[self.namespace],
             )
-            self._register_jobs_listeners()
-            self._register_machines_listeners()
-            self._register_stations_listeners()
 
         def on(self, event, handler=None):
             def wrapper(handler):
@@ -69,26 +92,41 @@ if (sys.version_info[0] == 3):
                 return wrapper
             wrapper(handler)
 
+        def set_lz_events(self):
+            self.lz_events = LzEvents()
+            self._register_machines_listeners()
+            return self.lz_events
+
+        def set_jobs_events(self):
+            self.jobs_events = JobsEvents()
+            self._register_jobs_listeners()
+            return self.jobs_events
+
+        def set_stations_events(self):
+            self.stations_events = StationsEvents()
+            self._register_stations_listeners()
+            return self.stations_events
+
         def _register_machines_listeners(self):
             # Machines
             @self.on("machine/status_updated")
-            def on_machine_status_updated(data):
-                self.machines_events.machine_status_update(
-                    MachineStatusUpdateEvent(
-                        mid=data["mid"], status=EMachineStatus[data["status"]]
+            def on_lz_status_update(data):
+                self.lz_events.lz_status_update(
+                    LzStatusUpdateEvent(
+                        lz_id=data["mid"], status=EMachineStatus[data["status"]]
                     )
                 )
 
             @self.on("machine/registered")
-            def on_machine_registered(data):
-                self.machines_events.machine_registered(
-                    MachineRegisteredEvent(machine_dict_to_machine(data["machine"]))
+            def on_lz_registered(data):
+                self.lz_events.lz_registered(
+                    LzRegisteredEvent(machine_dict_to_machine(data["machine"]))
                 )
 
             @self.on("machine/hardware_updated")
             def on_machine_hardware_updated(data):
-                self.machines_events.machine_hardware_update(
-                    MachineHardwareUpdateEvent(machine_dict_to_machine(data["machine"]))
+                self.lz_events.lz_hardware_update(
+                    LzHardwareUpdateEvent(machine_dict_to_machine(data["machine"]))
                 )
 
         def _register_jobs_listeners(self):
@@ -128,7 +166,9 @@ if (sys.version_info[0] == 3):
             @self.on("station_user_invite_received")
             def on_station_user_invite_received(data):
                 self.stations_events.station_user_invite_received(
-                    StationUserInviteReceivedEvent(station_dict_to_station(data["station"]))
+                    StationUserInviteReceivedEvent(
+                        station_dict_to_station(data["station"])
+                    )
                 )
 
             @self.on("station_admin_invite_accepted")
@@ -344,13 +384,17 @@ if (sys.version_info[0] == 3):
             @self.on("station_admin_volume_removed")
             def on_station_admin_volume_removed(data):
                 self.stations_events.station_admin_volume_removed(
-                    StationAdminVolumeRemovedEvent(data["stationid"], data["volume_names"])
+                    StationAdminVolumeRemovedEvent(
+                        data["stationid"], data["volume_names"]
+                    )
                 )
 
             @self.on("station_member_volume_removed")
             def on_station_member_volume_removed(data):
                 self.stations_events.station_member_volume_removed(
-                    StationMemberVolumeRemovedEvent(data["stationid"], data["volume_names"])
+                    StationMemberVolumeRemovedEvent(
+                        data["stationid"], data["volume_names"]
+                    )
                 )
 
             @self.on("station_admin_station_updated")
@@ -362,7 +406,9 @@ if (sys.version_info[0] == 3):
             @self.on("station_member_station_updated")
             def on_station_member_station_updated(data):
                 self.stations_events.station_member_station_updated(
-                    StationMemberStationUpdated(station_dict_to_station(data["station"]))
+                    StationMemberStationUpdated(
+                        station_dict_to_station(data["station"])
+                    )
                 )
 
         def disconnect(self):

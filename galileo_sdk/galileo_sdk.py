@@ -1,26 +1,31 @@
 import os
 
-from .business.services.jobs import JobsService
-from .business.services.log import LogService
-from .business.services.machines import MachinesService
-from .business.services.profiles import ProfilesService
-from .business.services.projects import ProjectsService
-from .business.services.stations import StationsService
-from .data.providers.auth import AuthProvider
-from .data.repositories.jobs import JobsRepository
-from .data.repositories.machines import MachinesRepository
-from .data.repositories.profiles import ProfilesRepository
-from .data.repositories.projects import ProjectsRepository
-from .data.repositories.settings import SettingsRepository
-from .data.repositories.stations import StationsRepository
-from .sdk import JobsSdk, MachinesSdk, ProfilesSdk, ProjectsSdk, StationsSdk
+from .business import (
+    JobsService,
+    LogService,
+    LzService,
+    ProfilesService,
+    ProjectsService,
+    StationsService,
+)
+from .data import (
+    AuthProvider,
+    JobsRepository,
+    LzRepository,
+    ProfilesRepository,
+    ProjectsRepository,
+    SettingsRepository,
+    StationsRepository,
+    GalileoConnector
+)
+from .sdk import JobsSdk, LzSdk, ProfilesSdk, ProjectsSdk, StationsSdk
 
 import sys
 
 _ver = sys.version_info
 
-is_py2 = (_ver[0] == 2)
-is_py3 = (_ver[0] == 3)
+is_py2 = _ver[0] == 2
+is_py3 = _ver[0] == 3
 
 NAMESPACE = "/galileo/user_interface/v1"
 
@@ -88,7 +93,7 @@ class GalileoSdk:
         self._profiles_repo = ProfilesRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
-        self._machines_repo = MachinesRepository(
+        self._lz_repo = LzRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
         self._projects_repo = ProjectsRepository(
@@ -98,15 +103,17 @@ class GalileoSdk:
         self._jobs_service = JobsService(self._jobs_repo, self._profiles_repo)
         self._stations_service = StationsService(self._stations_repo)
         self._profiles_service = ProfilesService(self._profiles_repo)
-        self._machines_service = MachinesService(self._machines_repo)
+        self._lz_service = LzService(self._lz_repo)
         self._projects_service = ProjectsService(self._projects_repo)
 
         self.profiles = ProfilesSdk(self._profiles_service)
         self.projects = ProjectsSdk(self._projects_service)
 
-        self.jobs = JobsSdk(self._jobs_service, self._settings, self._auth_provider, NAMESPACE)
-        self.stations = StationsSdk(self._stations_service, self._settings, self._auth_provider, NAMESPACE)
-        self.machines = MachinesSdk(self._machines_service, self._settings, self._auth_provider, NAMESPACE)
+        connector = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
+
+        self.jobs = JobsSdk(self._jobs_service, connector)
+        self.stations = StationsSdk(self._stations_service, connector)
+        self.lz = LzSdk(self._lz_service, connector)
 
     def disconnect(self):
         """
@@ -116,7 +123,7 @@ class GalileoSdk:
         if is_py3:
             self.jobs.disconnect()
             self.stations.disconnect()
-            self.machines.disconnect()
+            self.lz.disconnect()
 
     def update_auth_token(self, auth_token):
         """
