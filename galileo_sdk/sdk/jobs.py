@@ -2,11 +2,10 @@ from .event import EventsSdk
 
 
 class JobsSdk(EventsSdk):
-    def __init__(self, jobs_service, connector, events=None):
+    def __init__(self, jobs_service, connector=None, events=None):
         self._jobs_service = jobs_service
         super(JobsSdk, self).__init__(
-            connector=connector,
-            events=events,
+            connector=connector, events=events,
         )
 
     def on_job_launcher_updated(self, func):

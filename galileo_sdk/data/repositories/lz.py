@@ -1,4 +1,4 @@
-from galileo_sdk.business.objects.lz import EMachineStatus, Lz
+from galileo_sdk.business.objects.lz import ELzStatus, Lz
 from galileo_sdk.data.repositories import RequestsRespository
 
 
@@ -46,7 +46,7 @@ def machine_dict_to_machine(machine):
     return Lz(
         name=machine["name"],
         userid=machine["userid"],
-        status=EMachineStatus[machine["status"]],
+        status=ELzStatus[machine["status"]],
         lz_id=machine["mid"],
         gpu_count=machine["gpu_count"],
         cpu_count=machine["cpu_count"],

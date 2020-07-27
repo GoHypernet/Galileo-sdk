@@ -1,6 +1,6 @@
 from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.lz import (
-    EMachineStatus,
+    ELzStatus,
     Lz,
     UpdateMachineRequest,
 )
@@ -128,7 +128,7 @@ def list_machines(mocked_requests):
     assert len(r) == 5
     for i in range(5):
         assert r[i].userid == i
-        assert r[i].status == EMachineStatus.online
+        assert r[i].status == ELzStatus.online
 
 
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)

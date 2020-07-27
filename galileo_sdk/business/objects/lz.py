@@ -3,7 +3,7 @@ import enum
 from ...business.objects.event import EventEmitter
 
 
-class EMachineStatus(enum.Enum):
+class ELzStatus(enum.Enum):
     offline = 0  # machine is offline as an LZ
     online = 1  # machine is online as an LZ
     default = offline

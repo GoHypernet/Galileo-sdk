@@ -10,7 +10,7 @@ if sys.version_info[0] == 3:
         StationJobUpdatedEvent,
     )
     from galileo_sdk.business.objects.lz import (
-        EMachineStatus,
+        ELzStatus,
         LzHardwareUpdateEvent,
         LzRegisteredEvent,
         LzEvents,
@@ -113,7 +113,7 @@ if sys.version_info[0] == 3:
             def on_lz_status_update(data):
                 self.lz_events.lz_status_update(
                     LzStatusUpdateEvent(
-                        lz_id=data["mid"], status=EMachineStatus[data["status"]]
+                        lz_id=data["mid"], status=ELzStatus[data["status"]]
                     )
                 )
 

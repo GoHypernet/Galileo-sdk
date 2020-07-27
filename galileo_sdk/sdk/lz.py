@@ -2,13 +2,10 @@ from .event import EventsSdk
 
 
 class LzSdk(EventsSdk):
-    def __init__(
-        self, lz_service, connector, events=None
-    ):
+    def __init__(self, lz_service, connector=None, events=None):
         self._lz_service = lz_service
         super(LzSdk, self).__init__(
-            connector=connector,
-            events=events,
+            connector=connector, events=events,
         )
 
     def on_lz_status_update(self, func):

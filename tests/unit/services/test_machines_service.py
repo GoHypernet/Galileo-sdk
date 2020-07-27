@@ -1,6 +1,6 @@
 from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.lz import (
-    EMachineStatus,
+    ELzStatus,
     Lz,
     UpdateMachineRequest,
 )
@@ -29,7 +29,7 @@ def test_get_machine_by_id():
         memory=str(x),
         name=str(x),
         operating_system=str(x),
-        status=EMachineStatus.online,
+        status=ELzStatus.online,
         userid=str(x),
         container_technology="container_tech",
         job_runner="job runner",
@@ -53,7 +53,7 @@ def test_list_machines():
             memory=str(x),
             name=str(x),
             operating_system=str(x),
-            status=EMachineStatus.online,
+            status=ELzStatus.online,
             userid=str(x),
             container_technology="container_tech",
             job_runner="job runner",
@@ -80,7 +80,7 @@ def test_update():
         memory=str(x),
         name=str(x),
         operating_system=str(x),
-        status=EMachineStatus.online,
+        status=ELzStatus.online,
         userid=str(x),
         container_technology="container_tech",
         job_runner="job runner",

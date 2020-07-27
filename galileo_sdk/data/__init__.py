@@ -1,3 +1,8 @@
+import sys
+
+if sys.version_info[0] == 3:
+    from .events import GalileoConnector
+
 from .repositories import (
     JobsRepository,
     LzRepository,
@@ -8,4 +13,3 @@ from .repositories import (
     SettingsRepository,
 )
 from .providers import AuthProvider
-from .events import GalileoConnector

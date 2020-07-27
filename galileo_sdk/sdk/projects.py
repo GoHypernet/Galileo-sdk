@@ -75,9 +75,7 @@ class ProjectsSdk:
         :param machine_id: str
         :return: Job
         """
-        return self._projects_service.run_job_on_lz(
-            project_id, station_id, machine_id
-        )
+        return self._projects_service.run_job_on_lz(project_id, station_id, machine_id)
 
     def create_and_upload_project(
         self,

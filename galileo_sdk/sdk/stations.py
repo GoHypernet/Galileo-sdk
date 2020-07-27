@@ -2,13 +2,10 @@ from .event import EventsSdk
 
 
 class StationsSdk(EventsSdk):
-    def __init__(
-        self, stations_service, connector, events=None
-    ):
+    def __init__(self, stations_service, connector=None, events=None):
         self._stations_service = stations_service
         super(StationsSdk, self).__init__(
-            connector=connector,
-            events=events,
+            connector=connector, events=events,
         )
 
     def on_new_station(self, func):

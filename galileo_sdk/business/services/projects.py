@@ -79,9 +79,7 @@ class ProjectsService:
         return self._projects_repo.run_job_on_station(project_id, station_id)
 
     def run_job_on_lz(self, project_id, station_id, lz_id):
-        return self._projects_repo.run_job_on_lz(
-            project_id, station_id, lz_id
-        )
+        return self._projects_repo.run_job_on_lz(project_id, station_id, lz_id)
 
     def get_project_files(self, project_id):
         return self._projects_repo.get_project_files(project_id)

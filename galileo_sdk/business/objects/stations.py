@@ -154,9 +154,9 @@ class StationAdminMemberRemovedEvent:
 
 
 class StationAdminMachineRemovedEvent:
-    def __init__(self, stationid, mids):
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationMemberMemberRemovedEvent:
@@ -166,15 +166,15 @@ class StationMemberMemberRemovedEvent:
 
 
 class StationMemberMachineRemovedEvent:
-    def __init__(self, stationid, mids):
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationUserWithdrawnEvent:
-    def __init__(self, stationid, mids):
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationUserExpelledEvent:

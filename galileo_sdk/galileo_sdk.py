@@ -16,7 +16,6 @@ from .data import (
     ProjectsRepository,
     SettingsRepository,
     StationsRepository,
-    GalileoConnector
 )
 from .sdk import JobsSdk, LzSdk, ProfilesSdk, ProjectsSdk, StationsSdk
 
@@ -26,6 +25,9 @@ _ver = sys.version_info
 
 is_py2 = _ver[0] == 2
 is_py3 = _ver[0] == 3
+
+if is_py3:
+    from .data import GalileoConnector
 
 NAMESPACE = "/galileo/user_interface/v1"
 
@@ -93,9 +95,7 @@ class GalileoSdk:
         self._profiles_repo = ProfilesRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
-        self._lz_repo = LzRepository(
-            self._settings, self._auth_provider, NAMESPACE
-        )
+        self._lz_repo = LzRepository(self._settings, self._auth_provider, NAMESPACE)
         self._projects_repo = ProjectsRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
@@ -109,11 +109,16 @@ class GalileoSdk:
         self.profiles = ProfilesSdk(self._profiles_service)
         self.projects = ProjectsSdk(self._projects_service)
 
-        connector = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
+        if is_py3:
+            connector = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
 
-        self.jobs = JobsSdk(self._jobs_service, connector)
-        self.stations = StationsSdk(self._stations_service, connector)
-        self.lz = LzSdk(self._lz_service, connector)
+            self.jobs = JobsSdk(self._jobs_service, connector)
+            self.stations = StationsSdk(self._stations_service, connector)
+            self.lz = LzSdk(self._lz_service, connector)
+        else:
+            self.jobs = JobsSdk(self._jobs_service)
+            self.stations = StationsSdk(self._stations_service)
+            self.lz = LzSdk(self._lz_service)
 
     def disconnect(self):
         """
