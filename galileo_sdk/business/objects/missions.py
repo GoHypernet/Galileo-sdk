@@ -23,10 +23,10 @@ class DirectoryListing:
         self.listings = listings
 
 
-class Project:
+class Mission:
     def __init__(
         self,
-        project_id,
+        mission_id,
         name,
         description,
         source_storage_id,
@@ -37,7 +37,7 @@ class Project:
         creation_timestamp,
         project_type_id,
     ):
-        self.project_id = project_id
+        self.mission_id = mission_id
         self.name = name
         self.description = description
         self.source_storage_id = source_storage_id
@@ -49,12 +49,7 @@ class Project:
         self.project_type_id = project_type_id
 
 
-class ProjectsEvents:
-    def __init__(self):
-        self._events = EventEmitter()
-
-
-class ProjectType:
+class MissionType:
     def __init__(self, id, name, description, version):
         self.id = id
         self.name = name
@@ -62,7 +57,7 @@ class ProjectType:
         self.version = version
 
 
-class CreateProjectRequest(object):
+class CreateMissionRequest(object):
     def __init__(
         self,
         name,
@@ -84,7 +79,7 @@ class CreateProjectRequest(object):
         self.project_type_name = project_type_name
 
 
-class HECRASProject(CreateProjectRequest):
+class HECRASMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -105,7 +100,7 @@ class HECRASProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(HECRASProject, self).__init__(
+        super(HECRASMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -129,7 +124,7 @@ class HECRASPlan(enum.Enum):
     ManuallySelect = "Manually Select"
 
 
-class PythonProject(CreateProjectRequest):
+class PythonMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -150,7 +145,7 @@ class PythonProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(PythonProject, self).__init__(
+        super(PythonMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -169,7 +164,7 @@ class PythonProject(CreateProjectRequest):
         self.env = env
 
 
-class JuliaProject(CreateProjectRequest):
+class JuliaMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -190,7 +185,7 @@ class JuliaProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(JuliaProject, self).__init__(
+        super(JuliaMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -208,7 +203,7 @@ class JuliaProject(CreateProjectRequest):
         self.env = env
 
 
-class RProject(CreateProjectRequest):
+class RMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -230,7 +225,7 @@ class RProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(RProject, self).__init__(
+        super(RMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -249,7 +244,7 @@ class RProject(CreateProjectRequest):
         self.env = env
 
 
-class STATAProject(CreateProjectRequest):
+class STATAMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -270,7 +265,7 @@ class STATAProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(STATAProject, self).__init__(
+        super(STATAMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -288,7 +283,7 @@ class STATAProject(CreateProjectRequest):
         self.env = env
 
 
-class OctaveProject(CreateProjectRequest):
+class OctaveMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -307,7 +302,7 @@ class OctaveProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(OctaveProject, self).__init__(
+        super(OctaveMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -323,7 +318,7 @@ class OctaveProject(CreateProjectRequest):
         self.arg = arg
 
 
-class SWMM5Project(CreateProjectRequest):
+class SWMM5Mission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -340,7 +335,7 @@ class SWMM5Project(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(SWMM5Project, self).__init__(
+        super(SWMM5Mission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -354,7 +349,7 @@ class SWMM5Project(CreateProjectRequest):
         self.filename = filename
 
 
-class AutoDockVinaProject(CreateProjectRequest):
+class AutoDockVinaMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -371,7 +366,7 @@ class AutoDockVinaProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(AutoDockVinaProject, self).__init__(
+        super(AutoDockVinaMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -385,7 +380,7 @@ class AutoDockVinaProject(CreateProjectRequest):
         self.filename = filename
 
 
-class BioconductorProject(CreateProjectRequest):
+class BioconductorMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -401,7 +396,7 @@ class BioconductorProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(BioconductorProject, self).__init__(
+        super(BioconductorMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -414,7 +409,7 @@ class BioconductorProject(CreateProjectRequest):
         self.version = version
 
 
-class BlenderProject(CreateProjectRequest):
+class BlenderMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -432,7 +427,7 @@ class BlenderProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(BlenderProject, self).__init__(
+        super(BlenderMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -447,7 +442,7 @@ class BlenderProject(CreateProjectRequest):
         self.copy_container_path = copy_container_path
 
 
-class QuantumEspressoProject(CreateProjectRequest):
+class QuantumEspressoMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -464,7 +459,7 @@ class QuantumEspressoProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(QuantumEspressoProject, self).__init__(
+        super(QuantumEspressoMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -478,7 +473,7 @@ class QuantumEspressoProject(CreateProjectRequest):
         self.filename = filename
 
 
-class FLO2DProject(CreateProjectRequest):
+class FLO2DMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -495,7 +490,7 @@ class FLO2DProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(FLO2DProject, self).__init__(
+        super(FLO2DMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -509,7 +504,7 @@ class FLO2DProject(CreateProjectRequest):
         self.filename = filename
 
 
-class MatLabProject(CreateProjectRequest):
+class MatLabMission(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -526,7 +521,7 @@ class MatLabProject(CreateProjectRequest):
             raise Exception(
                 "Either 'version' or 'project_type_id' parameter must be filled"
             )
-        super(MatLabProject, self).__init__(
+        super(MatLabMission, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,
@@ -546,7 +541,7 @@ class Dependency:
         self.version = version
 
 
-class UpdateProjectRequest(CreateProjectRequest):
+class UpdateMissionRequest(CreateMissionRequest):
     def __init__(
         self,
         name,
@@ -557,7 +552,7 @@ class UpdateProjectRequest(CreateProjectRequest):
         destination_path=None,
         settings=None,
     ):
-        super(CreateProjectRequest, self).__init__(
+        super(CreateMissionRequest, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,

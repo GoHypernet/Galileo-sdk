@@ -5,7 +5,7 @@ from galileo_sdk.compat import urlunparse, requests
 
 from galileo_sdk.business.objects import EJobStatus, Job, JobStatus, UpdateJobRequest
 from galileo_sdk.business.objects.jobs import TopDetails, TopProcess
-from galileo_sdk.business.objects.projects import FileListing
+from galileo_sdk.business.objects.missions import FileListing
 
 
 import sys
@@ -187,7 +187,6 @@ def top_dict_to_jobs_top(process, titles):
     return TopProcess(
         [TopDetails(title, detail) for detail, title in zip(process, titles)]
     )
-
 
 def file_dict_to_file_listing(file):
     return FileListing(

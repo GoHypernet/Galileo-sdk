@@ -13,7 +13,7 @@ from galileo_sdk.business.objects.jobs import (
     UpdateJobRequest,
 )
 
-from galileo_sdk.business.objects.projects import (
-    UpdateProjectRequest,
-    CreateProjectRequest,
+from galileo_sdk.business.objects.missions import (
+    UpdateMissionRequest,
+    CreateMissionRequest,
 )

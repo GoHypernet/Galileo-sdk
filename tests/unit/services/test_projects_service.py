@@ -2,13 +2,13 @@ from datetime import datetime
 
 from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.jobs import Job
-from galileo_sdk.business.objects.projects import (
-    Project,
-    HECRASProject,
-    ProjectType,
-    PythonProject,
+from galileo_sdk.business.objects.missions import (
+    Mission,
+    HECRASMission,
+    MissionType,
+    PythonMission,
 )
-from galileo_sdk.business.services.projects import ProjectsService
+from galileo_sdk.business.services.missions import MissionsService
 
 BACKEND = "http://BACKEND"
 NAME = "test_name"
@@ -23,12 +23,12 @@ settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = mock.Mock()
-projects_service = ProjectsService(projects_repo)
+projects_service = MissionsService(projects_repo)
 
 
 def test_list_projects():
-    projects_repo.list_projects.return_value = [
-        Project(
+    projects_repo.list_missions.return_value = [
+        Mission(
             "project_id",
             "name",
             "description",
@@ -43,16 +43,16 @@ def test_list_projects():
         for _ in range(5)
     ]
 
-    r = projects_service.list_projects()
+    r = projects_service.list_missions()
 
     assert len(r) == 5
-    assert r[0].project_id == "project_id"
+    assert r[0].mission_id == "project_id"
 
 
 def test_create_hecras_project():
-    projects_service.get_project_types = mock.MagicMock(
+    projects_service.get_mission_types = mock.MagicMock(
         return_value=[
-            ProjectType(
+            MissionType(
                 id="hecras_project_type_id",
                 name="HECRAS",
                 description="description",
@@ -60,7 +60,7 @@ def test_create_hecras_project():
             )
         ]
     )
-    projects_repo.create_project.return_value = Project(
+    projects_repo.create_mission.return_value = Mission(
         "project_id",
         NAME,
         DESCRIPTION,
@@ -73,8 +73,8 @@ def test_create_hecras_project():
         "hecras_project_type_id",
     )
 
-    r = projects_service.create_project(
-        HECRASProject(
+    r = projects_service.create_mission(
+        HECRASMission(
             name=NAME,
             description=DESCRIPTION,
             version="version",
@@ -92,9 +92,9 @@ def test_create_hecras_project():
 
 
 def test_create_python_project():
-    projects_service.get_project_types = mock.MagicMock(
+    projects_service.get_mission_types = mock.MagicMock(
         return_value=[
-            ProjectType(
+            MissionType(
                 id="python_project_type_id",
                 name="Python",
                 description="description",
@@ -102,7 +102,7 @@ def test_create_python_project():
             )
         ]
     )
-    projects_repo.create_project.return_value = Project(
+    projects_repo.create_mission.return_value = Mission(
         "project_id",
         NAME,
         DESCRIPTION,
@@ -115,8 +115,8 @@ def test_create_python_project():
         "python_project_type_id",
     )
 
-    r = projects_service.create_project(
-        PythonProject(
+    r = projects_service.create_mission(
+        PythonMission(
             name=NAME,
             description=DESCRIPTION,
             version="version",

@@ -1,19 +1,19 @@
 from galileo_sdk import GalileoSdk
 from galileo_sdk.business.objects.jobs import Job
-from galileo_sdk.business.objects.projects import (
-    Project,
-    JuliaProject,
-    HECRASProject,
-    PythonProject,
-    RProject,
-    STATAProject,
-    OctaveProject,
-    SWMM5Project,
-    AutoDockVinaProject,
-    BlenderProject,
-    QuantumEspressoProject,
-    MatLabProject,
-    FLO2DProject,
+from galileo_sdk.business.objects.missions import (
+    Mission,
+    JuliaMission,
+    HECRASMission,
+    PythonMission,
+    RMission,
+    STATAMission,
+    OctaveMission,
+    SWMM5Mission,
+    AutoDockVinaMission,
+    BlenderMission,
+    QuantumEspressoMission,
+    MatLabMission,
+    FLO2DMission,
 )
 
 # Must set env variables before running tests
@@ -60,18 +60,18 @@ galileo = GalileoSdk(config=CONFIG)
 
 
 def test_list_projects():
-    project_list = galileo.projects.list_projects()
+    project_list = galileo.missions.list_missions()
 
     assert project_list[0].creation_timestamp is not None
     assert project_list[0].source_path is not None
 
 
 def test_upload_file():
-    project = galileo.projects.create_project(
+    project = galileo.missions.create_mission(
         name="project", description="upload_single_file",
     )
 
-    response = galileo.projects.upload(project.project_id, "flatplate/flatplate")
+    response = galileo.missions.upload(project.mission_id, "flatplate/flatplate")
 
     assert response == True
     assert project is not None
@@ -117,12 +117,12 @@ def test_upload_file():
 
 
 def test_create_and_upload():
-    project = galileo.projects.create_and_upload_project(
+    project = galileo.missions.create_and_upload_mission(
         "sdk_project_test", "flatplate/flatplate"
     )
 
     assert project is not None
-    assert isinstance(project, Project)
+    assert isinstance(project, Mission)
 
 
 # def test_create_octave_project():

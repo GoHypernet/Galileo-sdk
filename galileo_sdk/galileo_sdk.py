@@ -5,7 +5,7 @@ from .business import (
     LogService,
     LzService,
     ProfilesService,
-    ProjectsService,
+    MissionsService,
     StationsService,
 )
 from .data import (
@@ -13,11 +13,11 @@ from .data import (
     JobsRepository,
     LzRepository,
     ProfilesRepository,
-    ProjectsRepository,
+    MissionsRepository,
     SettingsRepository,
     StationsRepository,
 )
-from .sdk import JobsSdk, LzSdk, ProfilesSdk, ProjectsSdk, StationsSdk
+from .sdk import JobsSdk, LzSdk, ProfilesSdk, MissionsSdk, StationsSdk
 
 import sys
 
@@ -96,7 +96,7 @@ class GalileoSdk:
             self._settings, self._auth_provider, NAMESPACE
         )
         self._lz_repo = LzRepository(self._settings, self._auth_provider, NAMESPACE)
-        self._projects_repo = ProjectsRepository(
+        self._missions_repo = MissionsRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
 
@@ -104,21 +104,18 @@ class GalileoSdk:
         self._stations_service = StationsService(self._stations_repo)
         self._profiles_service = ProfilesService(self._profiles_repo)
         self._lz_service = LzService(self._lz_repo)
-        self._projects_service = ProjectsService(self._projects_repo)
+        self._missions_service = MissionsService(self._missions_repo)
 
         self.profiles = ProfilesSdk(self._profiles_service)
-        self.projects = ProjectsSdk(self._projects_service)
+        self.missions = MissionsSdk(self._missions_service)
 
+        connector = None
         if is_py3:
             connector = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
 
-            self.jobs = JobsSdk(self._jobs_service, connector)
-            self.stations = StationsSdk(self._stations_service, connector)
-            self.lz = LzSdk(self._lz_service, connector)
-        else:
-            self.jobs = JobsSdk(self._jobs_service)
-            self.stations = StationsSdk(self._stations_service)
-            self.lz = LzSdk(self._lz_service)
+        self.jobs = JobsSdk(self._jobs_service, connector)
+        self.stations = StationsSdk(self._stations_service, connector)
+        self.lz = LzSdk(self._lz_service, connector)
 
     def disconnect(self):
         """
