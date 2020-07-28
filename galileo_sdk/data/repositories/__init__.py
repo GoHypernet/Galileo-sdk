@@ -1,4 +1,4 @@
-from .requests import RequestsRespository
+from .requests import RequestsRepository
 from .jobs import JobsRepository
 from .lz import LzRepository
 from .profiles import ProfilesRepository

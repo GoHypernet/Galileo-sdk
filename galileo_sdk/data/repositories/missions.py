@@ -20,10 +20,10 @@ from galileo_sdk.business.objects.missions import (
 )
 from galileo_sdk.business.objects import EJobStatus, Job, JobStatus, UpdateJobRequest
 from galileo_sdk.business.objects.missions import FileListing
-from galileo_sdk.data.repositories import RequestsRespository
+from galileo_sdk.data.repositories import RequestsRepository
 
 
-class MissionsRepository(RequestsRespository):
+class MissionsRepository(RequestsRepository):
     def __init__(
         self, settings_repository, auth_provider, namespace,
     ):

@@ -8,7 +8,7 @@ from .repositories import (
     LzRepository,
     ProfilesRepository,
     MissionsRepository,
-    RequestsRespository,
+    RequestsRepository,
     StationsRepository,
     SettingsRepository,
 )

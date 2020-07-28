@@ -116,6 +116,7 @@ def test_list_users(mocked_requests):
         "{backend}{namespace}/users".format(backend=BACKEND, namespace=NAMESPACE),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
+        data=None
     )
 
     # Assert
@@ -137,6 +138,7 @@ def test_get_profile(mocked_requests):
         "{backend}{namespace}/users/self".format(backend=BACKEND, namespace=NAMESPACE),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
+        data=None
     )
 
     # Assert
@@ -158,6 +160,7 @@ def test_list_station_invites(mocked_requests):
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
+        data=None
     )
 
     # Assert

@@ -118,6 +118,7 @@ def test_list_projects(mocked_requests):
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
+        data=None
     )
 
     assert len(r) == 1
@@ -159,6 +160,7 @@ def tests_create_project(mocked_requests):
             "input_path": "input_path",
             "output_path": "output_path",
         },
+        data=None
     )
 
     assert r.mission_id == "id"
@@ -187,6 +189,7 @@ def test_run_job_on_station(mocked_requests):
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"station_id": STATION_ID},
+        data=None
     )
 
     assert isinstance(r, Job)
@@ -203,6 +206,7 @@ def test_run_job_on_machine(mocked_requests):
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"station_id": STATION_ID, "machine_id": MACHINE_ID},
+        data=None
     )
 
     assert isinstance(r, Job)

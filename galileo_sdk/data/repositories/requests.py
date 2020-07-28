@@ -1,7 +1,7 @@
 from galileo_sdk.compat import urlunparse, requests
 
 
-class RequestsRespository(object):
+class RequestsRepository(object):
     def __init__(self, settings_repository, auth_provider, namespace):
         self._settings_repository = settings_repository
         self._auth_provider = auth_provider
@@ -31,12 +31,11 @@ class RequestsRespository(object):
         headers = {
             "Authorization": "Bearer {access_token}".format(access_token=access_token)
         }
-        if files is None:
-            r = request(url, json=data, headers=headers)
-        else:
+        if filename:
             headers["filename"] = filename
             headers["Content-Type"] = "application/octet-stream"
-            r = request(url, json=data, headers=headers, data=files)
+
+        r = request(url, json=data, headers=headers, data=files)
         r.raise_for_status()
         return r
 

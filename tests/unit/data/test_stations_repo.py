@@ -227,6 +227,7 @@ def test_list_stations(mocked_requests):
         "{backend}{namespace}/stations".format(backend=BACKEND, namespace=NAMESPACE),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -245,6 +246,7 @@ def test_create_station(mocked_requests):
         "{backend}{namespace}/station".format(backend=BACKEND, namespace=NAMESPACE),
         headers=HEADERS,
         json={"name": NAME, "usernames": USERNAMES, "description": DESCRIPTION},
+        data=None
     )
 
     # Assert
@@ -266,6 +268,7 @@ def test_invite_to_station(mocked_requests):
         ),
         headers=HEADERS,
         json={"userids": USERNAMES},
+        data=None
     )
 
     # Assert
@@ -284,6 +287,7 @@ def test_accept_station_invite(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -302,6 +306,7 @@ def test_reject_station_invite(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -320,6 +325,7 @@ def test_request_to_join(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -338,6 +344,7 @@ def test_approve_request_to_join(mocked_requests):
         ),
         headers=HEADERS,
         json={"userids": USERNAMES},
+        data=None
     )
 
     # Assert
@@ -356,6 +363,7 @@ def test_reject_request_to_join(mocked_requests):
         ),
         headers=HEADERS,
         json={"userids": USERNAMES},
+        data=None
     )
 
     # Assert
@@ -374,6 +382,7 @@ def test_leave_station(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -392,6 +401,7 @@ def test_remove_member_from_station(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -410,6 +420,7 @@ def test_delete_station(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -428,6 +439,7 @@ def test_add_machines_to_station(mocked_requests):
         ),
         headers=HEADERS,
         json={"mids": MIDS},
+        data=None
     )
 
     # Assert
@@ -446,6 +458,7 @@ def test_remove_machines_from_station(mocked_requests):
         ),
         headers=HEADERS,
         json={"mids": MIDS},
+        data=None
     )
 
     # Assert
@@ -464,6 +477,7 @@ def test_add_volumes_to_station(mocked_requests):
         ),
         headers=HEADERS,
         json={"name": NAME, "mount_point": MOUNT_POINT, "access": ACCESS.value},
+        data=None
     )
 
     # Assert
@@ -487,6 +501,7 @@ def test_add_host_path_to_station(mocked_requests):
         ),
         headers=HEADERS,
         json={"mid": MIDS[0], "host_path": HOST_PATH},
+        data=None
     )
 
     # Assert
@@ -509,6 +524,7 @@ def test_delete_host_path_from_station(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert
@@ -530,6 +546,7 @@ def test_remove_volume_from_station(mocked_requests):
         ),
         headers=HEADERS,
         json=None,
+        data=None
     )
 
     # Assert

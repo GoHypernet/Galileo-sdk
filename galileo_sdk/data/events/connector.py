@@ -71,9 +71,20 @@ if sys.version_info[0] == 3:
             self.lz_events = None
             self.jobs_events = None
             self.stations_events = None
+            self._socket = None
+            self.namespace = namespace
+
+        def on(self, event, handler=None):
+            def wrapper(handler):
+                self._socket.on(event, handler, self.namespace)
+
+            if handler is None:
+                return wrapper
+            wrapper(handler)
+
+        def set_socket_io_connection(self):
             settings = self._settings_repo.get_settings()
             token = self._auth_provider.get_access_token()
-            self.namespace = namespace
             self._socket = socketio.Client()
             self._socket.connect(
                 "{backend}{namespace}".format(
@@ -84,25 +95,20 @@ if sys.version_info[0] == 3:
                 namespaces=[self.namespace],
             )
 
-        def on(self, event, handler=None):
-            def wrapper(handler):
-                self._socket.on(event, handler, self.namespace)
-
-            if handler is None:
-                return wrapper
-            wrapper(handler)
-
         def set_lz_events(self):
+            self.set_socket_io_connection()
             self.lz_events = LzEvents()
             self._register_machines_listeners()
             return self.lz_events
 
         def set_jobs_events(self):
+            self.set_socket_io_connection()
             self.jobs_events = JobsEvents()
             self._register_jobs_listeners()
             return self.jobs_events
 
         def set_stations_events(self):
+            self.set_socket_io_connection()
             self.stations_events = StationsEvents()
             self._register_stations_listeners()
             return self.stations_events
