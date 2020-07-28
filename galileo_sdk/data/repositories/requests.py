@@ -35,7 +35,11 @@ class RequestsRepository(object):
             headers["filename"] = filename
             headers["Content-Type"] = "application/octet-stream"
 
-        r = request(url, json=data, headers=headers, data=files)
+        if files:
+            r = request(url, json=data, headers=headers, data=files)
+        else:
+            r = request(url, json=data, headers=headers)
+
         r.raise_for_status()
         return r
 

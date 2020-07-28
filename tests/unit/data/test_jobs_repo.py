@@ -142,8 +142,7 @@ def test_request_send_job(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -164,8 +163,7 @@ def test_request_send_job_completed(mocked_requests):
             "destination_mid": DEST_MID,
             "filename": FILENAME,
             "stationid": STATION_ID,
-        },
-        data=None
+        }
     )
 
     # Assert
@@ -184,8 +182,7 @@ def test_request_receive_job(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -204,8 +201,7 @@ def test_request_receive_job_completed(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -225,8 +221,7 @@ def test_submit_job(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -244,8 +239,7 @@ def test_request_stop_job(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -264,7 +258,6 @@ def test_request_pause_job(mocked_requests):
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
-        data=None
     )
 
     # Assert
@@ -282,8 +275,7 @@ def test_request_start_job(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -301,8 +293,7 @@ def test_request_top_from_job(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     print(r)
@@ -329,8 +320,7 @@ def test_request_logs_from_job(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -346,8 +336,7 @@ def test_list_jobs(mocked_requests):
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs".format(backend=BACKEND, namespace=NAMESPACE),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     # Assert
@@ -363,8 +352,7 @@ def test_kill_request(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     assert r.status == "kill"
@@ -379,8 +367,7 @@ def test_get_results_url(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     assert len(r) == 1

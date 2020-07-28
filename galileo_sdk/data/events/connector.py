@@ -418,4 +418,6 @@ if sys.version_info[0] == 3:
                 )
 
         def disconnect(self):
+            if self._socket is None:
+                return
             self._socket.disconnect()

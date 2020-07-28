@@ -117,8 +117,7 @@ def test_list_projects(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, query=QUERY_STR
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None,
-        data=None
+        json=None
     )
 
     assert len(r) == 1
@@ -159,8 +158,7 @@ def tests_create_project(mocked_requests):
             "nfs": False,
             "input_path": "input_path",
             "output_path": "output_path",
-        },
-        data=None
+        }
     )
 
     assert r.mission_id == "id"
@@ -188,8 +186,7 @@ def test_run_job_on_station(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"station_id": STATION_ID},
-        data=None
+        json={"station_id": STATION_ID}
     )
 
     assert isinstance(r, Job)
@@ -205,8 +202,7 @@ def test_run_job_on_machine(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"station_id": STATION_ID, "machine_id": MACHINE_ID},
-        data=None
+        json={"station_id": STATION_ID, "machine_id": MACHINE_ID}
     )
 
     assert isinstance(r, Job)
