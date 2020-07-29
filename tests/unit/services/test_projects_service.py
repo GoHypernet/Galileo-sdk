@@ -4,9 +4,7 @@ from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.jobs import Job
 from galileo_sdk.business.objects.missions import (
     Mission,
-    HECRASMission,
     MissionType,
-    PythonMission,
 )
 from galileo_sdk.business.services.missions import MissionsService
 
@@ -47,89 +45,6 @@ def test_list_projects():
 
     assert len(r) == 5
     assert r[0].mission_id == "project_id"
-
-
-def test_create_hecras_project():
-    projects_service.get_mission_types = mock.MagicMock(
-        return_value=[
-            MissionType(
-                id="hecras_project_type_id",
-                name="HECRAS",
-                description="description",
-                version="version",
-            )
-        ]
-    )
-    projects_repo.create_mission.return_value = Mission(
-        "project_id",
-        NAME,
-        DESCRIPTION,
-        "source_storage_id",
-        "source_path",
-        "destination_storage_id",
-        "destination_path",
-        "user_id",
-        datetime.now(),
-        "hecras_project_type_id",
-    )
-
-    r = projects_service.create_mission(
-        HECRASMission(
-            name=NAME,
-            description=DESCRIPTION,
-            version="version",
-            source_storage_id="source_storage_id",
-            destination_storage_id="destination_storage_id",
-            plan="plan",
-            input_path="input_path",
-            output_path="output_path",
-        )
-    )
-
-    assert r.name == NAME
-    assert r.description == DESCRIPTION
-    assert r.project_type_id == "hecras_project_type_id"
-
-
-def test_create_python_project():
-    projects_service.get_mission_types = mock.MagicMock(
-        return_value=[
-            MissionType(
-                id="python_project_type_id",
-                name="Python",
-                description="description",
-                version="version",
-            )
-        ]
-    )
-    projects_repo.create_mission.return_value = Mission(
-        "project_id",
-        NAME,
-        DESCRIPTION,
-        "source_storage_id",
-        "source_path",
-        "destination_storage_id",
-        "destination_path",
-        "user_id",
-        datetime.now(),
-        "python_project_type_id",
-    )
-
-    r = projects_service.create_mission(
-        PythonMission(
-            name=NAME,
-            description=DESCRIPTION,
-            version="version",
-            source_storage_id="source_storage_id",
-            destination_storage_id="destination_storage_id",
-            cpu_count=1,
-            filename="test.py",
-        )
-    )
-
-    assert r.name == NAME
-    assert r.description == DESCRIPTION
-    assert r.project_type_id == "python_project_type_id"
 
 
 def test_upload():

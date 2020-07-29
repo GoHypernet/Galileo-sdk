@@ -135,6 +135,7 @@ def top_dict_to_jobs_top(process, titles):
         [TopDetails(title, detail) for detail, title in zip(process, titles)]
     )
 
+
 def file_dict_to_file_listing(file):
     return FileListing(
         file["filename"],

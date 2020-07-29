@@ -136,6 +136,8 @@ class JobsSdk(EventsSdk):
             partial_names=partial_names,
             lz=machines,
             ownerids=ownerids,
+            sort_by=sort_by,
+            sort_order=sort_order,
         )
 
     def download_job_results(self, job_id, path, nonce=None):
@@ -167,5 +169,13 @@ class JobsSdk(EventsSdk):
         """
         return self._jobs_service.request_kill_job(job_id)
 
-    def download_and_extract_job_results(self, job_id, path):
-        return self._jobs_service.download_and_extract_job_results(job_id, path)
+    def download_and_extract_job_results(self, job_id, path, nonce=None):
+        """
+        Download and extract your job results when job is completed
+
+        :param job_id: str
+        :param path: str: path to directory, where results will be saved
+        :param nonce: str: can still download the file if provide an auth token
+        :return: List[str]: list of filenames that were downloaded
+        """
+        return self._jobs_service.download_and_extract_job_results(job_id, path, nonce)

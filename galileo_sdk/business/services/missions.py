@@ -9,7 +9,13 @@ class MissionsService:
         self._missions_repo = missions_repo
 
     def list_missions(
-        self, ids=None, names=None, user_ids=None, page=1, items=25,
+        self,
+        ids=None,
+        names=None,
+        user_ids=None,
+        page=1,
+        items=25,
+        mission_type_ids=None,
     ):
         query = generate_query_str(
             {
@@ -18,6 +24,7 @@ class MissionsService:
                 "user_ids": user_ids,
                 "page": page,
                 "items": items,
+                "project_type_id": mission_type_ids,
             }
         )
 
@@ -29,34 +36,55 @@ class MissionsService:
         description="",
         source_storage_id=None,
         destination_storage_id=None,
-        mission_type_name=None,
         source_path=None,
         destination_path=None,
         mission_type_id=None,
+        settings=None,
     ):
-
-        # if not project_type_id:
-        #     project_types = self.get_project_types()
-        #     for project_type in project_types:
-        #         if project_type.version == create_project_request.version and \
-        #                 project_type.name == create_project_request.project_type_name:
-        #             create_project_request.project_type_id = project_type.id
-        #
-        #     if not create_project_request.project_type_id:
-        #         raise Exception("Version of this project type is not found")
-
         return self._missions_repo.create_mission(
             CreateMissionRequest(
-                name,
-                description,
-                source_storage_id,
-                destination_storage_id,
-                mission_type_name,
-                source_path,
-                destination_path,
-                mission_type_id,
+                name=name,
+                description=description,
+                source_storage_id=source_storage_id,
+                destination_storage_id=destination_storage_id,
+                source_path=source_path,
+                destination_path=destination_path,
+                mission_type_id=mission_type_id,
+                settings=settings,
             )
         )
+
+    def create_mission_and_run_job(
+        self,
+        name,
+        directory,
+        station_id,
+        lz_id=None,
+        description="",
+        source_storage_id=None,
+        destination_storage_id=None,
+        source_path=None,
+        destination_path=None,
+        mission_type_id=None,
+        settings=None,
+    ):
+        mission = self.create_mission(
+            name=name,
+            description=description,
+            source_storage_id=source_storage_id,
+            destination_storage_id=destination_storage_id,
+            source_path=source_path,
+            destination_path=destination_path,
+            mission_type_id=mission_type_id,
+            settings=settings,
+        )
+        self.upload(mission.mission_id, directory)
+        if lz_id:
+            job = self.run_job_on_lz(mission.mission_id, station_id, lz_id)
+        else:
+            job = self.run_job_on_station(mission.mission_id, station_id)
+
+        return job
 
     def upload(self, mission_id, dir):
         name = os.path.basename(dir)
@@ -99,5 +127,44 @@ class MissionsService:
     def delete_mission_files(self, mission_id):
         return self._missions_repo.delete_mission_files(mission_id)
 
-    def get_mission_types(self):
-        return self._missions_repo.get_mission_types()
+    def delete_file(self, mission_id, file):
+        return self._missions_repo.delete_file(mission_id, file)
+
+    def list_mission_types(self):
+        return self._missions_repo.list_mission_types()
+
+    def _parse_wizard_spec(self, wizard_spec, settings):
+        dict_key = wizard_spec.get("key", None)
+        dict_type = wizard_spec.get("type", None)
+        if dict_key and dict_type and dict_key != "dependency":
+            # Rename types to standard Python types
+            if dict_type == "checkbox":
+                dict_type = "bool"
+            elif dict_type == "text":
+                dict_type = "str"
+            elif dict_type == "number":
+                dict_type = "int"
+
+            if dict_key == "dependencies":
+                dict_type = "Dict[str, str], e.g. {'dependency1': 'version1', 'dependency2': 'version2'}"
+
+            settings[dict_key] = dict_type
+
+        for key, value in wizard_spec.items():
+            if type(value) == type(list()):
+                for v in value:
+                    self._parse_wizard_spec(v, settings)
+
+    def _get_settings(self, wizard_spec_pages):
+        settings = []
+        for page in wizard_spec_pages:
+            self._parse_wizard_spec(page, settings)
+
+        return settings
+
+    def get_mission_type(self, mission_type_id):
+        return self._missions_repo.get_mission_type(mission_type_id)
+
+    def get_mission_type_settings_info(self, mission_type_id):
+        mission_type = self.get_mission_type(mission_type_id)
+        return self._get_settings(mission_type["wizard_spec"])

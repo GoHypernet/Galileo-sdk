@@ -63,6 +63,8 @@ class JobsService:
         partial_names=None,
         lz=None,
         ownerids=None,
+        sort_by=None,
+        sort_order=None,
     ):
         if userids is None:
             self_profile = self._profile_repo.self()
@@ -83,6 +85,8 @@ class JobsService:
                 "partial_names": partial_names,
                 "machines": lz,
                 "ownerids": ownerids,
+                "sort_by": sort_by,
+                "sort_order": sort_order,
             },
         )
         return self._jobs_repo.list_jobs(query)
@@ -99,7 +103,9 @@ class JobsService:
             absolute_path = os.path.join(path, file.filename)
             self._jobs_repo.download_results(
                 job_id,
-                generate_query_str({"filename": file.filename, "path": file.path}),
+                generate_query_str(
+                    {"filename": file.filename, "path": file.path, "nonce": nonce}
+                ),
                 os.path.join(path, file.filename),
             )
             files_downloaded.append(absolute_path)

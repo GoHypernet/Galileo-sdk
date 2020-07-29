@@ -1,10 +1,10 @@
 from galileo_sdk.compat import mock
 from galileo_sdk.business.objects import Job
 from galileo_sdk.business.objects.jobs import EJobStatus
+from galileo_sdk.business.objects.missions import CreateMissionRequest
 from galileo_sdk.business.utils.generate_query_str import generate_query_str
 from galileo_sdk.data.repositories.missions import MissionsRepository
 from galileo_sdk.mock_response import MockResponse
-from galileo_sdk.business.objects.missions import HECRASMission
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
@@ -117,7 +117,7 @@ def test_list_projects(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, query=QUERY_STR
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None
+        json=None,
     )
 
     assert len(r) == 1
@@ -129,15 +129,11 @@ def test_list_projects(mocked_requests):
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def tests_create_project(mocked_requests):
     r = projects_repo.create_mission(
-        HECRASMission(
+        CreateMissionRequest(
             name="name",
             description="description",
-            version="version",
             source_storage_id="source_storage_id",
             destination_storage_id="destination_storage_id",
-            plan="plan",
-            input_path="input_path",
-            output_path="output_path",
         )
     )
 
@@ -153,12 +149,7 @@ def tests_create_project(mocked_requests):
             "source_path": None,
             "destination_path": None,
             "project_type_id": None,
-            "plan": "plan",
-            "files_to_run": [],
-            "nfs": False,
-            "input_path": "input_path",
-            "output_path": "output_path",
-        }
+        },
     )
 
     assert r.mission_id == "id"
@@ -186,7 +177,7 @@ def test_run_job_on_station(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"station_id": STATION_ID}
+        json={"station_id": STATION_ID},
     )
 
     assert isinstance(r, Job)
@@ -202,7 +193,7 @@ def test_run_job_on_machine(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"station_id": STATION_ID, "machine_id": MACHINE_ID}
+        json={"station_id": STATION_ID, "machine_id": MACHINE_ID},
     )
 
     assert isinstance(r, Job)

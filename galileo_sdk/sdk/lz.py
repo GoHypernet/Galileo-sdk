@@ -10,9 +10,9 @@ class LzSdk(EventsSdk):
 
     def on_lz_status_update(self, func):
         """
-        Callback will execute upon a machine status update event
+        Callback will execute upon a landing zone status update event
 
-        :param func: Callable[[MachineStatusUpdateEvent], None]
+        :param func: Callable[[LzStatusUpdateEvent], None]
         :return: None
         """
         self._set_event_handler("lz")
@@ -20,9 +20,9 @@ class LzSdk(EventsSdk):
 
     def on_lz_hardware_update(self, func):
         """
-        Callback will execute upon a machine hardware update event
+        Callback will execute upon a landing zone hardware update event
 
-        :param func: Callable[[MachineHardwareUpdateEvent], None]
+        :param func: Callable[[LzHardwareUpdateEvent], None]
         :return: None
         """
         self._set_event_handler("lz")
@@ -38,29 +38,29 @@ class LzSdk(EventsSdk):
         self._set_event_handler("lz")
         self._events.on_lz_registered(func)
 
-    def get_lz_by_id(self, machine_id):
+    def get_lz_by_id(self, lz_id):
         """
         Get landing zone's info by its id
 
-        :param machine_id: str
-        :return: Machine
+        :param lz_id: str
+        :return: Lz
         """
-        return self._lz_service.get_lz_by_id(machine_id)
+        return self._lz_service.get_lz_by_id(lz_id)
 
     def list_lz(
-        self, mids=None, userids=None, page=1, items=25,
+        self, lz_ids=None, userids=None, page=1, items=25,
     ):
         """
         List all machines
 
-        :param mids: List[str]: Filter by machine id
+        :param lz_ids: List[str]: Filter by landing zone id
         :param userids: List[str]: Filter by user id
         :param page: int: Page #
         :param items: int: Items per page
-        :return: List[Machine]
+        :return: List[Lz]
         """
         return self._lz_service.list_lz(
-            mids=mids, userids=userids, page=page, items=items
+            lz_ids=lz_ids, userids=userids, page=page, items=items
         )
 
     def update_lz(self, request):
@@ -68,7 +68,7 @@ class LzSdk(EventsSdk):
         Update info about landing zone
 
         :param request: UpdateMachineRequest
-        :return: Machine
+        :return: Lz
         """
 
         return self._lz_service.update(request)

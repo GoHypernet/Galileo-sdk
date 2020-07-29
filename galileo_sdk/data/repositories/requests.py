@@ -23,8 +23,15 @@ class RequestsRepository(object):
         )
 
     def _request(
-        self, request, endpoint, data=None, params=None, query=None, fragment=None, files=None,
-            filename=None
+        self,
+        request,
+        endpoint,
+        data=None,
+        params=None,
+        query=None,
+        fragment=None,
+        files=None,
+        filename=None,
     ):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()

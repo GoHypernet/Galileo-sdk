@@ -105,7 +105,7 @@ def get_machine_by_id(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, mid=MID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json=None
+        json=None,
     )
 
     # Assert
@@ -121,7 +121,7 @@ def list_machines(mocked_requests):
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/machines".format(backend=BACKEND, namespace=NAMESPACE),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"page": None, "items": None, "mids": None, "userids": None}
+        json={"page": None, "items": None, "mids": None, "userids": None},
     )
 
     # Assert
@@ -142,7 +142,7 @@ def update_max_concurrent_jobs(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, mid=MID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"amount": AMOUNT}
+        json={"amount": AMOUNT},
     )
 
     # Assert

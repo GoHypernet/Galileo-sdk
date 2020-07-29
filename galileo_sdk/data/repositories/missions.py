@@ -1,24 +1,7 @@
 from datetime import datetime
 
-from galileo_sdk.business.objects.missions import (
-    DirectoryListing,
-    Mission,
-    MissionType,
-    HECRASMission,
-    PythonMission,
-    JuliaMission,
-    RMission,
-    STATAMission,
-    OctaveMission,
-    SWMM5Mission,
-    AutoDockVinaMission,
-    BioconductorMission,
-    BlenderMission,
-    QuantumEspressoMission,
-    MatLabMission,
-    FLO2DMission,
-)
-from galileo_sdk.business.objects import EJobStatus, Job, JobStatus, UpdateJobRequest
+from galileo_sdk.business.objects.missions import DirectoryListing, Mission, MissionType
+from galileo_sdk.business.objects import EJobStatus, Job, JobStatus
 from galileo_sdk.business.objects.missions import FileListing
 from galileo_sdk.data.repositories import RequestsRepository
 
@@ -49,7 +32,6 @@ class MissionsRepository(RequestsRepository):
             "destination_path": create_project_request.destination_path,
             "project_type_id": create_project_request.project_type_id,
         }
-        self._add_project_type_params(body, create_project_request)
         response = self._post("/projects", body)
         json = response.json()
         project = json["project"]
@@ -109,10 +91,10 @@ class MissionsRepository(RequestsRepository):
         return json
 
     def delete_mission_files(self, mission_id):
-        self._delete("projects/{project_id}".format(project_project_id=mission_id))
+        self._delete("projects/{project_id}".format(project_id=mission_id))
         return mission_id
 
-    def get_mission_types(self):
+    def list_mission_types(self):
         response = self._get("/projecttypes/summaries")
         json = response.json()
         projecttypes = json["project_types"]
@@ -120,68 +102,11 @@ class MissionsRepository(RequestsRepository):
             projecttype_dict_to_projecttype(projecttype) for projecttype in projecttypes
         ]
 
-    def _add_project_type_params(self, body, create_project_request):
-        if isinstance(create_project_request, HECRASMission):
-            body["plan"] = create_project_request.plan
-            body["files_to_run"] = create_project_request.files_to_run
-            body["nfs"] = create_project_request.nfs
-            body["input_path"] = create_project_request.input_path
-            body["output_path"] = create_project_request.output_path
-        elif (
-            isinstance(create_project_request, PythonMission)
-            or isinstance(create_project_request, JuliaMission)
-            or isinstance(create_project_request, STATAMission)
-        ):
-            body["filename"] = create_project_request.filename
-            body["cpu"] = create_project_request.cpu_count
-            body["arg"] = (create_project_request.arg,)
-            body["dependencies"] = {
-                dependency.name: dependency.version
-                for dependency in create_project_request.dependencies
-            }
-            body["env"] = create_project_request.env
-        elif isinstance(create_project_request, RMission):
-            body["filename"] = create_project_request.filename
-            body["cpu"] = create_project_request.cpu_count
-            body["arg"] = create_project_request.arg
-            body["dependencies"] = (
-                {
-                    dependency.name: dependency.version
-                    for dependency in create_project_request.dependencies
-                }
-                if create_project_request.dependencies
-                else {}
-            )
-            body["cran_dependencies"] = (
-                {
-                    dependency.name: dependency.version
-                    for dependency in create_project_request.dependencies
-                }
-                if create_project_request.cran_dependencies
-                else {}
-            )
-            body["env"] = create_project_request.env
-        elif (
-            isinstance(create_project_request, SWMM5Mission)
-            or isinstance(create_project_request, QuantumEspressoMission)
-            or isinstance(create_project_request, MatLabMission)
-            or isinstance(create_project_request, FLO2DMission)
-        ):
-            body["filename"] = create_project_request.filename
-        elif isinstance(create_project_request, OctaveMission):
-            body["filename"] = create_project_request.filename
-            body["dependencies"] = {
-                dependency.name: dependency.version
-                for dependency in create_project_request.dependencies
-            }
-            body["arg"] = create_project_request.arg
-        elif isinstance(create_project_request, AutoDockVinaMission):
-            body["FILENAME"] = create_project_request.filename
-        elif isinstance(create_project_request, BioconductorMission):
-            pass
-        elif isinstance(create_project_request, BlenderMission):
-            body["copy_in_path"] = create_project_request.copy_in_path
-            body["copy_container_path"] = create_project_request.copy_container_path
+    def get_mission_type(self, mission_type_id):
+        response = self._get(
+            "/projecttypes/{mission_type_id}".format(mission_type_id=mission_type_id)
+        )
+        return projecttype_dict_to_projecttype(response)
 
 
 def projecttype_dict_to_projecttype(projecttype):

@@ -9,10 +9,10 @@ class LzService:
         return self._lz_repo.get_lz_by_id(lz_id)
 
     def list_lz(
-        self, mids=None, userids=None, page=1, items=25,
+        self, lz_ids=None, userids=None, page=1, items=25,
     ):
         query = generate_query_str(
-            {"mids": mids, "userids": userids, "page": page, "items": items}
+            {"mids": lz_ids, "userids": userids, "page": page, "items": items}
         )
         return self._lz_repo.list_lz(query)
 
