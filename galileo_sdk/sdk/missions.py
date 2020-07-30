@@ -23,7 +23,7 @@ class MissionsSdk:
         :param page: Optional[int]: Page #
         :param items: Optional[int]: # of items per page
         :param mission_type_ids: Optional[List[str]]: Filter by mission_type_ids
-        :return: List[mission]
+        :return: List[Mission]
         """
         return self._missions_service.list_missions(
             ids=ids,
@@ -33,6 +33,14 @@ class MissionsSdk:
             items=items,
             mission_type_ids=mission_type_ids,
         )
+
+    def get_mission_by_id(self, mission_id):
+        """
+        Get a mission's details by searching its id
+        :param mission_id: str: Mission id
+        :return: Mission
+        """
+        return self._missions_service.get_mission_by_id(mission_id)
 
     def create_mission(
         self,
@@ -245,15 +253,15 @@ class MissionsSdk:
         )
         return self._missions_service.update_mission(request)
 
-    def update_mission_args(self, mission_id, args):
+    def update_mission_args(self, mission_id, arg):
         """
         Update the arguments to a mission.
 
-        :param mission_id:
-        :param args:
+        :param mission_id: str: Mission's id
+        :param arg: List[str]: Please supply them as a list of str ["arg1", "arg2"]
         :return:
         """
-        return self._missions_service.update_mission(mission_id, args)
+        return self._missions_service.update_mission_args(mission_id, arg)
 
     def list_mission_types(self):
         """

@@ -31,7 +31,11 @@ class Mission:
         destination_path,  # default will be project_id
         user_id,
         creation_timestamp,
-        project_type_id,
+        mission_type_id,
+        updated_timestamp=None,
+        organization_id=None,
+        settings=None,
+        mission_type_name=None,
     ):
         self.mission_id = mission_id
         self.name = name
@@ -42,15 +46,31 @@ class Mission:
         self.destination_path = destination_path
         self.user_id = user_id
         self.creation_timestamp = creation_timestamp
-        self.project_type_id = project_type_id
+        self.mission_type_id = mission_type_id
+        self.updated_timestamp = updated_timestamp
+        self.organization_id = organization_id
+        self.settings = settings
+        self.mission_type_name = mission_type_name
 
 
 class MissionType:
-    def __init__(self, id, name, description, version):
+    def __init__(
+        self,
+        id,
+        name,
+        description,
+        version,
+        active=None,
+        container_type=None,
+        wizard_spec=None,
+    ):
         self.id = id
         self.name = name
         self.description = description
         self.version = version
+        self.active = active
+        self.container_type = container_type
+        self.wizard_spec = wizard_spec
 
 
 class CreateMissionRequest(object):
@@ -88,7 +108,7 @@ class UpdateMissionRequest(CreateMissionRequest):
         settings=None,
     ):
         self.mission_id = mission_id
-        super(CreateMissionRequest, self).__init__(
+        super(UpdateMissionRequest, self).__init__(
             name=name,
             description=description,
             source_storage_id=source_storage_id,

@@ -106,11 +106,11 @@ class MissionsRepository(RequestsRepository):
             projecttype_dict_to_projecttype(projecttype) for projecttype in projecttypes
         ]
 
-    def get_mission_type(self, mission_type_id):
-        response = self._get(
-            "/projecttypes/{mission_type_id}".format(mission_type_id=mission_type_id)
-        )
-        return projecttype_dict_to_projecttype(response)
+    def get_mission_type(self, query):
+        response = self._get("/projecttypes", query=query)
+        json = response.json()
+        projecttype = json["projecttypes"]
+        return projecttype_dict_to_projecttype(projecttype[0])
 
 
 def projecttype_dict_to_projecttype(projecttype):
@@ -119,6 +119,9 @@ def projecttype_dict_to_projecttype(projecttype):
         projecttype["name"],
         projecttype["description"],
         projecttype["version"],
+        projecttype.get("active", None),
+        projecttype.get("container_type", None),
+        projecttype.get("wizard_spec", None),
     )
 
 
@@ -147,6 +150,10 @@ def project_dict_to_project(project):
         project["user_id"],
         project["creation_timestamp"],
         project["project_type_id"],
+        project.get("updated_timestamp", None),
+        project.get("organization_id", None),
+        project.get("settings", None),
+        project.get("project_type_name"),
     )
 
 

@@ -454,7 +454,7 @@ class StationsSdk(EventsSdk):
         self,
         stationids=None,
         names=None,
-        mids=None,
+        lz_ids=None,
         user_roles=None,
         volumeids=None,
         descriptions=None,
@@ -472,7 +472,7 @@ class StationsSdk(EventsSdk):
         List of your Galileo stations
         :param stationids: Optional[List[str]]: Filter based on station ids
         :param names: Optional[List[str]]: Filter based on names
-        :param mids: Optional[List[str]]: Filter based on mids
+        :param lz_ids: Optional[List[str]]: Filter based on landing zone ids
         :param user_roles: Optional[List[str]]: Filter based on user roles
         :param volumeids: Optional[List[str]]: Filter based on volumeids
         :param descriptions: Optional[List[str]]: Filter based on descriptions
@@ -491,7 +491,7 @@ class StationsSdk(EventsSdk):
         return self._stations_service.list_stations(
             stationids=stationids,
             names=names,
-            mids=mids,
+            lz_ids=lz_ids,
             user_roles=user_roles,
             volumeids=volumeids,
             descriptions=descriptions,
@@ -602,25 +602,25 @@ class StationsSdk(EventsSdk):
         """
         return self._stations_service.delete_station(station_id)
 
-    def add_machines_to_station(self, station_id, mids):
+    def add_machines_to_station(self, station_id, lz_ids):
         """
         Add machines to a station
 
         :param station_id: str
-        :param mids: List[str]: list of machine ids that will be added
+        :param lz_ids: List[str]: list of machine ids that will be added
         :return: boolean
         """
-        return self._stations_service.add_lz_to_station(station_id, mids)
+        return self._stations_service.add_lz_to_station(station_id, lz_ids)
 
-    def remove_machines_from_station(self, station_id, mids):
+    def remove_machines_from_station(self, station_id, lz_ids):
         """
         Remove machines from a station
 
         :param station_id: str
-        :param mids: List[str]: list of machine ids that will be added
+        :param lz_ids: List[str]: list of machine ids that will be added
         :return: boolean
         """
-        return self._stations_service.remove_lz_from_station(station_id, mids)
+        return self._stations_service.remove_lz_from_station(station_id, lz_ids)
 
     def add_volumes_to_station(self, station_id, name, mount_point, access):
         """
@@ -679,9 +679,9 @@ class StationsSdk(EventsSdk):
         """
         Update a station
 
-        :param station_id:
-        :param name:
-        :param description:
+        :param station_id: str
+        :param name: str
+        :param description: str
         :return:
         """
         request = UpdateStationRequest(

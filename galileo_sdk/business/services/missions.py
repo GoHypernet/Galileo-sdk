@@ -31,6 +31,11 @@ class MissionsService:
 
         return self._missions_repo.list_missions(query)
 
+    def get_mission_by_id(self, mission_id):
+        query = generate_query_str({"ids": mission_id})
+
+        return self._missions_repo.list_missions(query)[0]
+
     def create_mission(self, request):
         return self._missions_repo.create_mission(request)
 
@@ -76,11 +81,15 @@ class MissionsService:
     def update_mission(self, update_mission_request):
         return self._missions_repo.update_mission(update_mission_request)
 
-    def update_mission_args(self, mission_id, args):
+    def update_mission_args(self, mission_id, arg):
+        if not isinstance(arg, list):
+            raise Exception(
+                "args must be in the form of a List[str] e.g. ['arg1', 'arg2', 'arg3']"
+            )
         update_mission_request = UpdateMissionRequest(
-            None, None, None, None, None, args
+            mission_id=mission_id, settings={"arg": arg}
         )
-        return self._missions_repo.update_mission(mission_id, update_mission_request)
+        return self._missions_repo.update_mission(update_mission_request)
 
     def delete_file(self, mission_id, filename):
         query = generate_query_str({"filename": quote(filename, safe="")})
@@ -113,15 +122,16 @@ class MissionsService:
                     self._parse_wizard_spec(v, settings)
 
     def _get_settings(self, wizard_spec_pages):
-        settings = []
+        settings = {}
         for page in wizard_spec_pages:
             self._parse_wizard_spec(page, settings)
 
         return settings
 
     def get_mission_type(self, mission_type_id):
-        return self._missions_repo.get_mission_type(mission_type_id)
+        query = generate_query_str({"ids": mission_type_id})
+        return self._missions_repo.get_mission_type(query)
 
     def get_mission_type_settings_info(self, mission_type_id):
         mission_type = self.get_mission_type(mission_type_id)
-        return self._get_settings(mission_type["wizard_spec"])
+        return self._get_settings(mission_type.wizard_spec)
