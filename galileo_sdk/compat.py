@@ -8,7 +8,7 @@ is_py3 = _ver[0] == 3
 
 if is_py2:
     from urlparse import urlunparse, urlparse
-    from urllib import urlencode
+    from urllib import urlencode, quote
     import mock
     import urllib2
     from urllib2 import URLError
@@ -109,7 +109,7 @@ if is_py2:
 
 
 elif is_py3:
-    from urllib.parse import urlunparse, urlparse, urlencode
+    from urllib.parse import urlunparse, urlparse, urlencode, quote
     from urllib.error import URLError
     from unittest import mock
     import requests

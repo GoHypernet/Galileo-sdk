@@ -1,8 +1,8 @@
 from galileo_sdk.business.objects.lz import ELzStatus, Lz
-from galileo_sdk.data.repositories import RequestsRespository
+from galileo_sdk.data.repositories import RequestsRepository
 
 
-class LzRepository(RequestsRespository):
+class LzRepository(RequestsRepository):
     def __init__(
         self, settings_repository, auth_provider, namespace,
     ):

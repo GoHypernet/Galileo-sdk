@@ -1,4 +1,5 @@
 from .event import EventsSdk
+from ..business.objects.jobs import UpdateJobRequest
 
 
 class JobsSdk(EventsSdk):
@@ -136,6 +137,8 @@ class JobsSdk(EventsSdk):
             partial_names=partial_names,
             lz=machines,
             ownerids=ownerids,
+            sort_by=sort_by,
+            sort_order=sort_order,
         )
 
     def download_job_results(self, job_id, path, nonce=None):
@@ -149,12 +152,14 @@ class JobsSdk(EventsSdk):
         """
         return self._jobs_service.download_job_results(job_id, path, nonce)
 
-    def update_job(self, request):
+    def update_job(self, job_id, archived=None):
         """ Updates an existing job
 
-        :param request: UpdateJobRequest
+        :param job_id:
+        :param archived: bool: Archive a job
         return: Job
         """
+        request = UpdateJobRequest(job_id, archived)
 
         return self._jobs_service.update_job(request)
 
@@ -167,5 +172,13 @@ class JobsSdk(EventsSdk):
         """
         return self._jobs_service.request_kill_job(job_id)
 
-    def download_and_extract_job_results(self, job_id, path):
-        return self._jobs_service.download_and_extract_job_results(job_id, path)
+    def download_and_extract_job_results(self, job_id, path, nonce=None):
+        """
+        Download and extract your job results when job is completed
+
+        :param job_id: str
+        :param path: str: path to directory, where results will be saved
+        :param nonce: str: can still download the file if provide an auth token
+        :return: List[str]: list of filenames that were downloaded
+        """
+        return self._jobs_service.download_and_extract_job_results(job_id, path, nonce)

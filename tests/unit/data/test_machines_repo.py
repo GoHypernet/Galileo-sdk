@@ -2,7 +2,7 @@ from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.lz import (
     ELzStatus,
     Lz,
-    UpdateMachineRequest,
+    UpdateLzRequest,
 )
 from galileo_sdk.data.repositories.lz import LzRepository
 from galileo_sdk.mock_response import MockResponse
@@ -134,7 +134,7 @@ def list_machines(mocked_requests):
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def update_max_concurrent_jobs(mocked_requests):
     # Call
-    r = machines_repo.update(UpdateMachineRequest(MID))
+    r = machines_repo.update(UpdateLzRequest(MID))
 
     # Act
     mocked_requests.assert_called_once_with(

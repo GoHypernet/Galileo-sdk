@@ -2,7 +2,7 @@ from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.lz import (
     ELzStatus,
     Lz,
-    UpdateMachineRequest,
+    UpdateLzRequest,
 )
 from galileo_sdk.business import LzService
 
@@ -88,7 +88,7 @@ def test_update():
     )
 
     # Call
-    r = machines_service.update(UpdateMachineRequest(mid=MID))
+    r = machines_service.update(UpdateLzRequest(lz_id=MID))
 
     # Assert
     assert r.userid == str(x)

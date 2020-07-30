@@ -3,6 +3,7 @@ import zipfile
 
 from ..objects.exceptions import JobsException
 from ..utils.generate_query_str import generate_query_str
+from galileo_sdk.compat import quote
 
 
 class JobsService:
@@ -63,6 +64,8 @@ class JobsService:
         partial_names=None,
         lz=None,
         ownerids=None,
+        sort_by=None,
+        sort_order=None,
     ):
         if userids is None:
             self_profile = self._profile_repo.self()
@@ -83,6 +86,8 @@ class JobsService:
                 "partial_names": partial_names,
                 "machines": lz,
                 "ownerids": ownerids,
+                "sort_by": sort_by,
+                "sort_order": sort_order,
             },
         )
         return self._jobs_repo.list_jobs(query)
@@ -99,15 +104,21 @@ class JobsService:
             absolute_path = os.path.join(path, file.filename)
             self._jobs_repo.download_results(
                 job_id,
-                generate_query_str({"filename": file.filename, "path": file.path}),
+                generate_query_str(
+                    {
+                        "filename": quote(file.filename, safe=""),
+                        "path": file.path,
+                        "nonce": nonce,
+                    }
+                ),
                 os.path.join(path, file.filename),
             )
             files_downloaded.append(absolute_path)
 
         return files_downloaded
 
-    def download_and_extract_job_results(self, job_id, path):
-        files_downloaded = self.download_job_results(job_id, path)
+    def download_and_extract_job_results(self, job_id, path, nonce=None):
+        files_downloaded = self.download_job_results(job_id, path, nonce)
         for file in files_downloaded:
             dir = file.rsplit(".zip", 1)[0]
             if not os.path.exists(dir):

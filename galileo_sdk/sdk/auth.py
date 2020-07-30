@@ -10,10 +10,10 @@ class AuthSdk:
         self, client_id="oDmH6Nf4DN3oILcNk7cQqBchXUfv7fpD", mode="prod", audience=""
     ):
         """
-        Constructor for AuthSdk class. 
+        Constructor for AuthSdk class.
 
-        :param client_id: string: Optional argument for tracking which integration is calling the sdk. 
-        :param mode: string: Optional argument, can be prod (default) or dev. 
+        :param client_id: string: Optional argument for tracking which integration is calling the sdk.
+        :param mode: string: Optional argument, can be prod (default) or dev.
         :param audience: string: Optional argument
         :return: AuthSdk
         """
@@ -25,20 +25,13 @@ class AuthSdk:
         if audience:
             self.audience = audience
         else:
-            # otherwise the choice is between production and development
-            if mode == "prod":
-                self.audience = "https://booming-client-217619.appspot.com"
-            elif mode == "dev":
-                self.audience = "https://profound-ripsaw-232522.appspot.com"
-            else:
-                print("mode: " + str(mode) + " not recognized")
-                exit()
+            self.audience = "https://api.galileoapp.io"
 
     def initialize(
         self, refresh_token_path=os.path.join(os.path.expanduser("~"), ".galileo")
     ):
         """
-        Automatically authenticate the user either through a webbrowser or auth-link printed to the terminal. 
+        Automatically authenticate the user either through a webbrowser or auth-link printed to the terminal.
 
         :param refresh_token_path: string: An optional file path for where to store auth token information. If you don not want authentication info to be stored, pass an empty string, i.e. refresh_token_path=''. The default location is in you home directory in a file named .galileo.
         :return: access_token, refresh_token, expiration
@@ -57,9 +50,9 @@ class AuthSdk:
 
     def device_flow(self, refresh_token_path=""):
         """
-        Attempts to bring up a webbrowser for the user to authenticate. Otherwise, it will print a URL and access code to stdout. 
+        Attempts to bring up a webbrowser for the user to authenticate. Otherwise, it will print a URL and access code to stdout.
 
-        :param refresh_token_path: string: An optional file path for where to store auth token information. If you do not provide a file path, the programmer is responsible for handling persistence. 
+        :param refresh_token_path: string: An optional file path for where to store auth token information. If you do not provide a file path, the programmer is responsible for handling persistence.
         :return: access_token, refresh_token, expiration
         """
         (
@@ -169,9 +162,9 @@ body {
 
     def refresh_token_file_flow(self, refresh_token_file):
         """
-        Refreshes access token if given the location of a refresh token file.  
+        Refreshes access token if given the location of a refresh token file.
 
-        :param refresh_token_file: string: File path for where auth token information is stored.  
+        :param refresh_token_file: string: File path for where auth token information is stored.
         :return: access_token, refresh_token, expiration
         """
         if not os.path.exists(refresh_token_file):
@@ -191,10 +184,10 @@ body {
 
     def refresh_token_flow(self, refresh_token, expires_in):
         """
-        Refreshes access token if given a refresh token.  
+        Refreshes access token if given a refresh token.
 
-        :param refresh_token: string: String object representing the token. 
-        :param expires_in: string: String object representing the expiry date of the refresh token.         
+        :param refresh_token: string: String object representing the token.
+        :param expires_in: string: String object representing the expiry date of the refresh token.
         :return: access_token, refresh_token, expiration
         """
         access_token = self._get_new_access_token(refresh_token, "")
