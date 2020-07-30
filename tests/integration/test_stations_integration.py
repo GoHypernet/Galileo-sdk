@@ -1,4 +1,4 @@
-from galileo_sdk import GalileoSdk, ResourcePolicy, StationRole
+from galileo_sdk import GalileoSdk, ResourcePolicy, StationRole, EVolumeAccess
 
 # Must set env variables before running tests
 
