@@ -85,4 +85,10 @@ from galileo_sdk.business.objects.stations import (
     StationAdminStationUpdated,
     StationMemberStationUpdated,
     StationsEvents,
+    ResourcePolicy,
+    UpdateResourcePolicyRequest,
+    CreateStationRoleRequest,
+    UpdateStationRoleRequest,
+    AutoscaleSettings,
+    StationRole,
 )

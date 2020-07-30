@@ -77,4 +77,10 @@ from .business.objects import (
     StationAdminStationUpdated,
     StationMemberStationUpdated,
     StationsEvents,
+    ResourcePolicy,
+    UpdateResourcePolicyRequest,
+    CreateStationRoleRequest,
+    UpdateStationRoleRequest,
+    AutoscaleSettings,
+    StationRole,
 )

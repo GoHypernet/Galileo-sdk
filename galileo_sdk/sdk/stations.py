@@ -1,5 +1,9 @@
 from .event import EventsSdk
-from ..business.objects.stations import UpdateStationRequest
+from ..business.objects import (
+    UpdateStationRequest,
+    UpdateResourcePolicyRequest,
+    CreateStationRoleRequest,
+)
 
 
 class StationsSdk(EventsSdk):
@@ -688,3 +692,683 @@ class StationsSdk(EventsSdk):
             station_id=station_id, name=name, description=description
         )
         return self._stations_service.update_station(request)
+
+    def get_station_resource_policy(self, station_id):
+        """
+        Gets the resource policy for a station
+
+        :param station_id: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_resource_policy(station_id)
+
+    def update_station_resource_policy(
+        self,
+        station_id,
+        max_cpu_per_job=None,
+        max_memory_per_job=None,
+        max_gpu_per_job=None,
+        max_cpu_per_station=None,
+        max_memory_per_station=None,
+        max_gpu_per_station=None,
+        max_cpu_global=None,
+        max_memory_global=None,
+        max_gpu_global=None,
+        max_projects=None,
+        max_users_in_station=None,
+        max_stations=None,
+        max_project_types=None,
+        max_cloud_storage_space=None,
+        max_spend_per_day=None,
+        max_spend_per_week=None,
+        max_spend_per_month=None,
+        max_spend_per_year=None,
+        cpu_credits_per_hour=None,
+        memory_credits_per_hour=None,
+        gpu_credits_per_hour=None,
+    ):
+        """
+        Updates an the resource policy attached to the station. Creates the policy if it does not exist.
+
+        :param station_id: str
+        :param max_cpu_per_job: int
+        :param max_memory_per_job: int
+        :param max_gpu_per_job: int
+        :param max_cpu_per_station: int
+        :param max_memory_per_station: int
+        :param max_gpu_per_station: int
+        :param max_cpu_global: int
+        :param max_memory_global: int
+        :param max_gpu_global: int
+        :param max_projects: int
+        :param max_users_in_station: int
+        :param max_stations: int
+        :param max_project_types: int
+        :param max_cloud_storage_space: int
+        :param max_spend_per_day: int
+        :param max_spend_per_week: int
+        :param max_spend_per_month: int
+        :param max_spend_per_year: int
+        :param cpu_credits_per_hour: int
+        :param memory_credits_per_hour: int
+        :param gpu_credits_per_hour: int
+        :return: ResourcePolicy
+        """
+        request = UpdateResourcePolicyRequest(
+            max_cpu_per_job=max_cpu_per_job,
+            max_memory_per_job=max_memory_per_job,
+            max_gpu_per_job=max_gpu_per_job,
+            max_cpu_per_station=max_cpu_per_station,
+            max_memory_per_station=max_memory_per_station,
+            max_gpu_per_station=max_gpu_per_station,
+            max_cpu_global=max_cpu_global,
+            max_memory_global=max_memory_global,
+            max_gpu_global=max_gpu_global,
+            max_projects=max_projects,
+            max_users_in_station=max_users_in_station,
+            max_stations=max_stations,
+            max_project_types=max_project_types,
+            max_cloud_storage_space=max_cloud_storage_space,
+            max_spend_per_day=max_spend_per_day,
+            max_spend_per_week=max_spend_per_week,
+            max_spend_per_month=max_spend_per_month,
+            max_spend_per_year=max_spend_per_year,
+            cpu_credits_per_hour=cpu_credits_per_hour,
+            memory_credits_per_hour=memory_credits_per_hour,
+            gpu_credits_per_hour=gpu_credits_per_hour,
+        )
+        return self._stations_service.update_station_resource_policy(
+            station_id, request
+        )
+
+    def delete_station_resource_policy(self, station_id):
+        """
+        Deletes the resource policy associated with the station.
+
+        :param station_id: str
+        :return: boolean
+        """
+        return self._stations_service.delete_station_resource_policy(station_id)
+
+    def get_self_station_resource_limits(self, station_id):
+        """
+        Returns the user's calculated (or effective) resource policy in the station.
+
+        :param station_id: str
+        :return: Tuple(ResourcePolicy, lz_id)
+        """
+        return self._stations_service.get_self_resource_limits(station_id)
+
+    def update_station_member(self, station_id, userid, role_id):
+        """
+        Updates a user in a station.
+
+        :param station_id: str
+        :param userid: str
+        :param role_id: str
+        :return: Station
+        """
+        return self._stations_service.update_station_member(station_id, userid, role_id)
+
+    def get_station_user_resource_policy(self, station_id, userid):
+        """
+        Gets the resource policy for a station user.
+
+        :param station_id: str
+        :param userid: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_user_resource_policy(
+            station_id, userid
+        )
+
+    def update_station_user_resource_policy(
+        self,
+        station_id,
+        userid,
+        max_cpu_per_job=None,
+        max_memory_per_job=None,
+        max_gpu_per_job=None,
+        max_cpu_per_station=None,
+        max_memory_per_station=None,
+        max_gpu_per_station=None,
+        max_cpu_global=None,
+        max_memory_global=None,
+        max_gpu_global=None,
+        max_projects=None,
+        max_users_in_station=None,
+        max_stations=None,
+        max_project_types=None,
+        max_cloud_storage_space=None,
+        max_spend_per_day=None,
+        max_spend_per_week=None,
+        max_spend_per_month=None,
+        max_spend_per_year=None,
+        cpu_credits_per_hour=None,
+        memory_credits_per_hour=None,
+        gpu_credits_per_hour=None,
+    ):
+        """
+        Updates an the resource policy attached to the station user. Creates the policy if it does not exist.
+
+        :param station_id: str
+        :param userid: str
+        :param max_cpu_per_job: int
+        :param max_memory_per_job: int
+        :param max_gpu_per_job: int
+        :param max_cpu_per_station: int
+        :param max_memory_per_station: int
+        :param max_gpu_per_station: int
+        :param max_cpu_global: int
+        :param max_memory_global: int
+        :param max_gpu_global: int
+        :param max_projects: int
+        :param max_users_in_station: int
+        :param max_stations: int
+        :param max_project_types: int
+        :param max_cloud_storage_space: int
+        :param max_spend_per_day: int
+        :param max_spend_per_week: int
+        :param max_spend_per_month: int
+        :param max_spend_per_year: int
+        :param cpu_credits_per_hour: int
+        :param memory_credits_per_hour: int
+        :param gpu_credits_per_hour: int
+        :return: ResourcePolicy
+        """
+        request = UpdateResourcePolicyRequest(
+            max_cpu_per_job=max_cpu_per_job,
+            max_memory_per_job=max_memory_per_job,
+            max_gpu_per_job=max_gpu_per_job,
+            max_cpu_per_station=max_cpu_per_station,
+            max_memory_per_station=max_memory_per_station,
+            max_gpu_per_station=max_gpu_per_station,
+            max_cpu_global=max_cpu_global,
+            max_memory_global=max_memory_global,
+            max_gpu_global=max_gpu_global,
+            max_projects=max_projects,
+            max_users_in_station=max_users_in_station,
+            max_stations=max_stations,
+            max_project_types=max_project_types,
+            max_cloud_storage_space=max_cloud_storage_space,
+            max_spend_per_day=max_spend_per_day,
+            max_spend_per_week=max_spend_per_week,
+            max_spend_per_month=max_spend_per_month,
+            max_spend_per_year=max_spend_per_year,
+            cpu_credits_per_hour=cpu_credits_per_hour,
+            memory_credits_per_hour=memory_credits_per_hour,
+            gpu_credits_per_hour=gpu_credits_per_hour,
+        )
+        return self._stations_service.update_station_user_resource_policy(
+            station_id, userid, request
+        )
+
+    def delete_station_user_resource_policy(self, station_id, userid):
+        """
+        Deletes the resource policy associated with the station user.
+
+        :param station_id: str
+        :param userid: str
+        :return: boolean
+        """
+        return self._stations_service.delete_station_user_resource_policy(
+            station_id, userid
+        )
+
+    def get_station_roles(
+        self,
+        station_id,
+        page=None,
+        items=None,
+        names=None,
+        role_ids=None,
+        user_ids=None,
+        description=None,
+    ):
+        """
+        Returns a list of StationRole objects that match the query string
+
+        :param station_id:
+        :param user_ids:
+        :param description:
+        :param page: number
+        :param items: number
+        :param names: str
+        :param role_ids: List[str]
+        :return: List[StationRole]
+        """
+        return self._stations_service.get_station_roles(
+            station_id, page, items, names, role_ids, user_ids, description
+        )
+
+    def create_station_role(
+        self,
+        station_id,
+        name,
+        description="",
+        protected_role=0,
+        edit_station_roles=0,
+        assign_user_roles=0,
+        assign_protected_user_roles=0,
+        launch_jobs=0,
+        invite_users=0,
+        remove_all_users=0,
+        remove_invited_users=0,
+        view_all_users=0,
+        edit_metadata=0,
+        add_machine=0,
+        remove_any_machine=0,
+        view_all_jobs=0,
+        control_all_jobs=0,
+        view_jobs_on_own_machines=0,
+        control_jobs_on_own_machines=0,
+        view_own_jobs=0,
+        control_own_jobs=0,
+        view_complete_activity=0,
+        edit_station_policy=0,
+        edit_own_machine_policy=0,
+        edit_machine_policy=0,
+        edit_user_policy=0,
+        edit_job_resource_limits=0,
+        manage_volumes=0,
+        reject_user_requests=0,
+    ):
+        """
+        Creates a new role in the station
+
+        :param station_id:
+        :param name: str
+        :param description: str
+        :param protected_role: bool
+        :param edit_station_roles: bool
+        :param assign_user_roles: bool
+        :param assign_protected_user_roles: bool
+        :param launch_jobs: bool
+        :param invite_users: bool
+        :param remove_all_users: bool
+        :param remove_invited_users: bool
+        :param view_all_users: bool
+        :param edit_metadata: bool
+        :param add_machine: bool
+        :param remove_any_machine: bool
+        :param view_all_jobs: bool
+        :param control_all_jobs: bool
+        :param view_jobs_on_own_machines: bool
+        :param control_jobs_on_own_machines: bool
+        :param view_own_jobs: bool
+        :param control_own_jobs: bool
+        :param view_complete_activity: bool
+        :param edit_station_policy: bool
+        :param edit_own_machine_policy: bool
+        :param edit_machine_policy: bool
+        :param edit_user_policy: bool
+        :param edit_job_resource_limits: bool
+        :param manage_volumes: bool
+        :param reject_user_requests: bool
+        :return: StationRole
+        """
+        request = CreateStationRoleRequest(
+            name,
+            description,
+            protected_role,
+            edit_station_roles,
+            assign_user_roles,
+            assign_protected_user_roles,
+            launch_jobs,
+            invite_users,
+            remove_all_users,
+            remove_invited_users,
+            view_all_users,
+            edit_metadata,
+            add_machine,
+            remove_any_machine,
+            view_all_jobs,
+            control_all_jobs,
+            view_jobs_on_own_machines,
+            control_jobs_on_own_machines,
+            view_own_jobs,
+            control_own_jobs,
+            view_complete_activity,
+            edit_station_policy,
+            edit_own_machine_policy,
+            edit_machine_policy,
+            edit_user_policy,
+            edit_job_resource_limits,
+            manage_volumes,
+            reject_user_requests,
+        )
+        return self._stations_service.create_station_role(station_id, request)
+
+    def update_station_role(
+        self,
+        station_id,
+        station_role_id,
+        name=None,
+        description=None,
+        protected_role=None,
+        edit_station_roles=None,
+        assign_user_roles=None,
+        assign_protected_user_roles=None,
+        launch_jobs=None,
+        invite_users=None,
+        remove_all_users=None,
+        remove_invited_users=None,
+        view_all_users=None,
+        edit_metadata=None,
+        add_machine=None,
+        remove_any_machine=None,
+        view_all_jobs=None,
+        control_all_jobs=None,
+        view_jobs_on_own_machines=None,
+        control_jobs_on_own_machines=None,
+        view_own_jobs=None,
+        control_own_jobs=None,
+        view_complete_activity=None,
+        edit_station_policy=None,
+        edit_own_machine_policy=None,
+        edit_machine_policy=None,
+        edit_user_policy=None,
+        edit_job_resource_limits=None,
+        manage_volumes=None,
+        reject_user_requests=None
+    ):
+        """
+        Updates an existing role
+
+        :param station_id: str
+        :param station_role_id: str
+        :param name: str
+        :param description: str
+        :param protected_role: bool
+        :param edit_station_roles: bool
+        :param assign_user_roles: bool
+        :param assign_protected_user_roles: bool
+        :param launch_jobs: bool
+        :param invite_users: bool
+        :param remove_all_users: bool
+        :param remove_invited_users: bool
+        :param view_all_users: bool
+        :param edit_metadata: bool
+        :param add_machine: bool
+        :param remove_any_machine: bool
+        :param view_all_jobs: bool
+        :param control_all_jobs: bool
+        :param view_jobs_on_own_machines: bool
+        :param control_jobs_on_own_machines: bool
+        :param view_own_jobs: bool
+        :param control_own_jobs: bool
+        :param view_complete_activity: bool
+        :param edit_station_policy: bool
+        :param edit_own_machine_policy: bool
+        :param edit_machine_policy: bool
+        :param edit_user_policy: bool
+        :param edit_job_resource_limits: bool
+        :param manage_volumes: bool
+        :param reject_user_requests: bool
+        :return: StationRole
+        """
+        request = CreateStationRoleRequest(
+            name,
+            description,
+            protected_role,
+            edit_station_roles,
+            assign_user_roles,
+            assign_protected_user_roles,
+            launch_jobs,
+            invite_users,
+            remove_all_users,
+            remove_invited_users,
+            view_all_users,
+            edit_metadata,
+            add_machine,
+            remove_any_machine,
+            view_all_jobs,
+            control_all_jobs,
+            view_jobs_on_own_machines,
+            control_jobs_on_own_machines,
+            view_own_jobs,
+            control_own_jobs,
+            view_complete_activity,
+            edit_station_policy,
+            edit_own_machine_policy,
+            edit_machine_policy,
+            edit_user_policy,
+            edit_job_resource_limits,
+            manage_volumes,
+            reject_user_requests
+        )
+        return self._stations_service.update_station_role(
+            station_id, station_role_id, request
+        )
+
+    def delete_station_role(self, station_id, role_id):
+        """
+        Deletes an existing role. All users that have this role will automatically be given the Launcher role.
+
+        :param role_id: str
+        :param station_id: str
+        :return: boolean
+        """
+        return self._stations_service.delete_station_role(station_id, role_id)
+
+    def get_station_role_resource_policy(self, station_id, role_id):
+        """
+        Gets the resource policy for a station role.
+
+        :param station_id: str
+        :param role_id: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_role_resource_policy(
+            station_id, role_id
+        )
+
+    def update_station_role_resource_policy(
+        self,
+        station_id,
+        role_id,
+        max_cpu_per_job=None,
+        max_memory_per_job=None,
+        max_gpu_per_job=None,
+        max_cpu_per_station=None,
+        max_memory_per_station=None,
+        max_gpu_per_station=None,
+        max_cpu_global=None,
+        max_memory_global=None,
+        max_gpu_global=None,
+        max_projects=None,
+        max_users_in_station=None,
+        max_stations=None,
+        max_project_types=None,
+        max_cloud_storage_space=None,
+        max_spend_per_day=None,
+        max_spend_per_week=None,
+        max_spend_per_month=None,
+        max_spend_per_year=None,
+        cpu_credits_per_hour=None,
+        memory_credits_per_hour=None,
+        gpu_credits_per_hour=None,
+    ):
+        """
+        Updates an the resource policy attached to the station role. Creates the policy if it does not exist.
+
+        :param station_id:
+        :param role_id:
+        :param max_cpu_per_job:
+        :param max_memory_per_job:
+        :param max_gpu_per_job:
+        :param max_cpu_per_station:
+        :param max_memory_per_station:
+        :param max_gpu_per_station:
+        :param max_cpu_global:
+        :param max_memory_global:
+        :param max_gpu_global:
+        :param max_projects:
+        :param max_users_in_station:
+        :param max_stations:
+        :param max_project_types:
+        :param max_cloud_storage_space:
+        :param max_spend_per_day:
+        :param max_spend_per_week:
+        :param max_spend_per_month:
+        :param max_spend_per_year:
+        :param cpu_credits_per_hour:
+        :param memory_credits_per_hour:
+        :param gpu_credits_per_hour:
+        :return: ResourcePolicy
+        """
+        request = UpdateResourcePolicyRequest(
+            max_cpu_per_job=max_cpu_per_job,
+            max_memory_per_job=max_memory_per_job,
+            max_gpu_per_job=max_gpu_per_job,
+            max_cpu_per_station=max_cpu_per_station,
+            max_memory_per_station=max_memory_per_station,
+            max_gpu_per_station=max_gpu_per_station,
+            max_cpu_global=max_cpu_global,
+            max_memory_global=max_memory_global,
+            max_gpu_global=max_gpu_global,
+            max_projects=max_projects,
+            max_users_in_station=max_users_in_station,
+            max_stations=max_stations,
+            max_project_types=max_project_types,
+            max_cloud_storage_space=max_cloud_storage_space,
+            max_spend_per_day=max_spend_per_day,
+            max_spend_per_week=max_spend_per_week,
+            max_spend_per_month=max_spend_per_month,
+            max_spend_per_year=max_spend_per_year,
+            cpu_credits_per_hour=cpu_credits_per_hour,
+            memory_credits_per_hour=memory_credits_per_hour,
+            gpu_credits_per_hour=gpu_credits_per_hour,
+        )
+        return self._stations_service.update_station_role_resource_policy(
+            station_id, role_id, request
+        )
+
+    def delete_station_role_resource_policy(self, station_id, role_id):
+        """
+        Deletes the resource policy associated with the station role.
+
+        :param station_id: str
+        :param role_id: str
+        :return: bool
+        """
+        return self._stations_service.delete_station_role_resource_policy(
+            station_id, role_id
+        )
+
+    def get_station_machine_resource_policy(self, station_id, machine_id):
+        """
+        Gets the resource policy for a station machine.
+
+        :param station_id: str
+        :param machine_id: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_machine_resource_policy(
+            station_id, machine_id
+        )
+
+    def update_station_machine_resource_policy(
+        self,
+        station_id,
+        lz_id,
+        max_cpu_per_job=None,
+        max_memory_per_job=None,
+        max_gpu_per_job=None,
+        max_cpu_per_station=None,
+        max_memory_per_station=None,
+        max_gpu_per_station=None,
+        max_cpu_global=None,
+        max_memory_global=None,
+        max_gpu_global=None,
+        max_projects=None,
+        max_users_in_station=None,
+        max_stations=None,
+        max_project_types=None,
+        max_cloud_storage_space=None,
+        max_spend_per_day=None,
+        max_spend_per_week=None,
+        max_spend_per_month=None,
+        max_spend_per_year=None,
+        cpu_credits_per_hour=None,
+        memory_credits_per_hour=None,
+        gpu_credits_per_hour=None,
+    ):
+        """
+        Updates an the resource policy attached to the station machine. Creates the policy if it does not exist.
+
+        :param station_id: str
+        :param lz_id: str
+        :param max_cpu_per_job: int
+        :param max_memory_per_job: int
+        :param max_gpu_per_job: int
+        :param max_cpu_per_station: int
+        :param max_memory_per_station: int
+        :param max_gpu_per_station: int
+        :param max_cpu_global: int
+        :param max_memory_global: int
+        :param max_gpu_global: int
+        :param max_projects: int
+        :param max_users_in_station: int
+        :param max_stations: int
+        :param max_project_types: int
+        :param max_cloud_storage_space: int
+        :param max_spend_per_day: int
+        :param max_spend_per_week: int
+        :param max_spend_per_month: int
+        :param max_spend_per_year: int
+        :param cpu_credits_per_hour: int
+        :param memory_credits_per_hour: int
+        :param gpu_credits_per_hour: int
+        :return: ResourcePolicy
+        """
+        request = UpdateResourcePolicyRequest(
+            max_cpu_per_job=max_cpu_per_job,
+            max_memory_per_job=max_memory_per_job,
+            max_gpu_per_job=max_gpu_per_job,
+            max_cpu_per_station=max_cpu_per_station,
+            max_memory_per_station=max_memory_per_station,
+            max_gpu_per_station=max_gpu_per_station,
+            max_cpu_global=max_cpu_global,
+            max_memory_global=max_memory_global,
+            max_gpu_global=max_gpu_global,
+            max_projects=max_projects,
+            max_users_in_station=max_users_in_station,
+            max_stations=max_stations,
+            max_project_types=max_project_types,
+            max_cloud_storage_space=max_cloud_storage_space,
+            max_spend_per_day=max_spend_per_day,
+            max_spend_per_week=max_spend_per_week,
+            max_spend_per_month=max_spend_per_month,
+            max_spend_per_year=max_spend_per_year,
+            cpu_credits_per_hour=cpu_credits_per_hour,
+            memory_credits_per_hour=memory_credits_per_hour,
+            gpu_credits_per_hour=gpu_credits_per_hour,
+        )
+        return self._stations_service.update_station_machine_resource_policy(
+            station_id, lz_id, request
+        )
+
+    def delete_station_machine_resource_policy(self, station_id, lz_id):
+        """
+        Deletes the resource policy associated with the station machine.
+
+        :param station_id: str
+        :param lz_id: str
+        :return: bool
+        """
+        return self._stations_service.delete_station_machine_resource_policy(
+            station_id, lz_id
+        )
+
+    def get_station_machine_resource_limits(self, station_id, lz_id):
+        """
+        Returns the user's calculated (or effective) resource policy for this particular machine in a station
+
+        :param station_id: str
+        :param lz_id: str
+        :return: ResourcePolicy
+        """
+        return self._stations_service.get_station_machine_resource_limits(
+            station_id, lz_id
+        )
