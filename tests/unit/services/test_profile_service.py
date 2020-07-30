@@ -1,7 +1,6 @@
 from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.profiles import Profile, ProfileWallet
-from galileo_sdk.business.objects.stations import (EStationUserRole, Station,
-                                                   StationUser)
+from galileo_sdk.business.objects.stations import EStationUserRole, Station, StationUser
 from galileo_sdk.business.services.profiles import ProfilesService
 
 BACKEND = "http://BACKEND"
@@ -28,7 +27,7 @@ def test_list_users():
     assert len(r) == 2
     assert r[0].userid == "userid"
     assert r[1].username == "username2"
-    assert r[1].mids[0] == "mids2"
+    assert r[1].lz_ids[0] == "mids2"
     assert r[1].wallets[0].wallet == "0x2"
 
 
@@ -44,7 +43,7 @@ def test_get_profile():
     assert r.userid == "userid"
     assert r.username == "username"
     assert r.wallets[0].wallet == "0x"
-    assert r.mids[0] == "mids"
+    assert r.lz_ids[0] == "mids"
 
 
 def test_list_station_invites():

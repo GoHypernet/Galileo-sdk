@@ -9,7 +9,7 @@ class StationsService:
         self,
         stationids=None,
         names=None,
-        mids=None,
+        lz_ids=None,
         user_roles=None,
         volumeids=None,
         descriptions=None,
@@ -19,9 +19,9 @@ class StationsService:
         userids=None,
         partial_names=None,
         updated=None,
-        machine_count_min=None,
-        machine_count_max=None,
-        machine_status=None
+        lz_count_min=None,
+        lz_count_max=None,
+        lz_status=None,
     ):
         query = generate_query_str(
             {
@@ -29,7 +29,7 @@ class StationsService:
                 "items": items,
                 "stationids": stationids,
                 "names": names,
-                "mids": mids,
+                "mids": lz_ids,
                 "user_roles": user_roles,
                 "volumeids": volumeids,
                 "descriptions": descriptions,
@@ -37,9 +37,9 @@ class StationsService:
                 "userids": userids,
                 "partial_names": partial_names,
                 "updated": updated,
-                "machine_count_min": machine_count_min,
-                "machine_count_max": machine_count_max,
-                "machine_status": machine_status
+                "machine_count_min": lz_count_min,
+                "machine_count_max": lz_count_max,
+                "machine_status": lz_status,
             }
         )
 
@@ -130,11 +130,14 @@ class StationsService:
     def remove_member_from_station(self, station_id, userid):
         return self._stations_repo.remove_member_from_station(station_id, userid)
 
-    def add_machines_to_station(self, station_id, mids):
-        return self._stations_repo.add_machines_to_station(station_id, mids)
+    def delete_station(self, station_id):
+        return self._stations_repo.delete_station(station_id)
 
-    def remove_machines_from_station(self, station_id, mids):
-        return self._stations_repo.remove_machines_from_station(station_id, mids)
+    def add_lz_to_station(self, station_id, mids):
+        return self._stations_repo.add_lz_to_station(station_id, mids)
+
+    def remove_lz_from_station(self, station_id, mids):
+        return self._stations_repo.remove_lz_from_station(station_id, mids)
 
     def get_station_machine_resource_policy(self, station_id, machine_id):
         return self._stations_repo.get_station_machine_resource_policy(station_id, machine_id)

@@ -5,55 +5,63 @@ import os, urllib, json, webbrowser, time, tempfile
 # wrapper class for Galileo sdk authentication. It automatically handles authentication for the user via the default webbrowser
 class AuthSdk:
     """Helper class for user authentication."""
-    def __init__(self, client_id="oDmH6Nf4DN3oILcNk7cQqBchXUfv7fpD", mode='prod', audience=''):
-        """
-        Constructor for AuthSdk class. 
 
-        :param client_id: string: Optional argument for tracking which integration is calling the sdk. 
-        :param mode: string: Optional argument, can be prod (default) or dev. 
+    def __init__(
+        self, client_id="oDmH6Nf4DN3oILcNk7cQqBchXUfv7fpD", mode="prod", audience=""
+    ):
+        """
+        Constructor for AuthSdk class.
+
+        :param client_id: string: Optional argument for tracking which integration is calling the sdk.
+        :param mode: string: Optional argument, can be prod (default) or dev.
         :param audience: string: Optional argument
         :return: AuthSdk
         """
         self.domain = "https://galileoapp.auth0.com"
-        self.headers_default = {'content-type': 'application/x-www-form-urlencoded'}
+        self.headers_default = {"content-type": "application/x-www-form-urlencoded"}
         self.client_id = client_id
 
         # if a custom audience is supplied, use it
         if audience:
             self.audience = audience
         else:
-            # otherwise the choice is between production and development
-            if mode == 'prod':
-                self.audience = "https://booming-client-217619.appspot.com"
-            elif mode == 'dev':
-                self.audience = "https://profound-ripsaw-232522.appspot.com"
-            else:
-                print('mode: ' + str(mode) + ' not recognized')
-                exit()
+            self.audience = "https://api.galileoapp.io"
 
-    def initialize(self, refresh_token_path=os.path.join(os.path.expanduser('~'), '.galileo')):
+    def initialize(
+        self, refresh_token_path=os.path.join(os.path.expanduser("~"), ".galileo")
+    ):
         """
-        Automatically authenticate the user either through a webbrowser or auth-link printed to the terminal. 
+        Automatically authenticate the user either through a webbrowser or auth-link printed to the terminal.
 
         :param refresh_token_path: string: An optional file path for where to store auth token information. If you don not want authentication info to be stored, pass an empty string, i.e. refresh_token_path=''. The default location is in you home directory in a file named .galileo.
         :return: access_token, refresh_token, expiration
         """
 
         if os.path.exists(refresh_token_path):
-            access_token, refresh_token, expires_in = self.refresh_token_file_flow(refresh_token_path)
+            access_token, refresh_token, expires_in = self.refresh_token_file_flow(
+                refresh_token_path
+            )
         else:
-            access_token, refresh_token, expires_in = self.device_flow(refresh_token_path)
+            access_token, refresh_token, expires_in = self.device_flow(
+                refresh_token_path
+            )
 
         return access_token, refresh_token, expires_in
 
-    def device_flow(self,refresh_token_path=''):
+    def device_flow(self, refresh_token_path=""):
         """
-        Attempts to bring up a webbrowser for the user to authenticate. Otherwise, it will print a URL and access code to stdout. 
+        Attempts to bring up a webbrowser for the user to authenticate. Otherwise, it will print a URL and access code to stdout.
 
-        :param refresh_token_path: string: An optional file path for where to store auth token information. If you do not provide a file path, the programmer is responsible for handling persistence. 
+        :param refresh_token_path: string: An optional file path for where to store auth token information. If you do not provide a file path, the programmer is responsible for handling persistence.
         :return: access_token, refresh_token, expiration
         """
-        user_url, user_code, device_code, interval, user_url_complete = self._request_device_authorization()
+        (
+            user_url,
+            user_code,
+            device_code,
+            interval,
+            user_url_complete,
+        ) = self._request_device_authorization()
 
         # Try to open a window to the auth0 audience
         bowser_available = webbrowser.open(user_url_complete)
@@ -65,12 +73,15 @@ class AuthSdk:
             mystring = "Go to: " + user_url + "\nEnter the code: " + user_code
             print(mystring)
 
-        access_token, refresh_token, expires_in = self._poll_for_tokens(interval, device_code)
+        access_token, refresh_token, expires_in = self._poll_for_tokens(
+            interval, device_code
+        )
         data = self._store_token_info(refresh_token, expires_in, refresh_token_path)
         return access_token, refresh_token, data["expires_in"]
 
     def show_user_code(self, user_code):
-        html = '''<!DOCTYPE html> 
+        html = (
+            """<!DOCTYPE html> 
 <html> 
 <head>
         <meta charset="utf-8">
@@ -132,7 +143,9 @@ body {
             <p class="text-simple _text  ">Please confirm this code in the other tab:</p>
           </div>
           <div class="header-description _header-description">
-            <p class="text-simple _text  " style="font-size:25px;">'''+ str(user_code) +'''</p>
+            <p class="text-simple _text  " style="font-size:25px;">"""
+            + str(user_code)
+            + """</p>
           </div>
         </header>
       
@@ -140,39 +153,44 @@ body {
     </div>
 </body>
 </html>
-  '''
-        with tempfile.NamedTemporaryFile('w', delete=False, suffix='.html') as f:
-            url = 'file://' + f.name
+  """
+        )
+        with tempfile.NamedTemporaryFile("w", delete=False, suffix=".html") as f:
+            url = "file://" + f.name
             f.write(html)
         webbrowser.open(url, new=1)
 
     def refresh_token_file_flow(self, refresh_token_file):
         """
-        Refreshes access token if given the location of a refresh token file.  
+        Refreshes access token if given the location of a refresh token file.
 
-        :param refresh_token_file: string: File path for where auth token information is stored.  
+        :param refresh_token_file: string: File path for where auth token information is stored.
         :return: access_token, refresh_token, expiration
         """
         if not os.path.exists(refresh_token_file):
-            print('No refresh token file')
+            print("No refresh token file")
 
-        with open(refresh_token_file, 'r') as fd:
+        with open(refresh_token_file, "r") as fd:
             refresh_token = fd.read()
 
         refresh_json = json.loads(refresh_token)
-        refresh_json["expires_in"] = datetime.strptime(refresh_json["expires_in"], "%Y-%m-%d %H:%M:%S.%f")
-        access_token = self._get_new_access_token(refresh_json["refresh_token"],refresh_token_file)
+        refresh_json["expires_in"] = datetime.strptime(
+            refresh_json["expires_in"], "%Y-%m-%d %H:%M:%S.%f"
+        )
+        access_token = self._get_new_access_token(
+            refresh_json["refresh_token"], refresh_token_file
+        )
         return access_token, refresh_json["refresh_token"], refresh_json["expires_in"]
-        
+
     def refresh_token_flow(self, refresh_token, expires_in):
         """
-        Refreshes access token if given a refresh token.  
+        Refreshes access token if given a refresh token.
 
-        :param refresh_token: string: String object representing the token. 
-        :param expires_in: string: String object representing the expiry date of the refresh token.         
+        :param refresh_token: string: String object representing the token.
+        :param expires_in: string: String object representing the expiry date of the refresh token.
         :return: access_token, refresh_token, expiration
         """
-        access_token = self._get_new_access_token(refresh_token,'')
+        access_token = self._get_new_access_token(refresh_token, "")
         return access_token, refresh_token, expires_in
 
     def datetime_converter(self, o):
@@ -180,16 +198,16 @@ body {
             return o.__str__()
 
     def _store_token_info(self, refresh_token, expires_in, refresh_token_path):
-        
+
         tmp = None
         data = {
             "refresh_token": refresh_token,
-            "expires_in": datetime.now() + timedelta(0, expires_in)
+            "expires_in": datetime.now() + timedelta(0, expires_in),
         }
 
         if len(refresh_token_path) > 0:
             try:
-                tmp = open(refresh_token_path, 'w')
+                tmp = open(refresh_token_path, "w")
                 tmp.write(json.dumps(data, default=self.datetime_converter))
             finally:
                 if tmp:
@@ -199,40 +217,49 @@ body {
 
     def _request_device_authorization(self):
         r = requests.post(
-            '{domain}/oauth/device/code'.format(domain=self.domain),
+            "{domain}/oauth/device/code".format(domain=self.domain),
             headers=self.headers_default,
-            data=urlencode({
-                'client_id': self.client_id,
-                'audience': self.audience,
-                'scope': 'email profile openid offline_access'
-            }, doseq=True),
+            data=urlencode(
+                {
+                    "client_id": self.client_id,
+                    "audience": self.audience,
+                    "scope": "email profile openid offline_access",
+                },
+                doseq=True,
+            ),
         )
         r = r.json()
-        user_url = r['verification_uri']
-        user_code = r['user_code']
-        device_code = r['device_code']
-        interval = r['interval']
-        user_url_complete = r['verification_uri_complete']
+        user_url = r["verification_uri"]
+        user_code = r["user_code"]
+        device_code = r["device_code"]
+        interval = r["interval"]
+        user_url_complete = r["verification_uri_complete"]
         return user_url, user_code, device_code, interval, user_url_complete
 
     def _poll_for_tokens(self, interval, device_code):
         interval = interval * 2
-        url_str = urlencode({
-            'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
-            'device_code': device_code,
-            'client_id': self.client_id
-        }, doseq=True)
+        url_str = urlencode(
+            {
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+                "device_code": device_code,
+                "client_id": self.client_id,
+            },
+            doseq=True,
+        )
 
         while True:
             try:
                 r = requests.post(
-                    '{domain}/oauth/token'.format(domain=self.domain),
+                    "{domain}/oauth/token".format(domain=self.domain),
                     headers=self.headers_default,
-                    data=urlencode({
-                        'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
-                        'device_code': device_code,
-                        'client_id': self.client_id
-                    }, doseq=True)
+                    data=urlencode(
+                        {
+                            "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+                            "device_code": device_code,
+                            "client_id": self.client_id,
+                        },
+                        doseq=True,
+                    ),
                 )
             except URLError as e:
                 if e.code == 429:
@@ -248,17 +275,20 @@ body {
 
         return r["access_token"], r["refresh_token"], r["expires_in"]
 
-    def _get_new_access_token(self, refresh_token,refresh_token_file):
+    def _get_new_access_token(self, refresh_token, refresh_token_file):
         response = requests.post(
-            '{domain}/oauth/token'.format(domain=self.domain),
+            "{domain}/oauth/token".format(domain=self.domain),
             headers=self.headers_default,
-            data=urlencode({
-                'client_id': self.client_id,
-                'grant_type': 'refresh_token',
-                'refresh_token': refresh_token,
-            }, doseq=True)
+            data=urlencode(
+                {
+                    "client_id": self.client_id,
+                    "grant_type": "refresh_token",
+                    "refresh_token": refresh_token,
+                },
+                doseq=True,
+            ),
         )
         response.raise_for_status()
         r = response.json()
-        self._store_token_info(refresh_token, r["expires_in"],refresh_token_file)
-        return r['access_token']
+        self._store_token_info(refresh_token, r["expires_in"], refresh_token_file)
+        return r["access_token"]
