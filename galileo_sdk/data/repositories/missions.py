@@ -72,12 +72,14 @@ class MissionsRepository(RequestsRepository):
         return [file_dict_to_file_listing(file) for file in json]
 
     def delete_mission(self, mission_id):
-        self._delete("/projects/{project_id}".format(project_id=mission_id))
-        return mission_id
+        response = self._delete("/projects/{project_id}".format(project_id=mission_id))
+        return response.json()
 
-    def update_mission(self, mission_id, update_project_request):
+    def update_mission(self, update_project_request):
         response = self._put(
-            "/projects/{project_id}".format(project_id=mission_id),
+            "/projects/{project_id}".format(
+                project_id=update_project_request.mission_id
+            ),
             data={
                 "name": update_project_request.name,
                 "description": update_project_request.description,
@@ -90,8 +92,10 @@ class MissionsRepository(RequestsRepository):
         json = response.json()
         return json
 
-    def delete_mission_files(self, mission_id):
-        self._delete("projects/{project_id}".format(project_id=mission_id))
+    def delete_file(self, mission_id, query):
+        self._delete(
+            "projects/{project_id}/files".format(project_id=mission_id), query=query
+        )
         return mission_id
 
     def list_mission_types(self):

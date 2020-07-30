@@ -2,10 +2,7 @@ from datetime import datetime
 
 from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.jobs import Job
-from galileo_sdk.business.objects.missions import (
-    Mission,
-    MissionType,
-)
+from galileo_sdk.business.objects.missions import Mission
 from galileo_sdk.business.services.missions import MissionsService
 
 BACKEND = "http://BACKEND"

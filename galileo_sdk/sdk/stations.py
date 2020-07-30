@@ -1,4 +1,5 @@
 from .event import EventsSdk
+from ..business.objects.stations import UpdateStationRequest
 
 
 class StationsSdk(EventsSdk):
@@ -674,5 +675,16 @@ class StationsSdk(EventsSdk):
         """
         return self._stations_service.remove_volume_from_station(station_id, volume_id)
 
-    def update_station(self, request):
+    def update_station(self, station_id, name=None, description=None):
+        """
+        Update a station
+
+        :param station_id:
+        :param name:
+        :param description:
+        :return:
+        """
+        request = UpdateStationRequest(
+            station_id=station_id, name=name, description=description
+        )
         return self._stations_service.update_station(request)

@@ -3,6 +3,7 @@ import zipfile
 
 from ..objects.exceptions import JobsException
 from ..utils.generate_query_str import generate_query_str
+from galileo_sdk.compat import quote
 
 
 class JobsService:
@@ -104,7 +105,11 @@ class JobsService:
             self._jobs_repo.download_results(
                 job_id,
                 generate_query_str(
-                    {"filename": file.filename, "path": file.path, "nonce": nonce}
+                    {
+                        "filename": quote(file.filename, safe=""),
+                        "path": file.path,
+                        "nonce": nonce,
+                    }
                 ),
                 os.path.join(path, file.filename),
             )
@@ -112,8 +117,8 @@ class JobsService:
 
         return files_downloaded
 
-    def download_and_extract_job_results(self, job_id, path):
-        files_downloaded = self.download_job_results(job_id, path)
+    def download_and_extract_job_results(self, job_id, path, nonce=None):
+        files_downloaded = self.download_job_results(job_id, path, nonce)
         for file in files_downloaded:
             dir = file.rsplit(".zip", 1)[0]
             if not os.path.exists(dir):

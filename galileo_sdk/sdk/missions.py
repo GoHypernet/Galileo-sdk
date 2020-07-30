@@ -1,3 +1,6 @@
+from ..business.objects.missions import UpdateMissionRequest, CreateMissionRequest
+
+
 class MissionsSdk:
     def __init__(self, missions_service):
         self._missions_service = missions_service
@@ -56,16 +59,17 @@ class MissionsSdk:
          missions.get_mission_type_settings_info()
         :return: Mission
         """
-        return self._missions_service.create_mission(
-            name,
-            description,
-            source_storage_id,
-            destination_storage_id,
-            source_path,
-            destination_path,
-            mission_type_id,
-            settings,
+        request = CreateMissionRequest(
+            name=name,
+            description=description,
+            source_storage_id=source_storage_id,
+            destination_storage_id=destination_storage_id,
+            source_path=source_path,
+            destination_path=destination_path,
+            mission_type_id=mission_type_id,
+            settings=settings,
         )
+        return self._missions_service.create_mission(request)
 
     def upload(self, mission_id, directory):
         """
@@ -125,16 +129,17 @@ class MissionsSdk:
          missions.get_mission_type_settings_info()
         :return: Mission
         """
-        mission = self._missions_service.create_mission(
-            name,
-            description,
-            source_storage_id,
-            destination_storage_id,
-            source_path,
-            destination_path,
-            mission_type_id,
-            settings,
+        request = CreateMissionRequest(
+            name=name,
+            description=description,
+            source_storage_id=source_storage_id,
+            destination_storage_id=destination_storage_id,
+            source_path=source_path,
+            destination_path=destination_path,
+            mission_type_id=mission_type_id,
+            settings=settings,
         )
+        mission = self._missions_service.create_mission(request)
         self._missions_service.upload(mission.mission_id, directory)
         return mission
 
@@ -169,11 +174,8 @@ class MissionsSdk:
          missions.get_mission_type_settings_info()
         :return: Job
         """
-        return self._missions_service.create_mission_and_run_job(
+        request = CreateMissionRequest(
             name=name,
-            directory=directory,
-            station_id=station_id,
-            lz_id=lz_id,
             description=description,
             source_storage_id=source_storage_id,
             destination_storage_id=destination_storage_id,
@@ -182,10 +184,14 @@ class MissionsSdk:
             mission_type_id=mission_type_id,
             settings=settings,
         )
+        return self._missions_service.create_mission_and_run_job(
+            request=request, directory=directory, station_id=station_id, lz_id=lz_id,
+        )
 
     def get_mission_files(self, mission_id):
         """
         Provides the metadata of all files in a mission
+
         :param mission_id: mission you want to inspect
         :return: DirectoryListing
         """
@@ -194,11 +200,12 @@ class MissionsSdk:
 
     def delete_file(self, mission_id, file_path):
         """
+        Delete file in mission
 
         :param mission_id: Mission id of mission you want to delete files from
-        :param file_path: Path to the mission file you want to delete starting from
-        the mission root
-        :return:
+        :param file_path: Path to the mission file you want to delete excluding the mission root
+        e.g. if the file to delete is "mission_name/files/file1.py", please enter "files/file1.py"
+        :return: boolean
         """
         return self._missions_service.delete_file(mission_id, file_path)
 
@@ -226,7 +233,7 @@ class MissionsSdk:
          missions.get_mission_type_settings_info()
         :return:
         """
-        return self._missions_service.update_mission(
+        request = UpdateMissionRequest(
             mission_id,
             name=name,
             description=description,
@@ -236,6 +243,7 @@ class MissionsSdk:
             destination_path=destination_path,
             settings=settings,
         )
+        return self._missions_service.update_mission(request)
 
     def update_mission_args(self, mission_id, args):
         """

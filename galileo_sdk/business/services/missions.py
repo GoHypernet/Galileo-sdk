@@ -1,7 +1,8 @@
 import os
 
 from ..utils.generate_query_str import generate_query_str
-from ..objects import UpdateMissionRequest, CreateMissionRequest
+from ..objects import UpdateMissionRequest
+from galileo_sdk.compat import quote
 
 
 class MissionsService:
@@ -30,54 +31,13 @@ class MissionsService:
 
         return self._missions_repo.list_missions(query)
 
-    def create_mission(
-        self,
-        name,
-        description="",
-        source_storage_id=None,
-        destination_storage_id=None,
-        source_path=None,
-        destination_path=None,
-        mission_type_id=None,
-        settings=None,
-    ):
-        return self._missions_repo.create_mission(
-            CreateMissionRequest(
-                name=name,
-                description=description,
-                source_storage_id=source_storage_id,
-                destination_storage_id=destination_storage_id,
-                source_path=source_path,
-                destination_path=destination_path,
-                mission_type_id=mission_type_id,
-                settings=settings,
-            )
-        )
+    def create_mission(self, request):
+        return self._missions_repo.create_mission(request)
 
     def create_mission_and_run_job(
-        self,
-        name,
-        directory,
-        station_id,
-        lz_id=None,
-        description="",
-        source_storage_id=None,
-        destination_storage_id=None,
-        source_path=None,
-        destination_path=None,
-        mission_type_id=None,
-        settings=None,
+        self, request, directory, station_id, lz_id=None,
     ):
-        mission = self.create_mission(
-            name=name,
-            description=description,
-            source_storage_id=source_storage_id,
-            destination_storage_id=destination_storage_id,
-            source_path=source_path,
-            destination_path=destination_path,
-            mission_type_id=mission_type_id,
-            settings=settings,
-        )
+        mission = self.create_mission(request)
         self.upload(mission.mission_id, directory)
         if lz_id:
             job = self.run_job_on_lz(mission.mission_id, station_id, lz_id)
@@ -96,8 +56,6 @@ class MissionsService:
                 else:
                     filename = os.path.join(os.path.basename(root), file)
 
-                filename = filename.replace(" ", "_")
-
                 filepath = os.path.join(os.path.abspath(root), file)
                 f = open(filepath, "rb").read()
                 self._missions_repo.upload_single_file(mission_id, f, filename)
@@ -115,8 +73,8 @@ class MissionsService:
     def delete_mission(self, mission_id):
         return self._missions_repo.delete_mission(mission_id)
 
-    def update_mission(self, mission_id, update_mission_request):
-        return self._missions_repo.update_mission(mission_id, update_mission_request)
+    def update_mission(self, update_mission_request):
+        return self._missions_repo.update_mission(update_mission_request)
 
     def update_mission_args(self, mission_id, args):
         update_mission_request = UpdateMissionRequest(
@@ -124,11 +82,10 @@ class MissionsService:
         )
         return self._missions_repo.update_mission(mission_id, update_mission_request)
 
-    def delete_mission_files(self, mission_id):
-        return self._missions_repo.delete_mission_files(mission_id)
+    def delete_file(self, mission_id, filename):
+        query = generate_query_str({"filename": quote(filename, safe="")})
 
-    def delete_file(self, mission_id, file):
-        return self._missions_repo.delete_file(mission_id, file)
+        return self._missions_repo.delete_file(mission_id, query)
 
     def list_mission_types(self):
         return self._missions_repo.list_mission_types()

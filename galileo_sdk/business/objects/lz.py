@@ -55,27 +55,12 @@ class LzHardwareUpdateEvent:
         self.lz = lz
 
 
-class UpdateMachineRequest:
+class UpdateLzRequest:
     def __init__(
-        self,
-        mid,
-        name=None,
-        gpu=None,
-        cpu=None,
-        os=None,
-        arch=None,
-        memory=None,
-        running_jobs_limit=None,
-        active=None,
+        self, lz_id, name=None, active=None,
     ):
-        self.mid = mid
+        self.lz_id = lz_id
         self.name = name
-        self.gpu = gpu
-        self.cpu = cpu
-        self.os = os
-        self.arch = arch
-        self.memory = memory
-        self.running_jobs_limit = running_jobs_limit
         self.active = active
 
 

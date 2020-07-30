@@ -1,4 +1,5 @@
 from .event import EventsSdk
+from ..business.objects.jobs import UpdateJobRequest
 
 
 class JobsSdk(EventsSdk):
@@ -151,12 +152,14 @@ class JobsSdk(EventsSdk):
         """
         return self._jobs_service.download_job_results(job_id, path, nonce)
 
-    def update_job(self, request):
+    def update_job(self, job_id, archived=None):
         """ Updates an existing job
 
-        :param request: UpdateJobRequest
+        :param job_id:
+        :param archived: bool: Archive a job
         return: Job
         """
+        request = UpdateJobRequest(job_id, archived)
 
         return self._jobs_service.update_job(request)
 

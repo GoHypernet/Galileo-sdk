@@ -1,4 +1,5 @@
 from .event import EventsSdk
+from ..business.objects.lz import UpdateLzRequest
 
 
 class LzSdk(EventsSdk):
@@ -63,12 +64,17 @@ class LzSdk(EventsSdk):
             lz_ids=lz_ids, userids=userids, page=page, items=items
         )
 
-    def update_lz(self, request):
+    def update_lz(
+        self, lz_id, name=None, active=None,
+    ):
         """
         Update info about landing zone
 
-        :param request: UpdateMachineRequest
+        :param lz_id: Landing zone you want to update
+        :param name: update lz name
+        :param active: bool
         :return: Lz
         """
+        request = UpdateLzRequest(lz_id, name, active)
 
         return self._lz_service.update(request)
