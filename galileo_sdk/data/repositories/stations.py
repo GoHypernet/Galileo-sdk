@@ -180,6 +180,10 @@ def station_dict_to_station(station):
         users=[user_dict_to_station_user(user) for user in station["users"]],
         lz_ids=station["mids"],
         volumes=[volume_dict_to_volume(volume) for volume in station["volumes"]],
+        status=station.get("status", None),
+        organization_id=station.get("organization_id", None),
+        creation_timestamp=station.get("creation_timestamp", None),
+        updated_timestamp=station.get("updated_timestamp", None)
     )
 
 
@@ -188,4 +192,8 @@ def user_dict_to_station_user(user):
         stationuserid=user["stationuserid"],
         userid=user["userid"],
         status=EStationUserRole[user["status"]],
+        station_id=user.get("station_id", None),
+        role_id=user.get("role_id", None),
+        creation_timestamp=user.get("creation_timestamp", None),
+        updated_timestamp=user.get("updated_timestamp", None)
     )

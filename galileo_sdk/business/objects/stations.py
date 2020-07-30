@@ -49,15 +49,38 @@ class EStationUserRole(enum.Enum):
 
 
 class StationUser:
-    def __init__(self, stationuserid, userid, status):
+    def __init__(
+        self,
+        stationuserid,
+        userid,
+        status=None,
+        station_id=None,
+        role_id=None,
+        creation_timestamp=None,
+        updated_timestamp=None,
+    ):
         self.stationuserid = stationuserid
         self.userid = userid
         self.status = status
+        self.station_id = station_id
+        self.role_id = role_id
+        self.creation_timestamp = (creation_timestamp,)
+        self.updated_timestamp = (updated_timestamp,)
 
 
 class Station:
     def __init__(
-        self, stationid, name, description, users, lz_ids=None, volumes=None,
+        self,
+        stationid,
+        name,
+        description,
+        users,
+        lz_ids=None,
+        volumes=None,
+        status=None,
+        organization_id=None,
+        creation_timestamp=None,
+        updated_timestamp=None,
     ):
         self.stationid = stationid
         self.name = name
@@ -65,6 +88,10 @@ class Station:
         self.users = users
         self.lz_ids = lz_ids
         self.volumes = volumes
+        self.status = status
+        self.organization_id = (organization_id,)
+        self.creation_timestamp = (creation_timestamp,)
+        self.updated_timestamp = (updated_timestamp,)
 
 
 class NewStationEvent:
