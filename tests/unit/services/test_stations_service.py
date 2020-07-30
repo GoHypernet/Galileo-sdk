@@ -37,14 +37,18 @@ def test_list_stations():
             "stationid",
             "name",
             "description",
-            [StationUser("stationuserid",
-                         "userid",
-                         EStationUserRole.ADMIN,
-                         "station_id",
-                         "username",
-                         "role_id",
-                         "creation_timestamp",
-                         "updated_timestamp")],
+            [
+                StationUser(
+                    "stationuserid",
+                    "userid",
+                    EStationUserRole.ADMIN,
+                    "station_id",
+                    "username",
+                    "role_id",
+                    "creation_timestamp",
+                    "updated_timestamp",
+                )
+            ],
             ["machine_ids"],
             ["volume_ids"],
         )
@@ -65,14 +69,18 @@ def test_create_station():
         "stationid",
         "name",
         "description",
-        [StationUser("stationuserid",
-                     "userid",
-                     EStationUserRole.ADMIN,
-                     "station_id",
-                     "username",
-                     "role_id",
-                     "creation_timestamp",
-                     "updated_timestamp")],
+        [
+            StationUser(
+                "stationuserid",
+                "userid",
+                EStationUserRole.ADMIN,
+                "station_id",
+                "username",
+                "role_id",
+                "creation_timestamp",
+                "updated_timestamp",
+            )
+        ],
         ["machine_ids"],
         ["volume_ids"],
     )

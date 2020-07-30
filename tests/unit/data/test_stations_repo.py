@@ -45,7 +45,7 @@ def mocked_requests_get(*args, **kwargs):
                                 "creation_timestamp": "date",
                                 "updated_timestamp": "date",
                                 "station_id": "station_id",
-                                "role_id": "role_id"
+                                "role_id": "role_id",
                             }
                         ],
                         "mids": ["mid"],
@@ -62,7 +62,7 @@ def mocked_requests_get(*args, **kwargs):
                         "creation_timestamp": "creation_timestamp",
                         "updated_timestamp": "updated_timestamp",
                         "organization_id": "organization_id",
-                        "status": "stable"
+                        "status": "stable",
                     }
                     for _ in range(5)
                 ]
@@ -91,7 +91,7 @@ def mocked_requests_post(*args, **kwargs):
                             "creation_timestamp": "date",
                             "updated_timestamp": "date",
                             "station_id": "station_id",
-                            "role_id": "role_id"
+                            "role_id": "role_id",
                         },
                         {
                             "userid": kwargs["json"]["user_ids"][1],
@@ -100,7 +100,7 @@ def mocked_requests_post(*args, **kwargs):
                             "creation_timestamp": "date",
                             "updated_timestamp": "date",
                             "station_id": "station_id",
-                            "role_id": "role_id"
+                            "role_id": "role_id",
                         },
                     ],
                     "mids": ["mid"],
@@ -117,7 +117,7 @@ def mocked_requests_post(*args, **kwargs):
                     "creation_timestamp": "creation_timestamp",
                     "updated_timestamp": "updated_timestamp",
                     "organization_id": "organization_id",
-                    "status": "stable"
+                    "status": "stable",
                 }
             },
             200,
@@ -201,9 +201,7 @@ def mocked_requests_put(*args, **kwargs):
 
 
 def mocked_requests_delete(*args, **kwargs):
-    if args[
-        0
-    ] == "{backend}{namespace}/station/{station_id}/user/{user_id}".format(
+    if args[0] == "{backend}{namespace}/station/{station_id}/user/{user_id}".format(
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID, user_id=USER_ID
     ):
         return MockResponse(True, 200)
@@ -286,7 +284,7 @@ def test_invite_to_station(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
         ),
         headers=HEADERS,
-        json={"userids": USERNAMES, 'role_id': 'role_id'},
+        json={"userids": USERNAMES, "role_id": "role_id"},
     )
 
     # Assert

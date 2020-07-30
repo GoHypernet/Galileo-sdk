@@ -57,8 +57,8 @@ class StationsService:
     def get_station_resource_policy(self, station_id):
         return self._stations_repo.get_station_resource_policy(station_id)
 
-    def update_station_resource_policy(self, request):
-        return self._stations_repo.update_station_resource_policy(request)
+    def update_station_resource_policy(self, station_id, request):
+        return self._stations_repo.update_station_resource_policy(station_id, request)
 
     def delete_station_resource_policy(self, station_id):
         return self._stations_repo.delete_station_resource_policy(station_id)
@@ -91,41 +91,57 @@ class StationsService:
         return self._stations_repo.update_station_member(station_id, userid, role_id)
 
     def get_station_user_resource_policy(self, station_id, userid):
-        return self._stations_repo.get_station_resource_policy(station_id, userid)
+        return self._stations_repo.get_station_user_resource_policy(station_id, userid)
 
-    def update_station_user_resource_policy(self, request):
-        return self._stations_repo.update_station_resource_policy(request)
+    def update_station_user_resource_policy(self, station_id, user_id, request):
+        return self._stations_repo.update_station_user_resource_policy(
+            station_id, user_id, request
+        )
 
     def delete_station_user_resource_policy(self, station_id, userid):
-        return self._stations_repo.delete_station_user_resource_policy(station_id, userid)
+        return self._stations_repo.delete_station_user_resource_policy(
+            station_id, userid
+        )
 
-    def get_station_roles(self, page, items, names, role_types):
-        query = generate_query_str({
-            "page": page,
-            "items": items,
-            "names": names,
-            "role_types": role_types
-        })
+    def get_station_roles(
+        self, station_id, page, items, names, role_ids, user_ids, description
+    ):
+        query = generate_query_str(
+            {
+                "page": page,
+                "items": items,
+                "names": names,
+                "role_ids": role_ids,
+                "user_ids": user_ids,
+                "description": description,
+            }
+        )
 
-        return self._stations_repo.get_station_roles(query)
+        return self._stations_repo.get_station_roles(station_id, query)
 
-    def create_station_role(self, request):
-        return self._stations_repo.create_station(request)
+    def create_station_role(self, station_id, request):
+        return self._stations_repo.create_station_role(station_id, request)
 
-    def update_station_role(self, request):
-        return self._stations_repo.update_station_role(request)
+    def update_station_role(self, station_id, station_role_id, request):
+        return self._stations_repo.update_station_role(
+            station_id, station_role_id, request
+        )
 
     def get_station_role_resource_policy(self, station_id, role_id):
         return self._stations_repo.get_station_role_resource_policy(station_id, role_id)
 
-    def update_station_role_resource_policy(self, request):
-        return self._stations_repo.update_station_role_resource_policy(request)
+    def update_station_role_resource_policy(self, station_id, role_id, request):
+        return self._stations_repo.update_station_role_resource_policy(
+            station_id, role_id, request
+        )
 
     def delete_station_role_resource_policy(self, station_id, role_id):
-        return self._stations_repo.delete_station_role_resource_policy(station_id, role_id)
+        return self._stations_repo.delete_station_role_resource_policy(
+            station_id, role_id
+        )
 
-    def delete_station_role(self, request):
-        return self._stations_repo.delete_station_role(request)
+    def delete_station_role(self, station_id, station_role_id):
+        return self._stations_repo.delete_station_role(station_id, station_role_id)
 
     def remove_member_from_station(self, station_id, userid):
         return self._stations_repo.remove_member_from_station(station_id, userid)
@@ -140,16 +156,24 @@ class StationsService:
         return self._stations_repo.remove_lz_from_station(station_id, mids)
 
     def get_station_machine_resource_policy(self, station_id, machine_id):
-        return self._stations_repo.get_station_machine_resource_policy(station_id, machine_id)
+        return self._stations_repo.get_station_machine_resource_policy(
+            station_id, machine_id
+        )
 
-    def update_station_machine_resource_policy(self, request):
-        return self._stations_repo.update_station_machine_resource_policy(request)
+    def update_station_machine_resource_policy(self, station_id, lz_id, request):
+        return self._stations_repo.update_station_machine_resource_policy(
+            station_id, lz_id, request
+        )
 
     def delete_station_machine_resource_policy(self, station_id, machine_id):
-        return self._stations_repo.delete_station_machine_resource_policy(station_id, machine_id)
+        return self._stations_repo.delete_station_machine_resource_policy(
+            station_id, machine_id
+        )
 
     def get_station_machine_resource_limits(self, station_id, machine_id):
-        return self._stations_repo.get_station_machine_resource_limits(station_id, machine_id)
+        return self._stations_repo.get_station_machine_resource_limits(
+            station_id, machine_id
+        )
 
     def add_volumes_to_station(self, station_id, name, mount_point, access):
         return self._stations_repo.add_volumes_to_station(
