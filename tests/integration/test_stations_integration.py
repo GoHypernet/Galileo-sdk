@@ -66,7 +66,7 @@ def test_add_and_delete_host_path_to_volume():
     volume_host_path = galileo.stations.add_host_path_to_volume(
         station_id=station_id,
         volume_id=volumes.volumeid,
-        mid=self.mids[0],
+        lz_id=self.lz_ids[0],
         host_path="host_path",
     )
 

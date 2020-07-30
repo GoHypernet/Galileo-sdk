@@ -31,6 +31,7 @@ from .business.objects import (
     UpdateLzRequest,
     LzEvents,
     Profile,
+    ProfileCard,
     ProfileWallet,
     UpdateStationRequest,
     EVolumeAccess,

@@ -8,6 +8,7 @@ galileo = GalileoSdk(config=CONFIG)
 
 missions = galileo.missions.list_missions()
 
+
 def test_list_projects():
     assert missions[0].creation_timestamp is not None
     assert missions[0].source_path is not None
@@ -65,7 +66,9 @@ def test_update_mission():
 
 
 def test_update_mission_args():
-    response = galileo.missions.update_mission_args(missions[0].mission_id, ["arg1", "arg2", "arg3"])
+    response = galileo.missions.update_mission_args(
+        missions[0].mission_id, ["arg1", "arg2", "arg3"]
+    )
     updated_mission = galileo.missions.get_mission_by_id(missions[0].mission_id)
 
     assert response is True
@@ -73,7 +76,9 @@ def test_update_mission_args():
 
 
 def test_mission_type_settings():
-    settings = galileo.missions.get_mission_type_settings_info(missions[0].mission_type_id)
+    settings = galileo.missions.get_mission_type_settings_info(
+        missions[0].mission_type_id
+    )
     assert isinstance(settings, dict)
 
 

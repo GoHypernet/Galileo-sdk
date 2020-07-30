@@ -1,6 +1,6 @@
 import enum
 
-from galileo_sdk.business.objects.event import EventEmitter
+from galileo_sdk.business.objects import EventEmitter
 
 
 class EJobStatus(enum.Enum):

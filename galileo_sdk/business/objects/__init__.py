@@ -1,3 +1,5 @@
+from galileo_sdk.business.objects.event import EventEmitter
+
 from galileo_sdk.business.objects.jobs import (
     EJobRunningStatus,
     EJobStatus,
@@ -36,7 +38,7 @@ from galileo_sdk.business.objects.lz import (
     LzEvents,
 )
 
-from galileo_sdk.business.objects.profiles import Profile, ProfileWallet
+from galileo_sdk.business.objects.profiles import Profile, ProfileCard, ProfileWallet
 
 from galileo_sdk.business.objects.stations import (
     UpdateStationRequest,

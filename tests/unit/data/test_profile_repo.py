@@ -120,7 +120,7 @@ def test_list_users(mocked_requests):
 
     # Assert
     assert len(r) == 5
-    assert len(r[0].mids) == 1
+    assert len(r[0].lz_ids) == 1
     assert len(r[0].wallets) == 1
     for i in range(5):
         assert r[i].userid == "user{i}".format(i=i)
@@ -143,7 +143,7 @@ def test_get_profile(mocked_requests):
     assert r.userid == "userid"
     assert r.username == "username"
     assert r.wallets[0].wallet == "0x"
-    assert r.mids == ["mids"]
+    assert r.lz_ids == ["mids"]
 
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)

@@ -602,22 +602,22 @@ class StationsSdk(EventsSdk):
         """
         return self._stations_service.delete_station(station_id)
 
-    def add_machines_to_station(self, station_id, lz_ids):
+    def add_lz_to_station(self, station_id, lz_ids):
         """
-        Add machines to a station
+        Add landing zones to a station
 
         :param station_id: str
-        :param lz_ids: List[str]: list of machine ids that will be added
+        :param lz_ids: List[str]: list of landing zone ids that will be added
         :return: boolean
         """
         return self._stations_service.add_lz_to_station(station_id, lz_ids)
 
-    def remove_machines_from_station(self, station_id, lz_ids):
+    def remove_lz_from_station(self, station_id, lz_ids):
         """
-        Remove machines from a station
+        Remove landing zones from a station
 
         :param station_id: str
-        :param lz_ids: List[str]: list of machine ids that will be added
+        :param lz_ids: List[str]: list of landing zone ids that will be added
         :return: boolean
         """
         return self._stations_service.remove_lz_from_station(station_id, lz_ids)
@@ -636,19 +636,19 @@ class StationsSdk(EventsSdk):
             station_id, name, mount_point, access
         )
 
-    def add_host_path_to_volume(self, station_id, volume_id, mid, host_path):
+    def add_host_path_to_volume(self, station_id, volume_id, lz_id, host_path):
         """
         Add host path to volume before running a job
         Host path is where the landing zone will store the results of a job
 
         :param station_id: str
         :param volume_id: tr
-        :param mid: str: machine id
+        :param lz_id: str: landing zone id
         :param host_path: str: directory path for landing zone
         :return: Volume
         """
         return self._stations_service.add_host_path_to_volume(
-            station_id, volume_id, mid, host_path
+            station_id, volume_id, lz_id, host_path
         )
 
     def delete_host_path_from_volume(self, station_id, volume_id, host_path_id):
