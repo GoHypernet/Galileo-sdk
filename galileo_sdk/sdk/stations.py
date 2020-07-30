@@ -818,7 +818,9 @@ class StationsSdk(EventsSdk):
         :param userid: str
         :return: ResourcePolicy
         """
-        return self._stations_service.get_station_user_resource_policy(station_id, userid)
+        return self._stations_service.get_station_user_resource_policy(
+            station_id, userid
+        )
 
     def update_station_user_resource_policy(
         self,

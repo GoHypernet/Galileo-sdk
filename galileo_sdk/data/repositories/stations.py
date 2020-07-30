@@ -494,6 +494,12 @@ def autoscale_settings_dict_to_autoscale_settings(settings):
 
 def station_dict_to_station(station):
     autoscale_settings = station.get("autoscale_settings", None)
+    if autoscale_settings is not None:
+        autoscale_settings = [
+            autoscale_settings_dict_to_autoscale_settings(settings)
+            for settings in autoscale_settings
+        ]
+
     return Station(
         stationid=station["stationid"],
         name=station["name"],
@@ -505,12 +511,7 @@ def station_dict_to_station(station):
         organization_id=station.get("organization_id", None),
         creation_timestamp=station.get("creation_timestamp", None),
         updated_timestamp=station.get("updated_timestamp", None),
-        autoscale_settings=[
-            autoscale_settings_dict_to_autoscale_settings(settings)
-            for settings in autoscale_settings
-        ]
-        if autoscale_settings is None
-        else None,
+        autoscale_settings=autoscale_settings,
     )
 
 
