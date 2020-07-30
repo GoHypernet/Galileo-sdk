@@ -1,4 +1,4 @@
-from galileo_sdk import GalileoSdk
+from galileo_sdk.galileo_sdk import GalileoSdk
 
 CONFIG = "development"
 galileo = GalileoSdk(config=CONFIG)
@@ -199,9 +199,9 @@ def on_station_member_station_updated(event):
     print("\non_station_member_station_updated", vars(event.station))
 
 
-galileo.machines.on_machine_status_update(on_machine_status_update)
-galileo.machines.on_machine_hardware_update(on_hardware_update)
-galileo.machines.on_machine_registered(on_machine_registered)
+galileo.lz.on_lz_status_update(on_machine_status_update)
+galileo.lz.on_lz_hardware_update(on_hardware_update)
+galileo.lz.on_lz_registered(on_machine_registered)
 galileo.jobs.on_job_launcher_updated(on_job_launcher_updated)
 galileo.jobs.on_job_launcher_submitted(on_job_launcher_submitted)
 galileo.jobs.on_station_job_updated(on_station_job_updated)

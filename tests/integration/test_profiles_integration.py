@@ -25,7 +25,7 @@ def test_get_profile():
 def test_list_station_invites():
     station_invites = galileo.profiles.list_station_invites()
     assert station_invites is not None
-    assert station_invites[0].mids is not None
+    assert station_invites[0].lz_ids is not None
     assert station_invites[0].description is not None
     assert station_invites[0].users is not None
     assert station_invites[0].volumes is not None

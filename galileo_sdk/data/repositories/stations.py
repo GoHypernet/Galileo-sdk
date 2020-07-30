@@ -1,55 +1,23 @@
-from galileo_sdk.compat import urlunparse, requests
+from galileo_sdk.business.objects.stations import (
+    EStationUserRole,
+    EVolumeAccess,
+    Station,
+    StationUser,
+    Volume,
+    VolumeHostPath,
+)
+from galileo_sdk.data.repositories import RequestsRepository
 
-from galileo_sdk.business.objects.stations import (EStationUserRole,
-                                                   EVolumeAccess, Station,
-                                                   StationUser,
-                                                   Volume, VolumeHostPath)
 
-
-class StationsRepository:
+class StationsRepository(RequestsRepository):
     def __init__(
         self, settings_repository, auth_provider, namespace,
     ):
-        self._settings_repository = settings_repository
-        self._auth_provider = auth_provider
-        self._namespace = namespace
-
-    def _make_url(self, endpoint, params="", query="", fragment=""):
-        settings = self._settings_repository.get_settings()
-        backend = settings.backend
-        schema, addr = backend.split("://")
-        return urlunparse(
-            (
-                schema,
-                "{addr}{namespace}".format(addr=addr, namespace=self._namespace),
-                endpoint,
-                params,
-                query,
-                fragment,
-            )
+        super(StationsRepository, self).__init__(
+            settings_repository=settings_repository,
+            auth_provider=auth_provider,
+            namespace=namespace,
         )
-
-    def _request(self, request, endpoint, data=None, params="", query="", fragment=""):
-        url = self._make_url(endpoint, params, query, fragment)
-        access_token = self._auth_provider.get_access_token()
-        headers = {
-            "Authorization": "Bearer {access_token}".format(access_token=access_token)
-        }
-        r = request(url, json=data, headers=headers)
-        r.raise_for_status()
-        return r
-
-    def _get(self, *args, **kwargs):
-        return self._request(requests.get, *args, **kwargs)
-
-    def _post(self, *args, **kwargs):
-        return self._request(requests.post, *args, **kwargs)
-
-    def _put(self, *args, **kwargs):
-        return self._request(requests.put, *args, **kwargs)
-
-    def _delete(self, *args, **kwargs):
-        return self._request(requests.delete, *args, **kwargs)
 
     def list_stations(self, query):
         response = self._get("/stations", query=query)
@@ -210,7 +178,7 @@ def station_dict_to_station(station):
         name=station["name"],
         description=station["description"],
         users=[user_dict_to_station_user(user) for user in station["users"]],
-        machine_ids=station["mids"],
+        lz_ids=station["mids"],
         volumes=[volume_dict_to_volume(volume) for volume in station["volumes"]],
     )
 

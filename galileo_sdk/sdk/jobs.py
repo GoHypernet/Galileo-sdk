@@ -1,14 +1,12 @@
 from .event import EventsSdk
+from ..business.objects.jobs import UpdateJobRequest
 
 
 class JobsSdk(EventsSdk):
-    def __init__(self, jobs_service, settings, auth_provider, namespace, events=None):
+    def __init__(self, jobs_service, connector=None, events=None):
         self._jobs_service = jobs_service
         super(JobsSdk, self).__init__(
-            settings=settings,
-            auth_provider=auth_provider,
-            namespace=namespace,
-            events=events
+            connector=connector, events=events,
         )
 
     def on_job_launcher_updated(self, func):
@@ -18,7 +16,7 @@ class JobsSdk(EventsSdk):
         :param func: Callable[[JobLauncherUpdatedEvent], None]
         :return: None
         """
-        self._set_event_handler()
+        self._set_event_handler("jobs")
         self._events.on_job_launcher_updated(func)
 
     def on_job_launcher_submitted(self, func):
@@ -27,7 +25,7 @@ class JobsSdk(EventsSdk):
         :param func: Callable[[JobLauncherSubmittedEvent]
         :return: None
         """
-        self._set_event_handler()
+        self._set_event_handler("jobs")
         self._events.on_job_launcher_submitted(func)
 
     def on_station_job_updated(self, func):
@@ -37,7 +35,7 @@ class JobsSdk(EventsSdk):
         :param func: Callable[[StationJobUpdatedEvent], None]
         :return: None
         """
-        self._set_event_handler()
+        self._set_event_handler("jobs")
         self._events.on_station_job_updated(func)
 
     def request_stop_job(self, job_id):
@@ -102,7 +100,7 @@ class JobsSdk(EventsSdk):
         machines=None,
         ownerids=None,
         sort_by=None,
-        sort_order=None
+        sort_order=None,
     ):
         """
         List of your jobs
@@ -137,8 +135,10 @@ class JobsSdk(EventsSdk):
             archived=archived,
             receiver_archived=receiver_archived,
             partial_names=partial_names,
-            machines=machines,
-            ownerids=ownerids
+            lz=machines,
+            ownerids=ownerids,
+            sort_by=sort_by,
+            sort_order=sort_order,
         )
 
     def download_job_results(self, job_id, path, nonce=None):
@@ -152,12 +152,14 @@ class JobsSdk(EventsSdk):
         """
         return self._jobs_service.download_job_results(job_id, path, nonce)
 
-    def update_job(self, request):
+    def update_job(self, job_id, archived=None):
         """ Updates an existing job
 
-        :param request: UpdateJobRequest
+        :param job_id:
+        :param archived: bool: Archive a job
         return: Job
         """
+        request = UpdateJobRequest(job_id, archived)
 
         return self._jobs_service.update_job(request)
 
@@ -170,5 +172,13 @@ class JobsSdk(EventsSdk):
         """
         return self._jobs_service.request_kill_job(job_id)
 
-    def download_and_extract_job_results(self, job_id, path):
-        return self._jobs_service.download_and_extract_job_results(job_id, path)
+    def download_and_extract_job_results(self, job_id, path, nonce=None):
+        """
+        Download and extract your job results when job is completed
+
+        :param job_id: str
+        :param path: str: path to directory, where results will be saved
+        :param nonce: str: can still download the file if provide an auth token
+        :return: List[str]: list of filenames that were downloaded
+        """
+        return self._jobs_service.download_and_extract_job_results(job_id, path, nonce)
