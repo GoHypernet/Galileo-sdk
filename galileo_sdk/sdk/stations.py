@@ -730,7 +730,28 @@ class StationsSdk(EventsSdk):
         """
         Updates an the resource policy attached to the station. Creates the policy if it does not exist.
 
-        :param request: UpdateResourcePolicyRequest
+        :param station_id: str
+        :param max_cpu_per_job: int
+        :param max_memory_per_job: int
+        :param max_gpu_per_job: int
+        :param max_cpu_per_station: int
+        :param max_memory_per_station: int
+        :param max_gpu_per_station: int
+        :param max_cpu_global: int
+        :param max_memory_global: int
+        :param max_gpu_global: int
+        :param max_projects: int
+        :param max_users_in_station: int
+        :param max_stations: int
+        :param max_project_types: int
+        :param max_cloud_storage_space: int
+        :param max_spend_per_day: int
+        :param max_spend_per_week: int
+        :param max_spend_per_month: int
+        :param max_spend_per_year: int
+        :param cpu_credits_per_hour: int
+        :param memory_credits_per_hour: int
+        :param gpu_credits_per_hour: int
         :return: ResourcePolicy
         """
         request = UpdateResourcePolicyRequest(
@@ -828,7 +849,29 @@ class StationsSdk(EventsSdk):
         """
         Updates an the resource policy attached to the station user. Creates the policy if it does not exist.
 
-        :param request: UpdateResourcePolicyRequest
+        :param station_id: str
+        :param userid: str
+        :param max_cpu_per_job: int
+        :param max_memory_per_job: int
+        :param max_gpu_per_job: int
+        :param max_cpu_per_station: int
+        :param max_memory_per_station: int
+        :param max_gpu_per_station: int
+        :param max_cpu_global: int
+        :param max_memory_global: int
+        :param max_gpu_global: int
+        :param max_projects: int
+        :param max_users_in_station: int
+        :param max_stations: int
+        :param max_project_types: int
+        :param max_cloud_storage_space: int
+        :param max_spend_per_day: int
+        :param max_spend_per_week: int
+        :param max_spend_per_month: int
+        :param max_spend_per_year: int
+        :param cpu_credits_per_hour: int
+        :param memory_credits_per_hour: int
+        :param gpu_credits_per_hour: int
         :return: ResourcePolicy
         """
         request = UpdateResourcePolicyRequest(
@@ -883,6 +926,9 @@ class StationsSdk(EventsSdk):
         """
         Returns a list of StationRole objects that match the query string
 
+        :param station_id:
+        :param user_ids:
+        :param description:
         :param page: number
         :param items: number
         :param names: str
@@ -928,7 +974,34 @@ class StationsSdk(EventsSdk):
         """
         Creates a new role in the station
 
-        :param request: CreateStationRoleRequest
+        :param station_id:
+        :param name: str
+        :param description: str
+        :param protected_role: bool
+        :param edit_station_roles: bool
+        :param assign_user_roles: bool
+        :param assign_protected_user_roles: bool
+        :param launch_jobs: bool
+        :param invite_users: bool
+        :param remove_all_users: bool
+        :param remove_invited_users: bool
+        :param view_all_users: bool
+        :param edit_metadata: bool
+        :param add_machine: bool
+        :param remove_any_machine: bool
+        :param view_all_jobs: bool
+        :param control_all_jobs: bool
+        :param view_jobs_on_own_machines: bool
+        :param control_jobs_on_own_machines: bool
+        :param view_own_jobs: bool
+        :param control_own_jobs: bool
+        :param view_complete_activity: bool
+        :param edit_station_policy: bool
+        :param edit_own_machine_policy: bool
+        :param edit_machine_policy: bool
+        :param edit_user_policy: bool
+        :param edit_job_resource_limits: bool
+        :param manage_volumes: bool
         :return: StationRole
         """
         request = CreateStationRoleRequest(
@@ -970,7 +1043,7 @@ class StationsSdk(EventsSdk):
         name=None,
         description=None,
         protected_role=None,
-        edit_station_role=None,
+        edit_station_roles=None,
         assign_user_roles=None,
         assign_protected_user_roles=None,
         launch_jobs=None,
@@ -998,14 +1071,42 @@ class StationsSdk(EventsSdk):
         """
         Updates an existing role
 
-        :param request: UpdateStationRoleRequest
+        :param station_id: str
+        :param station_role_id: str
+        :param name: str
+        :param description: str
+        :param protected_role: bool
+        :param edit_station_roles: bool
+        :param assign_user_roles: bool
+        :param assign_protected_user_roles: bool
+        :param launch_jobs: bool
+        :param invite_users: bool
+        :param remove_all_users: bool
+        :param remove_invited_users: bool
+        :param view_all_users: bool
+        :param edit_metadata: bool
+        :param add_machine: bool
+        :param remove_any_machine: bool
+        :param view_all_jobs: bool
+        :param control_all_jobs: bool
+        :param view_jobs_on_own_machines: bool
+        :param control_jobs_on_own_machines: bool
+        :param view_own_jobs: bool
+        :param control_own_jobs: bool
+        :param view_complete_activity: bool
+        :param edit_station_policy: bool
+        :param edit_own_machine_policy: bool
+        :param edit_machine_policy: bool
+        :param edit_user_policy: bool
+        :param edit_job_resource_limits: bool
+        :param manage_volumes: bool
         :return: StationRole
         """
         request = CreateStationRoleRequest(
             name,
             description,
             protected_role,
-            edit_station_role,
+            edit_station_roles,
             assign_user_roles,
             assign_protected_user_roles,
             launch_jobs,
@@ -1038,6 +1139,7 @@ class StationsSdk(EventsSdk):
         """
         Deletes an existing role. All users that have this role will automatically be given the Launcher role.
 
+        :param role_id: str
         :param station_id: str
         :return: boolean
         """
@@ -1084,7 +1186,29 @@ class StationsSdk(EventsSdk):
         """
         Updates an the resource policy attached to the station role. Creates the policy if it does not exist.
 
-        :param request: UpdateResourcePolicyRequest
+        :param station_id:
+        :param role_id:
+        :param max_cpu_per_job:
+        :param max_memory_per_job:
+        :param max_gpu_per_job:
+        :param max_cpu_per_station:
+        :param max_memory_per_station:
+        :param max_gpu_per_station:
+        :param max_cpu_global:
+        :param max_memory_global:
+        :param max_gpu_global:
+        :param max_projects:
+        :param max_users_in_station:
+        :param max_stations:
+        :param max_project_types:
+        :param max_cloud_storage_space:
+        :param max_spend_per_day:
+        :param max_spend_per_week:
+        :param max_spend_per_month:
+        :param max_spend_per_year:
+        :param cpu_credits_per_hour:
+        :param memory_credits_per_hour:
+        :param gpu_credits_per_hour:
         :return: ResourcePolicy
         """
         request = UpdateResourcePolicyRequest(
@@ -1118,9 +1242,9 @@ class StationsSdk(EventsSdk):
         """
         Deletes the resource policy associated with the station role.
 
-        :param station_id:
-        :param role_id:
-        :return:
+        :param station_id: str
+        :param role_id: str
+        :return: bool
         """
         return self._stations_service.delete_station_role_resource_policy(
             station_id, role_id
@@ -1130,8 +1254,8 @@ class StationsSdk(EventsSdk):
         """
         Gets the resource policy for a station machine.
 
-        :param station_id:
-        :param machine_id:
+        :param station_id: str
+        :param machine_id: str
         :return: ResourcePolicy
         """
         return self._stations_service.get_station_machine_resource_policy(
@@ -1167,6 +1291,29 @@ class StationsSdk(EventsSdk):
         """
         Updates an the resource policy attached to the station machine. Creates the policy if it does not exist.
 
+        :param station_id: str
+        :param lz_id: str
+        :param max_cpu_per_job: int
+        :param max_memory_per_job: int
+        :param max_gpu_per_job: int
+        :param max_cpu_per_station: int
+        :param max_memory_per_station: int
+        :param max_gpu_per_station: int
+        :param max_cpu_global: int
+        :param max_memory_global: int
+        :param max_gpu_global: int
+        :param max_projects: int
+        :param max_users_in_station: int
+        :param max_stations: int
+        :param max_project_types: int
+        :param max_cloud_storage_space: int
+        :param max_spend_per_day: int
+        :param max_spend_per_week: int
+        :param max_spend_per_month: int
+        :param max_spend_per_year: int
+        :param cpu_credits_per_hour: int
+        :param memory_credits_per_hour: int
+        :param gpu_credits_per_hour: int
         :return: ResourcePolicy
         """
         request = UpdateResourcePolicyRequest(
@@ -1200,8 +1347,8 @@ class StationsSdk(EventsSdk):
         """
         Deletes the resource policy associated with the station machine.
 
-        :param station_id:
-        :param lz_id:
+        :param station_id: str
+        :param lz_id: str
         :return: bool
         """
         return self._stations_service.delete_station_machine_resource_policy(
@@ -1212,8 +1359,8 @@ class StationsSdk(EventsSdk):
         """
         Returns the user's calculated (or effective) resource policy for this particular machine in a station
 
-        :param station_id:
-        :param lz_id:
+        :param station_id: str
+        :param lz_id: str
         :return: ResourcePolicy
         """
         return self._stations_service.get_station_machine_resource_limits(
