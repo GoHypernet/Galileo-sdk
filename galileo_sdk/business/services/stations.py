@@ -146,9 +146,6 @@ class StationsService:
     def remove_member_from_station(self, station_id, userid):
         return self._stations_repo.remove_member_from_station(station_id, userid)
 
-    def delete_station(self, station_id):
-        return self._stations_repo.delete_station(station_id)
-
     def add_lz_to_station(self, station_id, mids):
         return self._stations_repo.add_lz_to_station(station_id, mids)
 

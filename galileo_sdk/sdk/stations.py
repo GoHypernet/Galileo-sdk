@@ -1004,6 +1004,7 @@ class StationsSdk(EventsSdk):
         :param edit_user_policy: bool
         :param edit_job_resource_limits: bool
         :param manage_volumes: bool
+        :param reject_user_requests: bool
         :return: StationRole
         """
         request = CreateStationRoleRequest(
@@ -1069,6 +1070,7 @@ class StationsSdk(EventsSdk):
         edit_user_policy=None,
         edit_job_resource_limits=None,
         manage_volumes=None,
+        reject_user_requests=None
     ):
         """
         Updates an existing role
@@ -1102,6 +1104,7 @@ class StationsSdk(EventsSdk):
         :param edit_user_policy: bool
         :param edit_job_resource_limits: bool
         :param manage_volumes: bool
+        :param reject_user_requests: bool
         :return: StationRole
         """
         request = CreateStationRoleRequest(
@@ -1132,6 +1135,7 @@ class StationsSdk(EventsSdk):
             edit_user_policy,
             edit_job_resource_limits,
             manage_volumes,
+            reject_user_requests
         )
         return self._stations_service.update_station_role(
             station_id, station_role_id, request
