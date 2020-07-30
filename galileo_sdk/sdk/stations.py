@@ -1,7 +1,13 @@
-class StationsSdk:
-    def __init__(self, stations_service, events=None):
+from .event import EventsSdk
+from ..business.objects.stations import UpdateStationRequest
+
+
+class StationsSdk(EventsSdk):
+    def __init__(self, stations_service, connector=None, events=None):
         self._stations_service = stations_service
-        self._events = events
+        super(StationsSdk, self).__init__(
+            connector=connector, events=events,
+        )
 
     def on_new_station(self, func):
         """
@@ -10,6 +16,7 @@ class StationsSdk:
         :param func: Callable[[NewStationEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_new_station(func)
 
     def on_station_admin_invite_sent(self, func):
@@ -20,6 +27,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminInviteSentEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_invite_sent(func)
 
     def on_station_user_invite_received(self, func):
@@ -30,6 +38,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteReceivedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_invite_received(func)
 
     def on_station_admin_invite_accepted(self, func):
@@ -40,6 +49,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminInviteAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_invite_accepted(func)
 
     def on_station_member_member_added(self, func):
@@ -50,6 +60,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMemberEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_member_added(func)
 
     def on_station_user_invite_accepted(self, func):
@@ -60,6 +71,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_invite_accepted(func)
 
     def on_station_admin_invite_rejected(self, func):
@@ -70,6 +82,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminInviteRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_invite_rejected(func)
 
     def on_station_user_invite_rejected(self, func):
@@ -80,6 +93,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_invite_rejected(func)
 
     def on_station_admin_request_received(self, func):
@@ -90,6 +104,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminRequestReceivedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_request_received(func)
 
     def on_station_user_request_sent(self, func):
@@ -100,6 +115,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestSentEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_request_sent(func)
 
     def on_station_admin_request_accepted(self, func):
@@ -110,6 +126,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminRequestAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_request_accepted(func)
 
     def on_station_user_request_accepted(self, func):
@@ -120,6 +137,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestAcceptedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_request_accepted(func)
 
     def on_station_admin_request_rejected(
@@ -132,6 +150,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminRequestRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_request_rejected(func)
 
     def on_station_user_request_rejected(
@@ -144,6 +163,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestRejectedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_request_rejected(func)
 
     def on_station_admin_member_removed(
@@ -156,6 +176,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminMemberRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_member_removed(func)
 
     def on_station_admin_machine_removed(
@@ -168,6 +189,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminMachineRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_machine_removed(func)
 
     def on_station_member_member_removed(
@@ -180,6 +202,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMemberRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_member_removed(func)
 
     def on_station_member_machine_removed(
@@ -192,6 +215,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMachineRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_machine_removed(func)
 
     def on_station_user_withdrawn(
@@ -204,6 +228,7 @@ class StationsSdk:
         :param func: Callable[[StationUserWithdrawnEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_withdrawn(func)
 
     def on_station_user_expelled(
@@ -216,6 +241,7 @@ class StationsSdk:
         :param func: Callable[[StationUserExpelledEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_expelled(func)
 
     def on_station_admin_destroyed(
@@ -228,6 +254,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_destroyed(func)
 
     def on_station_member_destroyed(
@@ -240,6 +267,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_destroyed(func)
 
     def on_station_user_invite_destroyed(
@@ -252,6 +280,7 @@ class StationsSdk:
         :param func: Callable[[StationUserInviteDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_invite_destroyed(func)
 
     def on_station_user_request_destroyed(
@@ -264,6 +293,7 @@ class StationsSdk:
         :param func: Callable[[StationUserRequestDestroyedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_user_request_destroyed(func)
 
     def on_station_admin_machine_added(
@@ -276,6 +306,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminMachineAddedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_machine_added(func)
 
     def on_station_member_machine_added(
@@ -288,6 +319,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberMachineAddedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_machine_added(func)
 
     def on_station_admin_volume_added(self, func):
@@ -298,6 +330,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeAddedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_volume_added(func)
 
     def on_station_member_volume_added(
@@ -310,6 +343,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeAddedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_volume_added(func)
 
     def on_station_admin_volume_host_path_added(
@@ -322,6 +356,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeHostPathAddedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_volume_host_path_added(func)
 
     def on_station_member_volume_host_path_added(
@@ -334,6 +369,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeHostPathAddedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_volume_host_path_added(func)
 
     def on_station_admin_volume_host_path_removed(
@@ -346,6 +382,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeHostPathRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_volume_host_path_removed(func)
 
     def on_station_member_volume_host_path_removed(
@@ -358,6 +395,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeHostPathRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_volume_host_path_removed(func)
 
     def on_station_admin_volume_removed(
@@ -370,6 +408,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminVolumeRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_volume_removed(func)
 
     def on_station_member_volume_removed(
@@ -382,6 +421,7 @@ class StationsSdk:
         :param func: Callable[[StationMemberVolumeRemovedEvent], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_volume_removed(func)
 
     def on_station_admin_station_updated(
@@ -394,6 +434,7 @@ class StationsSdk:
         :param func: Callable[[StationAdminStationUpdated], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_admin_station_updated(func)
 
     def on_station_member_station_updated(
@@ -406,13 +447,14 @@ class StationsSdk:
         :param func: Callable[[StationMemberStationUpdated], None]
         :return: None
         """
+        self._set_event_handler("stations")
         self._events.on_station_member_station_updated(func)
 
     def list_stations(
         self,
         stationids=None,
         names=None,
-        mids=None,
+        lz_ids=None,
         user_roles=None,
         volumeids=None,
         descriptions=None,
@@ -424,13 +466,13 @@ class StationsSdk:
         updated=None,
         machine_count_min=None,
         machine_count_max=None,
-        machine_status=None
+        machine_status=None,
     ):
         """
         List of your Galileo stations
         :param stationids: Optional[List[str]]: Filter based on station ids
         :param names: Optional[List[str]]: Filter based on names
-        :param mids: Optional[List[str]]: Filter based on mids
+        :param lz_ids: Optional[List[str]]: Filter based on landing zone ids
         :param user_roles: Optional[List[str]]: Filter based on user roles
         :param volumeids: Optional[List[str]]: Filter based on volumeids
         :param descriptions: Optional[List[str]]: Filter based on descriptions
@@ -449,7 +491,7 @@ class StationsSdk:
         return self._stations_service.list_stations(
             stationids=stationids,
             names=names,
-            mids=mids,
+            lz_ids=lz_ids,
             user_roles=user_roles,
             volumeids=volumeids,
             descriptions=descriptions,
@@ -459,9 +501,9 @@ class StationsSdk:
             userids=userids,
             partial_names=partial_names,
             updated=updated,
-            machine_count_min=machine_count_min,
-            machine_count_max=machine_count_max,
-            machine_status=machine_status
+            lz_count_min=machine_count_min,
+            lz_count_max=machine_count_max,
+            lz_status=machine_status,
         )
 
     def create_station(self, name, description="", userids=None):
@@ -560,25 +602,25 @@ class StationsSdk:
         """
         return self._stations_service.delete_station(station_id)
 
-    def add_machines_to_station(self, station_id, mids):
+    def add_lz_to_station(self, station_id, lz_ids):
         """
-        Add machines to a station
+        Add landing zones to a station
 
         :param station_id: str
-        :param mids: List[str]: list of machine ids that will be added
+        :param lz_ids: List[str]: list of landing zone ids that will be added
         :return: boolean
         """
-        return self._stations_service.add_machines_to_station(station_id, mids)
+        return self._stations_service.add_lz_to_station(station_id, lz_ids)
 
-    def remove_machines_from_station(self, station_id, mids):
+    def remove_lz_from_station(self, station_id, lz_ids):
         """
-        Remove machines from a station
+        Remove landing zones from a station
 
         :param station_id: str
-        :param mids: List[str]: list of machine ids that will be added
+        :param lz_ids: List[str]: list of landing zone ids that will be added
         :return: boolean
         """
-        return self._stations_service.remove_machines_from_station(station_id, mids)
+        return self._stations_service.remove_lz_from_station(station_id, lz_ids)
 
     def add_volumes_to_station(self, station_id, name, mount_point, access):
         """
@@ -594,19 +636,19 @@ class StationsSdk:
             station_id, name, mount_point, access
         )
 
-    def add_host_path_to_volume(self, station_id, volume_id, mid, host_path):
+    def add_host_path_to_volume(self, station_id, volume_id, lz_id, host_path):
         """
         Add host path to volume before running a job
         Host path is where the landing zone will store the results of a job
 
         :param station_id: str
         :param volume_id: tr
-        :param mid: str: machine id
+        :param lz_id: str: landing zone id
         :param host_path: str: directory path for landing zone
         :return: Volume
         """
         return self._stations_service.add_host_path_to_volume(
-            station_id, volume_id, mid, host_path
+            station_id, volume_id, lz_id, host_path
         )
 
     def delete_host_path_from_volume(self, station_id, volume_id, host_path_id):
@@ -633,5 +675,16 @@ class StationsSdk:
         """
         return self._stations_service.remove_volume_from_station(station_id, volume_id)
 
-    def update_station(self, request):
+    def update_station(self, station_id, name=None, description=None):
+        """
+        Update a station
+
+        :param station_id: str
+        :param name: str
+        :param description: str
+        :return:
+        """
+        request = UpdateStationRequest(
+            station_id=station_id, name=name, description=description
+        )
         return self._stations_service.update_station(request)

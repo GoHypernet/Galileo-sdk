@@ -49,22 +49,49 @@ class EStationUserRole(enum.Enum):
 
 
 class StationUser:
-    def __init__(self, stationuserid, userid, status):
+    def __init__(
+        self,
+        stationuserid,
+        userid,
+        status=None,
+        station_id=None,
+        role_id=None,
+        creation_timestamp=None,
+        updated_timestamp=None,
+    ):
         self.stationuserid = stationuserid
         self.userid = userid
         self.status = status
+        self.station_id = station_id
+        self.role_id = role_id
+        self.creation_timestamp = (creation_timestamp,)
+        self.updated_timestamp = (updated_timestamp,)
 
 
 class Station:
     def __init__(
-        self, stationid, name, description, users, machine_ids=None, volumes=None,
+        self,
+        stationid,
+        name,
+        description,
+        users,
+        lz_ids=None,
+        volumes=None,
+        status=None,
+        organization_id=None,
+        creation_timestamp=None,
+        updated_timestamp=None,
     ):
         self.stationid = stationid
         self.name = name
         self.description = description
         self.users = users
-        self.mids = machine_ids
+        self.lz_ids = lz_ids
         self.volumes = volumes
+        self.status = status
+        self.organization_id = (organization_id,)
+        self.creation_timestamp = (creation_timestamp,)
+        self.updated_timestamp = (updated_timestamp,)
 
 
 class NewStationEvent:
@@ -154,9 +181,9 @@ class StationAdminMemberRemovedEvent:
 
 
 class StationAdminMachineRemovedEvent:
-    def __init__(self, stationid, mids):
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationMemberMemberRemovedEvent:
@@ -166,15 +193,15 @@ class StationMemberMemberRemovedEvent:
 
 
 class StationMemberMachineRemovedEvent:
-    def __init__(self, stationid, mids):
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationUserWithdrawnEvent:
-    def __init__(self, stationid, mids):
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationUserExpelledEvent:
