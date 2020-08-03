@@ -25,7 +25,7 @@ class MissionsService:
                 "user_ids": user_ids,
                 "page": page,
                 "items": items,
-                "project_type_id": mission_type_ids,
+                "project_type_ids": mission_type_ids,
             }
         )
 
