@@ -1,4 +1,4 @@
-from galileo_sdk.compat import urlunparse, requests
+from galileo_sdk.compat import urlunparse, requests, HTTPError
 
 
 class RequestsRepository(object):

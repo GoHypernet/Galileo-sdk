@@ -32,7 +32,8 @@ class MissionsRepository(RequestsRepository):
             "destination_path": create_project_request.destination_path,
             "project_type_id": create_project_request.project_type_id,
         }
-        response = self._post("/projects", body)
+        body.update(create_project_request.settings)
+        response = self._post("/projects", data=body)
         json = response.json()
         project = json["project"]
         return project_dict_to_project(project)
@@ -76,18 +77,19 @@ class MissionsRepository(RequestsRepository):
         return response.json()
 
     def update_mission(self, update_project_request):
+        body = {
+            "name": update_project_request.name,
+            "description": update_project_request.description,
+            "source_storage_id": update_project_request.source_storage_id,
+            "source_path": update_project_request.source_path,
+            "destination_path": update_project_request.destination_path,
+        }
+        body.update(update_project_request.settings)
         response = self._put(
             "/projects/{project_id}".format(
                 project_id=update_project_request.mission_id
             ),
-            data={
-                "name": update_project_request.name,
-                "description": update_project_request.description,
-                "source_storage_id": update_project_request.source_storage_id,
-                "source_path": update_project_request.source_path,
-                "destination_path": update_project_request.destination_path,
-                "settings": update_project_request.settings,
-            },
+            data=body,
         )
         json = response.json()
         return json
