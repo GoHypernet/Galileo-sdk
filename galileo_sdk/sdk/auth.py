@@ -7,7 +7,7 @@ class AuthSdk:
     """Helper class for user authentication."""
 
     def __init__(
-        self, client_id="oDmH6Nf4DN3oILcNk7cQqBchXUfv7fpD", mode="prod", audience=""
+        self, client_id="oDmH6Nf4DN3oILcNk7cQqBchXUfv7fpD", audience=""
     ):
         """
         Constructor for AuthSdk class.
