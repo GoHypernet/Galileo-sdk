@@ -12,6 +12,9 @@
 
 import os
 import sys
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath(os.pardir))
+sys.path.insert(0, os.path.abspath('../../galileo_sdk'))
 
 import galileo_sdk
 import sphinx_material
