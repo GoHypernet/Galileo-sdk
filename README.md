@@ -10,7 +10,7 @@ with Galileo.
 3. Install all necessary packages/dependencies by running the command `pip install -e .`
 
 ## API Documentation
-Documentation for the API can be found on the [Galileo website](https://galileoapp.io/sdk).
+Documentation for the API can be found on  [ReadTheDocs](https://galileo-sdk.readthedocs.io/en/latest/).
 
 
 
