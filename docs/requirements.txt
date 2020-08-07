@@ -1,3 +1,2 @@
 sphinx>=2.2.0
 sphinx-material
-../galileo_sdk
