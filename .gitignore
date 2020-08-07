@@ -12,3 +12,5 @@ _build
 setup.spec
 *.pyc
 test_upload_file.txt
+docs/src/references/*
+!docs/src/references/index.rst

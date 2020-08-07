@@ -2,11 +2,12 @@ References
 ----------
 
 Authentication
-~~~~
+~~~~~~~~~~~~~~
 .. autosummary::
     :toctree: Authentication
 
     ~galileo_sdk.sdk.auth.AuthSdk
+
 API
 ****
 .. autosummary::
@@ -14,7 +15,7 @@ API
 
      ~galileo_sdk.sdk.auth.AuthSdk.initialize
      ~galileo_sdk.sdk.auth.AuthSdk.device_flow
-    
+
 
 Jobs
 ~~~~
@@ -22,6 +23,7 @@ Jobs
     :toctree: Jobs
 
     ~galileo_sdk.sdk.jobs.JobsSdk
+
 API
 ****
 .. autosummary::
@@ -34,6 +36,11 @@ API
      ~galileo_sdk.sdk.jobs.JobsSdk.request_logs_from_job
      ~galileo_sdk.sdk.jobs.JobsSdk.list_jobs
      ~galileo_sdk.sdk.jobs.JobsSdk.download_job_results
+     ~galileo_sdk.sdk.jobs.JobsSdk.update_job
+     ~galileo_sdk.sdk.jobs.JobsSdk.request_kill_job
+     ~galileo_sdk.sdk.jobs.JobsSdk.download_and_extract_job_results
+
+
 Objects
 *******
 .. autosummary::
@@ -43,53 +50,62 @@ Objects
     ~galileo_sdk.business.objects.jobs.EJobStatus
     ~galileo_sdk.business.objects.jobs.EJobRunningStatus
     ~galileo_sdk.business.objects.jobs.EPaymentStatus
+    ~galileo_sdk.business.objects.jobs.UpdateJobRequest
+    ~galileo_sdk.business.objects.jobs.JobStatus
     ~galileo_sdk.business.objects.jobs.JobLauncherUpdatedEvent
-    ~galileo_sdk.business.objects.jobs.JobLauncherResultsDownloadedEvent
+    ~galileo_sdk.business.objects.jobs.JobLauncherSubmittedEvent
+    ~galileo_sdk.business.objects.jobs.StationJobUpdatedEvent
     ~galileo_sdk.business.objects.jobs.StationJobUpdatedEvent
     ~galileo_sdk.business.objects.jobs.JobTopEvent
     ~galileo_sdk.business.objects.jobs.JobLogEvent
+
 Events
 ******
 .. autosummary::
     :toctree: Jobs Events
 
     ~galileo_sdk.sdk.jobs.JobsSdk.on_job_launcher_updated
-    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_launcher_results_downloaded
+    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_launcher_submitted
     ~galileo_sdk.sdk.jobs.JobsSdk.on_station_job_updated
-    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_top
-    ~galileo_sdk.sdk.jobs.JobsSdk.on_job_log
+    ~galileo_sdk.sdk.jobs.JobsSdk.on_station_job_updated
 
 
-
-Machines
+Lz
 ~~~~~~~~
 .. autosummary::
-    :toctree: Machines
+    :toctree: Lz
 
-    ~galileo_sdk.sdk.machines.MachinesSdk
+    ~galileo_sdk.sdk.lz.LzSdk
+
 API
 ****
 .. autosummary::
-    :toctree: Machine API
+    :toctree: Lz API
 
-    ~galileo_sdk.sdk.machines.MachinesSdk.get_machines_by_id
-    ~galileo_sdk.sdk.machines.MachinesSdk.list_machines
-    ~galileo_sdk.sdk.machines.MachinesSdk.update_concurrent_max_jobs
+    ~galileo_sdk.sdk.lz.LzSdk.get_lz_by_id
+    ~galileo_sdk.sdk.lz.LzSdk.list_lz
+    ~galileo_sdk.sdk.lz.LzSdk.update_lz
+
 Objects
 *******
 .. autosummary::
-    :toctree: Machine Objects
+    :toctree: Lz Objects
 
-    ~galileo_sdk.business.objects.machines.Machine
-    ~galileo_sdk.business.objects.machines.EMachineStatus
-    ~galileo_sdk.business.objects.machines.MachineStatusUpdateEvent
+    ~galileo_sdk.business.objects.lz.Lz
+    ~galileo_sdk.business.objects.lz.ELzStatus
+    ~galileo_sdk.business.objects.lz.LzStatusUpdateEvent
+    ~galileo_sdk.business.objects.lz.LzHardwareUpdateEvent
+    ~galileo_sdk.business.objects.lz.LzRegisteredEvent
+    ~galileo_sdk.business.objects.lz.UpdateLzRequest
+
 Events
-*****
+******
 .. autosummary::
-    :toctree: Machine Events
+    :toctree: Landing Zone Events
 
-    ~galileo_sdk.sdk.machines.MachinesSdk.on_machine_status_update
-
+    ~galileo_sdk.sdk.lz.LzSdk.on_lz_status_update
+    ~galileo_sdk.sdk.lz.LzSdk.on_lz_hardware_update
+    ~galileo_sdk.sdk.lz.LzSdk.on_lz_registered
 
 
 Profiles
@@ -98,6 +114,7 @@ Profiles
     :toctree: Profiles
 
     ~galileo_sdk.sdk.profiles.ProfilesSdk
+
 API
 ****
 .. autosummary::
@@ -106,30 +123,55 @@ API
     ~galileo_sdk.sdk.profiles.ProfilesSdk.self
     ~galileo_sdk.sdk.profiles.ProfilesSdk.list_station_invites
     ~galileo_sdk.sdk.profiles.ProfilesSdk.list_users
+
 Objects
-****
+*******
 .. autosummary::
     :toctree: Profiles Objects
 
     ~galileo_sdk.business.objects.profiles.Profile
     ~galileo_sdk.business.objects.profiles.ProfileWallet
+    ~galileo_sdk.business.objects.profiles.ProfileCard
 
-Projects
+Missions
 ~~~~~~~~
 .. autosummary::
-    :toctree: Projects
+    :toctree: Missions
 
-    ~galileo_sdk.sdk.projects.ProjectsSdk
+    ~galileo_sdk.sdk.missions.MissionsSdk
+
 API
 ****
 .. autosummary::
-    :toctree: Projects API
+    :toctree: Missions API
 
-    ~galileo_sdk.sdk.projects.ProjectsSdk.list_projects
-    ~galileo_sdk.sdk.projects.ProjectsSdk.create_project
-    ~galileo_sdk.sdk.projects.ProjectsSdk.upload
-    ~galileo_sdk.sdk.projects.ProjectsSdk.run_job_on_station
-    ~galileo_sdk.sdk.projects.ProjectsSdk.run_job_on_machine
+    ~galileo_sdk.sdk.missions.MissionsSdk.list_missions
+    ~galileo_sdk.sdk.missions.MissionsSdk.get_mission_by_id
+    ~galileo_sdk.sdk.missions.MissionsSdk.create_mission
+    ~galileo_sdk.sdk.missions.MissionsSdk.upload
+    ~galileo_sdk.sdk.missions.MissionsSdk.run_job_on_station
+    ~galileo_sdk.sdk.missions.MissionsSdk.run_job_on_lz
+    ~galileo_sdk.sdk.missions.MissionsSdk.create_and_upload_mission
+    ~galileo_sdk.sdk.missions.MissionsSdk.create_mission_and_run_job
+    ~galileo_sdk.sdk.missions.MissionsSdk.get_mission_files
+    ~galileo_sdk.sdk.missions.MissionsSdk.delete_file
+    ~galileo_sdk.sdk.missions.MissionsSdk.update_mission
+    ~galileo_sdk.sdk.missions.MissionsSdk.update_mission_args
+    ~galileo_sdk.sdk.missions.MissionsSdk.list_mission_types
+    ~galileo_sdk.sdk.missions.MissionsSdk.get_mission_type
+    ~galileo_sdk.sdk.missions.MissionsSdk.get_mission_type_settings_info
+
+Objects
+*******
+.. autosummary::
+    :toctree: Missions Objects
+
+    ~galileo_sdk.business.objects.Mission
+    ~galileo_sdk.business.objects.MissionType
+    ~galileo_sdk.business.objects.CreateMissionRequest
+    ~galileo_sdk.business.objects.UpdateMissionRequest
+    ~galileo_sdk.business.objects.FileListing
+    ~galileo_sdk.business.objects.DirectoryListing
 
 
 Stations
@@ -138,6 +180,7 @@ Stations
     :toctree: Station
 
     ~galileo_sdk.sdk.stations.StationsSdk
+
 API
 ****
 .. autosummary::
@@ -154,12 +197,31 @@ API
     ~galileo_sdk.sdk.stations.StationsSdk.leave_station
     ~galileo_sdk.sdk.stations.StationsSdk.remove_member_from_station
     ~galileo_sdk.sdk.stations.StationsSdk.delete_station
-    ~galileo_sdk.sdk.stations.StationsSdk.add_machines_to_station
-    ~galileo_sdk.sdk.stations.StationsSdk.remove_machines_from_station
+    ~galileo_sdk.sdk.stations.StationsSdk.add_lz_to_station
+    ~galileo_sdk.sdk.stations.StationsSdk.remove_lz_from_station
     ~galileo_sdk.sdk.stations.StationsSdk.add_volumes_to_station
     ~galileo_sdk.sdk.stations.StationsSdk.add_host_path_to_volume
     ~galileo_sdk.sdk.stations.StationsSdk.delete_host_path_from_volume
     ~galileo_sdk.sdk.stations.StationsSdk.remove_volume_from_station
+    ~galileo_sdk.sdk.stations.StationsSdk.update_station
+    ~galileo_sdk.sdk.stations.StationsSdk.get_station_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.update_station_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.delete_station_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.get_self_station_resource_limits
+    ~galileo_sdk.sdk.stations.StationsSdk.update_station_member
+    ~galileo_sdk.sdk.stations.StationsSdk.get_station_user_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.update_station_user_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.delete_station_user_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.update_station_role
+    ~galileo_sdk.sdk.stations.StationsSdk.delete_station_role
+    ~galileo_sdk.sdk.stations.StationsSdk.get_station_role_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.update_station_role_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.delete_station_role_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.get_station_lz_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.update_station_lz_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.delete_station_lz_resource_policy
+    ~galileo_sdk.sdk.stations.StationsSdk.get_station_lz_resource_limits
+
 Objects
 *******
 .. autosummary::
@@ -185,17 +247,17 @@ Objects
     ~galileo_sdk.business.objects.stations.StationAdminRequestRejectedEvent
     ~galileo_sdk.business.objects.stations.StationUserRequestRejectedEvent
     ~galileo_sdk.business.objects.stations.StationAdminMemberRemovedEvent
-    ~galileo_sdk.business.objects.stations.StationAdminMachineRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminLzRemovedEvent
     ~galileo_sdk.business.objects.stations.StationMemberMemberRemovedEvent
-    ~galileo_sdk.business.objects.stations.StationMemberMachineRemovedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberLzRemovedEvent
     ~galileo_sdk.business.objects.stations.StationUserWithdrawnEvent
     ~galileo_sdk.business.objects.stations.StationUserExpelledEvent
     ~galileo_sdk.business.objects.stations.StationAdminDestroyedEvent
     ~galileo_sdk.business.objects.stations.StationMemberDestroyedEvent
     ~galileo_sdk.business.objects.stations.StationUserInviteDestroyedEvent
     ~galileo_sdk.business.objects.stations.StationUserRequestDestroyedEvent
-    ~galileo_sdk.business.objects.stations.StationAdminMachineAddedEvent
-    ~galileo_sdk.business.objects.stations.StationMemberMachineAddedEvent
+    ~galileo_sdk.business.objects.stations.StationAdminLzAddedEvent
+    ~galileo_sdk.business.objects.stations.StationMemberLzAddedEvent
     ~galileo_sdk.business.objects.stations.StationAdminVolumeAddedEvent
     ~galileo_sdk.business.objects.stations.StationMemberVolumeAddedEvent
     ~galileo_sdk.business.objects.stations.StationAdminVolumeHostPathAddedEvent
@@ -224,17 +286,17 @@ Events
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_request_rejected
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_request_rejected
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_member_removed
-    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_machine_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_lz_removed
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_member_removed
-    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_machine_removed
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_lz_removed
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_withdrawn
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_expelled
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_destroyed
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_destroyed
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_invite_destroyed
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_user_request_destroyed
-    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_machine_added
-    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_machine_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_lz_added
+    ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_lz_added
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_volume_added
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_member_volume_added
     ~galileo_sdk.sdk.stations.StationsSdk.on_station_admin_volume_host_path_added

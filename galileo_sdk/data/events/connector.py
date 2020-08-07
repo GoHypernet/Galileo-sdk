@@ -22,8 +22,8 @@ if sys.version_info[0] == 3:
         StationAdminInviteAcceptedEvent,
         StationAdminInviteRejectedEvent,
         StationAdminInviteSentEvent,
-        StationAdminMachineAddedEvent,
-        StationAdminMachineRemovedEvent,
+        StationAdminLzAddedEvent,
+        StationAdminLzRemovedEvent,
         StationAdminMemberRemovedEvent,
         StationAdminRequestAcceptedEvent,
         StationAdminRequestReceivedEvent,
@@ -34,8 +34,8 @@ if sys.version_info[0] == 3:
         StationAdminVolumeHostPathRemovedEvent,
         StationAdminVolumeRemovedEvent,
         StationMemberDestroyedEvent,
-        StationMemberMachineAddedEvent,
-        StationMemberMachineRemovedEvent,
+        StationMemberLzAddedEvent,
+        StationMemberLzRemovedEvent,
         StationMemberMemberEvent,
         StationMemberMemberRemovedEvent,
         StationMemberStationUpdated,
@@ -252,7 +252,7 @@ if sys.version_info[0] == 3:
             @self.on("station_admin_machine_removed")
             def on_station_admin_machine_removed(data):
                 self.stations_events.station_admin_machine_removed(
-                    StationAdminMachineRemovedEvent(data["stationid"], data["mids"])
+                    StationAdminLzRemovedEvent(data["stationid"], data["mids"])
                 )
 
             @self.on("station_member_member_removed")
@@ -264,7 +264,7 @@ if sys.version_info[0] == 3:
             @self.on("station_member_machine_removed")
             def on_station_member_machine_removed(data):
                 self.stations_events.station_member_machine_removed(
-                    StationMemberMachineRemovedEvent(data["stationid"], data["mids"])
+                    StationMemberLzRemovedEvent(data["stationid"], data["mids"])
                 )
 
             @self.on("station_user_withdrawn")
@@ -306,13 +306,13 @@ if sys.version_info[0] == 3:
             @self.on("station_admin_machine_added")
             def on_station_admin_machine_added(data):
                 self.stations_events.station_admin_machine_added(
-                    StationAdminMachineAddedEvent(data["stationid"], data["mids"])
+                    StationAdminLzAddedEvent(data["stationid"], data["mids"])
                 )
 
             @self.on("station_member_machine_added")
             def on_station_member_machine_added(data):
                 self.stations_events.station_member_machine_added(
-                    StationMemberMachineAddedEvent(data["stationid"], data["mids"])
+                    StationMemberLzAddedEvent(data["stationid"], data["mids"])
                 )
 
             @self.on("station_admin_volume_added")

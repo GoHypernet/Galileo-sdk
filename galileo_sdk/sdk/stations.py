@@ -183,14 +183,14 @@ class StationsSdk(EventsSdk):
         self._set_event_handler("stations")
         self._events.on_station_admin_member_removed(func)
 
-    def on_station_admin_machine_removed(
+    def on_station_admin_lz_removed(
         self, func,
     ):
         """
         Callback will execute when a machine has been removed from a station
         Emitted to admin of station
 
-        :param func: Callable[[StationAdminMachineRemovedEvent], None]
+        :param func: Callable[[StationAdminLzRemovedEvent], None]
         :return: None
         """
         self._set_event_handler("stations")
@@ -209,18 +209,18 @@ class StationsSdk(EventsSdk):
         self._set_event_handler("stations")
         self._events.on_station_member_member_removed(func)
 
-    def on_station_member_machine_removed(
+    def on_station_member_lz_removed(
         self, func,
     ):
         """
-        Callback will execute when a machine has been removed from a station
+        Callback will execute when a lz has been removed from a station
         Emitted to members of a station
 
-        :param func: Callable[[StationMemberMachineRemovedEvent], None]
+        :param func: Callable[[StationMemberLzRemovedEvent], None]
         :return: None
         """
         self._set_event_handler("stations")
-        self._events.on_station_member_machine_removed(func)
+        self._events.on_station_member_lz_removed(func)
 
     def on_station_user_withdrawn(
         self, func,
@@ -300,31 +300,31 @@ class StationsSdk(EventsSdk):
         self._set_event_handler("stations")
         self._events.on_station_user_request_destroyed(func)
 
-    def on_station_admin_machine_added(
+    def on_station_admin_lz_added(
         self, func,
     ):
         """
-        Callback will execute when a machine has been added to the station
+        Callback will execute when a lz has been added to the station
         Emitted to admin of station
 
-        :param func: Callable[[StationAdminMachineAddedEvent], None]
+        :param func: Callable[[StationAdminLzAddedEvent], None]
         :return: None
         """
         self._set_event_handler("stations")
-        self._events.on_station_admin_machine_added(func)
+        self._events.on_station_admin_lz_added(func)
 
-    def on_station_member_machine_added(
+    def on_station_member_lz_added(
         self, func,
     ):
         """
-        Callback will execute when a machine has been added to the station
+        Callback will execute when a lz has been added to the station
         Emitted to members of station
 
-        :param func: Callable[[StationMemberMachineAddedEvent], None]
+        :param func: Callable[[StationMemberLzAddedEvent], None]
         :return: None
         """
         self._set_event_handler("stations")
-        self._events.on_station_member_machine_added(func)
+        self._events.on_station_member_lz_added(func)
 
     def on_station_admin_volume_added(self, func):
         """
@@ -469,8 +469,8 @@ class StationsSdk(EventsSdk):
         partial_names=None,
         updated=None,
         machine_count_min=None,
-        machine_count_max=None,
-        machine_status=None,
+        lz_count_max=None,
+        lz_status=None,
     ):
         """
         List of your Galileo stations
@@ -484,9 +484,9 @@ class StationsSdk(EventsSdk):
         :param items: Optional[int]: Items per page
         :param active: Optional[bool]: Filter for all active stations
         :param userids: Optional[List[str]]: Filter based on userid
-        :param machine_status: Optional[List[str]]
-        :param machine_count_max: Optional[int]
-        :param machine_count_min: Optional[int]
+        :param lz_status: Optional[List[str]]
+        :param lz_count_max: Optional[int]
+        :param lz_count_min: Optional[int]
         :param updated: Optional[str]
         :param partial_names: Optional[List[str]]
         :return: List[Station]
@@ -505,9 +505,9 @@ class StationsSdk(EventsSdk):
             userids=userids,
             partial_names=partial_names,
             updated=updated,
-            lz_count_min=machine_count_min,
-            lz_count_max=machine_count_max,
-            lz_status=machine_status,
+            lz_count_min=lz_count_min,
+            lz_count_max=lz_count_max,
+            lz_status=lz_status,
         )
 
     def create_station(self, name, description="", userids=None):
@@ -956,18 +956,18 @@ class StationsSdk(EventsSdk):
         remove_invited_users=0,
         view_all_users=0,
         edit_metadata=0,
-        add_machine=0,
-        remove_any_machine=0,
+        add_lz=0,
+        remove_any_lz=0,
         view_all_jobs=0,
         control_all_jobs=0,
-        view_jobs_on_own_machines=0,
-        control_jobs_on_own_machines=0,
+        view_jobs_on_own_lzs=0,
+        control_jobs_on_own_lzs=0,
         view_own_jobs=0,
         control_own_jobs=0,
         view_complete_activity=0,
         edit_station_policy=0,
-        edit_own_machine_policy=0,
-        edit_machine_policy=0,
+        edit_own_lz_policy=0,
+        edit_lz_policy=0,
         edit_user_policy=0,
         edit_job_resource_limits=0,
         manage_volumes=0,
@@ -989,18 +989,18 @@ class StationsSdk(EventsSdk):
         :param remove_invited_users: bool
         :param view_all_users: bool
         :param edit_metadata: bool
-        :param add_machine: bool
-        :param remove_any_machine: bool
+        :param add_lz: bool
+        :param remove_any_lz: bool
         :param view_all_jobs: bool
         :param control_all_jobs: bool
-        :param view_jobs_on_own_machines: bool
-        :param control_jobs_on_own_machines: bool
+        :param view_jobs_on_own_lzs: bool
+        :param control_jobs_on_own_lzs: bool
         :param view_own_jobs: bool
         :param control_own_jobs: bool
         :param view_complete_activity: bool
         :param edit_station_policy: bool
-        :param edit_own_machine_policy: bool
-        :param edit_machine_policy: bool
+        :param edit_own_lz_policy: bool
+        :param edit_lz_policy: bool
         :param edit_user_policy: bool
         :param edit_job_resource_limits: bool
         :param manage_volumes: bool
@@ -1020,18 +1020,18 @@ class StationsSdk(EventsSdk):
             remove_invited_users,
             view_all_users,
             edit_metadata,
-            add_machine,
-            remove_any_machine,
+            add_lz,
+            remove_any_lz,
             view_all_jobs,
             control_all_jobs,
-            view_jobs_on_own_machines,
-            control_jobs_on_own_machines,
+            view_jobs_on_own_lzs,
+            control_jobs_on_own_lzs,
             view_own_jobs,
             control_own_jobs,
             view_complete_activity,
             edit_station_policy,
-            edit_own_machine_policy,
-            edit_machine_policy,
+            edit_own_lz_policy,
+            edit_lz_policy,
             edit_user_policy,
             edit_job_resource_limits,
             manage_volumes,
@@ -1055,18 +1055,18 @@ class StationsSdk(EventsSdk):
         remove_invited_users=None,
         view_all_users=None,
         edit_metadata=None,
-        add_machine=None,
-        remove_any_machine=None,
+        add_lz=None,
+        remove_any_lz=None,
         view_all_jobs=None,
         control_all_jobs=None,
-        view_jobs_on_own_machines=None,
-        control_jobs_on_own_machines=None,
+        view_jobs_on_own_lzs=None,
+        control_jobs_on_own_lzs=None,
         view_own_jobs=None,
         control_own_jobs=None,
         view_complete_activity=None,
         edit_station_policy=None,
-        edit_own_machine_policy=None,
-        edit_machine_policy=None,
+        edit_own_lz_policy=None,
+        edit_lz_policy=None,
         edit_user_policy=None,
         edit_job_resource_limits=None,
         manage_volumes=None,
@@ -1089,18 +1089,18 @@ class StationsSdk(EventsSdk):
         :param remove_invited_users: bool
         :param view_all_users: bool
         :param edit_metadata: bool
-        :param add_machine: bool
-        :param remove_any_machine: bool
+        :param add_lz: bool
+        :param remove_any_lz: bool
         :param view_all_jobs: bool
         :param control_all_jobs: bool
-        :param view_jobs_on_own_machines: bool
-        :param control_jobs_on_own_machines: bool
+        :param view_jobs_on_own_lzs: bool
+        :param control_jobs_on_own_lzs: bool
         :param view_own_jobs: bool
         :param control_own_jobs: bool
         :param view_complete_activity: bool
         :param edit_station_policy: bool
-        :param edit_own_machine_policy: bool
-        :param edit_machine_policy: bool
+        :param edit_own_lz_policy: bool
+        :param edit_lz_policy: bool
         :param edit_user_policy: bool
         :param edit_job_resource_limits: bool
         :param manage_volumes: bool
@@ -1120,18 +1120,18 @@ class StationsSdk(EventsSdk):
             remove_invited_users,
             view_all_users,
             edit_metadata,
-            add_machine,
-            remove_any_machine,
+            add_lz,
+            remove_any_lz,
             view_all_jobs,
             control_all_jobs,
-            view_jobs_on_own_machines,
-            control_jobs_on_own_machines,
+            view_jobs_on_own_lzs,
+            control_jobs_on_own_lzs,
             view_own_jobs,
             control_own_jobs,
             view_complete_activity,
             edit_station_policy,
-            edit_own_machine_policy,
-            edit_machine_policy,
+            edit_own_lz_policy,
+            edit_lz_policy,
             edit_user_policy,
             edit_job_resource_limits,
             manage_volumes,
@@ -1256,19 +1256,19 @@ class StationsSdk(EventsSdk):
             station_id, role_id
         )
 
-    def get_station_machine_resource_policy(self, station_id, machine_id):
+    def get_station_lz_resource_policy(self, station_id, lz_id):
         """
-        Gets the resource policy for a station machine.
+        Gets the resource policy for a station lz.
 
         :param station_id: str
-        :param machine_id: str
+        :param lz_id: str
         :return: ResourcePolicy
         """
-        return self._stations_service.get_station_machine_resource_policy(
-            station_id, machine_id
+        return self._stations_service.get_station_lz_resource_policy(
+            station_id, lz_id
         )
 
-    def update_station_machine_resource_policy(
+    def update_station_lz_resource_policy(
         self,
         station_id,
         lz_id,
@@ -1295,7 +1295,7 @@ class StationsSdk(EventsSdk):
         gpu_credits_per_hour=None,
     ):
         """
-        Updates an the resource policy attached to the station machine. Creates the policy if it does not exist.
+        Updates an the resource policy attached to the station lz. Creates the policy if it does not exist.
 
         :param station_id: str
         :param lz_id: str
@@ -1345,30 +1345,30 @@ class StationsSdk(EventsSdk):
             memory_credits_per_hour=memory_credits_per_hour,
             gpu_credits_per_hour=gpu_credits_per_hour,
         )
-        return self._stations_service.update_station_machine_resource_policy(
+        return self._stations_service.update_station_lz_resource_policy(
             station_id, lz_id, request
         )
 
-    def delete_station_machine_resource_policy(self, station_id, lz_id):
+    def delete_station_lz_resource_policy(self, station_id, lz_id):
         """
-        Deletes the resource policy associated with the station machine.
+        Deletes the resource policy associated with the station lz.
 
         :param station_id: str
         :param lz_id: str
         :return: bool
         """
-        return self._stations_service.delete_station_machine_resource_policy(
+        return self._stations_service.delete_station_lz_resource_policy(
             station_id, lz_id
         )
 
-    def get_station_machine_resource_limits(self, station_id, lz_id):
+    def get_station_lz_resource_limits(self, station_id, lz_id):
         """
-        Returns the user's calculated (or effective) resource policy for this particular machine in a station
+        Returns the user's calculated (or effective) resource policy for this particular lz in a station
 
         :param station_id: str
         :param lz_id: str
         :return: ResourcePolicy
         """
-        return self._stations_service.get_station_machine_resource_limits(
+        return self._stations_service.get_station_lz_resource_limits(
             station_id, lz_id
         )
