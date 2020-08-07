@@ -8,6 +8,7 @@ LZ_ID = "Jaguar2121"
 ROLE_ID = "b67bb82c-f939-4c22-a341-9904675b7c92"
 galileo = GalileoSdk(config=CONFIG)
 user = galileo.profiles.self()
+MISSION_TYPE_ID = "stata_stata"
 
 
 def test_list_stations():
@@ -104,7 +105,7 @@ def test_delete_station_resource_policy():
 
 
 def test_self_resource_limits():
-    policy, machine_id = galileo.stations.get_self_station_resource_limits(STATION_ID)
+    policy, lz_id = galileo.stations.get_self_station_resource_limits(STATION_ID)
     assert isinstance(policy, ResourcePolicy)
 
 
@@ -171,18 +172,18 @@ def test_delete_station_role_resource_policy():
     assert resource_policy is None
 
 
-def test_update_station_machine_resource_policy():
-    resource_policy = galileo.stations.update_station_machine_resource_policy(
+def test_update_station_lz_resource_policy():
+    resource_policy = galileo.stations.update_station_lz_resource_policy(
         STATION_ID, LZ_ID, max_cpu_per_job=1
     )
     assert resource_policy.max_cpu_per_job == 1
 
 
-def test_get_station_machine_resource_policy():
-    resource_policy = galileo.stations.get_station_machine_resource_policy(
+def test_get_station_lz_resource_policy():
+    resource_policy = galileo.stations.get_station_lz_resource_policy(
         STATION_ID, LZ_ID
     )
-    resource_limits = galileo.stations.get_station_machine_resource_limits(
+    resource_limits = galileo.stations.get_station_lz_resource_limits(
         STATION_ID, LZ_ID
     )
 
@@ -190,11 +191,11 @@ def test_get_station_machine_resource_policy():
     assert isinstance(resource_limits, ResourcePolicy)
 
 
-def test_delete_station_machine_resource_policy():
-    response = galileo.stations.delete_station_machine_resource_policy(
+def test_delete_station_lz_resource_policy():
+    response = galileo.stations.delete_station_lz_resource_policy(
         STATION_ID, LZ_ID
     )
-    resource_policy = galileo.stations.get_station_machine_resource_policy(
+    resource_policy = galileo.stations.get_station_lz_resource_policy(
         STATION_ID, LZ_ID
     )
     assert response is True

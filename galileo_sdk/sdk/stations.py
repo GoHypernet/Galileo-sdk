@@ -468,7 +468,7 @@ class StationsSdk(EventsSdk):
         userids=None,
         partial_names=None,
         updated=None,
-        machine_count_min=None,
+        lz_count_min=None,
         lz_count_max=None,
         lz_status=None,
     ):

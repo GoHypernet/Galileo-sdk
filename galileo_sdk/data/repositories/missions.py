@@ -87,6 +87,8 @@ class MissionsRepository(RequestsRepository):
         }
         if update_project_request.settings is not None:
             body.update(update_project_request.settings)
+
+        print("body", body)
         response = self._put(
             "/projects/{project_id}".format(
                 project_id=update_project_request.mission_id
