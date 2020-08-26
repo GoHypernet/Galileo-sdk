@@ -10,6 +10,8 @@ The Galileo SDK allows users to interact with the Galileo service using a Python
    :maxdepth: 2
    :caption: Contents:
     
+	Stations Guide <stations.rst>
+	Missions Guide <missions.rst>
     Quickstart for Landing Zones <landing_zones.rst>
     Quickstart for Python SDK <galileo_sdk.rst>
     SDK References <references/index.rst>
