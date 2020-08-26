@@ -36,7 +36,7 @@ def setup(app):
 
 # -- Project information -----------------------------------------------------
 
-project = "Galileo SDK"
+project = "Galileo"
 copyright = "2020, Hypernet Labs"
 author = "Hypernet Labs"
 
@@ -92,7 +92,7 @@ html_theme_options = {
     "repo_url": "https://github.com/GoHypernet/Galileo-sdk",
     "html_minify": True,
     "css_minify": True,
-    "nav_title": "SDK Documentation",
+    "nav_title": "Galileo Documentation",
     "globaltoc_depth": 3,
     "theme_color": "#4dc1ab",
     "color_primary": "teal",
