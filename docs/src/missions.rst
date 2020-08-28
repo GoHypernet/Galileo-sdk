@@ -13,8 +13,13 @@ To create a new Mission in Galileo, go to the Misssions tab on the left side of 
 Configuring your Mission type
 -------------------------------
 
+Galileo supports many scripting languages (such as R, Python, Julia, and Stata) and simulators (Gromacs, HECRAS, AmberTools) right out-of-the-box. To get started...
+
 Inviting Mission Crew members
 -------------------------------
 
+Galileo makes it easy share and collabrate on scientific computing projects via a role-based permission scheme. 
+
 Wormholes: Tunneled Sessions
 -----------------------------
+

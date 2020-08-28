@@ -10,15 +10,15 @@ Creating your own Galileo Station
 
 A Station can be created both in the web-based UI and through the python SDK. In order to create a station through the UI, start by clicking on the Stations tab once you've logged into your account from a webbrowser. 
 
-.. image:: images/stations_location.png
+.. image:: images/stations_tab.png
 
-Next, click the 'Create Stations' button in the upper right corner of the screen. 
+Next, click the 'Create Station' button in the upper right corner of the screen. 
 
-.. image:: images/create_station.png
+.. image:: images/stations_create.png
 
 This will bring up a configuration windows where you must name the Station and optionally provide a discription (which can be useful for conveying important information to Station members that you will invite later). 
 
-.. image:: images/name_station.png
+.. image:: images/stations_name.png
 
 Adding a Landing Zone to your Station
 ---------------------------------------

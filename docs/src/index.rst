@@ -1,3 +1,5 @@
+.. title:: Galileo Docs
+
 .. image:: images/galileo_pres.png
 
 Galileo is a hub for modeling, simulations, and data analysis that functions as an intuitive, easy-to-use portal to cloud and traditional, on-premises resources.  Galileo streamlines the utilization of computing infrastructure for all scientific computing applications, saving engineers and researchers the time and frustration involved in setting up an adequate simulation or analysis pipeline.  The Missions and Stations features in Galileo allow teams to collaborate efficiently on complex projects by sharing input files and data as well as computational resources in a simple fashion. Additionally, Galileo lets users flexibly control roles and permissions, and easily the track results histories of previous calculations.
