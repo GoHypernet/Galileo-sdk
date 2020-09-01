@@ -1,6 +1,6 @@
 .. _missions:
 
-Stations Guide
+Missions Guide
 ==============================================
 
 Missions are a feature of Galileo that allow users to easily configure complex simulators and scripting environements to run repeatibly and reliably on any LZ. Missions also allow for collaboration and sharing of simulation results through permissioned roles. 
