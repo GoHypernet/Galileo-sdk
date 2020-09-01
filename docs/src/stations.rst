@@ -5,7 +5,7 @@ Stations Guide
 
 Stations are a Galileo feature that make it quick and simple to share permissioned access to nearly any kind of computational resource. They also provide a built in queueing/scheduling mechanism so that Station administrators can 
 
-Creating your own Galileo Station 
+Creating Your Own Galileo Station 
 --------------------------------------
 
 A Station can be created both in the web-based UI and through the python SDK. In order to create a station through the UI, start by clicking on the Stations tab once you've logged into your account from a webbrowser. 
@@ -22,7 +22,7 @@ This will bring up a configuration window where you must name the Station and op
 
 After clicking the final "Create Station" button, you will see a new station appear in your Stations tab. At the point you can now proceed with additional configuration of your Station, such as attaching Landing Zones and inviting collaborators and assigning them permissioned roles. 
 
-Adding a Landing Zone to your Station
+Adding a Landing Zone to Your Station
 ---------------------------------------
 
 Now that you have created an empty Station, lets add a Landing Zone to it. First, go `here <landing_zones.html>`_ to see instructions for setting up your own Landing Zone and authenticating it against your account. 
