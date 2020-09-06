@@ -3,12 +3,12 @@
 Stations Guide
 ==============================================
 
-Stations are a Galileo feature that make it quick and simple to share permissioned access to nearly any kind of computational resource. They also provide a built in queueing/scheduling mechanism so that Station administrators can 
+Stations are a Galileo feature that make it quick and simple to manage permissioned access to nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues. 
 
 Creating Your Own Galileo Station 
 --------------------------------------
 
-A Station can be created both in the web-based UI and through the python SDK. In order to create a station through the UI, start by clicking on the Stations tab once you've logged into your account from a webbrowser. 
+A Station can be created both in the web-based UI and through the Python SDK. In order to create a station through the UI, start by clicking on the Stations tab once you've logged into your account from a web browser. 
 
 .. image:: images/stations_tab.png
 
@@ -16,11 +16,11 @@ Next, click the 'Create Station' button in the upper right corner of the screen.
 
 .. image:: images/stations_create.png
 
-This will bring up a configuration window where you must name the Station and optionally provide a discription (which can be useful for conveying important information to Station members that you will invite later). 
+This will bring up a configuration window. Here, you must name the Station and optionally provide a description (which can be useful for conveying important information to Station members). 
 
 .. image:: images/stations_name.png
 
-After clicking the final "Create Station" button, you will see a new station appear in your Stations tab. At the point you can now proceed with additional configuration of your Station, such as attaching Landing Zones and inviting collaborators and assigning them permissioned roles. 
+After clicking the final "Create Station" button, you will see a new station appear in your Stations tab. At this point, you canF proceed with additional configuration of your Station, such as attaching `Landing Zones <stations.html#adding-a-landing-zone-to-your-station>`_, `inviting collaborators <stations.html#inviting-collaborators>`_, and assigning them permissioned `roles <stations.html#user-roles-and-resource-settings>`_. 
 
 Adding a Landing Zone to Your Station
 ---------------------------------------
@@ -36,23 +36,25 @@ This will bring up a list for you to choose which LZ to add (or remove) from thi
 .. image:: images/stations_add_lz_2.png
     :align: center
 
-Now that you have attached a Landing Zone to your Station, you can submit jobs to it. To learn more about about launching jobs in Galileo, go `here <missions.html>`_. Galileo will automatically queue jobs if your LZ resources are fully utilized. Once sufficient resources on an LZ opens up, queued jobs will be dispatched. 
+Now that you have attached a Landing Zone to your Station, you can submit jobs to it. To learn more about launching jobs in Galileo, go `here <missions.html>`_. Galileo will automatically queue jobs if your LZ resources are fully utilized. Once sufficient resources on an LZ open up, queued jobs will be dispatched. 
 
-Note: If you remove an LZ from a Station while it is still running a job, the job will still run to completion unless you explicity cancel or kill the job. 
+Note: If you remove an LZ from a Station while it is still running a job, the job will continue to run until completion unless you explicity cancel or kill the job. 
 
 Inviting Collaborators
 -------------------------
 
-To invite other Galileo users to your new Galileo Station so that they can run jobs or even contribute their own LZs (should their user role permit), start by opening the Station settings page by clicking the dots in the upper-right of the Station's page. 
+To invite other Galileo users to your new Galileo Station so that they can run jobs or even contribute their own LZs (should their user role permit), start by opening the Station settings page by clicking the "+" button next to the User Count statistic. 
 
-.. image:: images/stations_settings_button.png
+.. image:: images/stations_add_user_button.png
 
-Next navigate to the "USER MANAGEMENT" tab. This is where you can add and remove Station members as well as assign them specific roles. 
+This will open the "USER MANAGEMENT" tab where you can add and remove Station members as well as assign them specific roles. 
 
 .. image:: images/stations_user_management.png
 
-User Roles
------------
+Click the small "+" button to the right of the search field to invite a new user and set their role (a user's role can be changed at anytime). 
+
+User Roles and Resource Settings
+---------------------------------
 
 By default, there are three user roles available upon the creation of a new Station: Admin, Contributor, and Launcher. 
 
@@ -62,18 +64,23 @@ These roles can be customized by clicking the edit button on the role you wish t
 
 .. image:: images/stations_user_role_permissions.png
 
-In addition to the role capabilities, resource limitations can be customized for each role. Values specified here will apply to any user assigned with the associated role. They can be left empty if you do not wish to have custom role resource limitations. When a job is submitted by a user in the Station with this role, the most restrictive resource limit (job specific, role specific, station specific) is the one that ultimately applies. 
+In addition to the role capabilities, resource limitations and usage quotas can be customized for each role by clicking the "resoures" tab next to "permissions". Values specified here will apply to any user assigned with the associated role. These values can be left empty if you do not wish to apply custom role-specific resource/quota limitations. 
 
 .. image:: images/stations_user_role_resources.png
 
-Setting Resource Limits and Basic Information
-------------------------------------------------------
+In the example pictured above, any user with the Launcher role can use at most 10 CPUs and 10 GB of RAM at one time and each individual job can use at most 5 CPUs and 5 GB of RAM. Every CPU-hour will cost 4 credits and each GB-hour will cost 1 credit, so if the user runs a job for 1 hour that uses 1 CPU and 1 GB of RAM, it will cost them 5 credits which is subracted from their quota. A quota can be set for the daily, weekly, and monthly time frame. For example, in the screen shot above, the Launcher role can use 10 credits per day, 500 credits per week, 1000 credits per month, or 10000 credits per year. As soon as the user hits one of these credit limits, they will not be able to run more jobs until the associated time period resets (so if they use up 10 credits before the end of a day, they will have to wait for the next 24 hour period for their daily credit quota to reset). 
 
-In the Basic Info tab of Station Settings, admins can edit the Station name and description.  
+Basic Station Settings and Resource Limits
+------------------------------------------------------
+To get to the Station-level settings page, click the three dots in the upper right corner of the Station main page. 
+
+.. image:: images/stations_settings_button.png
+
+In the Basic Info tab of Station Settings, admins can edit the Station name and description. Descriptions must be limited to 250 characters.  
 
 .. image:: images/stations_basic_info.png
 
-Additionally, basic resource limitations can be set that will apply to all users in the Station context. These limitations can be left empty if you do not wish to impose limitations at the Station level. 
+Additionally, basic resource limitations can be set that will apply to all users in the Station context. These limitations can be left empty if you do not wish to impose limitations at the Station level. The Station-level resource and quota limitations are applied to a job if there are no role-level resource/quota limitations associated with the user who submitted the job. See `User Roles and Resource Settings <stations.html#user-roles-and-resource-settings>`_ for more information about setting resource and quotas. 
 
 Station Volumes
 ----------------
@@ -88,13 +95,22 @@ A volume can be added to a Station by clicking the volume icon in the context of
 
 .. image:: images/stations_volume.png
 
-The volume must be given a name consisting of alpha-numeric characters and a unique mount path within the container. You must also choose if the volume will have write access via the supplied check box. 
+The volume must be given a name consisting of alpha-numeric characters and a unique mount path within the container. You must also choose if the volume will have write access via the supplied check box.
 
-.. image:: images/stations_volumes_mount_path.png
+.. image:: images/stations_volume_mount_path.png
 
-Optionally, a host path may be specified if you wish to expose a location on your LZ's hard drive. Remember that every job that is submitted within this Station context will mount all volumes specified here (this is why the mount path for a volume must be unique). 
 
-If you are running windows containers, you must provide mount paths that are Windows compatible, e.g. C:\Users\Public or D:. For example, if you want do expose you E: drive as a volume, your host path and mount path should both be entered as E:.  
+Optionally, a host path may be specified if you wish to expose a location on your LZ's hard drive. First navigate to the Host Paths settings. 
+
+.. image:: images/stations_volume_add_host_path.png
+
+Then write in the path on the host machine that you wish to expose at the mount path that was already set above. 
+
+.. image:: images/stations_volume_set_host_path.png
+
+Caution: Every job that is submitted within this Station context will mount all volumes specified here (this is why the mount path for a volume must be unique). If you specifiy a host path for a volume, be sure that this path exists on all hosts running an LZ that is attached to this station, otherwise jobs submitted to machines without the specified host path will error at container run time.
+
+If you are running windows containers, you must provide mount paths that are Windows compatible, e.g. C:\\Users\\Public or D: if you want to mount the entire D drive. For example, if you want do expose you E: drive as a volume, your host path and mount path should both be entered as E: with no trailing slash.  
 
 Station Queues
 ----------------
