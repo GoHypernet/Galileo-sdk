@@ -1,7 +1,7 @@
 .. _stations:
 
 Stations Guide
-==============================================
+===============
 
 Stations are a Galileo feature that make it quick and simple to manage permissioned access to nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues. 
 
@@ -85,11 +85,13 @@ Additionally, basic resource limitations can be set that will apply to all users
 Station Volumes
 ----------------
 
-Station administrators can expose `volumes <https://docs.docker.com/storage/volumes/>`_ to jobs run within the context of a station. This can be useful is situations such as: 
+Station administrators can expose `volumes <https://docs.docker.com/storage/volumes/>`_ to jobs run within the context of a station. This can be useful in situations such as: 
 
 * running licensed software that expects a license file to exist in a particular location
 * exposing networked filesystems 
 * sharing data between jobs running on the same LZ 
+
+When a volume is added to a Station, it will only be attached to jobs that where submitted to that specific Station. An LZ attached to multiple Stations will not expose volumes to a job if it is not associated with a Station that has been configured to have a volume.  
 
 A volume can be added to a Station by clicking the volume icon in the context of the relevant station. 
 
@@ -100,17 +102,17 @@ The volume must be given a name consisting of alpha-numeric characters and a uni
 .. image:: images/stations_volume_mount_path.png
 
 
-Optionally, a host path may be specified if you wish to expose a location on your LZ's hard drive. First navigate to the Host Paths settings. 
+Optionally, a host path may be specified if you wish to expose a location on your host machine's hard drive that is running an LZ. First navigate to the Host Paths settings. 
 
 .. image:: images/stations_volume_add_host_path.png
 
-Then write in the path on the host machine that you wish to expose at the mount path that was already set above. 
+Then specify the path on the host machine that you wish to expose at the mount path that was already set above. 
 
 .. image:: images/stations_volume_set_host_path.png
 
-Caution: Every job that is submitted within this Station context will mount all volumes specified here (this is why the mount path for a volume must be unique). If you specifiy a host path for a volume, be sure that this path exists on all hosts running an LZ that is attached to this station, otherwise jobs submitted to machines without the specified host path will error at container run time.
+**Note:** Every job that is submitted within this Station context will mount all volumes specified here (this is why the mount path for a volume must be unique for a given Station). If you specifiy a host path for a volume, be sure that this path exists on all hosts running an LZ that is attached to this station. Otherwise, jobs submitted to LZ's on machines in which the specified host path does not exist will error at container run time.
 
-If you are running windows containers, you must provide mount paths that are Windows compatible, e.g. C:\\Users\\Public or D: if you want to mount the entire D drive. For example, if you want do expose you E: drive as a volume, your host path and mount path should both be entered as E: with no trailing slash.  
+**Note:** If you are running windows containers, you must provide mount paths that are Windows compatible, e.g. C:\\Users\\Public or D: if you want to mount the entire D drive. For example, if you want to expose your E: drive as a volume, your mount path and host path should both be entered as E: with no trailing slash.  
 
 Station Queues
 ----------------
