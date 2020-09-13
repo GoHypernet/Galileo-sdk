@@ -3,7 +3,7 @@
 Quickstart for Landing Zones
 ============================
 
-The Galileo Landing Zone (LZ) daemon is a containerized daemon process that allows users to deploy jobs from the Galileo web-service to their own computational resources. 
+The Galileo Landing Zone (LZ) daemon is a containerized daemon process that facilitates the deployment of containerized jobs from the Galileo web-service. The LZ daemon pulls input file and metadata, runs the associated containerized job, monitors its health and status, and posts the results of completed jobs back to the Galileo web-service. Access to machines running the LZ is controlled via the `Stations <stations.html>`_ feature, where Station administrators set permissions and resource limitations. 
 
 .. image:: images/Galileo_LZ.png
 
@@ -51,7 +51,12 @@ How to Run the Landing Zone daemon
     URL: https://galileoapp.auth0.com/activate
     Code: XXXX-XXXX
 
-* Follow those instructions. Once you have confirmed your code at the provided URL you should see your new Landing Zone appear in the Galileo Landing Zones tab! In order to submit jobs to your new LZ, you must add it to a Station. You can create a new Station by going to the Stations tab and clicking the Create Stations button. 
+* Follow those instructions. Once you have confirmed your code at the provided URL you should see your new Landing Zone appear in the Galileo Landing Zones tab as show below! The dot next to the LZ name will be green when the LZ is online. If you stop the LZ container or turn your host machine off, this will disconnect the LZ session and the dot will turn red.  
+
+.. image:: images/landing_zone_tab.png
+
+* In order to submit jobs to your new LZ, you must add it to a `Station <stations.html#adding-a-landing-zone-to-your-station>`_. You can create a new Station by going to the Stations tab and clicking the Create Stations button.
+
 |
 Stopping and Restarting the Landing Zone daemon
 -----------------------------------------------
@@ -102,7 +107,7 @@ Running the Landing Zone daemon
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon
+        image: hypernetlabs/landing-zone-daemon:head
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           # uncomment the following line if you need your LZ to have access to private Docker Hub repositories
@@ -116,14 +121,14 @@ Running the Landing Zone daemon
     volumes:
       tokens:
 
-* If you are running windows containers, copy this into a text file named docker-compose.yml:
+* If you are on a windows host and running windows containers, copy this into a text file named docker-compose.yml:
 
 .. code-block:: yaml
 
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon:head-windowsservercore-1809
+        image: hypernetlabs/landing-zone-daemon:head
         volumes:
           - source: '\\.\pipe\docker_engine'
             target: '\\.\pipe\docker_engine'

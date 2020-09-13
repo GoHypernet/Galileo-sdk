@@ -1,15 +1,24 @@
+.. _introduction:
+
+.. title:: Galileo Docs
+
 .. image:: images/galileo_pres.png
 
-Galileo is a hub for modeling, simulations, and data analysis that functions as an intuitive, easy-to-use portal to cloud and traditional, on-premises resources.  Galileo streamlines the utilization of computing infrastructure for all scientific computing applications, saving engineers and researchers the time and frustration involved in setting up an adequate simulation or analysis pipeline.  The Missions and Stations features in Galileo allow teams to collaborate efficiently on complex projects by sharing input files and data as well as computational resources in a simple fashion. Additionally, Galileo lets users flexibly control roles and permissions, and easily the track results histories of previous calculations.
+Introduction
+==============
 
-The Galileo Landing Zone (LZ) deamon is a containerized daemon process that allows Galileo users to connect any computational resource with an internet connection to their Galileo account. Once the Galileo LZ daemon is authenticated against a user's account, a user must add the LZ to a Galileo Station where they can then invite collaborators who can then deploy jobs to the LZ with no additional configuration. 
+Galileo is a hub for modeling, simulation, and data analysis that functions as an intuitive, easy-to-use portal to cloud and traditional, on-premises resources.  Galileo streamlines the utilization of computing infrastructure for all scientific computing applications, saving engineers and researchers (as well as IT teams) of all knowledge levels the time and frustration involved in setting up an adequate simulation or analysis pipeline.  The `Missions <missions.html>`_ feature in Galileo allow teams to collaborate efficiently on complex modeling and simulation projects by sharing input files and configuration parameters. `Stations <stations.html>`_ make it quick and easy to administer computational resources by setting resource limits and quotas and have a built in queueing system. Additionally, Galileo lets users flexibly control roles and permissions, and easily track result histories of previous calculations.
 
-The Galileo SDK allows users to interact with the Galileo service using a Python script (both python2 and python3 are supported) instead the web-based graphical interface.  Use the SDK to automate processes such as scheduling jobs, automatically deploying jobs, accepting jobs, and accepting members as well as to integrate cloud computing into other applications.
+The Galileo `Landing Zone <landing_zones.html>`_ (LZ) deamon is a containerized daemon process that allows Galileo resource administrators to quickly and securely connect any computational resource with an internet connection to their Galileo account. Once the Galileo LZ daemon is authenticated against a user's account, a user must add the LZ to a Galileo Station. Here, they can then invite collaborators who can then deploy jobs to the LZ with no additional configuration. 
+
+The Galileo `SDK <galileo_sdk.html>`_ allows users to interact with the Galileo service using a Python script (both python2 and python3 are supported) instead of the web-based graphical interface.  Use the SDK to automate processes such as scheduling and deploying jobs, as well as to integrate Galileo into external applications.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
     
+	Stations Guide <stations.rst>
+	Missions Guide <missions.rst>
     Quickstart for Landing Zones <landing_zones.rst>
     Quickstart for Python SDK <galileo_sdk.rst>
     SDK References <references/index.rst>
