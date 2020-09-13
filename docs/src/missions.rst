@@ -51,7 +51,11 @@ After confirming the deletion, the file will be permanently removed.
 Jobs and Job Results
 ---------------------
 
-Once you have configured your Mission and all required input files have been added, run a job by clicking the "Run" button in the upper right. 
+The "Job Settings" tab allows you to set how many CPUs and the amount of RAM that jobs launched from this Mission will consume. In the screenshot below, the job launched from the Mission named "Python_example" will use 2 CPUs and 1280 MB of RAM. 
+
+.. image:: images/missions_job_settings.png
+
+Once you have configured your Mission and Job Settings and all required input files have been added, run a job by clicking the "Run" button in the upper right. 
 
 .. image:: images/missions_run_button.png
 
