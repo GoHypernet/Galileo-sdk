@@ -60,7 +60,7 @@ By default, there are three user roles available upon the creation of a new Stat
 
 .. image:: images/stations_role_management.png
 
-These roles can be customized by clicking the edit button on the role you wish to modify. Specific role permissions can be toggled on and off. These role permissions apply to the current Station context only. 
+The capabilities of these roles can be customized by clicking the edit button on the role you wish to modify. Specific role permissions can be toggled on and off. These role permissions apply to the current Station context only. 
 
 .. image:: images/stations_user_role_permissions.png
 

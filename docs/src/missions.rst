@@ -38,7 +38,7 @@ This will open the home page for that Mission where you can see all files associ
 
 .. image:: images/missions_create_file_button.png
 
-Select one or more files to add to your Mission environment. Once they upload, they will appear in the Mission home page as show below. 
+Select one or more files from your file explorer to add to your Mission environment. Once the file(s) upload, they will appear in the Mission home page as show below. 
 
 .. image:: images/missions_file_viewer.png
 

@@ -3,7 +3,7 @@
 Quickstart for Landing Zones
 ============================
 
-The Galileo Landing Zone (LZ) daemon is a containerized daemon process that facilitates the deployment of containerized jobs from the Galileo web-service. The LZ daemon pulls input file and metadata, runs the associated containerized job, monitors its health and status, and posts the results of completed jobs back to the Galileo web-service. Access to machines running the LZ is controlled via the `Stations <stations.html>`_ feature, where Station administrators set permissions and resource limitations. 
+The Galileo Landing Zone (LZ) daemon is a containerized daemon process that facilitates the deployment of containerized jobs from the Galileo web-service. The LZ daemon pulls input files and metadata, runs the associated job, monitors job health and status, and posts the results of completed jobs back to the Galileo web-service. Access to machines running an LZ is controlled via the `Stations <stations.html>`_ feature, where Station administrators set permissions and resource limitations. 
 
 .. image:: images/Galileo_LZ.png
 
