@@ -3,7 +3,7 @@
 Stations Guide
 ===============
 
-Stations are a Galileo feature that make it quick and simple to manage permissioned access to nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues. 
+Stations are a Galileo feature that make it quick and simple to manage permissioned access and user quotas for nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues. 
 
 Creating Your Own Galileo Station 
 --------------------------------------
@@ -60,7 +60,7 @@ By default, there are three user roles available upon the creation of a new Stat
 
 .. image:: images/stations_role_management.png
 
-These roles can be customized by clicking the edit button on the role you wish to modify. Specific role permissions can be toggled on and off. These role permissions apply to the current Station context only. 
+The capabilities of these roles can be customized by clicking the edit button on the role you wish to modify. Specific role permissions can be toggled on and off. These role permissions apply to the current Station context only. 
 
 .. image:: images/stations_user_role_permissions.png
 
