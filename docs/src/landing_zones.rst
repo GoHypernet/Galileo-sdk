@@ -3,7 +3,7 @@
 Quickstart for Landing Zones
 ============================
 
-The Galileo Landing Zone (LZ) daemon is a containerized daemon process that facilitates the deployment of containerized jobs from the Galileo web-service. The LZ daemon pulls input file and metadata, runs the associated containerized job, monitors its health and status, and posts the results of completed jobs back to the Galileo web-service. Access to machines running the LZ is controlled via the `Stations <stations.html>`_ feature, where Station administrators set permissions and resource limitations. 
+The Galileo Landing Zone (LZ) daemon is a containerized daemon process that facilitates the deployment of containerized jobs from the Galileo web-service. The LZ daemon pulls input files and metadata, runs the associated job, monitors job health and status, and posts the results of completed jobs back to the Galileo web-service. Access to machines running an LZ is controlled via the `Stations <stations.html>`_ feature where Station administrators set permissions and resource limitations. 
 
 .. image:: images/Galileo_LZ.png
 
@@ -51,7 +51,7 @@ How to Run the Landing Zone daemon
     URL: https://galileoapp.auth0.com/activate
     Code: XXXX-XXXX
 
-* Follow those instructions. Once you have confirmed your code at the provided URL you should see your new Landing Zone appear in the Galileo Landing Zones tab as show below! The dot next to the LZ name will be green when the LZ is online. If you stop the LZ container or turn your host machine off, this will disconnect the LZ session and the dot will turn red.  
+* Follow those instructions. Once you have confirmed your code at the provided URL you should see your new Landing Zone appear in the Galileo Landing Zones tab as show below! The dot next to the LZ name will be green when the LZ is online. If you stop the LZ container or turn your host machine off, this will disconnect the LZ session and the dot will turn red. If you don't want a particular LZ to appear in the UI anymore, click the delete button. 
 
 .. image:: images/landing_zone_tab.png
 
