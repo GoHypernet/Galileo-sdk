@@ -3,7 +3,7 @@
 Stations Guide
 ===============
 
-Stations are a Galileo feature that make it quick and simple to manage permissioned access to nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues. 
+Stations are a Galileo feature that make it quick and simple to manage permissioned access and user quotas for nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues. 
 
 Creating Your Own Galileo Station 
 --------------------------------------
