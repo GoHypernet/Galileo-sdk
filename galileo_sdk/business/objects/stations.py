@@ -28,7 +28,6 @@ class Volume:
     def __init__(
         self, stationid, name, mount_point, access, host_paths, volumeid,
     ):
-
         self.volumeid = volumeid
         self.stationid = stationid
         self.name = name
@@ -49,22 +48,53 @@ class EStationUserRole(enum.Enum):
 
 
 class StationUser:
-    def __init__(self, stationuserid, userid, status):
+    def __init__(
+        self,
+        stationuserid,
+        userid,
+        status=None,
+        station_id=None,
+        username=None,
+        role_id=None,
+        creation_timestamp=None,
+        updated_timestamp=None,
+    ):
         self.stationuserid = stationuserid
         self.userid = userid
         self.status = status
+        self.station_id = station_id
+        self.username = username
+        self.role_id = role_id
+        self.creation_timestamp = creation_timestamp
+        self.updated_timestamp = updated_timestamp
 
 
 class Station:
     def __init__(
-        self, stationid, name, description, users, machine_ids=None, volumes=None,
+        self,
+        stationid,
+        name,
+        description,
+        users,
+        lz_ids=None,
+        volumes=None,
+        status=None,
+        organization_id=None,
+        creation_timestamp=None,
+        updated_timestamp=None,
+        autoscale_settings=None,
     ):
         self.stationid = stationid
         self.name = name
         self.description = description
         self.users = users
-        self.mids = machine_ids
+        self.lz_ids = lz_ids
         self.volumes = volumes
+        self.status = status
+        self.organization_id = organization_id
+        self.creation_timestamp = creation_timestamp
+        self.updated_timestamp = updated_timestamp
+        self.autoscale_settings = autoscale_settings
 
 
 class NewStationEvent:
@@ -153,10 +183,10 @@ class StationAdminMemberRemovedEvent:
         self.userids = userids
 
 
-class StationAdminMachineRemovedEvent:
-    def __init__(self, stationid, mids):
+class StationAdminLzRemovedEvent:
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationMemberMemberRemovedEvent:
@@ -165,16 +195,16 @@ class StationMemberMemberRemovedEvent:
         self.userid = userid
 
 
-class StationMemberMachineRemovedEvent:
-    def __init__(self, stationid, mids):
+class StationMemberLzRemovedEvent:
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationUserWithdrawnEvent:
-    def __init__(self, stationid, mids):
+    def __init__(self, stationid, lz_ids):
         self.stationid = stationid
-        self.mids = mids
+        self.lz_ids = lz_ids
 
 
 class StationUserExpelledEvent:
@@ -202,13 +232,13 @@ class StationUserRequestDestroyedEvent:
         self.stationid = stationid
 
 
-class StationAdminMachineAddedEvent:
+class StationAdminLzAddedEvent:
     def __init__(self, stationid, mids):
         self.stationid = stationid
         self.mids = mids
 
 
-class StationMemberMachineAddedEvent:
+class StationMemberLzAddedEvent:
     def __init__(self, stationid, mids):
         self.stationid = stationid
         self.mids = mids
@@ -270,6 +300,344 @@ class StationAdminStationUpdated:
 class StationMemberStationUpdated:
     def __init__(self, station):
         self.station = station
+
+
+class ResourcePolicy:
+    def __init__(
+        self,
+        id,
+        max_cpu_per_job,
+        max_memory_per_job,
+        max_gpu_per_job,
+        max_cpu_per_station,
+        max_memory_per_station,
+        max_gpu_per_station,
+        max_cpu_global,
+        max_memory_global,
+        max_gpu_global,
+        max_projects,
+        max_users_in_station,
+        max_stations,
+        max_project_types,
+        max_cloud_storage_space,
+        max_spend_per_day,
+        max_spend_per_week,
+        max_spend_per_month,
+        max_spend_per_year,
+        cpu_credits_per_hour,
+        memory_credits_per_hour,
+        gpu_credits_per_hour,
+        creation_timestamp,
+        updated_timestamp,
+    ):
+        self.id = id
+        self.max_cpu_per_job = max_cpu_per_job
+        self.max_memory_per_job = max_memory_per_job
+        self.max_gpu_per_job = max_gpu_per_job
+        self.max_cpu_per_station = max_cpu_per_station
+        self.max_memory_per_station = max_memory_per_station
+        self.max_gpu_per_station = max_gpu_per_station
+        self.max_cpu_global = max_cpu_global
+        self.max_memory_global = max_memory_global
+        self.max_gpu_global = max_gpu_global
+        self.max_projects = max_projects
+        self.max_users_in_station = max_users_in_station
+        self.max_stations = max_stations
+        self.max_project_types = max_project_types
+        self.max_cloud_storage_space = max_cloud_storage_space
+        self.max_spend_per_day = max_spend_per_day
+        self.max_spend_per_week = max_spend_per_week
+        self.max_spend_per_month = max_spend_per_month
+        self.max_spend_per_year = max_spend_per_year
+        self.cpu_credits_per_hour = cpu_credits_per_hour
+        self.memory_credits_per_hour = memory_credits_per_hour
+        self.gpu_credits_per_hour = gpu_credits_per_hour
+        self.creation_timestamp = creation_timestamp
+        self.updated_timestamp = updated_timestamp
+
+
+class UpdateResourcePolicyRequest:
+    def __init__(
+        self,
+        max_cpu_per_job=None,
+        max_memory_per_job=None,
+        max_gpu_per_job=None,
+        max_cpu_per_station=None,
+        max_memory_per_station=None,
+        max_gpu_per_station=None,
+        max_cpu_global=None,
+        max_memory_global=None,
+        max_gpu_global=None,
+        max_projects=None,
+        max_users_in_station=None,
+        max_stations=None,
+        max_project_types=None,
+        max_cloud_storage_space=None,
+        max_spend_per_day=None,
+        max_spend_per_week=None,
+        max_spend_per_month=None,
+        max_spend_per_year=None,
+        cpu_credits_per_hour=None,
+        memory_credits_per_hour=None,
+        gpu_credits_per_hour=None,
+    ):
+        self.max_cpu_per_job = max_cpu_per_job
+        self.max_memory_per_job = max_memory_per_job
+        self.max_gpu_per_job = max_gpu_per_job
+        self.max_cpu_per_station = max_cpu_per_station
+        self.max_memory_per_station = max_memory_per_station
+        self.max_gpu_per_station = max_gpu_per_station
+        self.max_cpu_global = max_cpu_global
+        self.max_memory_global = max_memory_global
+        self.max_gpu_global = max_gpu_global
+        self.max_projects = max_projects
+        self.max_users_in_station = max_users_in_station
+        self.max_stations = max_stations
+        self.max_project_types = max_project_types
+        self.max_cloud_storage_space = max_cloud_storage_space
+        self.max_spend_per_day = max_spend_per_day
+        self.max_spend_per_week = max_spend_per_week
+        self.max_spend_per_month = max_spend_per_month
+        self.max_spend_per_year = max_spend_per_year
+        self.cpu_credits_per_hour = cpu_credits_per_hour
+        self.memory_credits_per_hour = memory_credits_per_hour
+        self.gpu_credits_per_hour = gpu_credits_per_hour
+
+
+class CreateStationRoleRequest:
+    def __init__(
+        self,
+        name,
+        description,
+        role_type=None,
+        protected_role=0,
+        edit_station_roles=0,
+        assign_user_roles=0,
+        assign_protected_user_roles=0,
+        launch_jobs=0,
+        invite_users=0,
+        remove_all_users=0,
+        remove_invited_users=0,
+        view_all_users=0,
+        edit_metadata=0,
+        add_machine=0,
+        remove_any_machine=0,
+        view_all_jobs=0,
+        control_all_jobs=0,
+        view_jobs_on_own_machines=0,
+        control_jobs_on_own_machines=0,
+        view_own_jobs=0,
+        control_own_jobs=0,
+        view_complete_activity=0,
+        edit_station_policy=0,
+        edit_own_machine_policy=0,
+        edit_machine_policy=0,
+        edit_user_policy=0,
+        edit_job_resource_limits=0,
+        add_autoscale=0,
+        edit_autoscale=0,
+        remove_autoscale=0,
+        manage_volumes=0,
+        reject_user_requests=0,
+    ):
+        self.name = name
+        self.description = description
+        self.role_type = role_type
+        self.protected_role = protected_role
+        self.edit_station_roles = edit_station_roles
+        self.assign_user_roles = assign_user_roles
+        self.assign_protected_user_roles = assign_protected_user_roles
+        self.launch_jobs = launch_jobs
+        self.invite_users = invite_users
+        self.remove_all_users = remove_all_users
+        self.remove_invited_users = remove_invited_users
+        self.view_all_users = view_all_users
+        self.edit_metadata = edit_metadata
+        self.add_machine = add_machine
+        self.remove_any_machine = remove_any_machine
+        self.view_all_jobs = view_all_jobs
+        self.control_all_jobs = control_all_jobs
+        self.view_jobs_on_own_machines = view_jobs_on_own_machines
+        self.control_jobs_on_own_machines = control_jobs_on_own_machines
+        self.view_own_jobs = view_own_jobs
+        self.control_own_jobs = control_own_jobs
+        self.view_complete_activity = view_complete_activity
+        self.edit_station_policy = edit_station_policy
+        self.edit_own_machine_policy = edit_own_machine_policy
+        self.edit_machine_policy = edit_machine_policy
+        self.edit_user_policy = edit_user_policy
+        self.edit_job_resource_limits = edit_job_resource_limits
+        self.add_autoscale = add_autoscale
+        self.edit_autoscale = edit_autoscale
+        self.remove_autoscale = remove_autoscale
+        self.manage_volumes = manage_volumes
+        self.reject_user_requests = reject_user_requests
+
+
+class UpdateStationRoleRequest:
+    def __init__(
+        self,
+        name=None,
+        description=None,
+        protected_role=None,
+        edit_station_role=None,
+        assign_user_roles=None,
+        assign_protected_user_roles=None,
+        launch_jobs=None,
+        invite_users=None,
+        remove_all_users=None,
+        remove_invited_users=None,
+        view_all_users=None,
+        edit_metadata=None,
+        add_machine=None,
+        remove_any_machine=None,
+        view_all_jobs=None,
+        control_all_jobs=None,
+        view_jobs_on_own_machines=None,
+        control_jobs_on_own_machines=None,
+        view_own_jobs=None,
+        control_own_jobs=None,
+        view_complete_activity=None,
+        edit_station_policy=None,
+        edit_own_machine_policy=None,
+        edit_machine_policy=None,
+        edit_user_policy=None,
+        edit_job_resource_limits=None,
+        manage_volumes=None,
+        reject_user_requests=None,
+    ):
+        self.name = name
+        self.description = description
+        self.protected_role = protected_role
+        self.edit_station_role = edit_station_role
+        self.assign_user_roles = assign_user_roles
+        self.assign_protected_user_roles = assign_protected_user_roles
+        self.launch_jobs = launch_jobs
+        self.invite_users = invite_users
+        self.remove_all_users = remove_all_users
+        self.remove_invited_users = remove_invited_users
+        self.view_all_users = view_all_users
+        self.edit_metadata = edit_metadata
+        self.add_machine = add_machine
+        self.remove_any_machine = remove_any_machine
+        self.view_all_jobs = view_all_jobs
+        self.control_all_jobs = control_all_jobs
+        self.view_jobs_on_own_machines = view_jobs_on_own_machines
+        self.control_jobs_on_own_machines = control_jobs_on_own_machines
+        self.view_own_jobs = view_own_jobs
+        self.control_own_jobs = control_own_jobs
+        self.view_complete_activity = view_complete_activity
+        self.edit_station_policy = edit_station_policy
+        self.edit_own_machine_policy = edit_own_machine_policy
+        self.edit_machine_policy = edit_machine_policy
+        self.edit_user_policy = edit_user_policy
+        self.edit_job_resource_limits = edit_job_resource_limits
+        self.manage_volumes = manage_volumes
+        self.reject_user_requests = reject_user_requests
+
+
+class AutoscaleSettings:
+    def __init__(
+        self,
+        id,
+        station_id,
+        creation_timestamp,
+        updated_timestamp,
+        increment_amount,
+        name_prefix,
+        computer_provider_id,
+        provision_count,
+        provision_count_min,
+        provision_count_max,
+        usage_threshold_up,
+        usage_threshold_down,
+        status,
+    ):
+        self.id = id
+        self.station_id = station_id
+        self.creation_timestamp = creation_timestamp
+        self.updated_timestamp = updated_timestamp
+        self.increment_amount = increment_amount
+        self.name_prefix = name_prefix
+        self.computer_provider_id = computer_provider_id
+        self.provision_count = provision_count
+        self.provision_count_min = provision_count_min
+        self.provision_count_max = provision_count_max
+        self.usage_threshold_up = usage_threshold_up
+        self.usage_threshold_down = usage_threshold_down
+        self.status = status
+
+
+class StationRole:
+    def __init__(
+        self,
+        id,
+        station_id,
+        creation_timestamp,
+        updated_timestamp,
+        name,
+        description,
+        role_type,
+        protected_role,
+        edit_station_roles,
+        assign_user_roles,
+        assign_protected_user_roles,
+        launch_jobs,
+        invite_users,
+        remove_all_users,
+        remove_invited_users,
+        view_all_users,
+        edit_metadata,
+        add_machine,
+        remove_any_machine,
+        view_all_jobs,
+        control_all_jobs,
+        view_jobs_on_own_machines,
+        control_jobs_on_own_machines,
+        view_own_jobs,
+        control_own_jobs,
+        view_complete_activity,
+        edit_station_policy,
+        edit_own_machine_policy,
+        edit_machine_policy,
+        edit_user_policy,
+        edit_job_resource_limits,
+        manage_volumes,
+        reject_user_requests,
+    ):
+        self.id = id
+        self.station_id = station_id
+        self.creation_timestamp = creation_timestamp
+        self.updated_timestamp = updated_timestamp
+        self.name = name
+        self.description = description
+        self.role_type = role_type
+        self.protected_role = protected_role
+        self.edit_station_roles = edit_station_roles
+        self.assign_user_roles = assign_user_roles
+        self.assign_protected_user_roles = assign_protected_user_roles
+        self.launch_jobs = launch_jobs
+        self.invite_users = invite_users
+        self.remove_all_users = remove_all_users
+        self.remove_invited_users = remove_invited_users
+        self.view_all_users = view_all_users
+        self.edit_metadata = edit_metadata
+        self.add_machine = add_machine
+        self.remove_any_machine = remove_any_machine
+        self.view_all_jobs = view_all_jobs
+        self.control_all_jobs = control_all_jobs
+        self.view_jobs_on_own_machines = view_jobs_on_own_machines
+        self.control_jobs_on_own_machines = control_jobs_on_own_machines
+        self.view_own_jobs = view_own_jobs
+        self.control_own_jobs = control_own_jobs
+        self.view_complete_activity = view_complete_activity
+        self.edit_station_policy = edit_station_policy
+        self.edit_own_machine_policy = edit_own_machine_policy
+        self.edit_machine_policy = edit_machine_policy
+        self.edit_user_policy = edit_user_policy
+        self.edit_job_resource_limits = edit_job_resource_limits
+        self.manage_volumes = manage_volumes
+        self.reject_user_requests = reject_user_requests
 
 
 class StationsEvents:

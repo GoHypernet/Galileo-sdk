@@ -1,34 +1,33 @@
 import os
 
-from .business.services.jobs import JobsService
-from .business.services.log import LogService
-from .business.services.machines import MachinesService
-from .business.services.profiles import ProfilesService
-from .business.services.projects import ProjectsService
-from .business.services.stations import StationsService
-from .data.providers.auth import AuthProvider
-from .data.repositories.jobs import JobsRepository
-from .data.repositories.machines import MachinesRepository
-from .data.repositories.profiles import ProfilesRepository
-from .data.repositories.projects import ProjectsRepository
-from .data.repositories.settings import SettingsRepository
-from .data.repositories.stations import StationsRepository
-from .sdk.auth import AuthSdk
-from .sdk.jobs import JobsSdk
-from .sdk.machines import MachinesSdk
-from .sdk.profiles import ProfilesSdk
-from .sdk.projects import ProjectsSdk
-from .sdk.stations import StationsSdk
+from .business import (
+    JobsService,
+    LogService,
+    LzService,
+    ProfilesService,
+    MissionsService,
+    StationsService,
+)
+from .data import (
+    AuthProvider,
+    JobsRepository,
+    LzRepository,
+    ProfilesRepository,
+    MissionsRepository,
+    SettingsRepository,
+    StationsRepository,
+)
+from .sdk import JobsSdk, LzSdk, ProfilesSdk, MissionsSdk, StationsSdk
 
 import sys
 
 _ver = sys.version_info
 
-is_py2 = (_ver[0] == 2)
-is_py3 = (_ver[0] == 3)
+is_py2 = _ver[0] == 2
+is_py3 = _ver[0] == 3
 
 if is_py3:
-    from .data.events.connector import GalileoConnector
+    from .data import GalileoConnector
 
 NAMESPACE = "/galileo/user_interface/v1"
 
@@ -96,35 +95,27 @@ class GalileoSdk:
         self._profiles_repo = ProfilesRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
-        self._machines_repo = MachinesRepository(
-            self._settings, self._auth_provider, NAMESPACE
-        )
-        self._projects_repo = ProjectsRepository(
+        self._lz_repo = LzRepository(self._settings, self._auth_provider, NAMESPACE)
+        self._missions_repo = MissionsRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
 
         self._jobs_service = JobsService(self._jobs_repo, self._profiles_repo)
         self._stations_service = StationsService(self._stations_repo)
         self._profiles_service = ProfilesService(self._profiles_repo)
-        self._machines_service = MachinesService(self._machines_repo)
-        self._projects_service = ProjectsService(self._projects_repo)
+        self._lz_service = LzService(self._lz_repo)
+        self._missions_service = MissionsService(self._missions_repo)
 
         self.profiles = ProfilesSdk(self._profiles_service)
-        self.projects = ProjectsSdk(self._projects_service)
+        self.missions = MissionsSdk(self._missions_service)
 
+        connector = None
         if is_py3:
-            self._events = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
-            self.jobs = JobsSdk(self._jobs_service, self._events.jobs_events)
-            self.stations = StationsSdk(
-                self._stations_service, self._events.stations_events
-            )
-            self.machines = MachinesSdk(
-                self._machines_service, self._events.machines_events
-            )
-        elif is_py2:
-            self.jobs = JobsSdk(self._jobs_service)
-            self.stations = StationsSdk(self._stations_service)
-            self.machines = MachinesSdk(self._machines_service)
+            connector = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
+
+        self.jobs = JobsSdk(self._jobs_service, connector)
+        self.stations = StationsSdk(self._stations_service, connector)
+        self.lz = LzSdk(self._lz_service, connector)
 
     def disconnect(self):
         """
@@ -132,7 +123,9 @@ class GalileoSdk:
         :return: None
         """
         if is_py3:
-            self._events.disconnect()
+            self.jobs.disconnect()
+            self.stations.disconnect()
+            self.lz.disconnect()
 
     def update_auth_token(self, auth_token):
         """

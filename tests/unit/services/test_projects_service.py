@@ -2,8 +2,8 @@ from datetime import datetime
 
 from galileo_sdk.compat import mock
 from galileo_sdk.business.objects.jobs import Job
-from galileo_sdk.business.objects.projects import Project, HECRASProject, ProjectType, PythonProject
-from galileo_sdk.business.services.projects import ProjectsService
+from galileo_sdk.business.objects.missions import Mission
+from galileo_sdk.business.services.missions import MissionsService
 
 BACKEND = "http://BACKEND"
 NAME = "test_name"
@@ -18,12 +18,12 @@ settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = mock.Mock()
-projects_service = ProjectsService(projects_repo)
+projects_service = MissionsService(projects_repo)
 
 
 def test_list_projects():
-    projects_repo.list_projects.return_value = [
-        Project(
+    projects_repo.list_missions.return_value = [
+        Mission(
             "project_id",
             "name",
             "description",
@@ -33,74 +33,15 @@ def test_list_projects():
             "destination_path",
             "user_id",
             datetime.now(),
-            "project_type_id"
+            "project_type_id",
         )
         for _ in range(5)
     ]
 
-    r = projects_service.list_projects()
+    r = projects_service.list_missions()
 
     assert len(r) == 5
-    assert r[0].project_id == "project_id"
-
-
-def test_create_hecras_project():
-    projects_service.get_project_types = mock.MagicMock(return_value=[
-        ProjectType(id="hecras_project_type_id", name="HECRAS", description="description", version="version")])
-    projects_repo.create_project.return_value = Project(
-        "project_id",
-        NAME,
-        DESCRIPTION,
-        "source_storage_id",
-        "source_path",
-        "destination_storage_id",
-        "destination_path",
-        "user_id",
-        datetime.now(),
-        "hecras_project_type_id"
-    )
-
-    r = projects_service.create_project(HECRASProject(name=NAME,
-                                                      description=DESCRIPTION,
-                                                      version="version",
-                                                      source_storage_id="source_storage_id",
-                                                      destination_storage_id="destination_storage_id",
-                                                      plan="plan",
-                                                      input_path="input_path",
-                                                      output_path="output_path"))
-
-    assert r.name == NAME
-    assert r.description == DESCRIPTION
-    assert r.project_type_id == "hecras_project_type_id"
-
-
-def test_create_python_project():
-    projects_service.get_project_types = mock.MagicMock(return_value=[
-        ProjectType(id="python_project_type_id", name="Python", description="description", version="version")])
-    projects_repo.create_project.return_value = Project(
-        "project_id",
-        NAME,
-        DESCRIPTION,
-        "source_storage_id",
-        "source_path",
-        "destination_storage_id",
-        "destination_path",
-        "user_id",
-        datetime.now(),
-        "python_project_type_id"
-    )
-
-    r = projects_service.create_project(PythonProject(name=NAME,
-                                                      description=DESCRIPTION,
-                                                      version="version",
-                                                      source_storage_id="source_storage_id",
-                                                      destination_storage_id="destination_storage_id",
-                                                      cpu_count=1,
-                                                      filename="test.py"))
-
-    assert r.name == NAME
-    assert r.description == DESCRIPTION
-    assert r.project_type_id == "python_project_type_id"
+    assert r[0].mission_id == "project_id"
 
 
 def test_upload():
@@ -137,7 +78,7 @@ def test_run_job_on_station():
 
 
 def test_run_job_on_machine():
-    projects_repo.run_job_on_machine.return_value = Job(
+    projects_repo.run_job_on_lz.return_value = Job(
         "jobid",
         "receiverid",
         "project_id",
@@ -157,7 +98,7 @@ def test_run_job_on_machine():
         [],
     )
 
-    r = projects_service.run_job_on_machine(PROJECT_ID, STATION_ID, MACHINE_ID)
+    r = projects_service.run_job_on_lz(PROJECT_ID, STATION_ID, MACHINE_ID)
 
     assert r.project_id == "project_id"
     assert r.job_id == "jobid"

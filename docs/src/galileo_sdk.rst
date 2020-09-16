@@ -100,29 +100,28 @@ Before you end your script, you must disconnect the Galileo object via:
 
     galileo.disconnect()
 
-|
-Using the Galileo Command Line Interface
+.. Using the Galileo Command Line Interface
 -----------------------------------------
 The Galileo CLI is an application that utilizes the Galileo SDK to view jobs without a GUI.
 
-Install via pip:
+.. Install via pip:
 
-.. code-block:: bash
+.. .. code-block:: bash
 
     $ pip install galileo-cli
 
-Provide a username and password combination or authorization token and refresh token combination. One way of providing a username is to set environment variables GALILEO_USER and GALILEO_PASSWORD.
+.. Provide a username and password combination or authorization token and refresh token combination. One way of providing a username is to set environment variables GALILEO_USER and GALILEO_PASSWORD.
 
-.. code-block:: bash
+.. .. code-block:: bash
 
-    $ export GALILEO_USER=user@galileoapp.io
-    $ export GALILEO_PASSWORD=password
-    $ galileo-cli
+..    $ export GALILEO_USER=user@galileoapp.io
+..    $ export GALILEO_PASSWORD=password
+..    $ galileo-cli
 
-Another way to login is to provide your username on the command line, where you will be prompted for your password:
+.. Another way to login is to provide your username on the command line, where you will be prompted for your password:
 
-.. code-block:: bash
+.. .. code-block:: bash
 
-    $ galileo-cli -u user@galileoapp.io
-    $ Password:
+..    $ galileo-cli -u user@galileoapp.io
+..    $ Password:
 

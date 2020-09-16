@@ -2,10 +2,15 @@
 
 Quickstart for Landing Zones
 ============================
+
+The Galileo Landing Zone (LZ) daemon is a containerized daemon process that facilitates the deployment of containerized jobs from the Galileo web-service. The LZ daemon pulls input files and metadata, runs the associated job, monitors job health and status, and posts the results of completed jobs back to the Galileo web-service. Access to machines running an LZ is controlled via the `Stations <stations.html>`_ feature where Station administrators set permissions and resource limitations. 
+
+.. image:: images/Galileo_LZ.png
+
 Prerequisites
 -------------
 
-Docker must be installed on the machine you wish to use as a landing zone. You can find those instructions here:
+Docker must be installed on the machine you wish to use as a landing zone. You can find installation instructions for all major operating systems here:
 
 * `Windows <https://docs.docker.com/docker-for-windows/install/>`_
 * `Mac <https://docs.docker.com/docker-for-mac/install/>`_
@@ -15,7 +20,7 @@ Docker must be installed on the machine you wish to use as a landing zone. You c
     * `Fedora <https://docs.docker.com/engine/install/fedora/>`_
     * `Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_
 |
-How to Run the Landing Zone Daemon
+How to Run the Landing Zone daemon
 ----------------------------------
 * Make sure that Docker is running.
 * Open a terminal
@@ -23,8 +28,8 @@ How to Run the Landing Zone Daemon
     * Mac: Press Cmd+Space to open Spotlight Search, type "terminal", and press Return.
     * Linux: You can try Ctrl+Alt+T. If that doesn’t work you should find instructions for your distribution.
 * This is a good time to `test your Docker installation <https://docs.docker.com/get-started/#test-docker-installation>`_.
-* Choose the name you’d like this Landing Zone to have and choose a unique ID Galileo should identify it by. We will refer to these values as :code:`$LZ_NAME` and :code:`$LZ_ID` respectively. When you see those references simply substitute your chosen values in their place.
-* Copy the following command, paste it in the terminal, substitute your values, and run the command by pressing Enter or Return and wait for the process to finish.
+* Choose the name you’d like this LZ to have when viewed in the Galileo web interface. We will refer to the LZ name as :code:`$LZ_NAME`. When you see :code:`$LZ_NAME` referenced, simply substitute your chosen name in its place.
+* Copy the following command, paste it in the terminal, substitute the name you chose for :code:`$LZ_NAME`, and run the command by pressing Enter or Return and wait for the process to finish.
 
 .. code-block:: bash
 
@@ -46,9 +51,14 @@ How to Run the Landing Zone Daemon
     URL: https://galileoapp.auth0.com/activate
     Code: XXXX-XXXX
 
-* Follow those instructions. Once you have confirmed your code at the provided URL you should see your new Landing Zone appear in Galileo!
+* Follow those instructions. Once you have confirmed your code at the provided URL you should see your new Landing Zone appear in the Galileo Landing Zones tab as show below! The dot next to the LZ name will be green when the LZ is online. If you stop the LZ container or turn your host machine off, this will disconnect the LZ session and the dot will turn red. If you don't want a particular LZ to appear in the UI anymore, click the delete button. 
+
+.. image:: images/landing_zone_tab.png
+
+* In order to submit jobs to your new LZ, you must add it to a `Station <stations.html#adding-a-landing-zone-to-your-station>`_. You can create a new Station by going to the Stations tab and clicking the Create Stations button.
+
 |
-Stopping and Restarting the Landing Zone Daemon
+Stopping and Restarting the Landing Zone daemon
 -----------------------------------------------
 * Open a terminal as you did above
 * Run this command to stop the Landing Zone
@@ -65,20 +75,20 @@ Stopping and Restarting the Landing Zone Daemon
 
 * You should not have to re-authenticate this time!
 |
-Removing and Restarting the Landing Zone Daemon
+Removing and Restarting the Landing Zone daemon
 -----------------------------------------------
 * Open a terminal as you did above
-* To remove the Landing Zone Daemon container from your Docker installation, first stop the Landing Zone, then run this command
+* To remove the Landing Zone daemon container from your Docker installation, first stop the Landing Zone, then run this command
 
 .. code-block:: bash
 
     $ docker rm landing-zone-daemon
 
-* To install the Landing Zone Daemon again follow the instructions above. You may or may not need to reauthenticate depending on whether you delete the Docker volume called "tokens" that was created when you started the landing zone.
+* To install the Landing Zone daemon again follow the instructions above. You may or may not need to reauthenticate depending on whether you delete the Docker volume called "tokens" that was created when you started the landing zone.
 |
-How to Run, Stop, and Remove the Landing Zone Daemon using Docker Compose
+How to Run, Stop, and Remove the Landing Zone daemon using Docker Compose
 -------------------------------------------------------------------------
-Running the Landing Zone Daemon
+Running the Landing Zone daemon
 ###############################
 
 * Make sure that Docker is running
@@ -97,7 +107,7 @@ Running the Landing Zone Daemon
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon
+        image: hypernetlabs/landing-zone-daemon:head
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           # uncomment the following line if you need your LZ to have access to private Docker Hub repositories
@@ -111,14 +121,14 @@ Running the Landing Zone Daemon
     volumes:
       tokens:
 
-* If you are running windows containers, copy this into a text file named docker-compose.yml:
+* If you are on a windows host and running windows containers, copy this into a text file named docker-compose.yml:
 
 .. code-block:: yaml
 
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon:head-windowsservercore-1809
+        image: hypernetlabs/landing-zone-daemon:head
         volumes:
           - source: '\\.\pipe\docker_engine'
             target: '\\.\pipe\docker_engine'
@@ -131,8 +141,8 @@ Running the Landing Zone Daemon
         command: --log-file - --refresh-token-file C:\\tokens\\authfile.txt --backend 'https://api.galileoapp.io' --machine-name "$LZ_NAME"
     volumes:
       tokens:
-
-* In the same folder as the .yml file, copy the commands below and paste in a terminal to pull the Landing Zone image and run the Landing Zone Daemon:
+* Be sure to change :code:`$LZ_NAME` to your desired name to be displayed in the user interface. 
+* In the same folder as the .yml file, copy the commands below and paste in a terminal to pull the Landing Zone image and run the Landing Zone daemon:
 
 .. code-block:: bash
 
@@ -182,4 +192,4 @@ Stopping and Restarting
 Removing and Restarting
 #######################
 * By running the stop command above, you automatically remove the container
-* To install the Landing Zone Daemon again follow the instructions above. You may or may not need to reauthenticate depending on whether you delete the landing-zone_tokens docker volume that stores your authentication token.
+* To install the Landing Zone daemon again follow the instructions above. You should not need to reauthenticate if you do not delete the landing-zone_tokens docker volume that stores your authentication token.

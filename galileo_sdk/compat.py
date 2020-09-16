@@ -3,12 +3,12 @@ import sys
 
 _ver = sys.version_info
 
-is_py2 = (_ver[0] == 2)
-is_py3 = (_ver[0] == 3)
+is_py2 = _ver[0] == 2
+is_py3 = _ver[0] == 3
 
 if is_py2:
     from urlparse import urlunparse, urlparse
-    from urllib import urlencode
+    from urllib import urlencode, quote
     import mock
     import urllib2
     from urllib2 import URLError
@@ -17,11 +17,11 @@ if is_py2:
 
     class PutRequest(urllib2.Request):
         def get_method(self, *args, **kwargs):
-            return 'PUT'
+            return "PUT"
 
     class DeleteRequest(urllib2.Request):
         def get_method(self, *args, **kwargs):
-            return 'DELETE'
+            return "DELETE"
 
     class Response(urllib2.URLError):
         def __init__(self, r):
@@ -46,20 +46,28 @@ if is_py2:
             return json_p.loads(self.json_obj)
 
         def raise_for_status(self):
-            http_error_msg = ''
+            http_error_msg = ""
             if isinstance(self.reason, bytes):
                 try:
-                    reason = self.reason.decode('utf-8')
+                    reason = self.reason.decode("utf-8")
                 except UnicodeDecodeError:
-                    reason = self.reason.decode('iso-8859-1')
+                    reason = self.reason.decode("iso-8859-1")
             else:
                 reason = self.reason
 
             if 400 <= self.status_code < 500:
-                http_error_msg = u'%s Client Error: %s for url: %s' % (self.status_code, reason, self.url)
+                http_error_msg = u"%s Client Error: %s for url: %s" % (
+                    self.status_code,
+                    reason,
+                    self.url,
+                )
 
             elif 500 <= self.status_code < 600:
-                http_error_msg = u'%s Server Error: %s for url: %s' % (self.status_code, reason, self.url)
+                http_error_msg = u"%s Server Error: %s for url: %s" % (
+                    self.status_code,
+                    reason,
+                    self.url,
+                )
 
             if http_error_msg:
                 raise urllib2.URLError(http_error_msg, response=self)
@@ -75,7 +83,9 @@ if is_py2:
             if headers is None:
                 headers = {}
             if not data:
-                headers.update({"Content-type": "application/json", "Accept": "text/plain"})
+                headers.update(
+                    {"Content-type": "application/json", "Accept": "text/plain"}
+                )
                 request = urllib2.Request(url, data=json_p.dumps(json), headers=headers)
             else:
                 request = urllib2.Request(url, data=data, headers=headers)
@@ -99,7 +109,7 @@ if is_py2:
 
 
 elif is_py3:
-    from urllib.parse import urlunparse, urlparse, urlencode
+    from urllib.parse import urlunparse, urlparse, urlencode, quote
     from urllib.error import URLError
     from unittest import mock
     import requests

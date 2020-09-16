@@ -10,11 +10,16 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
-import os
+from os import path
 import sys
-
-import galileo_sdk
 import sphinx_material
+root = path.realpath(path.join(path.dirname(__file__), '..', '..'))
+sys.path.insert(1, root)
+import galileo_sdk
+
+autodoc_default_flags = ['members']
+autosummary_generate = True
+autosummary_imported_members = True
 
 # -- Python specific configuration -------------------------------------------
 
@@ -31,7 +36,7 @@ def setup(app):
 
 # -- Project information -----------------------------------------------------
 
-project = "Galileo SDK"
+project = "Galileo"
 copyright = "2020, Hypernet Labs"
 author = "Hypernet Labs"
 
@@ -40,7 +45,6 @@ author = "Hypernet Labs"
 
 
 # -- General configuration ---------------------------------------------------
-sys.path.insert(0, os.path.abspath('../../galileo_sdk'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -88,7 +92,7 @@ html_theme_options = {
     "repo_url": "https://github.com/GoHypernet/Galileo-sdk",
     "html_minify": True,
     "css_minify": True,
-    "nav_title": "SDK Documentation",
+    "nav_title": "Galileo Documentation",
     "globaltoc_depth": 3,
     "theme_color": "#4dc1ab",
     "color_primary": "teal",

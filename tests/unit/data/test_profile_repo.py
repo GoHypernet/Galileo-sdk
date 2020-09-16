@@ -78,6 +78,10 @@ def mocked_requests_get(*args, **kwargs):
                                 "stationuserid": "stationuserid",
                                 "userid": "userid",
                                 "status": "ADMIN",
+                                "creation_timestamp": "date",
+                                "updated_timestamp": "date",
+                                "station_id": "station_id",
+                                "role_id": "role_id",
                             }
                         ],
                         "mids": ["1", "2"],
@@ -97,6 +101,10 @@ def mocked_requests_get(*args, **kwargs):
                                 ],
                             }
                         ],
+                        "creation_timestamp": "creation_timestamp",
+                        "updated_timestamp": "updated_timestamp",
+                        "organization_id": "organization_id",
+                        "status": "stable",
                     }
                 ]
             },
@@ -120,7 +128,7 @@ def test_list_users(mocked_requests):
 
     # Assert
     assert len(r) == 5
-    assert len(r[0].mids) == 1
+    assert len(r[0].lz_ids) == 1
     assert len(r[0].wallets) == 1
     for i in range(5):
         assert r[i].userid == "user{i}".format(i=i)
@@ -143,7 +151,7 @@ def test_get_profile(mocked_requests):
     assert r.userid == "userid"
     assert r.username == "username"
     assert r.wallets[0].wallet == "0x"
-    assert r.mids == ["mids"]
+    assert r.lz_ids == ["mids"]
 
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
@@ -162,6 +170,6 @@ def test_list_station_invites(mocked_requests):
 
     # Assert
     assert r[0].stationid == "stationid"
-    assert r[0].mids[0] == "1"
+    assert r[0].lz_ids[0] == "1"
     assert r[0].name == "name"
     assert r[0].users[0].stationuserid == "stationuserid"
