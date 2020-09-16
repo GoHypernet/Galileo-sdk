@@ -14,24 +14,23 @@ def test_list_projects():
     assert missions[0].source_path is not None
 
 
-def test_upload_file():
-    project = galileo.missions.create_mission(
-        name="project", description="upload_single_file",
-    )
+# def test_upload_file():
+#     project = galileo.missions.create_mission(
+#         name="project", description="upload_single_file",
+#     )
+#
+#     response = galileo.missions.upload(project.mission_id, "flatplate/flatplate")
+#
+#     assert response == True
+#     assert project is not None
 
-    response = galileo.missions.upload(project.mission_id, "flatplate/flatplate")
-
-    assert response == True
-    assert project is not None
-
-
-def test_create_and_upload():
-    project = galileo.missions.create_and_upload_mission(
-        "sdk_project_test", "flatplate/flatplate"
-    )
-
-    assert project is not None
-    assert isinstance(project, Mission)
+# def test_create_and_upload():
+#     project = galileo.missions.create_and_upload_mission(
+#         "sdk_project_test", "flatplate/flatplate"
+#     )
+#
+#     assert project is not None
+#     assert isinstance(project, Mission)
 
 
 def test_list_mission_types():
