@@ -16,7 +16,7 @@ class MissionsSdk:
     ):
         """
         Get list of missions
-
+        
         :param ids: Optional[List[str]]: Filter by mission id
         :param names: Optional[List[str]]: Filter by mission name
         :param user_ids: Optional[List[str]]: Filter by user ids
@@ -89,17 +89,21 @@ class MissionsSdk:
         """
         return self._missions_service.upload(mission_id, directory)
 
-    def run_job_on_station(self, mission_id, station_id):
+    def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         """
         Run a job on a station
+
+        Example::
+        
+            galileo.missions.run_job_on_station(a,b,c)
 
         :param mission_id: str: Mission you want to upload the file to
         :param station_id: str: Station you want to run the job on
         :return: Job
         """
-        return self._missions_service.run_job_on_station(mission_id, station_id)
+        return self._missions_service.run_job_on_station(mission_id, station_id, cpu_count=cpu_count, memory_amount=memory_amount, gpu_count=gpu_count)
 
-    def run_job_on_lz(self, mission_id, station_id, lz_id):
+    def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
         """
         Run a job on a landing zone
 
@@ -108,7 +112,7 @@ class MissionsSdk:
         :param lz_id: str: Landing zone you want to run the job on
         :return: Job
         """
-        return self._missions_service.run_job_on_lz(mission_id, station_id, lz_id)
+        return self._missions_service.run_job_on_lz(mission_id, station_id, lz_id, cpu_count=cpu_count, memory_amount=memory_amount, gpu_count=gpu_count)
 
     def create_and_upload_mission(
         self,

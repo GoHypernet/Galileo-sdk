@@ -47,19 +47,19 @@ class MissionsRepository(RequestsRepository):
         )
         return r.json()
 
-    def run_job_on_station(self, mission_id, station_id):
+    def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         response = self._post(
             "/projects/{project_id}/jobs".format(project_id=mission_id),
-            data={"station_id": station_id},
+            data={"station_id": station_id, "cpu_count": cpu_count, "memory_amount": memory_amount, "gpu_count": gpu_count},
         )
         json = response.json()
         job = json["job"]
         return job_dict_to_job(job)
 
-    def run_job_on_lz(self, mission_id, station_id, lz_id):
+    def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
         response = self._post(
             "/projects/{project_id}/jobs".format(project_id=mission_id),
-            data={"station_id": station_id, "machine_id": lz_id},
+            data={"station_id": station_id, "machine_id": lz_id, "cpu_count": cpu_count, "memory_amount": memory_amount, "gpu_count": gpu_count},
         )
         json = response.json()
         job = json["job"]
