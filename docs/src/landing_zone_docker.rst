@@ -106,9 +106,17 @@ How to Run the Landing Zone Daemon
 
 * Follow those instructions. Once you have confirmed your code at the
   provided URL you should see your new Landing Zone appear in the
-  Galileo Landing Zones tab! In order to submit jobs to your new LZ,
-  you must add it to a Station. You can create a new Station by going
-  to the Stations tab and clicking the Create Stations button.
+  Galileo Landing Zones tab as show below! The dot next to the LZ name 
+  will be green when the LZ is online. If the LZ is stopped or the host 
+  machine is turned off, this will disconnect the LZ session and the dot 
+  will turn red. If you do not want a particular LZ to appear in the UI 
+  anymore, click the delete button. 
+
+.. image:: images/landing_zone_tab.png
+
+* In order to submit jobs to your new LZ, you must add it to a `Station <stations.html>`_. 
+  You can create a new Station by going to the Stations tab and clicking 
+  the Create Stations button.
 
 Stopping and Restarting the Landing Zone Daemon
 -----------------------------------------------
@@ -146,7 +154,7 @@ How to Run, Stop, and Remove the Landing Zone daemon using Docker Compose
 -------------------------------------------------------------------------
 
 Running the Landing Zone daemon
-###############################
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Make sure that Docker is running
 * Open a terminal as you did above
@@ -168,7 +176,7 @@ Running the Landing Zone daemon
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon
+        image: hypernetlabs/landing-zone-daemon:head
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           # uncomment the following line if you need your LZ to have access to private Docker Hub repositories
@@ -190,7 +198,7 @@ Running the Landing Zone daemon
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon:head-windowsservercore-1809
+        image: hypernetlabs/landing-zone-daemon:head
         volumes:
           - source: '\\.\pipe\docker_engine'
             target: '\\.\pipe\docker_engine'
@@ -249,7 +257,7 @@ docker daemon by running :code:`docker login`. Be sure to uncomment
 the line in the .yml file that mounts :code:`C:\$homepath\config.json`
 
 Stopping and Restarting
-#######################
+~~~~~~~~~~~~~~~~~~~~~~~
 
 * Open a terminal as you did above
 * Run this command to stop the Landing Zone
@@ -267,7 +275,7 @@ Stopping and Restarting
 * You should not have to re-authenticate this time!
 
 Removing and Restarting
-#######################
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 * By running the stop command above, you automatically remove the
   container
