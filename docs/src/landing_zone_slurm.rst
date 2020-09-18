@@ -55,7 +55,11 @@ As a Pilot Job
 
 An alternative way to use the Landing Zone in a clustered environment
 is to send a batch of Landing Zones to run in the cluster as pilot
-`jobs <https://en.wikipedia.org/wiki/Pilot_job>`_. By submitting the 
+`jobs <https://en.wikipedia.org/wiki/Pilot_job>`_. 
+
+.. image:: images/Galileo_HPC_pilot.png
+
+By submitting the 
 Landing Zone as a job to the cluster, a user need only wait in the 
 cluster queue once; thereafter they can skip the cluster's queue and 
 submit jobs directly to the LZ! Landing Zones in this circumstance will 
