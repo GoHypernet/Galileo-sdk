@@ -43,7 +43,7 @@ Singularity added support for a potential workaround in the `fakeroot
 <https://sylabs.io/guides/3.6/user-guide/fakeroot.html>`_ feature
 beginning in version 3.3.0. The ``--fakeroot`` flag allows us to mimic
 having root privileges, so adding this flag to your Singularity
-invocation of the LZ allows to LZ to inherit this characteristic when
+invocation of the LZ allows the LZ to inherit this characteristic when
 building containers for the jobs sent to it,
 e.g.
 
@@ -55,7 +55,7 @@ Persisting and Accessing Application Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Depending on how you invoke Singularity to run the LZ, this may or may
-not be a problem for you. By default Singularity bind mounts
+not be a problem for you. By default, Singularity bind mounts
 ``/home/$USER``, ``/tmp``, and ``$PWD`` into containers at runtime. If
 you allow for these default mounts, then the only difficulties you may
 experience will stem from sharing files between host and container
@@ -65,10 +65,10 @@ that aren't in those mounted directories (like the global config at
 If you choose to disable those default bind mounts, then you need to
 be aware of the application files you'd like to access while the
 container is running, or persist after the container has exited. For
-example, if I want to keep a copy of my authentication token to use
-across LZ sessions, then I would create a directory to hold it
+example, if you choose to keep a copy of the authentication token to use
+across LZ sessions, then create a specific directory to hold it
 (e.g. ``$ mkdir $HOME/lz_token``), mount the directory, and use the
-``--token`` flag to tell the LZ to look for it at the mount point:
+``--token`` flag to tell the LZ to look for it at that mount point:
 
 .. code-block:: bash
 

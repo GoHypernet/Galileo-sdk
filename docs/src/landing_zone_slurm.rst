@@ -36,28 +36,30 @@ a pilot job to the cluster so as to take advantage of Galileo's
 station queueing systems.
 
 As a Gateway
-~~~~~~~~~~~~
-In a nutshell, a Landing Zone receives jobs from users, builds
-containers for those jobs, and then manages the execution of those
-containers until the job is complete. In the SLURM configuration the
-LZ receives the details of a job, builds a Singularity container for
-the job in ``/tmp``, and issues an ``srun`` command to execute the
-container. Periodic calls to ``squeue`` and ``sstat`` are used to
-track the job's progress, and when it finishes the LZ collects any new
-and modified files in the container and returns them to the
-user. Finally the LZ deletes any trace of the job's container from the
-filesystem.
+~~~~~~~~~~~~~~~
+
+The Landing Zone can be run on the headnode of a cluster and interact directly with its pre-existing SLURM resource scheduler.
+
+.. image:: images/Galileo_HPC_gateway.png
+
+In the SLURM configuration the LZ receives the details of a job, builds 
+a Singularity container for the job in ``/tmp``, and issues an ``srun`` 
+command to execute the container. Periodic calls to ``squeue`` and
+``sstat`` are used to track the job's progress. When the job finishes
+the LZ collects any new and modified files in the container and returns
+them to the user. Finally the LZ deletes any trace of the job's container
+from the filesystem.
 
 As a Pilot Job
 ~~~~~~~~~~~~~~
 
-Another clever way to use the Landing Zone in a clustered environment
+An alternative way to use the Landing Zone in a clustered environment
 is to send a batch of Landing Zones to run in the cluster as pilot
-jobs. By submitting the Landing Zone as a job to the cluster a user
-need only wait in the cluster queue once; thereafter they can skip the
-cluster's queue and submit jobs directly to the LZ! Landing Zones in
-this circumstance will be running in a :ref:`Singularity configuration
-<landing_zone_singularity>`.
+`jobs <https://en.wikipedia.org/wiki/Pilot_job>`_. By submitting the 
+Landing Zone as a job to the cluster, a user need only wait in the 
+cluster queue once; thereafter they can skip the cluster's queue and 
+submit jobs directly to the LZ! Landing Zones in this circumstance will 
+be running in a :ref:`Singularity configuration <landing_zone_singularity>`.
 
 How to Run the Landing Zone Daemon
 ----------------------------------
