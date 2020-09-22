@@ -40,14 +40,14 @@ class MissionsService:
         return self._missions_repo.create_mission(request)
 
     def create_mission_and_run_job(
-        self, request, directory, station_id, lz_id=None,
+        self, request, directory, station_id, lz_id=None, cpu_count=None, memory_amount=None, gpu_count=None
     ):
         mission = self.create_mission(request)
         self.upload(mission.mission_id, directory)
         if lz_id:
-            job = self.run_job_on_lz(mission.mission_id, station_id, lz_id)
+            job = self.run_job_on_lz(mission.mission_id, station_id, lz_id, cpu_count, memory_amount, gpu_count)
         else:
-            job = self.run_job_on_station(mission.mission_id, station_id)
+            job = self.run_job_on_station(mission.mission_id, station_id, cpu_count=cpu_count, memory_amount=memory_amount, gpu_count=gpu_count)
 
         return job
 
@@ -66,11 +66,11 @@ class MissionsService:
                 self._missions_repo.upload_single_file(mission_id, f, filename)
         return True
 
-    def run_job_on_station(self, mission_id, station_id):
-        return self._missions_repo.run_job_on_station(mission_id, station_id)
+    def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
+        return self._missions_repo.run_job_on_station(mission_id, station_id, cpu_count, memory_amount, gpu_count)
 
-    def run_job_on_lz(self, mission_id, station_id, lz_id):
-        return self._missions_repo.run_job_on_lz(mission_id, station_id, lz_id)
+    def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
+        return self._missions_repo.run_job_on_lz(mission_id, station_id, lz_id, cpu_count, memory_amount, gpu_count)
 
     def get_mission_files(self, mission_id):
         return self._missions_repo.get_mission_files(mission_id)
