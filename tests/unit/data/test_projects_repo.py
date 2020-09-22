@@ -11,9 +11,9 @@ NAMESPACE = "/galileo/user_interface/v1"
 PROJECT_ID = "project_id"
 STATION_ID = "station_id"
 MACHINE_ID = "machine_id"
-CPU_COUNT = "cpu_count"
-MEMORY_AMOUNT = "memory_amount"
-GPU_COUNT = "gpu_count"
+CPU_COUNT = "1"
+MEMORY_AMOUNT = "1048"
+GPU_COUNT = "0"
 QUERY_STR = generate_query_str(
     {"ids": ["id"], "names": ["name"], "user_ids": ["user_id"], "page": 1, "items": 25,}
 )
@@ -180,7 +180,7 @@ def test_run_job_on_station(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"station_id": STATION_ID},
+        json={"station_id": STATION_ID, "cpu_count": CPU_COUNT, "memory_amount": MEMORY_AMOUNT, "gpu_count": GPU_COUNT},
     )
 
     assert isinstance(r, Job)
@@ -196,7 +196,7 @@ def test_run_job_on_machine(mocked_requests):
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
-        json={"station_id": STATION_ID, "machine_id": MACHINE_ID},
+        json={"station_id": STATION_ID, "machine_id": MACHINE_ID, "cpu_count": CPU_COUNT, "memory_amount": MEMORY_AMOUNT, "gpu_count": GPU_COUNT},
     )
 
     assert isinstance(r, Job)
