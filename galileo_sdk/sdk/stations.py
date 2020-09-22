@@ -464,7 +464,7 @@ class StationsSdk(EventsSdk):
         descriptions=None,
         page=1,
         items=25,
-        active=True,
+        active="true",
         userids=None,
         partial_names=None,
         updated=None,
@@ -482,7 +482,7 @@ class StationsSdk(EventsSdk):
         :param descriptions: Optional[List[str]]: Filter based on descriptions
         :param page: Optional[int]: Page #
         :param items: Optional[int]: Items per page
-        :param active: Optional[bool]: Filter for all active stations
+        :param active: Optional[str]: Filter for all active stations ("true","false")
         :param userids: Optional[List[str]]: Filter based on userid
         :param lz_status: Optional[List[str]]
         :param lz_count_max: Optional[int]
