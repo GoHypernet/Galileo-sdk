@@ -11,6 +11,9 @@ NAMESPACE = "/galileo/user_interface/v1"
 PROJECT_ID = "project_id"
 STATION_ID = "station_id"
 MACHINE_ID = "machine_id"
+CPU_COUNT = "cpu_count"
+MEMORY_AMOUNT = "memory_amount"
+GPU_COUNT = "gpu_count"
 QUERY_STR = generate_query_str(
     {"ids": ["id"], "names": ["name"], "user_ids": ["user_id"], "page": 1, "items": 25,}
 )
@@ -169,7 +172,7 @@ def tests_upload_file(mocked_requests):
 
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_station(mocked_requests):
-    r = projects_repo.run_job_on_station(PROJECT_ID, STATION_ID)
+    r = projects_repo.run_job_on_station(PROJECT_ID, STATION_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -185,7 +188,7 @@ def test_run_job_on_station(mocked_requests):
 
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_machine(mocked_requests):
-    r = projects_repo.run_job_on_lz(PROJECT_ID, STATION_ID, MACHINE_ID)
+    r = projects_repo.run_job_on_lz(PROJECT_ID, STATION_ID, MACHINE_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
 
     # Act
     mocked_requests.assert_called_once_with(
