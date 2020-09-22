@@ -95,10 +95,13 @@ class MissionsSdk:
 
         Example::
         
-            galileo.missions.run_job_on_station(a,b,c)
+            galileo.missions.run_job_on_station(mission.mission_id,station.stationid,cpu_count=1,memory_amount=1048)
 
-        :param mission_id: str: Mission you want to upload the file to
-        :param station_id: str: Station you want to run the job on
+        :param mission_id: str: Reference ID of Mission to launch job from
+        :param station_id: str: Reference ID of the Station to deploy job to 
+        :param cpu_count: int: Number of cpus for this job to request
+        :param memory_amount: int: Memory in MB for this job to request
+        :param gpu_count: int: Number of gpus for this job to request
         :return: Job
         """
         return self._missions_service.run_job_on_station(mission_id, station_id, cpu_count=cpu_count, memory_amount=memory_amount, gpu_count=gpu_count)
@@ -106,10 +109,17 @@ class MissionsSdk:
     def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
         """
         Run a job on a landing zone
+        
+        Example::
+        
+            galileo.missions.run_job_on_lz(mission.mission_id,station.stationid,lzid,cpu_count=1,memory_amount=1048)
 
-        :param mission_id: str: Mission you want to upload the file to
-        :param station_id: str: Station you want to run the job on
-        :param lz_id: str: Landing zone you want to run the job on
+        :param mission_id: str: Reference ID of Mission to launch job from
+        :param station_id: str: Reference ID of the Station to deploy job to
+        :param lz_id: str: Reference ID of specific LZ to deploy to
+        :param cpu_count: int: Number of cpus for this job to request
+        :param memory_amount: int: Memory in MB for this job to request
+        :param gpu_count: int: Number of gpus for this job to request
         :return: Job
         """
         return self._missions_service.run_job_on_lz(mission_id, station_id, lz_id, cpu_count=cpu_count, memory_amount=memory_amount, gpu_count=gpu_count)
