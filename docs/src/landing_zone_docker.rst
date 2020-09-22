@@ -168,8 +168,8 @@ Running the Landing Zone daemon
 
 * Alternatively, follow the instructions for your operating system
   given `here <https://docs.docker.com/compose/install/>`_.
-* If you are running linux containers, download this .yml file
-  `(download, right-click and save) <docker-compose.yml>`_:
+* If you are running **linux** containers, download this .yml file
+  :download:`(download, right-click and save) <linux/docker-compose.yml>`:
 
 .. code-block:: yaml
 
@@ -190,8 +190,8 @@ Running the Landing Zone daemon
     volumes:
       tokens:
 
-* If you are running windows containers, copy this into a text file
-  named docker-compose.yml:
+* If you are running **Windows** containers, download this .yml file
+  :download:`(download, right-click and save) <linux/docker-compose.yml>`:
 
 .. code-block:: yaml
 
@@ -215,9 +215,9 @@ Running the Landing Zone daemon
 * Be sure to change :code:`$LZ_NAME` to your desired name to be
   displayed in the user interface.
 
-* In the same folder as the .yml file, copy the commands below and
-  paste in a terminal to pull the Landing Zone image and run the
-  Landing Zone daemon:
+* Open a terminal and navigate to the folder were the .yml file was downloaded. 
+  Copy the commands below and paste them into the terminal to pull the
+  Landing Zone image and run the Landing Zone daemon:
 
 .. code-block:: bash
 
