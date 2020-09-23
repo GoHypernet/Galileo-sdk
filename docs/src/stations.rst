@@ -112,7 +112,7 @@ Then specify the path on the host machine that you wish to expose at the mount p
 
 **Note:** Every job that is submitted within this Station context will mount all volumes specified here (this is why the mount path for a volume must be unique for a given Station). If you specifiy a host path for a volume, be sure that this path exists on all hosts running an LZ that is attached to this station. Otherwise, jobs submitted to LZ's on machines in which the specified host path does not exist will error at container run time.
 
-**Note:** If you are running windows containers, you must provide mount paths that are Windows compatible, e.g. C:\\Users\\Public or D: if you want to mount the entire D drive. For example, if you want to expose your E: drive as a volume, your mount path and host path should both be entered as E: with no trailing slash.  
+**Note:** If you are running **Windows** containers, you must provide mount paths that are Windows compatible. For example, if you want to expose the E: drive as a volume, the **mount path** should be E: and the **host path** should both be entered as E:\\ (including the trailing slash). This tells Docker that the directory location starting at E:\\ should be exposed as E: inside the container. See the `Microsoft Docs <https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/persistent-storage>`_ for specific information about exposing network file systems (SMB mounts) as volumes in Docker. 
 
 Station Queues
 ----------------
