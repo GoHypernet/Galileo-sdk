@@ -9,9 +9,15 @@ The following is a user guide for deploying a Galileo Landing Zone
 Prerequisites
 -------------
 
-Singularity must be installed on the machine you wish to use as a
-Landing Zone. You can find installation instructions `here
+Singularity (version >= 3.3.0) must be installed on the machine you
+wish to use as a Landing Zone. You can find installation instructions
+`here
 <https://sylabs.io/singularity/https://sylabs.io/singularity/>`_.
+
+Singularity's `fakeroot
+<https://sylabs.io/guides/3.6/user-guide/fakeroot.html>`_ feature is
+necessary to run jobs without root privileges. That feature requires
+Linux kernel >= 3.8, but version >= 3.18 is recommended.
 
 How It Works
 ------------
