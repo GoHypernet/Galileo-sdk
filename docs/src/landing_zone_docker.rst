@@ -256,6 +256,13 @@ is as follows: :code:`"credsStore" : ""`. Then re-authenticate your
 docker daemon by running :code:`docker login`. Be sure to uncomment
 the line in the .yml file that mounts :code:`C:\$homepath\config.json`
 
+**Note:** If you are using Windows 10 Desktop or Windows Server to run
+Windows containers, be aware that the default storage limit size is 
+20 GB. If you are running simulations that produce multiple GB of results
+files, you are likely to hit this limit which will cause your simulation to 
+crash. See the `Microsoft Docs <https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-storage>`_ 
+for how to increase the storage limits for Windows containers. 
+
 Stopping and Restarting
 ~~~~~~~~~~~~~~~~~~~~~~~
 
