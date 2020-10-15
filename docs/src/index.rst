@@ -17,6 +17,7 @@ The Galileo `SDK <galileo_sdk.html>`_ allows users to interact with the Galileo 
    :maxdepth: 2
    :caption: Contents:
 
+    Security Overview <security.rst>
     Stations Guide <stations.rst>
     Missions Guide <missions.rst>
     Quickstart for Landing Zones <landing_zone_main.rst>
