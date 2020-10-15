@@ -79,6 +79,7 @@ class MissionsRepository(RequestsRepository):
 
     def update_mission(self, update_project_request):
         body = {
+            "id": update_project_request.mission_id,
             "name": update_project_request.name,
             "description": update_project_request.description,
             "source_storage_id": update_project_request.source_storage_id,
@@ -86,9 +87,8 @@ class MissionsRepository(RequestsRepository):
             "destination_path": update_project_request.destination_path,
         }
         if update_project_request.settings is not None:
-            body.update(update_project_request.settings)
+            body.update({"settings": update_project_request.settings})
 
-        print("body", body)
         response = self._put(
             "/projects/{project_id}".format(
                 project_id=update_project_request.mission_id
