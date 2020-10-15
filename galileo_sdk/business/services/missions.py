@@ -17,6 +17,7 @@ class MissionsService:
         page=1,
         items=25,
         mission_type_ids=None,
+        archived=None
     ):
         query = generate_query_str(
             {
@@ -26,6 +27,7 @@ class MissionsService:
                 "page": page,
                 "items": items,
                 "project_type_ids": mission_type_ids,
+                "archived": archived
             }
         )
 
@@ -82,12 +84,15 @@ class MissionsService:
         return self._missions_repo.update_mission(update_mission_request)
 
     def update_mission_args(self, mission_id, arg):
+        missions = self.list_missions(ids=[mission_id])
+        mission = missions[0]
+        mission.settings["arg"] = arg
         if not isinstance(arg, list):
             raise Exception(
                 "args must be in the form of a List[str] e.g. ['arg1', 'arg2', 'arg3']"
             )
         update_mission_request = UpdateMissionRequest(
-            mission_id=mission_id, settings={"arg": arg}
+            mission_id=mission_id, settings=mission.settings
         )
         return self._missions_repo.update_mission(update_mission_request)
 

@@ -13,16 +13,18 @@ class MissionsSdk:
         page=1,
         items=25,
         mission_type_ids=None,
+        archived=None
     ):
         """
         Get list of missions
-        
+
         :param ids: Optional[List[str]]: Filter by mission id
         :param names: Optional[List[str]]: Filter by mission name
         :param user_ids: Optional[List[str]]: Filter by user ids
         :param page: Optional[int]: Page #
         :param items: Optional[int]: # of items per page
         :param mission_type_ids: Optional[List[str]]: Filter by mission_type_ids
+        :param archived: Optional[bool]: Filter for archived projects
         :return: List[Mission]
         """
         return self._missions_service.list_missions(
@@ -32,6 +34,7 @@ class MissionsSdk:
             page=page,
             items=items,
             mission_type_ids=mission_type_ids,
+            archived=archived
         )
 
     def get_mission_by_id(self, mission_id):
@@ -94,11 +97,11 @@ class MissionsSdk:
         Run a job on a station
 
         Example::
-        
+
             galileo.missions.run_job_on_station(mission.mission_id,station.stationid,cpu_count=1,memory_amount=1048)
 
         :param mission_id: str: Reference ID of Mission to launch job from
-        :param station_id: str: Reference ID of the Station to deploy job to 
+        :param station_id: str: Reference ID of the Station to deploy job to
         :param cpu_count: int: Number of cpus for this job to request
         :param memory_amount: int: Memory in MB for this job to request
         :param gpu_count: int: Number of gpus for this job to request
@@ -109,9 +112,9 @@ class MissionsSdk:
     def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
         """
         Run a job on a landing zone
-        
+
         Example::
-        
+
             galileo.missions.run_job_on_lz(mission.mission_id,station.stationid,lzid,cpu_count=1,memory_amount=1048)
 
         :param mission_id: str: Reference ID of Mission to launch job from
