@@ -150,6 +150,42 @@ Removing and Restarting the Landing Zone daemon
   whether you delete the Docker volume called "tokens" that was
   created when you started the landing zone.
 
+Enabling GPUs
+--------------
+
+Currently Galileo only supports NVIDIA GPUs on Linux systems. If you
+require support from other manufacturers please let us know!
+
+GPUs are allocated to jobs in exactly the same way as CPUs
+are. Missions may require some number of GPUs to run, and jobs will
+wait in a station's queue until space on an LZ with that many GPUs
+becomes available. A job has exclusive access to the GPUs allocated to
+it for its entire lifetime.
+
+Please see `Docker's instructions
+<https://docs.docker.com/config/containers/resource_constraints/#gpu>`_
+for installing the necessary drivers and container runtime for your hardware.
+
+To make your GPUs accessible to your Landing Zone, just add the
+``--gpus`` flag to your Docker invocation.
+
+.. code-block:: bash
+
+	 $ docker run ... --gpus all ... hypernetlabs/landing-zone-daemon ...
+
+This is also your opportunity to configure exactly which GPUs are
+exposed to Galileo. If for instance you have 2 GPUs of one variety and
+2 of another, then you could start two LZs, one for each type of GPU.
+
+.. code-block:: bash
+
+	 $ docker run ... --gpus 0,1 ... hypernetlabs/landing-zone-daemon --name tesla-t4
+	 $ docker run ... --gpus 2,3 ... hypernetlabs/landing-zone-daemon --name tesla-k80
+
+You can further configure access to GPUs station-wide in the Station
+Settings page or as they apply to a specific mission on the Mission
+Settings page.
+
 How to Run, Stop, and Remove the Landing Zone daemon using Docker Compose
 -------------------------------------------------------------------------
 
