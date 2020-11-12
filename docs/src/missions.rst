@@ -21,7 +21,7 @@ This will launch the Mission configuration wizard which is covered in the next s
 Configuring Your Mission Type
 -------------------------------
 
-Galileo supports many scripting languages (such as R, Python, Julia, and Stata) and simulators (Gromacs, HECRAS, AmberTools, etc.) right out-of-the-box. The first step in configuring you mission is to select your target framework from the drop-down list. 
+Galileo supports many scripting languages (such as R, Python, Julia, and Stata) and simulators (Gromacs, HECRAS, AmberTools, etc.) right out-of-the-box. The first step in configuring your Mission is to select your target framework from the drop-down list. 
 
 .. image:: images/missions_select_framework.png
 
