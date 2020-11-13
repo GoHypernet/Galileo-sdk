@@ -6,6 +6,9 @@ Quickstart for Galileo Landing Zones and Singularity
 The following is a user guide for deploying a Galileo Landing Zone
 (LZ) using our official Singularity image.
 
+.. contents:: :local:
+	 :depth: 2
+
 Prerequisites
 -------------
 

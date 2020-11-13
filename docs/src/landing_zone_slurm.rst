@@ -6,6 +6,9 @@ Quickstart for Galileo Landing Zones and Slurm
 The following is a user guide for deploying a Galileo Landing Zone
 (LZ) in a Slurm cluster.
 
+.. contents:: :local:
+	 :depth: 2
+
 Prerequisites
 -------------
 A Slurm client must be installed on the machine you wish to use as a
