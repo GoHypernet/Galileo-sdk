@@ -1,15 +1,14 @@
 .. _landing_zone_slurm:
 
-Quickstart for Galileo Landing Zones and SLURM
+Quickstart for Galileo Landing Zones and Slurm
 ==============================================
 
 The following is a user guide for deploying a Galileo Landing Zone
-(LZ) in a SLURM cluster.
+(LZ) in a Slurm cluster.
 
 Prerequisites
 -------------
-
-A SLURM client must be installed on the machine you wish to use as a
+A Slurm client must be installed on the machine you wish to use as a
 Landing Zone. It must be configured to correctly run basic commands like
 ``srun`` and ``squeue``.
 
@@ -42,11 +41,11 @@ station queueing systems.
 As a Gateway
 ~~~~~~~~~~~~~~~
 
-The Landing Zone can be run on the headnode of a cluster and interact directly with its pre-existing SLURM resource scheduler.
+The Landing Zone can be run on the headnode of a cluster and interact directly with its pre-existing Slurm resource scheduler.
 
 .. image:: images/Galileo_HPC_gateway.png
 
-In the SLURM configuration the LZ receives the details of a job, builds 
+In the Slurm configuration the LZ receives the details of a job, builds
 a Singularity container for the job in ``/tmp``, and issues an ``srun`` 
 command to execute the container. Periodic calls to ``squeue`` and
 ``sstat`` are used to track the job's progress. When the job finishes
