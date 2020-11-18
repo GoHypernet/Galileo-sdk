@@ -6,6 +6,9 @@ Quickstart for Galileo Landing Zones and Singularity
 The following is a user guide for deploying a Galileo Landing Zone
 (LZ) using our official Singularity image.
 
+.. contents:: :local:
+	 :depth: 2
+
 Prerequisites
 -------------
 
@@ -139,3 +142,17 @@ you can prove this by running ``singularity instance list``.
     $ singularity instance stop landing-zone-daemon
 
 Singularity will automatically clean up the container used to run the instance.
+
+GPUs
+----
+Unfortunately GPU access is not supported by Galileo for Singularity
+at this time. This is because Singularity cannot give containers
+*exclusive* access to specific GPUs making that resource impossible to
+allocate fairly to Galileo jobs. We are experimenting with ways to
+work around this limitation, so if it directly impacts you please let
+us know!
+
+Galileo uses Singularity containers to run jobs on Slurm clusters, but
+Slurm has its own GPU constraint mechanisms that allow Galileo to
+support GPUs on those clusters. You can read more
+:ref:`here<slurm_gpus>`.

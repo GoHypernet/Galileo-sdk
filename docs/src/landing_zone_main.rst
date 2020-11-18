@@ -21,7 +21,7 @@ Getting Started
 
 We suggest that you use our officially supported Docker image to run
 an LZ. The LZ has experimental support for running from inside a
-Singularity container and in a SLURM cluster. Choose the link that
+Singularity container and in a Slurm cluster. Choose the link that
 fits your needs to find installation and execution instructions.
 
 .. toctree::
@@ -29,7 +29,7 @@ fits your needs to find installation and execution instructions.
 
     Docker <landing_zone_docker.rst>
     Singularity <landing_zone_singularity.rst>
-    SLURM <landing_zone_slurm.rst>
+    Slurm <landing_zone_slurm.rst>
 
 How It Works
 ------------

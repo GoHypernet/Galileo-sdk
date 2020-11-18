@@ -5,6 +5,9 @@ Quickstart for Galileo Landing Zones and Docker
 The following is a user guide for deploying a Galileo Landing Zone
 (LZ) using our official Docker image.
 
+.. contents:: :local:
+	 :depth: 2
+
 Prerequisites
 -------------
 Docker must be installed on the machine you wish to use as a landing
