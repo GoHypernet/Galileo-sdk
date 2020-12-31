@@ -26,6 +26,10 @@ Galileo supports many scripting languages (such as R, Python, Julia, and Stata) 
 .. image:: images/missions_select_framework.png
 
 After you made your selection, follow the prompt to completion. 
+
+.. image:: images/missions_wizard_1.png
+
+In step 4, you can select a `Cargo Bay <cargobays.html>`_ to host your Mission data from or to point your Mission at pre-existing data you may already have stored in a third-party provider. 
  
 Adding and Removing Files 
 --------------------------
@@ -48,27 +52,26 @@ To delete a file from a Mission, first select the file you wish to remove by cli
 
 After confirming the deletion, the file will be permanently removed. 
 
-Jobs and Job Results
----------------------
+Jobs Results and Job Resources 
+------------------------------
 
-The "Job Settings" tab allows you to set how many CPUs and the amount of RAM that jobs launched from this Mission will consume. In the screenshot below, the job launched from the Mission named "Python_example" will use 2 CPUs and 1280 MB of RAM. 
+Each job instance launched from a Mission, buy hitting the run button in the upper right, can be monitored from the Jobs table on that Mission's home page. Past results can be downloaded from completed jobs clicking expanding the "Action" column for that job. 
 
-.. image:: images/missions_job_settings.png
+.. image:: images/missions_job_download.png
 
-Once you have configured your Mission and Job Settings and all required input files have been added, run a job by clicking the "Run" button in the upper right. 
+When a job is in the "running" status, you can check the progress by querying the standard output (what would normally be printed to screen if you were running the job locally on your laptop) and the process logs (to confirm what processes were created by your job). You also have the option (depending on the system you deployed to) to pause the job, cancel the job (which will return any partial results), and kill the job (which will not return any results from the job). 
 
-.. image:: images/missions_run_button.png
+In order to set the amount of resources that a job uses (i.e. the number of CPUs, the amount of memory, and the number of GPUs), click the settings tab under the current Missio, then scroll down to the Job Resources block and enter the values you want.
 
-Then select the station you wish to deploy to. 
-
-.. image:: images/missions_select_station.png
-
-Check the job status and get past results for the current Mission by navigating to the "Jobs & Results" tab. 
-
-.. image:: images/missions_results.png
-
-When a job is in the "running" status, you can check the progress by querying the standard output (what would normally be printed to screen if you were running the job locally on your laptop) and the process logs (to confirm what processes were created by your job). You also have the option to pause the job, cancel the job (which will return any partial results), and kill the job (which will not return any results from the job). 
+.. image:: images/missions_settings.png
 
 A global view of all jobs, regardless of what Mission they were launched from, can be seen by clicking the jobs tab. 
 
 .. image:: images/jobs_tab.png
+
+Mission Collaborators
+---------------------
+
+Mission Owners (the user who initially creates a Mission) can invite collaborators to their Mission. Collaborators can have different permission levels: Admin, View Results, and View All. Admins can do everything the Mission Owner can do except delete the Mission. The "View All" permission allows a user to view in input files and and historical job results while the "View Results" permission only allows the collaborator to view historical job results for the Mission. Clicking  the "plus" button on the right-hand side of the Users table will prompt for the names of the collaborators to add to the Mission.
+
+.. image:: images/missions_collaborators.png
