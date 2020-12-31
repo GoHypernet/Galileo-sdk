@@ -3,12 +3,13 @@
 Cargo Bays Guide
 ===============
 
-Cargo Bays are a Galileo feature that allow users to authenticate a third-party storage solution against their Galileo account. Once a Cargo Bay is established, it can be used in conjunction with the Missions feature; files and results belonging to a Mission can be configured to be stored in a particular Cargo Bay which can greatly help when the need arises to upload or download large amounts of data. Deleting a a Cargo Bay only removes the authentication credentials Galileo uses to communicate with the storage provider, it does not delete the data that has been stored there. 
+Cargo Bays are a Galileo feature that allow users to authenticate a third-party storage solution against their Galileo account. Once a Cargo Bay is established, it can be used in conjunction with the Missions feature; files and results belonging to a Mission can be configured to be stored in a particular Cargo Bay which can greatly help when the need arises to upload or download large amounts of data. Deleting a a Cargo Bay only removes the authentication credentials Galileo uses to communicate with the storage provider, it does not delete the data that has been stored there. Missions referencing a Cargo Bay that has been deleted are deactivated. 
 
 Creating a Cargo Bay 
 --------------------------------------
 
-A Cargo Bay can be created by first clickingon the Cargo Bays tab in the UI Dashboard. 
+
+A Cargo Bay can be created by first clicking on the Cargo Bays tab in the UI Dashboard. 
 
 .. image:: images/cargo_bays_tab.png
 
@@ -16,7 +17,7 @@ Next, click the 'Add Cargo Bay' button in the upper right corner of the screen.
 
 .. image:: images/cargo_bays_create_button.png
 
-This will bring up a configuration window. Here, you must select the 3rd party storage solution you would like to connect to your Galileo Account. 
+This will bring up a configuration window. Here, you must select the third-party storage solution you would like to connect to your Galileo Account. 
 
 .. image:: images/cargo_bays_select_provider.png
 
@@ -27,11 +28,11 @@ To connect your Dropbox account to Galileo, select the Dropbox option and and hi
 
 .. image:: images/cargo_bays_select_dropbox.png
 
-If you have never logged into your Dropbox in the current webbrowser, you will be redirected to the Dropbox login page. Once you give Galileo permission to access your Dropbox account, you will be brought back to Galileo. Next, provide a name for your Dropbox Cargo Bay, set the permission level (read and write permission is required for results to be written back to your Dropbox account), and optionally provide a description so you remember what the Cargo Bay was for. 
+If you have never logged into your Dropbox in the current webbrowser, you will be redirected to the Dropbox login page. Once you give Galileo permission to access your Dropbox account, you will be brought back to Galileo setup page. Next, provide a name for your Dropbox Cargo Bay, set the permission level (read and write permission is required for results to be written back to your Dropbox account), and optionally provide a description to denote the purpose of the Cargo Bay. 
 
 .. image:: images/cargo_bays_name_dropbox.png
 
-The final step is to set your root folder for the Cargo Bay. This folder will set the highest folder access level that Missions will have with they refer to this Dropbox Cargo Bay. You must check the acknowledgment box before you can complete your setup. 
+The final step is to set the root folder of the Cargo Bay. This folder will set the highest folder access level that Missions will have when they refer to this Dropbox Cargo Bay. You must check the acknowledgment box before you can complete your setup. 
 
 .. image:: images/cargo_bays_dropbox_set_root.png
 
@@ -50,7 +51,7 @@ Once you have an active Tardigrade Project, select the Storj option, this will b
 
 .. image:: images/cargo_bays_select_storj.png
 
-The "API Key" field refers to the API key associated with the Tardigrade Project you are using. If you want to point to an existing bucket, enter that bucket name in the "Bucket Name" field and enter that buckets encryption phrase into the "Encryption Passphrase" field. If you do not have an existing bucket, you can enter an arbitrary name and encryption phrase and Galileo will create a new bucket for you. WARNING: If you do not save your encryption phrase, we cannot recover it for you. 
+The "API Key" field refers to the API key associated with the Tardigrade Project you are using. If you want to point to an existing bucket, enter that bucket name in the "Bucket Name" field and enter the bucket's encryption phrase into the "Encryption Passphrase" field. If you do not have an existing bucket, you can enter an arbitrary name and encryption phrase and Galileo will create a new bucket for you in the Tardigrade project associated with the provided API key. **WARNING**: If you do not save your encryption phrase, we cannot recover it for you. 
 
 Once you've created the Storj-based Cargo Bay, you will see it appear in your Cargo Bays tab. The number of Missions referencing this Cargo Bay will be displayed here. 
 
