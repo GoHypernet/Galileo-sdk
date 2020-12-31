@@ -12,7 +12,7 @@ Galileo is a Platform-as-a-Service offering, and as such it allows the
 end user to host certain components of the platform on their own self-administered 
 resources. Currently users can choose to host their own object storage and their own 
 compute resources or to use the default storage and compute resources provided by 
-Galileo. In both cases, Galileo gives administrators of storage and compute assets sigmented control of both resource access and permissions. All authentication flows are handled via `Auth0 <https://auth0.com/>`_. 
+Galileo. In both cases, Galileo gives administrators of storage and compute assets segmented control of both resource access and permissions. All authentication flows are handled via `Auth0 <https://auth0.com/>`_. 
 
 Storage
 ~~~~~~~
