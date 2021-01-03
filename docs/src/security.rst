@@ -55,7 +55,10 @@ daemon must be run with sufficient permissions so as to create containers with t
 targeted container runtime or scheduling environment (i.e. Docker, Singularity, 
 Slurm, etc.). Reauthetication is fascilitated by writing a local authentication 
 token file (provided by Auth0). Deleting the authentication token file will require 
-the user to log their LZ daemon back into their account the next time it is restarted.  
+the user to log their LZ daemon back into their account the next time it is restarted.
+The LZ daemon executes jobs as stand-alone docker containers (or singularity containers). 
+For more information on container security, see the official `Docker Introduction to 
+Container Security <https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf>`_. 
 
 Access Control
 --------------
