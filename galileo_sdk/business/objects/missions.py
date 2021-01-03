@@ -2,6 +2,16 @@ class FileListing:
     def __init__(
         self, filename, path, modification_date, creation_date, file_size, nonce=None,
     ):
+        """
+        Mission File Listing Object
+
+        :param filename: Human readable name of the file object
+        :param path: Path of the file object in the Mission storage
+        :param modification_date: Timestamp when the file object was last touched
+        :param creation_date: Timestamp when the file object was created
+        :param file_size: Size in bytes of the file object
+        :param nonce: Access nonce (Optional)
+        """
         self.filename = filename
         self.path = path
         self.modification_date = modification_date
@@ -37,6 +47,24 @@ class Mission:
         settings=None,
         mission_type_name=None,
     ):
+        """
+        Mission Object
+
+        :param mission_id: UUID of the Mission
+        :param name: Human readable name of the Mission
+        :param description: Optional description of the Mission
+        :param source_storage_id: UUID of the storage provider for input data
+        :param source_path: base path in the source storage provider where data is stored
+        :param destination_storage_id: UUID of the storage provider for output data
+        :param destination_path: base path in the destination storage provider where data is stored
+        :param user_id: UUID of the Mission owner
+        :param creation_timestamp: Time the Mission was created
+        :param mission_type_id: Mission framework type UUID
+        :param updated_timestamp: Time the Mission was last updated
+        :param organization_id: The organization UUID the Mission is associated with
+        :param settings: Dictionary of Mission framework type settings
+        :param mission_type_name: Human readable name of the Mission framework type
+        """
         self.mission_id = mission_id
         self.name = name
         self.description = description

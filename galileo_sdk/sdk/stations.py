@@ -473,7 +473,8 @@ class StationsSdk(EventsSdk):
         lz_status=None,
     ):
         """
-        List of your Galileo stations
+        Get a filtered list of Galileo Stations in your account
+        
         :param stationids: Optional[List[str]]: Filter based on station ids
         :param names: Optional[List[str]]: Filter based on names
         :param lz_ids: Optional[List[str]]: Filter based on landing zone ids
@@ -491,6 +492,10 @@ class StationsSdk(EventsSdk):
         :param partial_names: Optional[List[str]]
         :return: List[Station]
 
+        Example:
+            >>> stations = galileo.stations.list_statins()
+            >>> for station in stations:
+            >>>    print(station.name)
         """
         return self._stations_service.list_stations(
             stationids=stationids,

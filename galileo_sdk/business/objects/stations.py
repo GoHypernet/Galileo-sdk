@@ -84,6 +84,21 @@ class Station:
         updated_timestamp=None,
         autoscale_settings=None,
     ):
+        """
+        Station Object
+
+        :param stationid: Optional[List[str]]: UUID of the Station
+        :param name: Optional[List[str]]: Human readable name of the Station
+        :param description: Optional[List[str]]: Optional description of the Station
+        :param users: Optional[int]: List of users that belong to the Station
+        :param lz_ids: Optional[int]: List of LZs that are accessible through the Station
+        :param volumes: Optional[List[str]]: Volumes declared in the Station
+        :param status: Optional[bool]: Station status (i.e. active or deactivated)
+        :param organization_id: Orgainization the Station is associated with, default if the Hypernet Orginization. 
+        :param creation_timestamp: Time the Station was created
+        :param updated_timestamp: Time the Station was last updated
+        :param autoscale_settings: Currently not used
+        """
         self.stationid = stationid
         self.name = name
         self.description = description

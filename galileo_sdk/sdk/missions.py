@@ -16,16 +16,21 @@ class MissionsSdk:
         archived=None
     ):
         """
-        Get list of missions
+        Get list of Missions associated with your account
 
-        :param ids: Optional[List[str]]: Filter by mission id
-        :param names: Optional[List[str]]: Filter by mission name
-        :param user_ids: Optional[List[str]]: Filter by user ids
-        :param page: Optional[int]: Page #
-        :param items: Optional[int]: # of items per page
+        :param ids: Optional[List[str]]: Filter by Mission UUID
+        :param names: Optional[List[str]]: Filter by Mission name
+        :param user_ids: Optional[List[str]]: Filter by user UUID
+        :param page: Optional[int]: Return a particular page number
+        :param items: Optional[int]: Number of Missions to return per page
         :param mission_type_ids: Optional[List[str]]: Filter by mission_type_ids
         :param archived: Optional[bool]: Filter for archived projects
         :return: List[Mission]
+        
+        Example:
+            >>> missions = galileo.missions.list_missions(items=10)
+            >>> for mission in missions:
+            >>>    print(mission.name)
         """
         return self._missions_service.list_missions(
             ids=ids,
@@ -39,9 +44,15 @@ class MissionsSdk:
 
     def get_mission_by_id(self, mission_id):
         """
-        Get a mission's details by searching its id
-        :param mission_id: str: Mission id
+        Get a specific Mission's details by providing its UUID
+        
+        :param mission_id: str: Mission UUID
         :return: Mission
+        
+        Example:
+            >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899'
+            >>> mission = galileo.missions.get_mission_by_id(mission_id=UUID)
+            >>> print(mission.name)
         """
         return self._missions_service.get_mission_by_id(mission_id)
 
@@ -59,16 +70,19 @@ class MissionsSdk:
         """
         Create a mission
 
-        :param name: str: Name of mission
-        :param description: Optional[str]: description of mission
-        :param mission_type_id: Optional[str]: specify mission type
-        :param destination_path: Optional[str]
-        :param source_path: Optional[str]
-        :param destination_storage_id: Optional[str]
-        :param source_storage_id: Optional[str]
-        :param settings: Optional[Dict[str, str]]: Get required settings via
+        :param name: str: Human readable name of the Mission you are creating
+        :param description: Optional[str]: Optional description of the Mission you are creating
+        :param mission_type_id: Optional[str]: UUID of the Mission framework type you are creating
+        :param destination_path: Optional[str]: Root directory of the Mission in the specified source Cargo Bay (not needed if using default storage)
+        :param source_path: Optional[str]: Root directory of the Mission in the specified destinatino Cargo Bay (not needed if using default storage)
+        :param destination_storage_id: Optional[str]: UUID of the Cargo Bay to use as the Mission data destination
+        :param source_storage_id: Optional[str]: UUID of the Cargo Bay to use as the Mission data source
+        :param settings: Optional[Dict[str, str]]: Mission framework type settings (get this info from get_mission_type_settings_info)
          missions.get_mission_type_settings_info()
         :return: Mission
+        
+        Example:
+            >>> new_mission = galileo.missions.create_mission(name='My Mission',description='This creates and empty Mission with no framework type')
         """
         request = CreateMissionRequest(
             name=name,
@@ -84,7 +98,7 @@ class MissionsSdk:
 
     def upload(self, mission_id, directory):
         """
-        Upload a directory
+        Uplood a
 
         :param mission_id: str: Mission you want to upload the file to
         :param directory: str: Path to folder that you want to upload
