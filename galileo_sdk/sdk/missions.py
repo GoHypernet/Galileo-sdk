@@ -96,15 +96,26 @@ class MissionsSdk:
         )
         return self._missions_service.create_mission(request)
 
-    def upload(self, mission_id, directory):
+    def upload(self, mission_id, payload, verbose=False):
         """
-        Uplood a
+        Upload a file or directory to the specified Mission. If the payload is a file, this function will place the file in the top level of the Mission file tree. If the payload is a directory, files in the first level of the payload directory will appear in the top level of the Mission file tree and subfolders of the payload will appear as subfolders in the Mission file tree. 
 
-        :param mission_id: str: Mission you want to upload the file to
-        :param directory: str: Path to folder that you want to upload
+        :param mission_id: str: Target Mission UUID
+        :param payload: str: Path to folder or file to upload to targeted Mission
+        :param verbose: bool: Verbosity flag, default is False
         :return: bool
+        
+        Example:
+        
+        >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899' # put your Mission UUID here
+        >>> payload = 'C:\\Users\\Galileo\\Hypernet Labs, Inc. Dropbox\\Julia Example' # a Windows path, put your path here
+        >>> success = galileo.missions.upload(UUID, payload) # upload a whole directory
+        >>> if success:
+        >>>     print("It worked")
+        >>> else:
+        >>>     print("I don't think this Mission exists")
         """
-        return self._missions_service.upload(mission_id, directory)
+        return self._missions_service.upload(mission_id, payload, verbose)
 
     def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         """
@@ -229,22 +240,37 @@ class MissionsSdk:
 
     def get_mission_files(self, mission_id):
         """
-        Provides the metadata of all files in a mission
+        Provides the metadata of all files in a Mission context
 
         :param mission_id: mission you want to inspect
         :return: DirectoryListing
+        
+        Example:
+        
+        >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899' # put your Mission UUID here
+        >>> mission_files = galileo.missions.get_mission_files(UUID)
+        >>> for file in mission_files:
+        >>>     print(file.filename, file.path, file.file_size)
+        
         """
 
         return self._missions_service.get_mission_files(mission_id)
 
     def delete_file(self, mission_id, file_path):
         """
-        Delete file in mission
+        Delete a single file in a Mission
 
-        :param mission_id: Mission id of mission you want to delete files from
+        :param mission_id: UUID of the targeted Mission
         :param file_path: Path to the mission file you want to delete excluding the mission root
-        e.g. if the file to delete is "mission_name/files/file1.py", please enter "files/file1.py"
-        :return: boolean
+        :return: Bool
+        
+        Example:
+        
+        >>> # Delete all files in a Mission, including the results
+        >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899' # put your Mission UUID here
+        >>> mission_files = galileo.missions.get_mission_files(UUID)
+        >>> for mission_file in mission_files:
+        >>>     success = galileo.missions.delete_file(UUID,os.path.join(mission_file.path,mission_file.name))
         """
         return self._missions_service.delete_file(mission_id, file_path)
 

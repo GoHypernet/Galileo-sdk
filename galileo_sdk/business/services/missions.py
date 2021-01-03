@@ -53,20 +53,37 @@ class MissionsService:
 
         return job
 
-    def upload(self, mission_id, dir):
-        name = os.path.basename(dir)
-        for root, dirs, files in os.walk(dir):
-            for file in files:
-                basename = os.path.basename(root)
-                if basename == name:
-                    filename = file
-                else:
-                    filename = os.path.join(os.path.basename(root), file)
-
-                filepath = os.path.join(os.path.abspath(root), file)
-                f = open(filepath, "rb").read()
-                self._missions_repo.upload_single_file(mission_id, f, filename)
-        return True
+    def upload(self, mission_id, payload, verbose=False):
+        try:
+            if not os.path.exists(payload):
+                if verbose:
+                    print("Payload is not a directory or file")
+                return False
+            
+            name = os.path.basename(payload)
+            if os.path.isdir(payload):
+                for root, dirs, files in os.walk(payload):
+                    for file in files:
+                        basename = os.path.basename(root)
+                        if basename == name:
+                            filename = file
+                        else:
+                            filename = os.path.join(os.path.basename(root), file)
+ 
+                        filepath = os.path.join(os.path.abspath(root), file)
+                        f = open(filepath, "rb").read()
+                        self._missions_repo.upload_single_file(mission_id, f, filename)
+                        if verbose:
+                            print("Upload complete: ", filepath)
+            else:
+                f = open(payload, "rb").read()
+                self._missions_repo.upload_single_file(mission_id, f, name)
+                if verbose:
+                    print("Upload complete: ", name)
+            return True
+        except Exception as e:
+            print("Error: ", e)
+            return False
 
     def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         return self._missions_repo.run_job_on_station(mission_id, station_id, cpu_count, memory_amount, gpu_count)
@@ -97,9 +114,14 @@ class MissionsService:
         return self._missions_repo.update_mission(update_mission_request)
 
     def delete_file(self, mission_id, filename):
-        query = generate_query_str({"filename": quote(filename, safe="")})
-
-        return self._missions_repo.delete_file(mission_id, query)
+        try:
+            query = generate_query_str({"filename": quote(filename, safe="")})
+            response = self._missions_repo.delete_file(mission_id, query)
+            
+            return True
+        except Exception as e:
+            print("Error: ", e)
+            return False
 
     def list_mission_types(self):
         return self._missions_repo.list_mission_types()

@@ -41,7 +41,7 @@ class MissionsRepository(RequestsRepository):
 
     def upload_single_file(self, mission_id, file, filename):
         r = self._post(
-            "/projects/{project_id}/files".format(project_id=mission_id),
+            "/projects/{mission_id}/files".format(mission_id=mission_id),
             files=file,
             filename=filename,
         )
@@ -49,7 +49,7 @@ class MissionsRepository(RequestsRepository):
 
     def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         response = self._post(
-            "/projects/{project_id}/jobs".format(project_id=mission_id),
+            "/projects/{mission_id}/jobs".format(mission_id=mission_id),
             data={"station_id": station_id, "cpu_count": cpu_count, "memory_amount": memory_amount, "gpu_count": gpu_count},
         )
         json = response.json()
@@ -58,7 +58,7 @@ class MissionsRepository(RequestsRepository):
 
     def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
         response = self._post(
-            "/projects/{project_id}/jobs".format(project_id=mission_id),
+            "/projects/{mission_id}/jobs".format(mission_id=mission_id),
             data={"station_id": station_id, "machine_id": lz_id, "cpu_count": cpu_count, "memory_amount": memory_amount, "gpu_count": gpu_count},
         )
         json = response.json()
@@ -67,14 +67,14 @@ class MissionsRepository(RequestsRepository):
 
     def get_mission_files(self, mission_id):
         response = self._get(
-            "/projects/{project_id}/files".format(project_id=mission_id)
+            "/projects/{mission_id}/files".format(mission_id=mission_id)
         )
         json = response.json()
         json = json["files"]
         return [file_dict_to_file_listing(file) for file in json]
 
     def delete_mission(self, mission_id):
-        response = self._delete("/projects/{project_id}".format(project_id=mission_id))
+        response = self._delete("/projects/{mission_id}".format(mission_id=mission_id))
         return response.json()
 
     def update_mission(self, update_project_request):
@@ -90,8 +90,8 @@ class MissionsRepository(RequestsRepository):
             body.update({"settings": update_project_request.settings})
 
         response = self._put(
-            "/projects/{project_id}".format(
-                project_id=update_project_request.mission_id
+            "/projects/{mission_id}".format(
+                mission_id=update_project_request.mission_id
             ),
             data=body,
         )
@@ -100,7 +100,7 @@ class MissionsRepository(RequestsRepository):
 
     def delete_file(self, mission_id, query):
         self._delete(
-            "projects/{project_id}/files".format(project_id=mission_id), query=query
+            "projects/{mission_id}/files".format(mission_id=mission_id), query=query
         )
         return mission_id
 
@@ -178,7 +178,7 @@ def job_dict_to_job(job):
     return Job(
         job["jobid"],
         job["receiverid"],
-        job["project_id"],
+        job["mission_id"],
         datetime.fromtimestamp(job["time_created"]),
         datetime.fromtimestamp(job["last_updated"]),
         job["status"],

@@ -61,10 +61,6 @@ class JobStatus:
 
 
 class Job:
-    """
-    Details of a job
-    """
-
     def __init__(
         self,
         jobid,
@@ -73,30 +69,63 @@ class Job:
         time_created,
         last_updated,
         status,
-        container,
+        cpu_count,
+        gpu_count,
+        memory_amount,
+        enable_tunnel,
+        tunnel_port,
+        tunnel_url,
         name,
         stationid,
         userid,
         state,
-        oaid,
         pay_status,
         pay_interval,
         total_runtime,
         archived,
         status_history,
     ):
+        """
+        Job Object 
+        
+        :param jobid: UUID of the Job
+        :param receiver_id: UUID of the recipient Landing Zone
+        :param project_id: UUID of the originating Mission
+        :param time_created: Time stamp of the Job run time
+        :param last_updated: Time stamp of last Job update
+        :param status: Current status of the Job
+        :param cpu_count: Number of CPUs claimed by the Job
+        :param gpu_count: Number of GPUs claimed by the Job
+        :param memory_amount: Amount of Memory in MB claimed by the Job
+        :param enable_tunnel: Boolean indicated if the job has tunnel access
+        :param tunnel_port: The container port exposed if tunneling is enabled
+        :param tunnel_url: The URL of the tunnel exposing the container if the job has tunneling enabled
+        :param name: Human readable name of the Job
+        :param stationid: UUID of the Station the Job was deployed to
+        :param userid: UUID of the user who deployed the Job
+        :param state: Current state of the Job (potentially superceded by status)
+        :param pay_status: Currently unused
+        :param pay_interval: Currently unused
+        :param total_runtime: Total Job runtime in seconds
+        :param archived: Boolean indicating if job is archived 
+        :param status_history: Dictionary of Job status and time stamp history
+        """
         self.job_id = jobid
         self.receiver_id = receiverid
         self.project_id = project_id
         self.time_created = time_created
         self.last_updated = last_updated
         self.status = status
-        self.container = container
+        self.cpu_count = cpu_count,
+        self.gpu_count = gpu_count,
+        self.memory_amount = memory_amount,
+        self.enable_tunnel = enable_tunnel,
+        self.tunnel_port = tunnel_port,
+        self.tunnel_url = tunnel_url,
         self.name = name
         self.station_id = stationid
         self.user_id = userid
         self.state = state
-        self.oaid = oaid
         self.pay_status = pay_status
         self.pay_interval = pay_interval
         self.total_runtime = total_runtime
