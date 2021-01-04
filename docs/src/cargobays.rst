@@ -30,7 +30,7 @@ To connect your Dropbox account to Galileo, select the Dropbox option and and hi
 
 .. image:: images/cargo_bays_select_dropbox.png
 
-If you have never logged into your Dropbox in the current webbrowser, you will be redirected to the Dropbox login page. Once you give Galileo permission to access your Dropbox account, you will be brought back to Galileo setup page. Next, provide a name for your Dropbox Cargo Bay, set the permission level (read and write permission is required for results to be written back to your Dropbox account), and optionally provide a description to denote the purpose of the Cargo Bay. 
+If you have never logged into your Dropbox in the current webbrowser, you will be redirected to the Dropbox login page. Once you give Galileo permission to access your Dropbox account, you will be brought back to the Galileo setup page. Next, provide a name for your Dropbox Cargo Bay, set the permission level (read and write permission is required for results to be written back to your Dropbox account), and optionally provide a description to denote the purpose of the Cargo Bay. 
 
 .. image:: images/cargo_bays_name_dropbox.png
 

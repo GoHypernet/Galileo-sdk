@@ -92,6 +92,17 @@ class MissionType:
         container_type=None,
         wizard_spec=None,
     ):
+        """
+        Mission Framework Type Object
+
+        :param id: UUID of the Mission Framework Type
+        :param name: Human readable name of the Framework Type
+        :param description: Optional description of the Framework Type
+        :param version: Specific version of the overall Framework Type
+        :param active: Is the framework actively supported (False means depricated)
+        :param container_type: Target container OS type (i.e. Windows, Linux, Singularity)
+        :param wizard_spec: JSON specs for UI configuration wizard
+        """
         self.id = id
         self.name = name
         self.description = description

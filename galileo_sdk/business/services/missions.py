@@ -98,7 +98,12 @@ class MissionsService:
         return self._missions_repo.delete_mission(mission_id)
 
     def update_mission(self, update_mission_request):
-        return self._missions_repo.update_mission(update_mission_request)
+        try:
+            response = self._missions_repo.update_mission(update_mission_request)
+            return True
+        except Exception as e:
+            print("Error: ", e)
+            return False
 
     def update_mission_args(self, mission_id, arg):
         missions = self.list_missions(ids=[mission_id])

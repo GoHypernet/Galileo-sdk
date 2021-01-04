@@ -50,8 +50,8 @@ class MissionsSdk:
         :return: Mission
         
         Example:
-            >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899'
-            >>> mission = galileo.missions.get_mission_by_id(mission_id=UUID)
+            >>> my_missions = galileo.missions.list_missions()
+            >>> mission = galileo.missions.get_mission_by_id(mission_id=my_missions[0].mission_id)
             >>> print(mission.name)
         """
         return self._missions_service.get_mission_by_id(mission_id)
@@ -98,7 +98,10 @@ class MissionsSdk:
 
     def upload(self, mission_id, payload, verbose=False):
         """
-        Upload a file or directory to the specified Mission. If the payload is a file, this function will place the file in the top level of the Mission file tree. If the payload is a directory, files in the first level of the payload directory will appear in the top level of the Mission file tree and subfolders of the payload will appear as subfolders in the Mission file tree. 
+        Upload a file or directory to the specified Mission. If the payload is a file, this function 
+        will place the file in the top level of the Mission file tree. If the payload is a directory, 
+        files in the first level of the payload directory will appear in the top level of the Mission 
+        file tree and subfolders of the payload will appear as subfolders in the Mission file tree. 
 
         :param mission_id: str: Target Mission UUID
         :param payload: str: Path to folder or file to upload to targeted Mission
@@ -107,7 +110,8 @@ class MissionsSdk:
         
         Example:
         
-        >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899' # put your Mission UUID here
+        >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
+        >>> UUID = my_missions[0].mission_id
         >>> payload = 'C:\\Users\\Galileo\\Hypernet Labs, Inc. Dropbox\\Julia Example' # a Windows path, put your path here
         >>> success = galileo.missions.upload(UUID, payload) # upload a whole directory
         >>> if success:
@@ -247,7 +251,8 @@ class MissionsSdk:
         
         Example:
         
-        >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899' # put your Mission UUID here
+        >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
+        >>> UUID = my_missions[0].mission_id
         >>> mission_files = galileo.missions.get_mission_files(UUID)
         >>> for file in mission_files:
         >>>     print(file.filename, file.path, file.file_size)
@@ -267,7 +272,8 @@ class MissionsSdk:
         Example:
         
         >>> # Delete all files in a Mission, including the results
-        >>> UUID = '3f571a99-783e-49d9-a218-c32ffcb81899' # put your Mission UUID here
+        >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
+        >>> UUID = my_missions[0].mission_id
         >>> mission_files = galileo.missions.get_mission_files(UUID)
         >>> for mission_file in mission_files:
         >>>     success = galileo.missions.delete_file(UUID,os.path.join(mission_file.path,mission_file.name))
@@ -286,17 +292,23 @@ class MissionsSdk:
         settings=None,
     ):
         """
+        Update the settings and metadata associated with a Mission context. 
 
-        :param mission_id: str: Mission type id
-        :param name: str: Name of mission
-        :param destination_path: Optional[str]
-        :param source_path: Optional[str]
-        :param destination_storage_id: Optional[str]
-        :param source_storage_id: Optional[str]
-        :param description: Optional[str]
-        :param settings: Optional[Dict[str, str]]: Get required settings via
-         missions.get_mission_type_settings_info()
-        :return:
+        :param mission_id: str: UUID of the Mission you are updating 
+        :param name: str: Mission name after update
+        :param destination_path: Optional[str]: Storage destination Cargo Bay root path after update
+        :param source_path: Optional[str]: Storage source Cargo Bay root path after update
+        :param destination_storage_id: Optional[str]: Storage destination Cargo Bay UUID after update
+        :param source_storage_id: Optional[str]: Storage source Cargo Bay UUID after update
+        :param description: Optional[str]: Mission description after update
+        :param settings: Optional[Dict[str, str]]: Mission framework setting to be applied after update
+        :return: Bool: Success flag
+        
+        Example:
+        
+        >>> my_missions = galileo.missions.list_missions()
+        >>> print("Old Mission Name: ", my_missions[0].name)
+        >>> success = galileo.missions.update_mission(my_missions[0].mission_id, "New Name")        
         """
         request = UpdateMissionRequest(
             mission_id,
@@ -330,19 +342,33 @@ class MissionsSdk:
 
     def get_mission_type(self, mission_type_id):
         """
-        Get a mission type further info
+        Retrieve more detailed information about a Mission Framework Type
 
-        :param mission_type_id: str: Mission type id
+        :param mission_type_id: str: Mission Framework Type UUID
         :return: MissionType
+        
+        Example:
+        
+        >>> my_missions = galileo.missions.list_missions()
+        >>> framework_type = galileo.missions.get_mission_type(my_missions[0].mission_type_id)
+        >>> print("Framework Name: ", framework_type.name)
         """
         return self._missions_service.get_mission_type(mission_type_id)
 
     def get_mission_type_settings_info(self, mission_type_id):
         """
-        Gets the mission type's settings info. This settings info is necessary
-        when providing a mission type id during creating a project.
+        Gets the settings of a particular Mission Framework Type. Use the settings that are returned 
+        when creating or updating a Mission with Framework Type mission_type_id. 
 
-        :param mission_type_id: str: Mission type id
-        :return: Dict[str, str]: a dictionary that you can update the values of
+        :param mission_type_id: str: Mission Framework Type UUID
+        :return: Dict[str, str]: a dictionary where the keys are the names of the settings you can provide and the value is the type that is expected for that setting. 
+        
+        Example:
+        
+        >>> my_missions = galileo.missions.list_missions()
+        >>> framework_type = galileo.missions.get_mission_type(my_missions[0].mission_type_id)
+        >>> framework_settings = galileo.missions.get_mission_type_settings_info(framework_type)
+        >>> for parameter in framework_settings:
+        >>>     print(parameter, framework_settings[parameter])
         """
         return self._missions_service.get_mission_type_settings_info(mission_type_id)
