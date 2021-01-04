@@ -3,7 +3,9 @@
 Cargo Bays Guide
 ===============
 
-Cargo Bays are a Galileo feature that allow users to authenticate a third-party storage solution against their Galileo account. Once a Cargo Bay is established, it can be used in conjunction with the Missions feature; files and results belonging to a Mission can be configured to be stored in a particular Cargo Bay which can greatly help when the need arises to upload or download large amounts of data. Deleting a a Cargo Bay only removes the authentication credentials Galileo uses to communicate with the storage provider, it does not delete the data that has been stored there. Missions referencing a Cargo Bay that has been deleted are deactivated. 
+Cargo Bays is a Galileo feature that allows users to authenticate third-party storage solutions against their Galileo account. Once a Cargo Bay is established, it can be used in conjunction with the Missions feature; files and results belonging to a Mission can be configured to be stored in a particular Cargo Bay which can greatly help when the need arises to upload or download large amounts of data. Deleting a Cargo Bay only removes the encrypted authentication credentials Galileo uses to communicate with the storage provider, it does not delete the data that has been stored there. Additionally, deleting a Cargo Bay deactivates all Missions that reference it as a storage source. 
+
+.. image:: images/cargo_bays_diagram.png
 
 Creating a Cargo Bay 
 --------------------------------------
