@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   landing-zone:
-    image: hypernetlabs/landing-zone-daemon:head
+    image: hypernetlabs/landing-zone-daemon
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       # uncomment the following line if you need your LZ to have access to private Docker Hub repositories
