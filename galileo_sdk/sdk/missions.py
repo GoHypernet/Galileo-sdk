@@ -246,8 +246,8 @@ class MissionsSdk:
         """
         Provides the metadata of all files in a Mission context
 
-        :param mission_id: mission you want to inspect
-        :return: DirectoryListing
+        :param mission_id: UUID of the Mission to inspect
+        :return: List[FileListing]
         
         Example:
         

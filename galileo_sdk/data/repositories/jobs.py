@@ -151,7 +151,7 @@ def job_dict_to_job(job):
     return Job(
         job["jobid"],
         job["receiverid"],
-        job["project_id"],
+        job["mission_id"],
         datetime.fromtimestamp(job["time_created"]),
         datetime.fromtimestamp(job["last_updated"]),
         job["status"],
