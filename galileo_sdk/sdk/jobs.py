@@ -103,7 +103,7 @@ class JobsSdk(EventsSdk):
         sort_order=None,
     ):
         """
-        List of your jobs
+        Get a filtered list of all jobs run under your Galileo account.
         
         :param jobids: List[str]: Filter by job ids
         :param receiverids: List[str]: Filter by receiver ids

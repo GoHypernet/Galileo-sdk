@@ -68,7 +68,7 @@ class MissionsSdk:
         settings=None,
     ):
         """
-        Create a mission
+        Create a new Mission in your Galileo account.
 
         :param name: str: Human readable name of the Mission you are creating
         :param description: Optional[str]: Optional description of the Mission you are creating
@@ -82,7 +82,8 @@ class MissionsSdk:
         :return: Mission
         
         Example:
-            >>> new_mission = galileo.missions.create_mission(name='My Mission',description='This creates and empty Mission with no framework type')
+            >>> swmm_mission = galileo.missions.create_mission(name="SWMM Test2",description="testing",mission_type_id='f1934063-034a-4eba-adaa-e28bd95f138a',settings={"cpu_count":"1","memory_count":"3000","filename":"river","swmmversion":"5.1.007"})
+            >>> print(swmm_mission.mission_id)
         """
         request = CreateMissionRequest(
             name=name,
@@ -169,19 +170,25 @@ class MissionsSdk:
         settings=None,
     ):
         """
-        Create and upload mission
+        Create a new Mission in your Galileo account and upload input files from the specified directory in the same call. 
 
-        :param name: str: Name of mission
-        :param directory: str: filepath to the folder you want to upload
-        :param description: Optional[str]: description of mission
-        :param mission_type_id: Optional[str]: specify mission type
-        :param destination_path: Optional[str]
-        :param source_path: Optional[str]
-        :param destination_storage_id: Optional[str]
-        :param source_storage_id: Optional[str]
-        :param settings: Optional[Dict[str, str]]: Get required settings via
+        :param name: str: Human readable name of the Mission that will be displayed in the UI
+        :param directory: str: filepath to the folder you want to upload as input files to the Mission
+        :param description: Optional[str]: Textual description of the Mission 
+        :param mission_type_id: Optional[str]: Mission Framework Type UUID
+        :param destination_path: Optional[str]: Storage directory in the destination Cargo Bay
+        :param source_path: Optional[str]: Source directory in the source Cargo Bay
+        :param destination_storage_id: Optional[str]: UUID of the Cargo Bay where results will be stored
+        :param source_storage_id: Optional[str]: UUID of the Cargo Bay where source files are to be stored
+        :param settings: Optional[Dict[str, str]]: Mission Framework Type settings (can be retrieved via the get_mission_type_settings_info function)
          missions.get_mission_type_settings_info()
         :return: Mission
+        
+        Example:
+        
+        >>> project_folder = 'C:\\Users\\Galileo\\SWMM_Project' # put your path here
+        >>> swmm_mission = galileo.missions.create_and_upload_mission(name="SWMM Test2",directory=project_folder,description="testing",mission_type_id='f1934063-034a-4eba-adaa-e28bd95f138a',settings={"cpu_count":"1","memory_count":"3000","filename":"river","swmmversion":"5.1.007"})
+        >>> print(swmm_mission.mission_id)
         """
         request = CreateMissionRequest(
             name=name,
@@ -334,9 +341,16 @@ class MissionsSdk:
 
     def list_mission_types(self):
         """
-        Gets a list of summaries of mission types
-
+        Gets a list of summaries of Mission Framework Types. 
+        
         :return: List[MissionType]
+        
+        Example:
+        
+        >>> mission_types = galileo.missions.list_mission_types()
+        >>> for mission_type in mission_types:
+        >>>     if mission_type.name == "SWMM5" and mission_type.version == 'Batch Mode':
+        >>>         print(mission_type.id)
         """
         return self._missions_service.list_mission_types()
 
@@ -361,7 +375,8 @@ class MissionsSdk:
         when creating or updating a Mission with Framework Type mission_type_id. 
 
         :param mission_type_id: str: Mission Framework Type UUID
-        :return: Dict[str, str]: a dictionary where the keys are the names of the settings you can provide and the value is the type that is expected for that setting. 
+        :return: Dict[str, str]: a dictionary where the keys are the names of the settings you can provide and 
+        the value is the type or options that are expected for that setting. 
         
         Example:
         
