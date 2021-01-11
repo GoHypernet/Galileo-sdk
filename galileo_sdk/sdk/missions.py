@@ -347,10 +347,10 @@ class MissionsSdk:
         
         Example:
         
-        mission_types = galileo.mission.list_mission_types()
-        for mission_type in mission_types:
-            if mission_type.name == "SWMM5" and mission_type.version == 'Batch Mode':
-                print(mission_type.id)
+        >>> mission_types = galileo.missions.list_mission_types()
+        >>> for mission_type in mission_types:
+        >>>     if mission_type.name == "SWMM5" and mission_type.version == 'Batch Mode':
+        >>>         print(mission_type.id)
         """
         return self._missions_service.list_mission_types()
 
@@ -375,7 +375,8 @@ class MissionsSdk:
         when creating or updating a Mission with Framework Type mission_type_id. 
 
         :param mission_type_id: str: Mission Framework Type UUID
-        :return: Dict[str, str]: a dictionary where the keys are the names of the settings you can provide and the value is the type that is expected for that setting. 
+        :return: Dict[str, str]: a dictionary where the keys are the names of the settings you can provide and 
+        the value is the type or options that are expected for that setting. 
         
         Example:
         

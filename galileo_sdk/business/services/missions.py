@@ -131,6 +131,7 @@ class MissionsService:
     def list_mission_types(self):
         return self._missions_repo.list_mission_types()
 
+    # extend this function when new widget types are added to the docker wizard
     def _parse_wizard_spec(self, wizard_spec, settings):
         dict_key = wizard_spec.get("key", None)
         dict_type = wizard_spec.get("type", None)
@@ -142,6 +143,10 @@ class MissionsService:
                 dict_type = "str"
             elif dict_type == "number":
                 dict_type = "int"
+            elif dict_type == "single-select":
+                dict_type = []
+                for option in wizard_spec.get('options', None):
+                    dict_type.append(option.get('value', None))
 
             if dict_key == "dependencies":
                 dict_type = "Dict[str, str], e.g. {'dependency1': 'version1', 'dependency2': 'version2'}"
