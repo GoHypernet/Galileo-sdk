@@ -32,7 +32,7 @@ the associated Cargo Bay which removes the authentication credentials.
 Compute
 ~~~~~~~
 Users of Galileo can host their own computational resources (virtual machines, 
-HPC, etc.) by running their own instances of the Landing Zone daemon process 
+HPC, etc.) by running their own instances of the `Landing Zone  <landing_zone_main.html>`_ daemon process 
 and authenticating it against their Galileo account. Running a Landing Zone does **not** require that the host machine be exposed to the wider internet via a public IP address, nor does it require any special VPN settings. When a user runs their 
 own LZ, they retain total control of the underlying host machine and any jobs 
 sent to the LZ via the Galileo web service (for more info, see `Access Control <security.html#access-control>`_). 
@@ -67,7 +67,7 @@ available: “Missions” and “Stations.”
 
 Missions
 ~~~~~~~~
-Missions are reusable code/simulation buckets where a Galileo user can upload data 
+`Missions <missions.html>`_ are reusable code/simulation buckets where a Galileo user can upload data 
 files in the form of input files, scripts, binaries, etc. Importantly, a Galileo 
 Mission can be set up as a pre-configured framework “type.” For example, a Galileo 
 Mission can be configured as a Python project, an R project, or a Gromacs project. 
@@ -84,7 +84,7 @@ Missions can be used in tandem with the `Cargo Bays <cargobays.html>`_ feature. 
 
 Stations
 ~~~~~~~~
-Stations allow computational resources running the Galileo “Landing Zone” daemon to 
+`Stations <stations.html>`_ allow computational resources running the Galileo “Landing Zone” daemon to 
 be shared with an arbitrary number of other Galileo users without the need to expose the resource to the wider internet or set up a VPN. Within the context of a 
 Station, administrators can set:
 
