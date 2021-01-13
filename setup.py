@@ -20,7 +20,11 @@ if is_py3:
         "mock",
     ]
 else:
-    install_requires = ["enum34"]
+    install_requires = [
+        "enum34",
+        "chardet",
+        "mock",
+    ]
 
 
 class VerifyVersionCommand(install):

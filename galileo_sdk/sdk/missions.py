@@ -201,7 +201,7 @@ class MissionsSdk:
             settings=settings,
         )
         mission = self._missions_service.create_mission(request)
-        self._missions_service.upload(mission.mission_id, directory)
+        self._missions_service.upload(mission.mission_id, directory, True)
         return mission
 
     def create_mission_and_run_job(
