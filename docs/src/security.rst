@@ -60,6 +60,11 @@ The LZ daemon executes jobs as stand-alone docker containers (or singularity con
 For more information on container security, see the official `Docker Introduction to 
 Container Security <https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf>`_. 
 
+Software Applications
+~~~~~~~~~~~~~~~~~~~~~
+
+
+
 Access Control
 --------------
 The Galileo platform has two primary features in which role-based access control is 
