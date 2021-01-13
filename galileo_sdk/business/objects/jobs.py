@@ -68,22 +68,22 @@ class Job:
         project_id,
         time_created,
         last_updated,
-        status,
-        cpu_count,
-        gpu_count,
-        memory_amount,
-        enable_tunnel,
-        tunnel_port,
-        tunnel_url,
-        name,
-        stationid,
-        userid,
-        state,
-        pay_status,
-        pay_interval,
-        total_runtime,
-        archived,
-        status_history,
+        status=None,
+        cpu_count=1,
+        gpu_count=0,
+        memory_amount=1000,
+        enable_tunnel=False,
+        tunnel_port=None,
+        tunnel_url=None,
+        name=None,
+        stationid=None,
+        userid=None,
+        state=None,
+        pay_status=None,
+        pay_interval=None,
+        total_runtime=None,
+        archived=False,
+        status_history=None,
     ):
         """
         Job Object 
@@ -113,6 +113,7 @@ class Job:
         self.job_id = jobid
         self.receiver_id = receiverid
         self.project_id = project_id
+        self.mission_id = project_id
         self.time_created = time_created
         self.last_updated = last_updated
         self.status = status
