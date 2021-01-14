@@ -14,6 +14,7 @@ if is_py2:
     from urllib2 import URLError
     import json as json_p
     import datetime
+    import ssl
 
     class PutRequest(urllib2.Request):
         def get_method(self, *args, **kwargs):
@@ -77,7 +78,11 @@ if is_py2:
             if headers is None:
                 headers = {}
             request = urllib2.Request(url, headers=headers)
-            return Response(urllib2.urlopen(request))
+            try:
+                response = urllib2.urlopen(request)
+            except URLError as e:
+                raise URLError(e)
+            return Response(response)
 
         def post(self, url, headers=None, json=None, data=None):
             if headers is None:
@@ -89,21 +94,35 @@ if is_py2:
                 request = urllib2.Request(url, data=json_p.dumps(json), headers=headers)
             else:
                 request = urllib2.Request(url, data=data, headers=headers)
-            return Response(urllib2.urlopen(request))
+                
+            try:
+                response = urllib2.urlopen(request)
+            except URLError as e:
+                raise URLError(e)
+                
+            return Response(response)
 
         def put(self, url, headers=None, json=None):
             if headers is None:
                 headers = {}
             headers.update({"Content-type": "application/json", "Accept": "text/plain"})
             request = PutRequest(url, data=json_p.dumps(json), headers=headers)
-            return Response(urllib2.urlopen(request))
+            try:
+                response = urllib2.urlopen(request)
+            except URLError as e:
+                raise URLError(e)
+            return Response(response)
 
         def delete(self, url, headers=None, json=None):
             if headers is None:
                 headers = {}
             headers.update({"Content-type": "application/json", "Accept": "text/plain"})
             request = DeleteRequest(url, data=json_p.dumps(json), headers=headers)
-            return Response(urllib2.urlopen(request))
+            try:
+                response = urllib2.urlopen(request)
+            except URLError as e:
+                raise URLError(e)
+            return Response(response)
 
     requests = Requests()
 
