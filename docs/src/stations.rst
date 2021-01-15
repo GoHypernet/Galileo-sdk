@@ -117,4 +117,6 @@ Then specify the path on the host machine that you wish to expose at the mount p
 Station Queues
 ----------------
 
-Jobs that are submitted to a Station are entered into a queue. If a job is submitted and there are sufficient resources on the Station's associated LZ's, then the job will be assigned and deployed immediately, otherwise it will remain in the queued state until a slot opens or more LZs are added. 
+Jobs that are submitted to a Station are entered into a queue. If a job is submitted and there are sufficient resources on the Station's associated LZ's, then the job will be assigned and deployed immediately, otherwise it will remain in the queued state until a slot opens or more LZs are added. Station members with sufficient permissions can vew the currently running jobs, past jobs, and all jobs currently queued and waiting for sufficient resources. 
+
+.. image:: images/stations_queue.png
