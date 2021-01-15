@@ -259,7 +259,7 @@ body {
                 "client_id": self.client_id,
             },
             doseq=True,
-        )
+        )        
 
         while True:
             try:
@@ -275,8 +275,8 @@ body {
                         doseq=True,
                     ),
                 )
-            except URLError as e:
-                if e.code == 429:
+            except Exception as e:
+                if hasattr(e, "code") and e.code == 429:
                     interval = interval * 2
                 continue
 

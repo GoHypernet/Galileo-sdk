@@ -8,14 +8,17 @@ All use of the Galileo service must comply with our
 
 Self-Hosting vs Default Hosting
 -------------------------------
-Galileo is a Platform-as-a-Service offering, and as such it allows the 
+Galileo is a Platform-as-a-Service offering, and as such, it allows the 
 end user to host certain components of the platform on their own self-administered 
 resources. Currently users can choose to host their own object storage and their own 
 compute resources or to use the default storage and compute resources provided by 
-Galileo. In both cases, Galileo gives administrators of storage and compute assets segmented control of both resource access and permissions. All authentication flows are handled via `Auth0 <https://auth0.com/>`_. 
+Galileo. In both cases, Galileo gives administrators of storage and compute assets segmented control 
+of both resource access and permissions. All authentication flows are handled via `Auth0 <https://auth0.com/>`_. 
 
-Storage
-~~~~~~~
+.. image:: images/galileo_security_model.png
+
+Data Storage
+~~~~~~~~~~~~
 The default storage provider used by Galileo for Mission input files and job 
 results is GCP Storage (standard level). More info on the security profile of 
 GCP Storage can be found `here <https://cloud.google.com/storage/docs/storage-classes#standard>`_. 
@@ -29,15 +32,15 @@ Galileo web service requires a user-provided API key to access non-default objec
 storage. These keys are stored in an encrypted format; access can be revoked by deleting
 the associated Cargo Bay which removes the authentication credentials.  
 
-Compute
-~~~~~~~
+Computational Assets
+~~~~~~~~~~~~~~~~~~~~
 Users of Galileo can host their own computational resources (virtual machines, 
-HPC, etc.) by running their own instances of the Landing Zone daemon process 
-and authenticating it against their Galileo account. Running a Landing Zone does **not** require that the host machine be exposed to the wider internet via a public IP address, nor does it require any special VPN settings. When a user runs their 
-own LZ, they retain total control of the underlying host machine and any jobs 
-sent to the LZ via the Galileo web service (for more info, see `Access Control <security.html#access-control>`_). 
-The LZ daemon is written in Python and the source code can be obtained and 
-audited for security analysis purposes. 
+HPC, etc.) by running their own instances of the `Landing Zone  <landing_zone_main.html>`_ daemon process 
+and authenticating it against their Galileo account. Running a Landing Zone does **not** require that 
+the host machine be exposed to the wider internet via a public IP address, nor does it require any 
+special VPN settings. When a user runs their own LZ, they retain total control of the underlying host 
+machine and any jobs sent to the LZ via the Galileo web service (for more info, see `Access Control <security.html#access-control>`_). 
+The LZ daemon is written in Python and the source code can be obtained and audited for security analysis purposes. 
 
 Alternatively, users can run on the default compute resources provided in the 
 communal Stations (the Linux and Windows Stations), or they can purchase privately
@@ -60,6 +63,19 @@ The LZ daemon executes jobs as stand-alone docker containers (or singularity con
 For more information on container security, see the official `Docker Introduction to 
 Container Security <https://www.docker.com/sites/default/files/WP_IntrotoContainerSecurity_08.19.2016.pdf>`_. 
 
+Software and Applications
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Galileo supports a suite of software and applications in the form of officially supported Mission Framework 
+Types. Software environments like Python, Julia, and R Language as well as interactive applications like
+Jupyter Notebooks, PCSWMM, and QGIS are officially supported and can be configured through the Mission
+Configuration Wizard. 
+
+Administrators of computational resources can restrict what applications are allowed to be accessed
+through the customizable role settings in the `Station Settings <stations.html#user-roles-and-resource-settings>`_ 
+feature. Enterprise accounts can enforce a customizable default storage provider for all users in the 
+organization, ensuring all input and output data files are stored on a specific storage solution controlled
+by the enterprise account owner. 
+
 Access Control
 --------------
 The Galileo platform has two primary features in which role-based access control is 
@@ -67,7 +83,7 @@ available: “Missions” and “Stations.”
 
 Missions
 ~~~~~~~~
-Missions are reusable code/simulation buckets where a Galileo user can upload data 
+`Missions <missions.html>`_ are reusable code/simulation buckets where a Galileo user can upload data 
 files in the form of input files, scripts, binaries, etc. Importantly, a Galileo 
 Mission can be set up as a pre-configured framework “type.” For example, a Galileo 
 Mission can be configured as a Python project, an R project, or a Gromacs project. 
@@ -84,7 +100,7 @@ Missions can be used in tandem with the `Cargo Bays <cargobays.html>`_ feature. 
 
 Stations
 ~~~~~~~~
-Stations allow computational resources running the Galileo “Landing Zone” daemon to 
+`Stations <stations.html>`_ allow computational resources running the Galileo “Landing Zone” daemon to 
 be shared with an arbitrary number of other Galileo users without the need to expose the resource to the wider internet or set up a VPN. Within the context of a 
 Station, administrators can set:
 
