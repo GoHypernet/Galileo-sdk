@@ -1,6 +1,6 @@
 .. _landing_zone_docker:
 
-Quickstart for Galileo Landing Zones and Docker
+QuickStart for Galileo Landing Zones and Docker
 ===============================================
 The following is a user guide for deploying a Galileo Landing Zone
 (LZ) using our official Docker image.

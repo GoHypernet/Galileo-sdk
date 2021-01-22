@@ -38,7 +38,7 @@ This will bring up a list for you to choose which LZ to add (or remove) from thi
 
 Now that you have attached a Landing Zone to your Station, you can submit jobs to it. To learn more about launching jobs in Galileo, go `here <missions.html>`_. Galileo will automatically queue jobs if your LZ resources are fully utilized. Once sufficient resources on an LZ open up, queued jobs will be dispatched. 
 
-Note: If you remove an LZ from a Station while it is still running a job, the job will continue to run until completion unless you explicity cancel or kill the job. 
+Note: If you remove an LZ from a Station while it is still running a job, the job will continue to run until completion unless you explicitly cancel or kill the job. 
 
 Inviting Collaborators
 -------------------------
@@ -64,11 +64,11 @@ The capabilities of these roles can be customized by clicking the edit button on
 
 .. image:: images/stations_user_role_permissions.png
 
-In addition to the role capabilities, resource limitations and usage quotas can be customized for each role by clicking the "resoures" tab next to "permissions". Values specified here will apply to any user assigned with the associated role. These values can be left empty if you do not wish to apply custom role-specific resource/quota limitations. 
+In addition to the role capabilities, resource limitations and usage quotas can be customized for each role by clicking the "resources" tab next to "permissions". Values specified here will apply to any user assigned with the associated role. These values can be left empty if you do not wish to apply custom role-specific resource/quota limitations. 
 
 .. image:: images/stations_user_role_resources.png
 
-In the example pictured above, any user with the Launcher role can use at most 10 CPUs and 10 GB of RAM at one time and each individual job can use at most 5 CPUs and 5 GB of RAM. Every CPU-hour will cost 4 credits and each GB-hour will cost 1 credit, so if the user runs a job for 1 hour that uses 1 CPU and 1 GB of RAM, it will cost them 5 credits which is subracted from their quota. A quota can be set for the daily, weekly, and monthly time frame. For example, in the screen shot above, the Launcher role can use 10 credits per day, 500 credits per week, 1000 credits per month, or 10000 credits per year. As soon as the user hits one of these credit limits, they will not be able to run more jobs until the associated time period resets (so if they use up 10 credits before the end of a day, they will have to wait for the next 24 hour period for their daily credit quota to reset). 
+In the example pictured above, any user with the Launcher role can use at most 10 CPUs and 10 GB of RAM at one time and each individual job can use at most 5 CPUs and 5 GB of RAM. Every CPU-hour will cost 4 credits and each GB-hour will cost 1 credit, so if the user runs a job for 1 hour that uses 1 CPU and 1 GB of RAM, it will cost them 5 credits which is subtracted from their quota. A quota can be set for the daily, weekly, and monthly time frame. For example, in the screen shot above, the Launcher role can use 10 credits per day, 500 credits per week, 1000 credits per month, or 10000 credits per year. As soon as the user hits one of these credit limits, they will not be able to run more jobs until the associated time period resets (so if they use up 10 credits before the end of a day, they will have to wait for the next 24 hour period for their daily credit quota to reset). 
 
 Basic Station Settings and Resource Limits
 ------------------------------------------------------

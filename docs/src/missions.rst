@@ -3,7 +3,7 @@
 Missions Guide
 ==============================================
 
-Missions are a feature of Galileo that allow users to easily configure complex simulators and scripting environements to run repeatibly and reliably on any `LZ <landing_zones.html>`_ that they have launch access to through a `Station <stations.html>`_. After the initial configuration, your Mission environment (which consists of your input files and framework parameters) can be updated quickly through the Mission settings page. See the `Galileo Tutorials <https://hypernetlabs.io/galileo/tutorials/#tutorials>`_ page for instructions on how to configure a Mission for specific applications. 
+Missions are a feature of Galileo that allow users to easily configure complex simulators and scripting environments to run repeatably and reliably on any `LZ <landing_zones.html>`_ that they have launch access to through a `Station <stations.html>`_. After the initial configuration, your Mission environment (which consists of your input files and framework parameters) can be updated quickly through the Mission settings page. See the `Galileo Tutorials <https://hypernetlabs.io/galileo/tutorials/#tutorials>`_ page for instructions on how to configure a Mission for specific applications. 
 
 Creating a New Mission 
 -----------------------
@@ -61,7 +61,7 @@ Each job instance launched from a Mission, buy hitting the run button in the upp
 
 When a job is in the "running" status, you can check the progress by querying the standard output (what would normally be printed to screen if you were running the job locally on your laptop) and the process logs (to confirm what processes were created by your job). You also have the option (depending on the system you deployed to) to pause the job, cancel the job (which will return any partial results), and kill the job (which will not return any results from the job). 
 
-In order to set the amount of resources that a job uses (i.e. the number of CPUs, the amount of memory, and the number of GPUs), click the settings tab under the current Missio, then scroll down to the Job Resources block and enter the values you want.
+In order to set the amount of resources that a job uses (i.e. the number of CPUs, the amount of memory, and the number of GPUs), click the settings tab under the current Mission, then scroll down to the Job Resources block and enter the values you want.
 
 .. image:: images/missions_settings.png
 
@@ -72,6 +72,6 @@ A global view of all jobs, regardless of what Mission they were launched from, c
 Mission Collaborators
 ---------------------
 
-Mission Owners (the user who initially creates a Mission) can invite collaborators to their Mission. Collaborators can have different permission levels: Admin, View Results, and View All. Admins can do everything the Mission Owner can do except delete the Mission. The "View All" permission allows a user to view in input files and and historical job results while the "View Results" permission only allows the collaborator to view historical job results for the Mission. Clicking  the "plus" button on the right-hand side of the Users table will prompt for the names of the collaborators to add to the Mission.
+Mission Owners (the user who initially creates a Mission) can invite collaborators to their Mission. Collaborators can have different permission levels: Admin, View Results, and View All. Admins can do everything the Mission Owner can do except delete the Mission. The "View All" permission allows a user to view in input files and historical job results while the "View Results" permission only allows the collaborator to view historical job results for the Mission. Clicking the "plus" button on the right-hand side of the Users table will prompt for the names of the collaborators to add to the Mission.
 
 .. image:: images/missions_collaborators.png

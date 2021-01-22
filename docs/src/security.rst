@@ -56,7 +56,7 @@ to the user who purchased them. All instances are sourced from
 The LZ daemon communicates with the Galileo web service via TLS and HTTPS. The LZ 
 daemon must be run with sufficient permissions so as to create containers with the 
 targeted container runtime or scheduling environment (i.e. Docker, Singularity, 
-Slurm, etc.). Reauthetication is fascilitated by writing a local authentication 
+Slurm, etc.). Reauthentication is facilitated by writing a local authentication 
 token file (provided by Auth0). Deleting the authentication token file will require 
 the user to log their LZ daemon back into their account the next time it is restarted.
 The LZ daemon executes jobs as stand-alone docker containers (or singularity containers). 
