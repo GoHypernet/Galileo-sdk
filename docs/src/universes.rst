@@ -17,8 +17,8 @@ setting is indicated by the tab in the upper left-hand portion of the screen.
 
 .. image:: images/universes_selector.png
 
-Creating a Universe requires and Enterprise account with Hypernet Labs who will initialize the Universe, set the Owner
-account, and apply and custom branding. To switch between different Universes, click the tab and select the desired Universe. 
+Creating a Universe requires an Enterprise account with Hypernet Labs who will initialize the Universe, set the Owner
+account, and apply custom branding. To switch between different Universes, click the tab and select the desired Universe. 
 This will refresh the page, changing which Stations, Missions, Landing Zones, and Cargo Bays you have access to (as instances of these features are restricted to a particular Universe context, they cannot be shared between Universes). 
 
 Adding Universe Users
