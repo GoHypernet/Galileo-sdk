@@ -66,7 +66,7 @@ setup(
     "jobs, accepting jobs, and accepting members.",
     url="https://hypernetlabs.io/galileo/",
     packages=["galileo_sdk"],
-    entry_points={"console_scripts": ["galileo-cli = galileo_cli.cli:main",]},
+    entry_points={"console_scripts": ["galileo-cli = galileo_sdk.galileo_cli.cli:main",]},
     package_data={
         "galileo_sdk": [
             "sdk/**",
