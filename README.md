@@ -1,4 +1,4 @@
-![alt](docs/src/galileo_pres.png)
+![alt](docs/src/images/galileo_pres.png)
 
 # Galileo SDK
 
