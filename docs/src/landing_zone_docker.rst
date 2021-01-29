@@ -88,11 +88,11 @@ How to Run the Landing Zone Daemon
 
 .. code-block:: bash
 
-    # For Linux
+    # For running Linux containers
     $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --name "$LZ_NAME" --token /tokens/token
 
-    # For Windows (replace "C:/Users/JohnDoe/tokens" with your token folder from the previous section)
-    > docker run -d -v //./pipe/docker_engine://./pipe/docker_engine -v C:/Users/JohnDoe/tokens:C:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --name "$LZ_NAME" --token C:/tokens/token
+    # For running Windows containers
+    > docker run -d -v //./pipe/docker_engine://./pipe/docker_engine -v tokens:C:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --name "$LZ_NAME" --token C:/tokens/token
 
 * Now that the LZ is running, we must authenticate it against your
   account. Run this command in your terminal
