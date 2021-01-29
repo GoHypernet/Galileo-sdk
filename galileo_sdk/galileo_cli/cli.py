@@ -52,6 +52,17 @@ def main(mode):
     @main.command()
     def quit():
         os._exit(0)
+        
+    @main.command()
+    def logout():
+        token_file = os.path.join(os.path.expanduser("~"), ".galileo")
+        if os.path.exists(token_file):
+            try:
+                os.remove(token_file)
+                print("You have been logged out, see you next time")
+            except Exception as e:
+                print("Could not remove Auth Token file", e)
+        os._exit(0)
 
     click.echo(f"Connected to {galileo.backend}!")
 
