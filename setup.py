@@ -18,6 +18,14 @@ if is_py3:
         "python-engineio==3.9.0",
         "chardet",
         "mock",
+        "termcolor==1.1.0",
+        "colorama==0.4.3",
+        "pyfiglet",
+        "click",
+        "click-shell",
+        "pandas==1.0.1",
+        "halo",
+        "curses-menu"
     ]
 else:
     install_requires = [
@@ -47,7 +55,7 @@ setup(
     version=VERSION,
     license="MIT",
     author="Hypernet Labs",
-    author_email="hypernet@hypernetlabs.io",
+    author_email="galileo@hypernetlabs.io",
     long_description="Galileo is a hub for modeling, simulations, and data analysis that functions as a quick and "
     "easy portal to cloud resources.  The application streamlines computing infrastructure, "
     "saving engineers and researchers weeks of cloud setup time.  Team and station features allow "
@@ -56,8 +64,9 @@ setup(
     "that allows users to interact with Galileo using a Python script instead of a graphical "
     "interface.  Use the SDK to automate processes such as scheduling jobs, automatically deploying "
     "jobs, accepting jobs, and accepting members.",
-    url="https://hypernetwork.io/",
+    url="https://hypernetlabs.io/galileo/",
     packages=["galileo_sdk"],
+    entry_points={"console_scripts": ["galileo-cli = galileo_cli.cli:main",]},
     package_data={
         "galileo_sdk": [
             "sdk/**",
