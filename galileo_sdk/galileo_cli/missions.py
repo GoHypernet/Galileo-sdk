@@ -126,10 +126,8 @@ def missions_cli(main, galileo: GalileoSdk):
         missions_df = missions_df[
             [
                 "name",
-                "description",
-                "mission_type_name",
+                "description"
             ]
         ]
-        
-        click.echo(missions_df.head(1))
         spinner.stop()
+        click.echo(missions_df.head(1))
