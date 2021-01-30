@@ -115,6 +115,18 @@ def missions_cli(main, galileo: GalileoSdk):
             return
             
         # Find this jobs Mission id
-        mission_id = job.project_id 
+        missions_ls = galileo.missions.list_missions(ids=[job.project_id])
         
+        missions_ls = [mission.__dict__ for mission in missions_ls]
+
+        missions_df = pandas.json_normalize(missions_ls)
+        missions_df['creation_timestamp'] = pandas.to_datetime(missions_df.creation_timestamp)
+        missions_df = missions_df.sort_values(by="creation_timestamp", ascending=False)
+        missions_df = missions_df[
+            [
+                "name",
+                "description",
+                "mission_type_name",
+            ]
+        ]
         
