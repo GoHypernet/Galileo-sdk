@@ -105,7 +105,7 @@ def missions_cli(main, galileo: GalileoSdk):
         jobs = galileo.jobs.list_jobs(jobids=[jobid])
         spinner.stop()
         
-        spinner = Halo("Retrieving the associated Mission.", spinner="dot").start()
+        
         if len(jobs) == 0:
             print("You are not in a recognized Galileo Job session")
             return
@@ -115,6 +115,7 @@ def missions_cli(main, galileo: GalileoSdk):
             print("The are multiple Jobs associated with the session.")
             return
             
+        spinner = Halo("Retrieving the associated Mission.", spinner="dot").start()    
         # Find this jobs Mission id
         missions_ls = galileo.missions.list_missions(ids=[job.project_id])
         
