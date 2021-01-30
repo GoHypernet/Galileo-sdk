@@ -1,5 +1,6 @@
 import click
 import pandas
+import os
 from halo import Halo
 
 from galileo_sdk import GalileoSdk
@@ -85,3 +86,35 @@ def missions_cli(main, galileo: GalileoSdk):
         else:
             click.echo("(Displaying only first 30 items)\n")
             click.echo(missions_df.head(30))
+
+    @missions.command()
+    def sync():
+        """
+        Sync your current job session with its Mission. 
+        """
+        spinner = Halo("Retrieving your Job Session info.", spinner="dot").start()
+        try:
+            # container hostnames are set based on their Galileo job id
+            jobid = os.environ["HOSTNAME"]
+        except:
+            print("You are not in an active Galileo Job session.")
+            spinner.stop()
+            return
+        
+        # Retrieve the meta-data associated with this job
+        jobs = galileo.jobs.list_jobs(jobids=[jobid])
+        spinner.stop()
+        
+        if len(jobs) == 0:
+            print("You are not in a recognized Galileo Job session")
+            return
+        elif len(jobs) == 1:
+            job = jobs[0]
+        else:
+            print("The are multiple Jobs associated with the session.")
+            return
+            
+        # Find this jobs Mission id
+        mission_id = job.project_id 
+        
+        
