@@ -143,5 +143,5 @@ class GalileoSdk:
         :param universe_id: str, the uuid of the universe you want to operate in (default is Hypernet Labs)
         :return: None
         """
-        
+        print("setting universe to:", universe_id)
         self._settings.universe = universe_id
