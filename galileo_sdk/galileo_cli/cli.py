@@ -58,7 +58,7 @@ def main(mode):
         "-u",
         "--universe",
         type=str,
-        multiple=True,
+        multiple=False,
         help="Set your active Universe.",
     )
     def universe(universe):
