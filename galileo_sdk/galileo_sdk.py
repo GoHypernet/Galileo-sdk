@@ -134,3 +134,14 @@ class GalileoSdk:
         :return: None
         """
         self._auth_provider.set_access_token(auth_token)
+        
+    def set_universe(self, universe_id):
+        """
+        Call this function to set your Galileo Universe context. The Hypernet Labs Universe is the
+        default operating Universe if nothing is set. 
+        
+        :param universe_id: str, the uuid of the universe you want to operate in (default is Hypernet Labs)
+        :return: None
+        """
+        
+        self._settings.universe = universe_id

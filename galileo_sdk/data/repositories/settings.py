@@ -4,7 +4,7 @@ from ...config.settings import development, production
 class Settings:
     def __init__(self):
         self.backend = ""
-
+        self.universe = None
 
 class SettingsRepository:
     def __init__(self, config):
