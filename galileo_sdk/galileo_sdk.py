@@ -145,7 +145,7 @@ class GalileoSdk:
         """
         print("setting universe to:", universe_id)
         self._settings.get_settings().universe = universe_id
-        print("did this work:" self._settings.get_settings().universe)
+        print("did this work:", self._settings.get_settings().universe)
         
         self._jobs_repo = JobsRepository(self._settings, self._auth_provider, NAMESPACE)
         self._stations_repo = StationsRepository(
