@@ -62,6 +62,7 @@ def main(mode):
         help="Set your active Universe.",
     )
     def universe(universe):
+        print("asdf:", universe)
         galileo.set_universe(universe)
         
     @main.command()
