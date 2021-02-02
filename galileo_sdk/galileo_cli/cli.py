@@ -54,6 +54,17 @@ def main(mode):
         os._exit(0)
         
     @main.command()
+    @click.option(
+        "-u",
+        "--universe",
+        type=str,
+        multiple=True,
+        help="Set your active Universe.",
+    )
+    def universe(universe):
+        galileo.set_universe(universe)
+        
+    @main.command()
     def logout():
         token_file = os.path.join(os.path.expanduser("~"), ".galileo")
         if os.path.exists(token_file):
