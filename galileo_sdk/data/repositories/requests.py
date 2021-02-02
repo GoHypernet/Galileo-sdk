@@ -36,7 +36,6 @@ class RequestsRepository(object):
         url = self._make_url(endpoint, params, query, fragment)
         access_token = self._auth_provider.get_access_token()
         universe = self._settings_repository.get_settings().universe
-        print("Universe:", universe)
         if universe:
             headers = {
                 "Authorization": "Bearer {access_token}".format(access_token=access_token),
@@ -46,7 +45,6 @@ class RequestsRepository(object):
             headers = {
                 "Authorization": "Bearer {access_token}".format(access_token=access_token)
             }
-        print(headers)
         if filename:
             headers["filename"] = filename
             headers["Content-Type"] = "application/octet-stream"

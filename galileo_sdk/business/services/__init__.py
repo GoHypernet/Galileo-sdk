@@ -1,3 +1,4 @@
+from .universes import UniversesService
 from .jobs import JobsService
 from .log import LogService
 from .lz import LzService

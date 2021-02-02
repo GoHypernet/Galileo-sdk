@@ -1,4 +1,5 @@
 from .services import (
+    UniversesService,
     JobsService,
     LogService,
     LzService,

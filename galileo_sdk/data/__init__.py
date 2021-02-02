@@ -4,6 +4,7 @@ if sys.version_info[0] == 3:
     from .events import GalileoConnector
 
 from .repositories import (
+    UniversesRepository,
     JobsRepository,
     LzRepository,
     ProfilesRepository,

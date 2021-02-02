@@ -15,6 +15,7 @@ from galileo_sdk import GalileoSdk, AuthSdk
 #from .lz import machines_cli
 #from .profiles import profiles_cli
 from .missions import missions_cli
+from .universes import universes_cli
 #from .stations import stations_cli
 
 init()
@@ -54,18 +55,6 @@ def main(mode):
         os._exit(0)
         
     @main.command()
-    @click.option(
-        "-u",
-        "--universe",
-        type=str,
-        multiple=False,
-        help="Set your active Universe.",
-    )
-    def universe(universe):
-        print("asdf:", universe)
-        galileo.set_universe(universe)
-        
-    @main.command()
     def logout():
         token_file = os.path.join(os.path.expanduser("~"), ".galileo")
         if os.path.exists(token_file):
@@ -78,6 +67,7 @@ def main(mode):
 
     click.echo(f"Connected to {galileo.backend}!")
 
+    universes_cli(main, galileo)
     #profiles_cli(main, galileo)
     #lz_cli(main, galileo)
     missions_cli(main, galileo)

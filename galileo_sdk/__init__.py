@@ -21,6 +21,7 @@ from .business.objects import (
     CreateMissionRequest,
     FileListing,
     DirectoryListing,
+    Universe,
     Mission,
     MissionType,
     ELzStatus,
