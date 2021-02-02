@@ -40,7 +40,7 @@ class RequestsRepository(object):
         if universe:
             headers = {
                 "Authorization": "Bearer {access_token}".format(access_token=access_token),
-                "universe-id": "{universe}".format(universe=universe)
+                "universe": "{universe}".format(universe=universe)
             }
         else:
             headers = {
