@@ -145,3 +145,32 @@ class GalileoSdk:
         """
         print("setting universe to:", universe_id)
         self._settings.universe = universe_id
+        
+        self._jobs_repo = JobsRepository(self._settings, self._auth_provider, NAMESPACE)
+        self._stations_repo = StationsRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
+        self._profiles_repo = ProfilesRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
+        self._lz_repo = LzRepository(self._settings, self._auth_provider, NAMESPACE)
+        self._missions_repo = MissionsRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
+
+        self._jobs_service = JobsService(self._jobs_repo, self._profiles_repo)
+        self._stations_service = StationsService(self._stations_repo)
+        self._profiles_service = ProfilesService(self._profiles_repo)
+        self._lz_service = LzService(self._lz_repo)
+        self._missions_service = MissionsService(self._missions_repo)
+
+        self.profiles = ProfilesSdk(self._profiles_service)
+        self.missions = MissionsSdk(self._missions_service)
+
+        connector = None
+        if is_py3:
+            connector = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
+
+        self.jobs = JobsSdk(self._jobs_service, connector)
+        self.stations = StationsSdk(self._stations_service, connector)
+        self.lz = LzSdk(self._lz_service, connector)
