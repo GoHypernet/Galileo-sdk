@@ -46,6 +46,7 @@ class RequestsRepository(object):
             headers = {
                 "Authorization": "Bearer {access_token}".format(access_token=access_token)
             }
+        print(headers)
         if filename:
             headers["filename"] = filename
             headers["Content-Type"] = "application/octet-stream"
