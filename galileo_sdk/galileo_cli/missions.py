@@ -117,7 +117,11 @@ def missions_cli(main, galileo: GalileoSdk):
             
         spinner = Halo("Retrieving the associated Mission.", spinner="dot").start()    
         # Find this jobs Mission id
-        missions_ls = galileo.missions.list_missions(ids=[job.project_id])
+        try:
+            missions_ls = galileo.missions.list_missions(ids=[job.project_id])
+        except Exception as e:
+            print("Problem getting Mission details.", e)
+            spinner.stop()
         
         missions_ls = [mission.__dict__ for mission in missions_ls]
 
@@ -156,5 +160,5 @@ def missions_cli(main, galileo: GalileoSdk):
             click.echo(missions_df.head(1))
         except Exception as e:
             spinner.stop()
-            print(e)
+            print("Problem getting Mission file listing.", e)
             
