@@ -132,3 +132,22 @@ def missions_cli(main, galileo: GalileoSdk):
         ]
         spinner.stop()
         click.echo(missions_df.head(1))
+        
+        spinner = Halo("Retrieving the Mission's file list.", spinner="dot").start()    
+        # Find this Mission's files
+        missions_files = galileo.missions.get_mission_files(missions_ls[0].mission_id)
+        
+        missions_files = [thing.__dict__ for thing in missions_files]
+
+        files_df = pandas.json_normalize(missions_files)
+        files_df['creation_timestamp'] = pandas.to_datetime(files_df.creation_timestamp)
+        files_df = missions_df.sort_values(by="creation_timestamp", ascending=False)
+        files_df = missions_df[
+            [
+                "name",
+                "path",
+                "file_size
+            ]
+        ]
+        spinner.stop()
+        click.echo(missions_df.head(1))

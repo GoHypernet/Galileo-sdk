@@ -41,6 +41,7 @@ def universes_cli(main, galileo: GalileoSdk):
         
         if name and uuid:
             print("Please give a name or a UUID, not both.")
+            return
         
         spinner = Halo("Checking your Universe membership", spinner="dot").start()
         universes = galileo.universes.list_universes()
