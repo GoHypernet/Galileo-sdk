@@ -17,7 +17,7 @@ class FileListing:
         self.modification_date = modification_date
         self.modification_timestamp = modification_date
         self.creation_date = creation_date
-        self.creation_timestamp = creation_timestamp
+        self.creation_timestamp = creation_date
         self.file_size = file_size
         self.nonce = nonce
 
