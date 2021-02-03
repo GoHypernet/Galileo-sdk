@@ -146,7 +146,7 @@ def missions_cli(main, galileo: GalileoSdk):
             [
                 "name",
                 "path",
-                "file_size
+                "file_size"
             ]
         ]
         spinner.stop()
