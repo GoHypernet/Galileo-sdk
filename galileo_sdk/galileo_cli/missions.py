@@ -156,7 +156,7 @@ def missions_cli(main, galileo: GalileoSdk):
                 ]
             ]
             spinner.stop()
-            click.echo("\nMission Files:
+            click.echo("\nMission Files:")
             click.echo(missions_df.head(1))
         except Exception as e:
             spinner.stop()
