@@ -2,6 +2,7 @@ import os
 
 from .business import (
     UniversesService,
+    CargoBaysService,
     JobsService,
     LogService,
     LzService,
@@ -12,6 +13,7 @@ from .business import (
 from .data import (
     AuthProvider,
     UniversesRepository,
+    CargoBaysRepository,
     JobsRepository,
     LzRepository,
     ProfilesRepository,
@@ -19,7 +21,15 @@ from .data import (
     SettingsRepository,
     StationsRepository,
 )
-from .sdk import UniversesSdk, JobsSdk, LzSdk, ProfilesSdk, MissionsSdk, StationsSdk
+from .sdk import (
+    UniversesSdk, 
+    CargoBaysSdk, 
+    JobsSdk, 
+    LzSdk, 
+    ProfilesSdk, 
+    MissionsSdk, 
+    StationsSdk,
+)
 
 import sys
 
@@ -94,6 +104,9 @@ class GalileoSdk:
         self._universes_repo = UniversesRepository(
             self._settings, self._auth_provider, NAMESPACE
         )
+        self._cargo_bays_repo = CargoBaysRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
         self._jobs_repo = JobsRepository(self._settings, self._auth_provider, NAMESPACE)
         self._stations_repo = StationsRepository(
             self._settings, self._auth_provider, NAMESPACE
@@ -108,6 +121,7 @@ class GalileoSdk:
 
         # set up feature services
         self._universes_service = UniversesService(self._universes_repo)
+        self._cargobays_service = CargoBaysService(self._cargo_bays_repo)
         self._jobs_service = JobsService(self._jobs_repo, self._profiles_repo)
         self._stations_service = StationsService(self._stations_repo)
         self._profiles_service = ProfilesService(self._profiles_repo)
@@ -116,6 +130,7 @@ class GalileoSdk:
 
         # set up feature SDKs
         self.universes = UniversesSdk(self._universes_service)
+        self.cargobays = CargoBaysSdk(self._cargobays_service)
         self.profiles = ProfilesSdk(self._profiles_service)
         self.missions = MissionsSdk(self._missions_service)
 

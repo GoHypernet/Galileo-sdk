@@ -16,6 +16,7 @@ from galileo_sdk import GalileoSdk, AuthSdk
 #from .profiles import profiles_cli
 from .missions import missions_cli
 from .universes import universes_cli
+from .cargobays import cargobays_cli
 #from .stations import stations_cli
 
 init()
@@ -68,6 +69,7 @@ def main(mode):
     click.echo(f"Connected to {galileo.backend}!")
 
     universes_cli(main, galileo)
+    cargobays_cli(main, galileo)
     #profiles_cli(main, galileo)
     #lz_cli(main, galileo)
     missions_cli(main, galileo)

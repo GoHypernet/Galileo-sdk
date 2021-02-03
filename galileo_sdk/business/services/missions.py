@@ -74,7 +74,7 @@ class MissionsService:
                         f = open(filepath, "rb").read()
                         self._missions_repo.upload_single_file(mission_id, f, filename)
                         if verbose:
-                            print("Upload complete: ", filename)
+                            print(" Upload complete: ", filename)
             else:
                 f = open(payload, "rb").read()
                 self._missions_repo.upload_single_file(mission_id, f, name)

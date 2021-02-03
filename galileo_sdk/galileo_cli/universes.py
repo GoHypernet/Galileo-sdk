@@ -16,7 +16,7 @@ def universes_cli(main, galileo: GalileoSdk):
         universes_ls = galileo.universes.list_universes()
         spinner.stop()
         
-        universes_ls = [mission.__dict__ for mission in universes_ls]
+        universes_ls = [universe.__dict__ for universe in universes_ls]
 
         universes_df = pandas.json_normalize(universes_ls)
         universes_df['creation_timestamp'] = pandas.to_datetime(universes_df.creation_timestamp)

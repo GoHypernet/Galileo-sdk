@@ -1,5 +1,6 @@
 from .requests import RequestsRepository
 from .universes import UniversesRepository
+from .cargobays import CargoBaysRepository
 from .jobs import JobsRepository
 from .lz import LzRepository
 from .profiles import ProfilesRepository
