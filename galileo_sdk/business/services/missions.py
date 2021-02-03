@@ -65,12 +65,12 @@ class MissionsService:
                 for root, dirs, files in os.walk(payload):
                     for file in files:
                         basename = os.path.basename(root)
+                        filepath = os.path.join(os.path.abspath(root), file)
                         if basename == name:
                             filename = file
                         else:
                             filename = os.path.relpath(filepath, payload)
  
-                        filepath = os.path.join(os.path.abspath(root), file)
                         f = open(filepath, "rb").read()
                         self._missions_repo.upload_single_file(mission_id, f, filename)
                         if verbose:
