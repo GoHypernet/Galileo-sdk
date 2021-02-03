@@ -162,3 +162,11 @@ def missions_cli(main, galileo: GalileoSdk):
             spinner.stop()
             print("Problem getting Mission file listing.", e)
             
+        spinner = Halo("Uploading files in working directory.", spinner="dot").start()    
+        # Find this Mission's files
+        try:
+            payload = "/home/galileo"
+            success = galileo.missions.upload(missions_ls[0]["mission_id"], payload, verbose=True)
+        except Exception as e:
+            spinner.stop()
+            print("Encountered problem uploading your working directory.", e)

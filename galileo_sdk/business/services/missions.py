@@ -68,13 +68,13 @@ class MissionsService:
                         if basename == name:
                             filename = file
                         else:
-                            filename = os.path.join(os.path.basename(root), file)
+                            filename = os.path.relpath(filepath, payload)
  
                         filepath = os.path.join(os.path.abspath(root), file)
                         f = open(filepath, "rb").read()
                         self._missions_repo.upload_single_file(mission_id, f, filename)
                         if verbose:
-                            print("Upload complete: ", filepath)
+                            print("Upload complete: ", filename)
             else:
                 f = open(payload, "rb").read()
                 self._missions_repo.upload_single_file(mission_id, f, name)
