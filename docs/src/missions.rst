@@ -3,7 +3,9 @@
 Missions Guide
 ==============================================
 
-Missions are a feature of Galileo that allow users to easily configure complex simulators and scripting environments to run repeatably and reliably on any `LZ <landing_zones.html>`_ that they have launch access to through a `Station <stations.html>`_. After the initial configuration, your Mission environment (which consists of your input files and framework parameters) can be updated quickly through the Mission settings page. See the `Galileo Tutorials <https://hypernetlabs.io/galileo/tutorials/#tutorials>`_ page for instructions on how to configure a Mission for specific applications. 
+Missions are a feature of Galileo that allow users to easily configure complex simulators and scripting environments to run repeatably and reliably on any `LZ <landing_zones.html>`_ that they have launch access to through a `Station <stations.html>`_. A Galileo Mission can be configured as either public or private. Public Missions can be cloned from the "Explore Missions" sub-tab and are a great way to share work with people in the Galileo community. 
+
+After initial configuration, your Mission environment (which consists of your input files and framework parameters) can be updated quickly through the Mission settings page. See the `Galileo Tutorials <https://hypernetlabs.io/galileo/tutorials/#tutorials>`_ page for instructions on how to configure a Mission for specific applications. 
 
 Creating a New Mission 
 -----------------------
