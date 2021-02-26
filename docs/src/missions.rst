@@ -30,36 +30,28 @@ In step 4, you can select a `Cargo Bay <cargobays.html>`_ to host your Mission d
 Adding and Removing Files 
 --------------------------
 
-To see the files associated with a specific Mission, click the Missions tab on the left side of the screen, then select the particular Mission you wish to modify. 
+To see the files associated with a specific Mission, click the Missions tab on the left side of the screen, then select the particular Mission you wish to modify. This will open the home page for that Mission where you can see all files associated with it. To upload files, click the "Create File" button. This will open a file explorer (if you intend to add a folder to your Mission, you can click the "Upload Folder" button instead). Select one or more files from your file explorer to add to your Mission environment. Once the file(s) upload, they will appear in the Mission home page as show below. 
 
-.. image:: images/missions_update_button.png
+.. image:: images/missions_add_files.gif
 
-This will open the home page for that Mission where you can see all files associated with it. To upload files, click the "Create File" button. This will open a file explorer (if you intend to add a folder to your Mission, you can click the "Upload Folder" button instead). 
+You can edit a file that you have already uploaded to a Galileo Mission by selecting the file in the file viewer, then clicking "View". This will open the file in a browser-based text editor. Click "Edit", make your changes, then save. Any further jobs you run from the Mission will reflect these changes (it will not take affect in currently running jobs). 
 
-.. image:: images/missions_create_file_button.png
+.. image:: images/missions_edit_files.gif
 
-Select one or more files from your file explorer to add to your Mission environment. Once the file(s) upload, they will appear in the Mission home page as show below. 
+To delete a file from a Mission, first select the file you wish to remove by clicking on it. This will bring up a trashcan icon in the upper right. Click the trashcan icon. After confirming the deletion, the file will be permanently removed. 
 
-.. image:: images/missions_file_viewer.png
-
-To delete a file from a Mission, first select the file you wish to remove by clicking on it. This will bring up a trashcan icon in the upper right. Click the trashcan icon. 
-
-.. image:: images/missions_delete_file.png
-
-After confirming the deletion, the file will be permanently removed. 
+.. image:: images/missions_delete_files.gif
 
 Jobs Results and Job Resources 
 ------------------------------
 
-Each job instance launched from a Mission, buy hitting the run button in the upper right, can be monitored from the Jobs table on that Mission's home page. Past results can be downloaded from completed jobs clicking expanding the "Action" column for that job. 
+Each job instance launched from a Mission, buy hitting the run button in the upper right, can be monitored from the Jobs table on that Mission's home page. When a job is in the "Job Running" status, you can check the progress by querying the standard output (what would normally be printed to screen if you were running the job locally on your laptop) and the process logs (to confirm what processes were created by your job). You also have the option (depending on the system you deployed to) to pause the job, cancel the job (which will return any partial results), and terminate the job (which will not return any results from the job). Past results can be downloaded from completed jobs clicking expanding the "Action" column for that job. 
 
-.. image:: images/missions_job_download.png
-
-When a job is in the "running" status, you can check the progress by querying the standard output (what would normally be printed to screen if you were running the job locally on your laptop) and the process logs (to confirm what processes were created by your job). You also have the option (depending on the system you deployed to) to pause the job, cancel the job (which will return any partial results), and kill the job (which will not return any results from the job). 
+.. image:: images/missions_job_download.gif
 
 In order to set the amount of resources that a job uses (i.e. the number of CPUs, the amount of memory, and the number of GPUs), click the settings tab under the current Mission, then scroll down to the Job Resources block and enter the values you want.
 
-.. image:: images/missions_settings.png
+.. image:: images/missions_settings.gif
 
 A global view of all jobs, regardless of what Mission they were launched from, can be seen by clicking the jobs tab. 
 
