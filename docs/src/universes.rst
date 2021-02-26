@@ -15,7 +15,7 @@ Creating a Universe
 When a user first makes an account on Galileo, they are added to the "Hypernet" Universe. A user's active Universe 
 setting is indicated by the tab in the upper left-hand portion of the screen.  
 
-.. image:: images/universes_selector.png
+.. image:: images/universes_selector.gif
 
 Creating a Universe requires an Enterprise account with Hypernet Labs who will initialize the Universe, set the Owner
 account, and apply custom branding. To switch between different Universes, click the tab and select the desired Universe. 

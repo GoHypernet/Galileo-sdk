@@ -124,4 +124,3 @@ The Galileo CLI is an application that utilizes the Galileo SDK to view jobs wit
 
 ..    $ galileo-cli -u user@galileoapp.io
 ..    $ Password:
-
