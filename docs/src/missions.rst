@@ -8,13 +8,9 @@ Missions are a feature of Galileo that allow users to easily configure complex s
 Creating a New Mission 
 -----------------------
 
-To create a new Mission in Galileo, go to the Missions tab on the left side of the UI. 
+To create a new Mission in Galileo, go to the Missions tab on the left side of the UI. There are two ways to create a new mission. You can drag and drop a folder from your local hard-drive to the area on the UI that says "Add a Mission" (which will automatically upload the contents of that folder once the configuration step is complete), or you can start a new empty Mission by clicking the "Create a custom mission" button in the upper right.
 
-.. image:: images/missions_tab.png
-
-There are two ways to create a new mission. You can drag and drop a folder from your local hard-drive to the area on the UI that says "Add a Mission" (which will automatically upload the contents of that folder once the configuration step is complete), or you can start a new empty Mission by clicking the "Create a custom mission" button in the upper right.
-
-.. image:: images/missions_create.png
+.. image:: images/missions_tab.gif
 
 This will launch the Mission configuration wizard which is covered in the next subsection. See the `Galileo Tutorials <https://hypernetlabs.io/galileo/tutorials/#tutorials>`_ for step-by-step instructions for specific frameworks. 
 
@@ -23,11 +19,9 @@ Configuring Your Mission Type
 
 Galileo supports many scripting languages (such as R, Python, Julia, and Stata) and simulators (Gromacs, HECRAS, AmberTools, etc.) right out-of-the-box. The first step in configuring your Mission is to select your target framework from the drop-down list. 
 
-.. image:: images/missions_select_framework.png
+.. image:: images/missions_select_framework.gif
 
 After you made your selection, follow the prompt to completion. 
-
-.. image:: images/missions_wizard_1.png
 
 In step 4, you can select a `Cargo Bay <cargobays.html>`_ to host your Mission data from or to point your Mission at pre-existing data you may already have stored in a third-party provider. 
  
