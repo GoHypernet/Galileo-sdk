@@ -62,4 +62,4 @@ Mission Collaborators
 
 Mission Owners (the user who initially creates a Mission) can invite collaborators to their Mission. Collaborators can have different permission levels: Admin, View Results, and View All. Admins can do everything the Mission Owner can do except delete the Mission. The "View All" permission allows a user to view in input files and historical job results while the "View Results" permission only allows the collaborator to view historical job results for the Mission. Clicking the "plus" button on the right-hand side of the Users table will prompt for the names of the collaborators to add to the Mission.
 
-.. image:: images/missions_collaborators.png
+.. image:: images/missions_collaborators.gif
