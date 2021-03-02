@@ -18,6 +18,7 @@ if is_py3:
         "python-engineio==3.9.0",
         "chardet",
         "mock",
+        "pathlib",
         "termcolor==1.1.0",
         "colorama==0.4.3",
         "pyfiglet",

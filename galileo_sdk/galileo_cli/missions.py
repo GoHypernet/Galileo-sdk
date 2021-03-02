@@ -1,6 +1,7 @@
 import click
 import pandas
 import os
+from pathlib import Path
 from halo import Halo
 
 from galileo_sdk import GalileoSdk
@@ -88,16 +89,29 @@ def missions_cli(main, galileo: GalileoSdk):
             click.echo(missions_df.head(30))
 
     @missions.command()
-    def sync():
+    @click.option(
+        '-e',
+        '--everything', 
+        is_flag=True, 
+        help="Save all files in this Job's working directory (echo $WORKDIR) to its Galileo Mission (carefull, this could be time-consuming)."
+    )
+    @click.option(
+        "-f",
+        "--file",
+        type=str,
+        multiple=False,
+        help="Save a specific file from this Job to your Galileo Mission.",
+    )
+    def save(file, everything):
         """
-        Sync your current job session with its Mission. 
+        Save files from the current job session to its Galileo Mission. 
         """
-        spinner = Halo("Retrieving your Job Session info.", spinner="dot").start()
+        spinner = Halo("Retrieving your job session info.", spinner="dot").start()
         try:
             # container hostnames are set based on their Galileo job id
             jobid = os.environ["HOSTNAME"]
         except:
-            print("You are not in an active Galileo Job session.")
+            print("You are not in an active Galileo job session.")
             spinner.stop()
             return
         
@@ -107,12 +121,12 @@ def missions_cli(main, galileo: GalileoSdk):
         
         
         if len(jobs) == 0:
-            print("You are not in a recognized Galileo Job session")
+            print("You are not in a recognized Galileo job session.")
             return
         elif len(jobs) == 1:
             job = jobs[0]
         else:
-            print("The are multiple Jobs associated with the session.")
+            print("The are multiple jobs associated with the session.")
             return
             
         spinner = Halo("Retrieving the associated Mission.", spinner="dot").start()    
@@ -157,16 +171,43 @@ def missions_cli(main, galileo: GalileoSdk):
             ]
             spinner.stop()
             click.echo("\nMission Files:")
-            click.echo(missions_df.head(1))
+            click.echo(files_df)
         except Exception as e:
             spinner.stop()
             print("Problem getting Mission file listing.", e)
             
-        spinner = Halo("Uploading files in working directory.", spinner="dot").start()    
+        try:
+            workdir = os.environ['WORKDIR']
+        except Exception as e:
+            print("WORKDIR environment variable is not set.")
+            return
+            
+        spinner = Halo("Uploading files.", spinner="dot").start()    
         # Find this Mission's files
         try:
-            payload = "/home/galileo"
-            success = galileo.missions.upload(missions_ls[0]["mission_id"], payload, verbose=True)
+            
+            rename = None
+            if file:
+                
+                payload = Path(file)
+                if not payload.exists():
+                    spinner.stop()
+                    print(payload,"does not exist.")
+                    return
+                
+                # we will rename the file based on it relative location to the Job's WORKDIR
+                rename = os.path.relpath(payload.absolute(), workdir)
+                print(payload)
+            elif everything:
+                payload = workdir
+                
+            else:                
+                spinner.stop()
+                print("Please tell me what you'd like to save.")
+                return
+                
+            success = galileo.missions.upload(missions_ls[0]["mission_id"], os.fspath(payload), rename=rename, verbose=True)
+            spinner.stop()
         except Exception as e:
             spinner.stop()
             print("Encountered problem uploading your working directory.", e)

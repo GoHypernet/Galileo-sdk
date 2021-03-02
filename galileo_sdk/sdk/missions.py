@@ -97,7 +97,7 @@ class MissionsSdk:
         )
         return self._missions_service.create_mission(request)
 
-    def upload(self, mission_id, payload, verbose=False):
+    def upload(self, mission_id, payload, rename=None, verbose=False):
         """
         Upload a file or directory to the specified Mission. If the payload is a file, this function 
         will place the file in the top level of the Mission file tree. If the payload is a directory, 
@@ -106,6 +106,7 @@ class MissionsSdk:
 
         :param mission_id: str: Target Mission UUID
         :param payload: str: Path to folder or file to upload to targeted Mission
+        :param rename: str: Used when uploading a single file to specify the desired path within the Mission context (i.e. rename='/data/mydata.csv').
         :param verbose: bool: Verbosity flag, default is False
         :return: bool
         
@@ -120,7 +121,7 @@ class MissionsSdk:
         >>> else:
         >>>     print("I don't think this Mission exists")
         """
-        return self._missions_service.upload(mission_id, payload, verbose)
+        return self._missions_service.upload(mission_id, payload, rename, verbose)
 
     def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         """

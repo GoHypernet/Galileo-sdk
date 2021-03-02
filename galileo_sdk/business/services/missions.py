@@ -53,7 +53,7 @@ class MissionsService:
 
         return job
 
-    def upload(self, mission_id, payload, verbose=False):
+    def upload(self, mission_id, payload, rename=None, verbose=False):
         try:
             if not os.path.exists(payload):
                 if verbose:
@@ -77,6 +77,8 @@ class MissionsService:
                             print(" Upload complete: ", filename)
             else:
                 f = open(payload, "rb").read()
+                if rename:
+                    name = rename
                 self._missions_repo.upload_single_file(mission_id, f, name)
                 if verbose:
                     print("Upload complete: ", name)
