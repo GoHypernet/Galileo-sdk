@@ -39,8 +39,8 @@ HPC, etc.) by running their own instances of the `Landing Zone  <landing_zone_ma
 and authenticating it against their Galileo account. Running a Landing Zone does **not** require that 
 the host machine be exposed to the wider internet via a public IP address, nor does it require any 
 special VPN settings. When a user runs their own LZ, they retain total control of the underlying host 
-machine and any jobs sent to the LZ via the Galileo web service (for more info, see `Access Control <security.html#access-control>`_). 
-The LZ daemon is written in Python and the source code can be obtained and audited for security analysis purposes. 
+machine and any jobs sent to the LZ via the Galileo web service (for more info, see `Access Control <security.html#access-control>`_). The LZ daemon is written in Python and the source code can be obtained and 
+audited for security analysis purposes. 
 
 Alternatively, users can run processes on the default compute resources provided in the 
 communal Stations (the Linux and Windows Stations), or they can purchase privately
@@ -70,8 +70,8 @@ Types. Software environments like Python, Julia, and R Language as well as inter
 Jupyter Notebooks, PCSWMM, and QGIS are officially supported and can be configured through the Mission
 Configuration Wizard. In all instances of Galileo-supported Mission Framework types, processes are executed
 with **non-root** priveledges as a security precaution. Additionally, users are not allowed to directly modify 
-the Dockerfile created for them in their Mission context, on the Galileo service can write to this file based 
-on the pre-configured rules assigned to the target software. 
+the Dockerfile created for them in their Mission context, only the Galileo service can write to this file using 
+the pre-configured rules assigned to the target software. 
 
 Administrators of computational resources can restrict what applications are allowed to be accessed
 through the customizable role settings in the `Station Settings <stations.html#user-roles-and-resource-settings>`_ 
@@ -86,7 +86,6 @@ available: "Universes", “Missions”, and “Stations.”
 
 Universes
 ~~~~~~~~~
-
 `Universes <universes.html>`_ partition the user space for Enterprise customers of Galileo. Switching from the 
 default "Hypernet Labs" Universe to a custom Universe context changes what Stations, Missions, Cargo Bays, Landing Zones, and Stations are available to a user. Owners and administrators can add and remove users from their Universe
 context (by using the Universe Admin Dashboard) and assign them an administrator role, or leave them as a regular user. Universes are only visible to active members of that Universe. 
