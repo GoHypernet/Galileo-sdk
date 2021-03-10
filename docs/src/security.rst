@@ -35,14 +35,14 @@ the associated Cargo Bay which removes the authentication credentials.
 Computational Assets
 ~~~~~~~~~~~~~~~~~~~~
 Users of Galileo can host their own computational resources (virtual machines, 
-HPC, etc.) by running their own instances of the `Landing Zone  <landing_zone_main.html>`_ daemon process 
+HPC, etc.) by running their own instances of the `Landing Zone  <landing_zone_main.html>`_ (LZ) daemon process 
 and authenticating it against their Galileo account. Running a Landing Zone does **not** require that 
 the host machine be exposed to the wider internet via a public IP address, nor does it require any 
 special VPN settings. When a user runs their own LZ, they retain total control of the underlying host 
 machine and any jobs sent to the LZ via the Galileo web service (for more info, see `Access Control <security.html#access-control>`_). 
 The LZ daemon is written in Python and the source code can be obtained and audited for security analysis purposes. 
 
-Alternatively, users can run on the default compute resources provided in the 
+Alternatively, users can run processes on the default compute resources provided in the 
 communal Stations (the Linux and Windows Stations), or they can purchase privately
 provisioned LZ instances. Users are given access to complimentary default 
 computational resources when their account is created. Be aware that the default 
@@ -56,8 +56,8 @@ to the user who purchased them. All instances are sourced from
 The LZ daemon communicates with the Galileo web service via TLS and HTTPS. The LZ 
 daemon must be run with sufficient permissions so as to create containers with the 
 targeted container runtime or scheduling environment (i.e. Docker, Singularity, 
-Slurm, etc.). Reauthentication is facilitated by writing a local authentication 
-token file (provided by Auth0). Deleting the authentication token file will require 
+Slurm, etc.). Reauthentication is facilitated by automatically writing an authentication 
+token file (provided by Auth0) to local disk. Deleting the authentication token file will require 
 the user to log their LZ daemon back into their account the next time it is restarted.
 The LZ daemon executes jobs as stand-alone docker containers (or singularity containers). 
 For more information on container security, see the official `Docker Introduction to 
@@ -68,29 +68,39 @@ Software and Applications
 Galileo supports a suite of software and applications in the form of officially supported Mission Framework 
 Types. Software environments like Python, Julia, and R Language as well as interactive applications like
 Jupyter Notebooks, PCSWMM, and QGIS are officially supported and can be configured through the Mission
-Configuration Wizard. 
+Configuration Wizard. In all instances of Galileo-supported Mission Framework types, processes are executed
+with **non-root** priveledges as a security precaution. Additionally, users are not allowed to directly modify 
+the Dockerfile created for them in their Mission context, on the Galileo service can write to this file based 
+on the pre-configured rules assigned to the target software. 
 
 Administrators of computational resources can restrict what applications are allowed to be accessed
 through the customizable role settings in the `Station Settings <stations.html#user-roles-and-resource-settings>`_ 
-feature. Enterprise accounts can enforce a customizable default storage provider for all users in the 
-organization, ensuring all input and output data files are stored on a specific storage solution controlled
-by the enterprise account owner. 
+feature. Enterprise accounts that are operating in their own Galileo `Universe <universes.html>`_ can enforce 
+a customizable default storage provider for all users in the organization, ensuring all input and output 
+data files are stored on a specific storage solution controlled by the enterprise account owner. 
 
 Access Control
 --------------
-The Galileo platform has two primary features in which role-based access control is 
-available: “Missions” and “Stations.” 
+The Galileo platform has three primary features in which role-based access control is 
+available: "Universes", “Missions”, and “Stations.” 
+
+Universes
+~~~~~~~~~
+
+`Universes <universes.html>`_ partition the user space for Enterprise customers of Galileo. Switching from the 
+default "Hypernet Labs" Universe to a custom Universe context changes what Stations, Missions, Cargo Bays, Landing Zones, and Stations are available to a user. Owners and administrators can add and remove users from their Universe
+context (by using the Universe Admin Dashboard) and assign them an administrator role, or leave them as a regular user. Universes are only visible to active members of that Universe. 
 
 Missions
 ~~~~~~~~
 `Missions <missions.html>`_ are reusable code/simulation buckets where a Galileo user can upload data 
-files in the form of input files, scripts, binaries, etc. Importantly, a Galileo 
-Mission can be set up as a pre-configured framework “type.” For example, a Galileo 
-Mission can be configured as a Python project, an R project, or a Gromacs project. 
-If a user sets up a Mission as one of the pre-supported framework types, then they 
-do not have to supply their own Dockerfile as Galileo will produce this for them 
-server-side at runtime. Additionally, users cannot manually edit the Dockerfile of a pre-configured framework type, its structure is strictly controlled by the framework definition. If a user does provide their own Dockerfile, Galileo identifies this 
-Mission type as “user-defined.” 
+files in the form of input files, scripts, binaries, etc. Importantly, a Galileo Mission can be set up as a 
+pre-configured framework “type.” For example, a Galileo Mission can be configured as a Python project, an 
+R project, or a Gromacs project. If a user sets up a Mission as one of the pre-supported framework types, 
+then they do not have to supply their own Dockerfile as Galileo will produce this for them server-side at 
+runtime. Additionally, users cannot manually edit the Dockerfile of a pre-configured framework type, its 
+structure is strictly controlled by the framework definition. If a user does provide their own Dockerfile, 
+Galileo identifies this Mission type as “user-defined.” 
 
 Within the context of a Mission, Galileo users can invite collaborators as role-based 
 members. The role assigned to a member determines if they read access to the input 
