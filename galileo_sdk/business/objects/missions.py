@@ -125,6 +125,7 @@ class CreateMissionRequest(object):
         destination_path=None,
         mission_type_id=None,
         settings=None,
+        public=False,
     ):
         self.name = name
         self.description = description
@@ -134,6 +135,7 @@ class CreateMissionRequest(object):
         self.destination_path = destination_path
         self.project_type_id = mission_type_id
         self.settings = settings
+        self.public = public
 
 
 class UpdateMissionRequest(CreateMissionRequest):

@@ -66,6 +66,7 @@ class MissionsSdk:
         destination_path=None,
         mission_type_id=None,
         settings=None,
+        public=False
     ):
         """
         Create a new Mission in your Galileo account.
@@ -78,6 +79,7 @@ class MissionsSdk:
         :param destination_storage_id: Optional[str]: UUID of the Cargo Bay to use as the Mission data destination
         :param source_storage_id: Optional[str]: UUID of the Cargo Bay to use as the Mission data source
         :param settings: Optional[Dict[str, str]]: Mission framework type settings (get this info from get_mission_type_settings_info)
+        :param public: Optional[bool]: Boolean indicating whether to list the Mission as public (True) or private (False - default)
          missions.get_mission_type_settings_info()
         :return: Mission
         
@@ -94,6 +96,7 @@ class MissionsSdk:
             destination_path=destination_path,
             mission_type_id=mission_type_id,
             settings=settings,
+            public=public,
         )
         return self._missions_service.create_mission(request)
 

@@ -211,3 +211,39 @@ def missions_cli(main, galileo: GalileoSdk):
         except Exception as e:
             spinner.stop()
             print("Encountered problem uploading your working directory.", e)
+
+    @missions.command()
+    
+    @click.option(
+        '-p',
+        '--public', 
+        is_flag=False, 
+        help="Create the Mission as a Publicly searchable Mission."
+    )
+    @click.option(
+        "-n",
+        "--name",
+        type=str,
+        multiple=False,
+        help="The name to assign to the Mission.",
+    )
+    def create(name, public):
+        """
+        Create a new Mission in your account.
+        """
+        
+        if not name:
+            print("Please specify a name with the -n or --name flag.")
+            return
+        
+        spinner = Halo("Uploading files.", spinner="dot").start()  
+        try:
+            mission = galileo.missions.create_mission(name,public=public)
+        except Exception as e:
+            print("Error:", e)
+            spinner.stop()
+            return
+        
+        spinner.stop()
+        print("Created Mission:", mission.name)
+        print("Mission ID: ", mission.mission_id)
