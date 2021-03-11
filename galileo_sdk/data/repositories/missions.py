@@ -162,6 +162,7 @@ def project_dict_to_project(project):
         project.get("organization_id", None),
         project.get("settings", None),
         project.get("mission_type_name"),
+        project.get("public", None)
     )
 
 
