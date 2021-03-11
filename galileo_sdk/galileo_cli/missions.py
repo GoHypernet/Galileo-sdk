@@ -76,6 +76,7 @@ def missions_cli(main, galileo: GalileoSdk):
                 "name",
                 "mission_id",
                 "description",
+                "public",
                 "creation_timestamp",
             ]
         ]
@@ -217,7 +218,7 @@ def missions_cli(main, galileo: GalileoSdk):
     @click.option(
         '-p',
         '--public', 
-        is_flag=False, 
+        is_flag=True, 
         help="Create the Mission as a Publicly searchable Mission."
     )
     @click.option(
@@ -247,3 +248,4 @@ def missions_cli(main, galileo: GalileoSdk):
         spinner.stop()
         print("Created Mission:", mission.name)
         print("Mission ID: ", mission.mission_id)
+        print("Public: ", str(bool(public)))

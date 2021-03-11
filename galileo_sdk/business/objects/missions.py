@@ -48,6 +48,7 @@ class Mission:
         organization_id=None,
         settings=None,
         mission_type_name=None,
+        public=False
     ):
         """
         Mission Object
@@ -66,6 +67,7 @@ class Mission:
         :param organization_id: The organization UUID the Mission is associated with
         :param settings: Dictionary of Mission framework type settings
         :param mission_type_name: Human readable name of the Mission framework type
+        :param public: Boolean indicating if the Mission is publicly searchable
         """
         self.mission_id = mission_id
         self.name = name
@@ -81,6 +83,7 @@ class Mission:
         self.organization_id = organization_id
         self.settings = settings
         self.mission_type_name = mission_type_name
+        self.public = public
 
 
 class MissionType:
@@ -149,6 +152,7 @@ class UpdateMissionRequest(CreateMissionRequest):
         source_path=None,
         destination_path=None,
         settings=None,
+        public=None,
     ):
         self.mission_id = mission_id
         super(UpdateMissionRequest, self).__init__(
@@ -159,4 +163,5 @@ class UpdateMissionRequest(CreateMissionRequest):
             source_path=source_path,
             destination_path=destination_path,
             settings=settings,
+            public=public,
         )

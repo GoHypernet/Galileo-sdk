@@ -172,6 +172,7 @@ class MissionsSdk:
         destination_path=None,
         mission_type_id=None,
         settings=None,
+        public=False,
     ):
         """
         Create a new Mission in your Galileo account and upload input files from the specified directory in the same call. 
@@ -186,6 +187,7 @@ class MissionsSdk:
         :param source_storage_id: Optional[str]: UUID of the Cargo Bay where source files are to be stored
         :param settings: Optional[Dict[str, str]]: Mission Framework Type settings (can be retrieved via the get_mission_type_settings_info function)
          missions.get_mission_type_settings_info()
+        :param public: Optional[bool]: Boolean indicating if the resulting Mission should be listed as public (True) or private (False - default)
         :return: Mission
         
         Example:
@@ -203,6 +205,7 @@ class MissionsSdk:
             destination_path=destination_path,
             mission_type_id=mission_type_id,
             settings=settings,
+            public=public,
         )
         mission = self._missions_service.create_mission(request)
         self._missions_service.upload(mission.mission_id, directory, True)
@@ -221,6 +224,7 @@ class MissionsSdk:
         destination_path=None,
         mission_type_id=None,
         settings=None,
+        public=False,
     ):
         """
         Create mission and run a job
@@ -237,6 +241,7 @@ class MissionsSdk:
         :param source_storage_id: Optional[str]
         :param settings: Optional[Dict[str, str]]: Get required settings via
          missions.get_mission_type_settings_info()
+        :param public: Optional[bool]: Boolean indicating if the resulting Mission should be listed as public (True) or private (False - default)
         :return: Job
         """
         request = CreateMissionRequest(
@@ -248,6 +253,7 @@ class MissionsSdk:
             destination_path=destination_path,
             mission_type_id=mission_type_id,
             settings=settings,
+            public=public,
         )
         return self._missions_service.create_mission_and_run_job(
             request=request, directory=directory, station_id=station_id, lz_id=lz_id,
