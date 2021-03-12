@@ -10,6 +10,7 @@ class ELzStatus(enum.Enum):
 
 
 class Lz:
+
     def __init__(
         self,
         name,
@@ -25,6 +26,22 @@ class Lz:
         job_runner,
         container_technology,
     ):
+        """
+        Landing Zone Object
+
+        :param name: Optional[List[str]]: Human readable name name of the Landing Zone
+        :param userid: Optional[List[str]]: User ID the LZ belongs to
+        :param status: Optional[List[str]]: Status of the Landing Zone (i.e. online or offline)
+        :param lz_id: Optional[int]: UUID of the Landing Zone
+        :param gpu_count: Optional[int]: Number of GPUs the LZ has
+        :param cpu_count: Optional[List[str]]: Number of CPUs the LZ has
+        :param operating_system: Optional[bool]: Operating system used by host (i.e. Windows or Linux)
+        :param arch: Chipset architecture of the container runtime (i.e. x86, Arm7, etc.)
+        :param memory_amount: Amount of memory available on the LZ
+        :param memory: Amount of memory available on the LZ
+        :param job_runner: Used internally
+        :param container_technology: Runtime technology(i.e. Slurm, Singularity, Docker)
+        """
         self.lz_id = lz_id
         self.name = name
         self.userid = userid

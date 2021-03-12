@@ -1,6 +1,8 @@
 import os
 
 from .business import (
+    UniversesService,
+    CargoBaysService,
     JobsService,
     LogService,
     LzService,
@@ -10,6 +12,8 @@ from .business import (
 )
 from .data import (
     AuthProvider,
+    UniversesRepository,
+    CargoBaysRepository,
     JobsRepository,
     LzRepository,
     ProfilesRepository,
@@ -17,7 +21,15 @@ from .data import (
     SettingsRepository,
     StationsRepository,
 )
-from .sdk import JobsSdk, LzSdk, ProfilesSdk, MissionsSdk, StationsSdk
+from .sdk import (
+    UniversesSdk, 
+    CargoBaysSdk, 
+    JobsSdk, 
+    LzSdk, 
+    ProfilesSdk, 
+    MissionsSdk, 
+    StationsSdk,
+)
 
 import sys
 
@@ -88,6 +100,13 @@ class GalileoSdk:
                 "Authentication token AND refresh token (OR) username AND password, must be provided"
             )
 
+        # Set up feature repositories
+        self._universes_repo = UniversesRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
+        self._cargo_bays_repo = CargoBaysRepository(
+            self._settings, self._auth_provider, NAMESPACE
+        )
         self._jobs_repo = JobsRepository(self._settings, self._auth_provider, NAMESPACE)
         self._stations_repo = StationsRepository(
             self._settings, self._auth_provider, NAMESPACE
@@ -100,12 +119,18 @@ class GalileoSdk:
             self._settings, self._auth_provider, NAMESPACE
         )
 
+        # set up feature services
+        self._universes_service = UniversesService(self._universes_repo)
+        self._cargobays_service = CargoBaysService(self._cargo_bays_repo)
         self._jobs_service = JobsService(self._jobs_repo, self._profiles_repo)
         self._stations_service = StationsService(self._stations_repo)
         self._profiles_service = ProfilesService(self._profiles_repo)
         self._lz_service = LzService(self._lz_repo)
         self._missions_service = MissionsService(self._missions_repo)
 
+        # set up feature SDKs
+        self.universes = UniversesSdk(self._universes_service)
+        self.cargobays = CargoBaysSdk(self._cargobays_service)
         self.profiles = ProfilesSdk(self._profiles_service)
         self.missions = MissionsSdk(self._missions_service)
 
@@ -134,3 +159,13 @@ class GalileoSdk:
         :return: None
         """
         self._auth_provider.set_access_token(auth_token)
+        
+    def set_universe(self, universe_id):
+        """
+        Call this function to set your Galileo Universe context. The Hypernet Labs Universe is the
+        default operating Universe if nothing is set. 
+        
+        :param universe_id: str, the uuid of the universe you want to operate in (default is Hypernet Labs)
+        :return: None
+        """
+        self._settings.get_settings().universe = universe_id

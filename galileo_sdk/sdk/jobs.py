@@ -103,7 +103,8 @@ class JobsSdk(EventsSdk):
         sort_order=None,
     ):
         """
-        List of your jobs
+        Get a filtered list of all jobs run under your Galileo account.
+        
         :param jobids: List[str]: Filter by job ids
         :param receiverids: List[str]: Filter by receiver ids
         :param oaids: List[str]: Filter by offer acceptance ids
@@ -121,6 +122,12 @@ class JobsSdk(EventsSdk):
         :param sort_by: EJobSort
         :param sort_order: str: "asc" or "desc"
         :return: List[Job]
+        
+        Example:
+        
+            >>> jobs = galileo.jobs.list_jobs(items=25)
+            >>> for job in jobs:
+            >>>     print(job.name)
         """
         return self._jobs_service.list_jobs(
             jobids=jobids,

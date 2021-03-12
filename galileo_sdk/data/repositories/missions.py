@@ -31,6 +31,7 @@ class MissionsRepository(RequestsRepository):
             "source_path": create_project_request.source_path,
             "destination_path": create_project_request.destination_path,
             "project_type_id": create_project_request.project_type_id,
+            "public": create_project_request.public,
         }
         if create_project_request.settings is not None:
             body.update(create_project_request.settings)
@@ -41,7 +42,7 @@ class MissionsRepository(RequestsRepository):
 
     def upload_single_file(self, mission_id, file, filename):
         r = self._post(
-            "/projects/{project_id}/files".format(project_id=mission_id),
+            "/projects/{mission_id}/files".format(mission_id=mission_id),
             files=file,
             filename=filename,
         )
@@ -49,7 +50,7 @@ class MissionsRepository(RequestsRepository):
 
     def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         response = self._post(
-            "/projects/{project_id}/jobs".format(project_id=mission_id),
+            "/projects/{mission_id}/jobs".format(mission_id=mission_id),
             data={"station_id": station_id, "cpu_count": cpu_count, "memory_amount": memory_amount, "gpu_count": gpu_count},
         )
         json = response.json()
@@ -58,7 +59,7 @@ class MissionsRepository(RequestsRepository):
 
     def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
         response = self._post(
-            "/projects/{project_id}/jobs".format(project_id=mission_id),
+            "/projects/{mission_id}/jobs".format(mission_id=mission_id),
             data={"station_id": station_id, "machine_id": lz_id, "cpu_count": cpu_count, "memory_amount": memory_amount, "gpu_count": gpu_count},
         )
         json = response.json()
@@ -67,31 +68,32 @@ class MissionsRepository(RequestsRepository):
 
     def get_mission_files(self, mission_id):
         response = self._get(
-            "/projects/{project_id}/files".format(project_id=mission_id)
+            "/projects/{mission_id}/files".format(mission_id=mission_id)
         )
         json = response.json()
         json = json["files"]
         return [file_dict_to_file_listing(file) for file in json]
 
     def delete_mission(self, mission_id):
-        response = self._delete("/projects/{project_id}".format(project_id=mission_id))
+        response = self._delete("/projects/{mission_id}".format(mission_id=mission_id))
         return response.json()
 
     def update_mission(self, update_project_request):
         body = {
+            "id": update_project_request.mission_id,
             "name": update_project_request.name,
             "description": update_project_request.description,
             "source_storage_id": update_project_request.source_storage_id,
             "source_path": update_project_request.source_path,
             "destination_path": update_project_request.destination_path,
+            "public":update_project_request.public
         }
         if update_project_request.settings is not None:
-            body.update(update_project_request.settings)
+            body.update({"settings": update_project_request.settings})
 
-        print("body", body)
         response = self._put(
-            "/projects/{project_id}".format(
-                project_id=update_project_request.mission_id
+            "/projects/{mission_id}".format(
+                mission_id=update_project_request.mission_id
             ),
             data=body,
         )
@@ -100,7 +102,7 @@ class MissionsRepository(RequestsRepository):
 
     def delete_file(self, mission_id, query):
         self._delete(
-            "projects/{project_id}/files".format(project_id=mission_id), query=query
+            "projects/{mission_id}/files".format(mission_id=mission_id), query=query
         )
         return mission_id
 
@@ -155,11 +157,12 @@ def project_dict_to_project(project):
         project["destination_path"],
         project["user_id"],
         project["creation_timestamp"],
-        project["project_type_id"],
+        project["mission_type_id"],
         project.get("updated_timestamp", None),
         project.get("organization_id", None),
         project.get("settings", None),
-        project.get("project_type_name"),
+        project.get("mission_type_name"),
+        project.get("public", None)
     )
 
 
@@ -176,23 +179,27 @@ def file_dict_to_file_listing(file):
 
 def job_dict_to_job(job):
     return Job(
-        job["jobid"],
-        job["receiverid"],
-        job["project_id"],
-        datetime.fromtimestamp(job["time_created"]),
-        datetime.fromtimestamp(job["last_updated"]),
-        job["status"],
-        job["container"],
-        job["name"],
-        job["stationid"],
-        job["userid"],
-        job["state"],
-        job["oaid"],
-        job["pay_status"],
-        job["pay_interval"],
-        job["total_runtime"],
-        job["archived"],
-        [
+        jobid=job["jobid"],
+        receiverid=job["receiverid"],
+        project_id=job["project_id"],
+        time_created=datetime.fromtimestamp(job["time_created"]),
+        last_updated=datetime.fromtimestamp(job["last_updated"]),
+        status=job["status"],
+        name=job["name"],
+        cpu_count=job["cpu_count"],
+        gpu_count=job["gpu_count"],
+        memory_amount=job["memory_amount"],
+        enable_tunnel=job["enable_tunnel"],
+        tunnel_url=job["tunnel_url"],
+        tunnel_port=job["tunnel_port"],
+        stationid=job["stationid"],
+        userid=job["userid"],
+        state=job["state"],
+        pay_status=job["pay_status"],
+        pay_interval=job["pay_interval"],
+        total_runtime=job["total_runtime"],
+        archived=job["archived"],
+        status_history=[
             job_status_dict_to_job_status(job_status)
             for job_status in job["status_history"]
         ],

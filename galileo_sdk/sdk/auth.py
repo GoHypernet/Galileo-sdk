@@ -16,6 +16,13 @@ class AuthSdk:
         :param mode: string: Optional argument, can be prod (default) or dev.
         :param audience: string: Optional argument
         :return: AuthSdk
+        
+        Example:
+            >>> from galileo_sdk import GalileoSdk, AuthSdk
+            >>> myauth = AuthSdk()
+            >>> access_token, refresh_token, expiry_time = myauth.initialize()
+            >>> galileo = GalileoSdk(auth_token=access_token, refresh_token=refresh_token)
+        
         """
         self.domain = "https://galileoapp.auth0.com"
         self.headers_default = {"content-type": "application/x-www-form-urlencoded"}
@@ -35,6 +42,13 @@ class AuthSdk:
 
         :param refresh_token_path: string: An optional file path for where to store auth token information. If you don not want authentication info to be stored, pass an empty string, i.e. refresh_token_path=''. The default location is in you home directory in a file named .galileo.
         :return: access_token, refresh_token, expiration
+        
+        Example:
+            >>> from galileo_sdk import GalileoSdk, AuthSdk
+            >>> myauth = AuthSdk()
+            >>> access_token, refresh_token, expiry_time = myauth.initialize()
+            >>> galileo = GalileoSdk(auth_token=access_token, refresh_token=refresh_token)
+        
         """
 
         if os.path.exists(refresh_token_path):
@@ -245,7 +259,7 @@ body {
                 "client_id": self.client_id,
             },
             doseq=True,
-        )
+        )        
 
         while True:
             try:
@@ -261,8 +275,8 @@ body {
                         doseq=True,
                     ),
                 )
-            except URLError as e:
-                if e.code == 429:
+            except Exception as e:
+                if hasattr(e, "code") and e.code == 429:
                     interval = interval * 2
                 continue
 

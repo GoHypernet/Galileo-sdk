@@ -19,14 +19,14 @@ or if you have the code checked out locally:
 
 Writing your first script
 -------------------------
-:code:`GalileoSdk` takes in 5 optional parameters.
+:code:`GalileoSdk` takes in 4 optional parameters.
 
 .. code-block:: python
 
     from galileo_sdk import GalileoSdk
 
-    # all parameters are optional however, must provide either auth and refresh token
-    # OR username and password
+    # all parameters are optional however, the user must provide either an auth and refresh token
+    # OR a username and password
     galileo = GalileoSdk(
         auth_token="AUTH_TOKEN", # optional, must also provide refresh token
         refresh_token="REFRESH_TOKEN",
@@ -39,7 +39,6 @@ Alternatively, you can set the environment variables instead of passing in the p
  - :code:`GALILEO_REFRESH_TOKEN`
  - :code:`GALILEO_USER`
  - :code:`GALILEO_PASSWORD`
- - :code:`GALILEO_CONFIG`
 
 An example of exporting your environment variable on MacOS:
 
@@ -50,12 +49,12 @@ An example of exporting your environment variable on MacOS:
 The most convenient and secure method for authentication is to use our AuthSdk helper class. 
 
 .. code-block:: python
-
+    
+	# On your first time using the sdk, this will open a web browser and ask you to sign in,
+    # or if you are in a headless environment, it will print an activation link to visit.
     from galileo_sdk import GalileoSdk, AuthSdk
 
     myauth = AuthSdk()
-    # On your first time using the sdk, this will open a web browser and ask you to sign in,
-    # or if you are in a headless environment, it will print an activation link to visit.
     access_token, refresh_token, expiry_time = myauth.initialize()
     galileo = GalileoSdk(auth_token=access_token, refresh_token=refresh_token)
 
@@ -67,12 +66,12 @@ Examples of using each of the APIs:
 
     from galileo_sdk import GalileoSdk
 
-    galileo = GalileoSdk()
-    jobs = galileo.jobs.list_jobs()
+    galileo  = GalileoSdk()
+    jobs     = galileo.jobs.list_jobs()
     stations = galileo.stations.list_stations()
-    users = galileo.profiles.list_users()
-    machines = galileo.machines.list_machines()
-    project = galileo.projects.create_project()
+    users    = galileo.profiles.list_users()
+    machines = galileo.lz.list_lz()
+    missions = galileo.missions.list_missions()
 
 You can also write callbacks that will execute upon events. The example below is a script that allows an admin of stations to automatically accept all requests to join a station:
 
@@ -91,7 +90,7 @@ You can also write callbacks that will execute upon events. The example below is
         userid = event["userid"]
         approve_request_to_join(stationid, [userid])
 
-    galileo.station.on_station_admin_request_received(on_request_received)
+    galileo.stations.on_station_admin_request_received(on_request_received)
 
 
 Before you end your script, you must disconnect the Galileo object via:
@@ -125,4 +124,3 @@ The Galileo CLI is an application that utilizes the Galileo SDK to view jobs wit
 
 ..    $ galileo-cli -u user@galileoapp.io
 ..    $ Password:
-

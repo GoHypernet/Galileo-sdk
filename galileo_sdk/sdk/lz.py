@@ -41,7 +41,7 @@ class LzSdk(EventsSdk):
 
     def get_lz_by_id(self, lz_id):
         """
-        Get landing zone's info by its id
+        Get a specific Landing Zone's info by its id
 
         :param lz_id: str
         :return: Lz
@@ -52,13 +52,18 @@ class LzSdk(EventsSdk):
         self, lz_ids=None, userids=None, page=1, items=25,
     ):
         """
-        List all machines
+        Get a filtered list of landing zones Landing Zones and their stats. 
 
         :param lz_ids: List[str]: Filter by landing zone id
         :param userids: List[str]: Filter by user id
-        :param page: int: Page #
-        :param items: int: Items per page
+        :param page: int: Page number you would like returned
+        :param items: int: Number of Landing Zones per page
         :return: List[Lz]
+
+        Example:
+            >>> lzs = galileo.lz.list_lz(items=10)
+            >>> for lz in lzs:
+            >>>    print(lz.name)
         """
         return self._lz_service.list_lz(
             lz_ids=lz_ids, userids=userids, page=page, items=items
@@ -68,7 +73,7 @@ class LzSdk(EventsSdk):
         self, lz_id, name=None, active=None,
     ):
         """
-        Update info about landing zone
+        Update the info about a Landing Zone
 
         :param lz_id: Landing zone you want to update
         :param name: update lz name

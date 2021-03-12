@@ -473,7 +473,8 @@ class StationsSdk(EventsSdk):
         lz_status=None,
     ):
         """
-        List of your Galileo stations
+        Get a filtered list of Galileo Stations that are accessible in your account.
+        
         :param stationids: Optional[List[str]]: Filter based on station ids
         :param names: Optional[List[str]]: Filter based on names
         :param lz_ids: Optional[List[str]]: Filter based on landing zone ids
@@ -482,7 +483,7 @@ class StationsSdk(EventsSdk):
         :param descriptions: Optional[List[str]]: Filter based on descriptions
         :param page: Optional[int]: Page #
         :param items: Optional[int]: Items per page
-        :param active: Optional[str]: Filter for all active stations ("true","false")
+        :param active: Optional[str]: Filter for all active stations ("true","false"). Default is 'true'.
         :param userids: Optional[List[str]]: Filter based on userid
         :param lz_status: Optional[List[str]]
         :param lz_count_max: Optional[int]
@@ -491,6 +492,10 @@ class StationsSdk(EventsSdk):
         :param partial_names: Optional[List[str]]
         :return: List[Station]
 
+        Example:
+            >>> stations = galileo.stations.list_stations()
+            >>> for station in stations:
+            >>>    print(station.name)
         """
         return self._stations_service.list_stations(
             stationids=stationids,

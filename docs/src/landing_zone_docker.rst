@@ -1,9 +1,12 @@
 .. _landing_zone_docker:
 
-Quickstart for Galileo Landing Zones and Docker
+QuickStart for Galileo Landing Zones and Docker
 ===============================================
 The following is a user guide for deploying a Galileo Landing Zone
 (LZ) using our official Docker image.
+
+.. contents:: :local:
+	 :depth: 2
 
 Prerequisites
 -------------
@@ -85,7 +88,11 @@ How to Run the Landing Zone Daemon
 
 .. code-block:: bash
 
+    # For running Linux containers
     $ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v tokens:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --name "$LZ_NAME" --token /tokens/token
+
+    # For running Windows containers
+    > docker run -d -v //./pipe/docker_engine://./pipe/docker_engine -v tokens:C:/tokens --name landing-zone-daemon hypernetlabs/landing-zone-daemon --name "$LZ_NAME" --token C:/tokens/token
 
 * Now that the LZ is running, we must authenticate it against your
   account. Run this command in your terminal
@@ -150,6 +157,42 @@ Removing and Restarting the Landing Zone daemon
   whether you delete the Docker volume called "tokens" that was
   created when you started the landing zone.
 
+Enabling GPUs
+--------------
+
+Currently Galileo only supports NVIDIA GPUs on Linux systems. If you
+require support from other manufacturers please let us know!
+
+GPUs are allocated to jobs in exactly the same way as CPUs
+are. Missions may require some number of GPUs to run, and jobs will
+wait in a station's queue until space on an LZ with that many GPUs
+becomes available. A job has exclusive access to the GPUs allocated to
+it for its entire lifetime.
+
+Please see `Docker's instructions
+<https://docs.docker.com/config/containers/resource_constraints/#gpu>`_
+for installing the necessary drivers and container runtime for your hardware.
+
+To make your GPUs accessible to your Landing Zone, just add the
+``--gpus`` flag to your Docker invocation.
+
+.. code-block:: bash
+
+	 $ docker run ... --gpus all ... hypernetlabs/landing-zone-daemon ...
+
+This is also your opportunity to configure exactly which GPUs are
+exposed to Galileo. If for instance you have 2 GPUs of one variety and
+2 of another, then you could start two LZs, one for each type of GPU.
+
+.. code-block:: bash
+
+	 $ docker run ... --gpus 0,1 ... hypernetlabs/landing-zone-daemon --name tesla-t4
+	 $ docker run ... --gpus 2,3 ... hypernetlabs/landing-zone-daemon --name tesla-k80
+
+You can further configure access to GPUs station-wide in the Station
+Settings page or as they apply to a specific mission on the Mission
+Settings page.
+
 How to Run, Stop, and Remove the Landing Zone daemon using Docker Compose
 -------------------------------------------------------------------------
 
@@ -176,7 +219,7 @@ Running the Landing Zone daemon
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon:head
+        image: hypernetlabs/landing-zone-daemon
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           # uncomment the following line if you need your LZ to have access to private Docker Hub repositories
@@ -198,7 +241,7 @@ Running the Landing Zone daemon
     version: "3.3"
     services:
       landing-zone:
-        image: hypernetlabs/landing-zone-daemon:head
+        image: hypernetlabs/landing-zone-daemon
         volumes:
           - source: '\\.\pipe\docker_engine'
             target: '\\.\pipe\docker_engine'
@@ -255,6 +298,13 @@ you are trying to run jobs referencing private images, edit your
 is as follows: :code:`"credsStore" : ""`. Then re-authenticate your
 docker daemon by running :code:`docker login`. Be sure to uncomment
 the line in the .yml file that mounts :code:`C:\$homepath\config.json`
+
+**Note:** If you are using Windows 10 Desktop or Windows Server to run
+Windows containers, be aware that the default storage limit size is 
+20 GB. If you are running simulations that produce multiple GB of results
+files, you are likely to hit this limit which will cause your simulation to 
+crash. See the `Microsoft Docs <https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-storage>`_ 
+for how to increase the storage limits for Windows containers. 
 
 Stopping and Restarting
 ~~~~~~~~~~~~~~~~~~~~~~~

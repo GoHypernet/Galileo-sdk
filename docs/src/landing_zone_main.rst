@@ -8,10 +8,13 @@ Introduction
 ------------
 The Galileo Landing Zone (LZ) is what receives jobs, organizes the
 resources necessary to run them, tracks their progress as they run,
-and returns their results. A user would setup an LZ on whatever
-computational resource they wish to make available in the Galileo web
-application. It runs as a daemon process, usually in its own
-container, and launches jobs by running them in their own containers.
+and returns results from the target computational asset. A 
+user would setup an LZ on whatever computational resource they wish 
+to make available in the Galileo web application. It runs as a daemon 
+process, usually in its own container, and launches jobs by running 
+them in their own containers. Running a Landing Zone makes it possible
+to provide permissioned access to computational resources without the 
+need to set up a VPN or expose the resource via a public IP address. 
 
 .. image:: images/Galileo_LZ.png
 
@@ -21,7 +24,7 @@ Getting Started
 
 We suggest that you use our officially supported Docker image to run
 an LZ. The LZ has experimental support for running from inside a
-Singularity container and in a SLURM cluster. Choose the link that
+Singularity container and in a Slurm cluster. Choose the link that
 fits your needs to find installation and execution instructions.
 
 .. toctree::
@@ -29,7 +32,7 @@ fits your needs to find installation and execution instructions.
 
     Docker <landing_zone_docker.rst>
     Singularity <landing_zone_singularity.rst>
-    SLURM <landing_zone_slurm.rst>
+    Slurm <landing_zone_slurm.rst>
 
 How It Works
 ------------

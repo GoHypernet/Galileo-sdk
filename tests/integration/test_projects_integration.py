@@ -6,7 +6,7 @@ CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)
 
-missions = galileo.missions.list_missions()
+missions = galileo.missions.list_missions(archived=False)
 
 
 def test_list_projects():

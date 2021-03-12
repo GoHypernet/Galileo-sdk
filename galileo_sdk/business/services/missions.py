@@ -17,6 +17,7 @@ class MissionsService:
         page=1,
         items=25,
         mission_type_ids=None,
+        archived=None
     ):
         query = generate_query_str(
             {
@@ -25,7 +26,8 @@ class MissionsService:
                 "user_ids": user_ids,
                 "page": page,
                 "items": items,
-                "project_type_ids": mission_type_ids,
+                "mission_type_ids": mission_type_ids,
+                "archived": archived
             }
         )
 
@@ -51,20 +53,39 @@ class MissionsService:
 
         return job
 
-    def upload(self, mission_id, dir):
-        name = os.path.basename(dir)
-        for root, dirs, files in os.walk(dir):
-            for file in files:
-                basename = os.path.basename(root)
-                if basename == name:
-                    filename = file
-                else:
-                    filename = os.path.join(os.path.basename(root), file)
-
-                filepath = os.path.join(os.path.abspath(root), file)
-                f = open(filepath, "rb").read()
-                self._missions_repo.upload_single_file(mission_id, f, filename)
-        return True
+    def upload(self, mission_id, payload, rename=None, verbose=False):
+        try:
+            if not os.path.exists(payload):
+                if verbose:
+                    print("Payload is not a directory or file")
+                return False
+            
+            name = os.path.basename(payload)
+            if os.path.isdir(payload):
+                for root, dirs, files in os.walk(payload):
+                    for file in files:
+                        basename = os.path.basename(root)
+                        filepath = os.path.join(os.path.abspath(root), file)
+                        if basename == name:
+                            filename = file
+                        else:
+                            filename = os.path.relpath(filepath, payload)
+ 
+                        f = open(filepath, "rb").read()
+                        self._missions_repo.upload_single_file(mission_id, f, filename)
+                        if verbose:
+                            print(" Upload complete: ", filename)
+            else:
+                f = open(payload, "rb").read()
+                if rename:
+                    name = rename
+                self._missions_repo.upload_single_file(mission_id, f, name)
+                if verbose:
+                    print("Upload complete: ", name)
+            return True
+        except Exception as e:
+            print("Error: ", e)
+            return False
 
     def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         return self._missions_repo.run_job_on_station(mission_id, station_id, cpu_count, memory_amount, gpu_count)
@@ -79,26 +100,40 @@ class MissionsService:
         return self._missions_repo.delete_mission(mission_id)
 
     def update_mission(self, update_mission_request):
-        return self._missions_repo.update_mission(update_mission_request)
+        try:
+            response = self._missions_repo.update_mission(update_mission_request)
+            return True
+        except Exception as e:
+            print("Error: ", e)
+            return False
 
     def update_mission_args(self, mission_id, arg):
+        missions = self.list_missions(ids=[mission_id])
+        mission = missions[0]
+        mission.settings["arg"] = arg
         if not isinstance(arg, list):
             raise Exception(
                 "args must be in the form of a List[str] e.g. ['arg1', 'arg2', 'arg3']"
             )
         update_mission_request = UpdateMissionRequest(
-            mission_id=mission_id, settings={"arg": arg}
+            mission_id=mission_id, settings=mission.settings
         )
         return self._missions_repo.update_mission(update_mission_request)
 
     def delete_file(self, mission_id, filename):
-        query = generate_query_str({"filename": quote(filename, safe="")})
-
-        return self._missions_repo.delete_file(mission_id, query)
+        try:
+            query = generate_query_str({"filename": quote(filename, safe="")})
+            response = self._missions_repo.delete_file(mission_id, query)
+            
+            return True
+        except Exception as e:
+            print("Error: ", e)
+            return False
 
     def list_mission_types(self):
         return self._missions_repo.list_mission_types()
 
+    # extend this function when new widget types are added to the docker wizard
     def _parse_wizard_spec(self, wizard_spec, settings):
         dict_key = wizard_spec.get("key", None)
         dict_type = wizard_spec.get("type", None)
@@ -110,6 +145,10 @@ class MissionsService:
                 dict_type = "str"
             elif dict_type == "number":
                 dict_type = "int"
+            elif dict_type == "single-select":
+                dict_type = []
+                for option in wizard_spec.get('options', None):
+                    dict_type.append(option.get('value', None))
 
             if dict_key == "dependencies":
                 dict_type = "Dict[str, str], e.g. {'dependency1': 'version1', 'dependency2': 'version2'}"
