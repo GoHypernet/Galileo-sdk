@@ -53,7 +53,7 @@ class MissionsService:
 
         return job
 
-    def upload(self, mission_id, payload, verbose=False):
+    def upload(self, mission_id, payload, rename=None, verbose=False):
         try:
             if not os.path.exists(payload):
                 if verbose:
@@ -65,18 +65,20 @@ class MissionsService:
                 for root, dirs, files in os.walk(payload):
                     for file in files:
                         basename = os.path.basename(root)
+                        filepath = os.path.join(os.path.abspath(root), file)
                         if basename == name:
                             filename = file
                         else:
-                            filename = os.path.join(os.path.basename(root), file)
+                            filename = os.path.relpath(filepath, payload)
  
-                        filepath = os.path.join(os.path.abspath(root), file)
                         f = open(filepath, "rb").read()
                         self._missions_repo.upload_single_file(mission_id, f, filename)
                         if verbose:
-                            print("Upload complete: ", filepath)
+                            print(" Upload complete: ", filename)
             else:
                 f = open(payload, "rb").read()
+                if rename:
+                    name = rename
                 self._missions_repo.upload_single_file(mission_id, f, name)
                 if verbose:
                     print("Upload complete: ", name)

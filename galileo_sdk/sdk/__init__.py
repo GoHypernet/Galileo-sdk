@@ -1,4 +1,6 @@
 from galileo_sdk.sdk.auth import AuthSdk
+from galileo_sdk.sdk.universes import UniversesSdk
+from galileo_sdk.sdk.cargobays import CargoBaysSdk
 from galileo_sdk.sdk.jobs import JobsSdk
 from galileo_sdk.sdk.stations import StationsSdk
 from galileo_sdk.sdk.profiles import ProfilesSdk

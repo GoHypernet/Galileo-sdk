@@ -66,6 +66,7 @@ class MissionsSdk:
         destination_path=None,
         mission_type_id=None,
         settings=None,
+        public=False
     ):
         """
         Create a new Mission in your Galileo account.
@@ -78,6 +79,7 @@ class MissionsSdk:
         :param destination_storage_id: Optional[str]: UUID of the Cargo Bay to use as the Mission data destination
         :param source_storage_id: Optional[str]: UUID of the Cargo Bay to use as the Mission data source
         :param settings: Optional[Dict[str, str]]: Mission framework type settings (get this info from get_mission_type_settings_info)
+        :param public: Optional[bool]: Boolean indicating whether to list the Mission as public (True) or private (False - default)
          missions.get_mission_type_settings_info()
         :return: Mission
         
@@ -94,10 +96,11 @@ class MissionsSdk:
             destination_path=destination_path,
             mission_type_id=mission_type_id,
             settings=settings,
+            public=public,
         )
         return self._missions_service.create_mission(request)
 
-    def upload(self, mission_id, payload, verbose=False):
+    def upload(self, mission_id, payload, rename=None, verbose=False):
         """
         Upload a file or directory to the specified Mission. If the payload is a file, this function 
         will place the file in the top level of the Mission file tree. If the payload is a directory, 
@@ -106,6 +109,7 @@ class MissionsSdk:
 
         :param mission_id: str: Target Mission UUID
         :param payload: str: Path to folder or file to upload to targeted Mission
+        :param rename: str: Used when uploading a single file to specify the desired path within the Mission context (i.e. rename='/data/mydata.csv').
         :param verbose: bool: Verbosity flag, default is False
         :return: bool
         
@@ -120,7 +124,7 @@ class MissionsSdk:
         >>> else:
         >>>     print("I don't think this Mission exists")
         """
-        return self._missions_service.upload(mission_id, payload, verbose)
+        return self._missions_service.upload(mission_id, payload, rename, verbose)
 
     def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
         """
@@ -168,6 +172,7 @@ class MissionsSdk:
         destination_path=None,
         mission_type_id=None,
         settings=None,
+        public=False,
     ):
         """
         Create a new Mission in your Galileo account and upload input files from the specified directory in the same call. 
@@ -182,6 +187,7 @@ class MissionsSdk:
         :param source_storage_id: Optional[str]: UUID of the Cargo Bay where source files are to be stored
         :param settings: Optional[Dict[str, str]]: Mission Framework Type settings (can be retrieved via the get_mission_type_settings_info function)
          missions.get_mission_type_settings_info()
+        :param public: Optional[bool]: Boolean indicating if the resulting Mission should be listed as public (True) or private (False - default)
         :return: Mission
         
         Example:
@@ -199,6 +205,7 @@ class MissionsSdk:
             destination_path=destination_path,
             mission_type_id=mission_type_id,
             settings=settings,
+            public=public,
         )
         mission = self._missions_service.create_mission(request)
         self._missions_service.upload(mission.mission_id, directory, True)
@@ -217,6 +224,7 @@ class MissionsSdk:
         destination_path=None,
         mission_type_id=None,
         settings=None,
+        public=False,
     ):
         """
         Create mission and run a job
@@ -233,6 +241,7 @@ class MissionsSdk:
         :param source_storage_id: Optional[str]
         :param settings: Optional[Dict[str, str]]: Get required settings via
          missions.get_mission_type_settings_info()
+        :param public: Optional[bool]: Boolean indicating if the resulting Mission should be listed as public (True) or private (False - default)
         :return: Job
         """
         request = CreateMissionRequest(
@@ -244,6 +253,7 @@ class MissionsSdk:
             destination_path=destination_path,
             mission_type_id=mission_type_id,
             settings=settings,
+            public=public,
         )
         return self._missions_service.create_mission_and_run_job(
             request=request, directory=directory, station_id=station_id, lz_id=lz_id,
