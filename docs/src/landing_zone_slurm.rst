@@ -20,9 +20,13 @@ target.
 
 You can download the statically linked (amd64 Linux) Landing Zone
 executable `here
-<https://storage.googleapis.com/landing-zone-daemon/galileod>`_. Put
+<https://storage.googleapis.com/lzd-master/linux/amd64/glibc/galileod>`_. Put
 this somewhere in your ``$PATH`` such that ``galileod --help`` runs
-successfully.
+successfully. In most circumstances we advise that a Landing Zone be
+executed inside its own container, however on Slurm systems it can be
+very difficult for a containerized Landing Zone to communicate with
+the Slurm controller. For this reason we suggest admins use the binary
+linked above on Slurm systems.
 
 It is also assumed by the LZ that ``/tmp`` belongs to a distributed
 file system that is readable and writable by every node in the
