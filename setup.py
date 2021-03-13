@@ -77,6 +77,8 @@ setup(
             "config/__init__.py",
             "data/**/*",
             "data/__init__.py",
+            "galileo_cli/**",
+            "galileo_cli/**/*",
         ]
     },
     python_requires=">=2.7",
