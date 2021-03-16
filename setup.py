@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 
-VERSION = "0.0.37"
+VERSION = "0.0.38"
 
 _ver = sys.version_info
 
@@ -77,6 +77,8 @@ setup(
             "config/__init__.py",
             "data/**/*",
             "data/__init__.py",
+            "galileo_cli/**",
+            "galileo_cli/**/*",
         ]
     },
     python_requires=">=2.7",
