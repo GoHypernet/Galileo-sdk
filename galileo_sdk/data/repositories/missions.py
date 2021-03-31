@@ -84,6 +84,7 @@ class MissionsRepository(RequestsRepository):
             "name": update_project_request.name,
             "description": update_project_request.description,
             "source_storage_id": update_project_request.source_storage_id,
+            "destination_storage_id": update_project_request.destination_storage_id,
             "source_path": update_project_request.source_path,
             "destination_path": update_project_request.destination_path,
             "public":update_project_request.public

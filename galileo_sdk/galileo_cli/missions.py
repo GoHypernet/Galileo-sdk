@@ -75,6 +75,10 @@ def missions_cli(main, galileo: GalileoSdk):
             [
                 "name",
                 "mission_id",
+                "source_storage_id",
+                "source_path",
+                "destination_storage_id",
+                "destination_path",
                 "description",
                 "public",
                 "creation_timestamp",
@@ -214,7 +218,6 @@ def missions_cli(main, galileo: GalileoSdk):
             print("Encountered problem uploading your working directory.", e)
 
     @missions.command()
-    
     @click.option(
         '-p',
         '--public', 
@@ -249,3 +252,77 @@ def missions_cli(main, galileo: GalileoSdk):
         print("Created Mission:", mission.name)
         print("Mission ID: ", mission.mission_id)
         print("Public: ", str(bool(public)))
+        
+        
+    @missions.command()
+    @click.option(
+        "-i",
+        "--id",
+        type=str,
+        multiple=False,
+        help="UUID of the Mission to update.",
+    )
+    @click.option(
+        "-n",
+        "--name",
+        type=str,
+        multiple=False,
+        help="Update the name of a Mission.",
+    )
+    @click.option(
+        "--ssid",
+        type=str,
+        multiple=False,
+        help="Cargo Bay ID for the input data of the Mission.",
+    )
+    @click.option(
+        "--dsid",
+        type=str,
+        multiple=False,
+        help="Cargo Bay ID for the output data of the Mission.",
+    )
+    @click.option(
+        "--spath",
+        type=str,
+        multiple=False,
+        help="Path within the source Cargo Bay to pull the input data of the Mission.",
+    )
+    @click.option(
+        "--dpath",
+        type=str,
+        multiple=False,
+        help="Path within the destination Cargo Bay to put the output data of the Mission.",
+    )
+    def update(id, name, ssid, dsid, spath, dpath):
+        """
+        Update the settings of a Mission in your account. 
+        """
+        
+        if not id:
+            print("Please specify a Mission with the -i or --id flag.")
+            return
+        
+        spinner = Halo("Finding Mission.", spinner="dot").start()
+        try:
+            mission = galileo.missions.list_missions(ids=[id])
+        except Exception as e:
+            spinner.stop()
+            print("Error:", e)
+            return
+        
+        spinner.stop()
+        
+        if len(mission) != 1:
+            print("Couldn't find a Mission with that UUID.")
+            return
+        
+        spinner = Halo("Updating Mission.", spinner="dot").start()  
+        try:
+            success = galileo.missions.update_mission(mission_id=id, name=name, source_storage_id=ssid, destination_storage_id=dsid, source_path=spath, destination_path=dpath)
+        except Exception as e:
+            print("Error:", e)
+            spinner.stop()
+            return
+        
+        spinner.stop()
+        print("Mission Updated")
