@@ -11,7 +11,11 @@ def cargobays_cli(main, galileo: GalileoSdk):
         pass
 
     @cargobays.command()
-    def ls():
+    @click.option('-n', '--head', type=int, help="Number of Cargo Bays to display.")
+    def ls(head):
+        """
+        List all Cargo Bays attached to your Galileo Account.
+        """
         spinner = Halo("Getting the list of your Cargo Bays", spinner="dot").start()
         try:
             cargobays_ls = galileo.cargobays.list_cargobays()
@@ -35,4 +39,8 @@ def cargobays_cli(main, galileo: GalileoSdk):
             ]
         ]
         spinner.stop()
-        click.echo(cargobays_df.head(1))
+        if head:
+            click.echo(cargobays_df.head(head))
+        else:
+            print("Displaying first 10 Cargo Bays.")
+            click.echo(cargobays_df.head(head))

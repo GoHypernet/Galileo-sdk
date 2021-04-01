@@ -21,6 +21,12 @@ def missions_cli(main, galileo: GalileoSdk):
         help="Filter by Mission id, can provide multiple options.",
     )
     @click.option(
+        '-s',
+        '--short', 
+        is_flag=True, 
+        help="Show less information for each Mission (only id, name, and Public/Private status)."
+    )
+    @click.option(
         "-n",
         "--name",
         type=str,
@@ -38,10 +44,10 @@ def missions_cli(main, galileo: GalileoSdk):
     @click.option(
         "--items", type=int, help="Filter by number of items in the page.",
     )
-    @click.option('-n', '--head', type=int, help="Number of items to display.")
-    def ls(index, id, name, userid, page, items, head):
+    @click.option('-n', '--head', type=int, help="Number of Missions to display.")
+    def ls(index, id, short, name, userid, page, items, head):
         """
-        List all Missions in your Galileo profile.
+        List the Missions in your Galileo profile.
         """
         spinner = Halo("Retrieving information", spinner="dot").start()
         self = galileo.profiles.self()
@@ -71,19 +77,28 @@ def missions_cli(main, galileo: GalileoSdk):
         missions_df = pandas.json_normalize(missions_ls)
         missions_df['creation_timestamp'] = pandas.to_datetime(missions_df.creation_timestamp)
         missions_df = missions_df.sort_values(by="creation_timestamp", ascending=False)
-        missions_df = missions_df[
-            [
-                "name",
-                "mission_id",
-                "source_storage_id",
-                "source_path",
-                "destination_storage_id",
-                "destination_path",
-                "description",
-                "public",
-                "creation_timestamp",
+        if short:
+            missions_df = missions_df[
+                [
+                    "name",
+                    "mission_id",
+                    "public",
+                ]
             ]
-        ]
+        else:
+            missions_df = missions_df[
+                [
+                    "name",
+                    "mission_id",
+                    "source_storage_id",
+                    "source_path",
+                    "destination_storage_id",
+                    "destination_path",
+                    "description",
+                    "public",
+                    "creation_timestamp",
+                ]
+            ]
 
         spinner.stop()
 
@@ -184,7 +199,7 @@ def missions_cli(main, galileo: GalileoSdk):
         try:
             workdir = os.environ['WORKDIR']
         except Exception as e:
-            print("WORKDIR environment variable is not set.")
+            print("WORKDIR environment variable is not set. You can set this with the workdir command.")
             return
             
         spinner = Halo("Uploading files.", spinner="dot").start()    
