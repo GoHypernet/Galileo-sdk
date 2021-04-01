@@ -92,3 +92,5 @@ Using the Galileo Command Line Interface
 -------------------------------------------
 The Galileo CLI is an application that utilizes the Galileo SDK to take actions in your Galileo account
 without the need of a Webbrowser. The executable is added to your path when you install the SDK. 
+
+.. image:: images/cli_demo.gif
