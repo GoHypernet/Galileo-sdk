@@ -24,7 +24,7 @@ The most convenient and secure method for authentication of your SDK session is 
 
 .. code-block:: python
     
-	# On your first time using the sdk, this will open a web browser and ask you to sign in,
+    # On your first time using the sdk, this will open a web browser and ask you to sign in,
     # or if you are in a headless environment, it will print an activation link to visit.
     from galileo_sdk import GalileoSdk, AuthSdk
 

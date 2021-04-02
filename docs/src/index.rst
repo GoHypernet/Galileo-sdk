@@ -23,5 +23,5 @@ The Galileo `SDK <galileo_sdk.html>`_ allows users to interact with the Galileo 
     Missions Guide <missions.rst>
 	Cargo Bay Guide <cargobays.rst>
     Quickstart for Landing Zones <landing_zone_main.rst>
-    Quickstart for Python SDK <galileo_sdk.rst>
+    Python SDK and CLI <galileo_sdk.rst>
     SDK References <references/index.rst>
