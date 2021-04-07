@@ -7,7 +7,6 @@ class ProfilesSdk:
         userids=None,
         usernames=None,
         partial_usernames=None,
-        wallets=None,
         public_keys=None,
         page=None,
         items=None,
@@ -18,7 +17,6 @@ class ProfilesSdk:
         :param userids: Optional[List[str]]: filter by list of userids
         :param usernames: Optional[List[str]]: filter by list of usernames
         :param partial_usernames: Optional[List[str]]: filter by partial usernames
-        :param wallets: Optional[List[Wallet]]: filter by list of wallet ids
         :param public_keys: Optional[List[str]]: filter by public key
         :param page: Optional[int]: page #
         :param items: Optional[int]: items per page
@@ -28,7 +26,6 @@ class ProfilesSdk:
             userids=userids,
             usernames=usernames,
             partial_usernames=partial_usernames,
-            wallets=wallets,
             public_keys=public_keys,
             page=page,
             items=items,
