@@ -12,12 +12,12 @@ from colorama import init
 from galileo_sdk import GalileoSdk, AuthSdk
 #from .rain import *
 #from .jobs import jobs_cli
-#from .lz import machines_cli
+from .lzs import lzs_cli
 #from .profiles import profiles_cli
 from .missions import missions_cli
 from .universes import universes_cli
 from .cargobays import cargobays_cli
-#from .stations import stations_cli
+from .stations import stations_cli
 
 init()
 
@@ -93,7 +93,7 @@ def main(mode):
     universes_cli(main, galileo)
     cargobays_cli(main, galileo)
     #profiles_cli(main, galileo)
-    #lz_cli(main, galileo)
+    lzs_cli(main, galileo)
     missions_cli(main, galileo)
-    #stations_cli(main, galileo)
+    stations_cli(main, galileo)
     #jobs_cli(main, galileo)
