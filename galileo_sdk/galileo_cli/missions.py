@@ -308,7 +308,12 @@ def missions_cli(main, galileo: GalileoSdk):
         multiple=False,
         help="Path within the destination Cargo Bay to put the output data of the Mission.",
     )
-    def update(id, name, ssid, dsid, spath, dpath):
+    @click.option(
+        "--public/--private",
+        default=False,
+        help="Set the Mission to be either publicly or privately viewable.",
+    )
+    def update(id, name, ssid, dsid, spath, dpath, public):
         """
         Update the settings of a Mission in your account. 
         """
@@ -333,7 +338,15 @@ def missions_cli(main, galileo: GalileoSdk):
         
         spinner = Halo("Updating Mission.", spinner="dot").start()  
         try:
-            success = galileo.missions.update_mission(mission_id=id, name=name, source_storage_id=ssid, destination_storage_id=dsid, source_path=spath, destination_path=dpath)
+            success = galileo.missions.update_mission(
+                mission_id=id, 
+                name=name, 
+                source_storage_id=ssid, 
+                destination_storage_id=dsid, 
+                source_path=spath, 
+                destination_path=dpath, 
+                public=public
+            )
         except Exception as e:
             print("Error:", e)
             spinner.stop()
