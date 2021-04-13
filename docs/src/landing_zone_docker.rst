@@ -335,7 +335,7 @@ Removing and Restarting
   authentication token.
 
 Docker Daemon Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------
 
 * The host machine's Docker daemon can be configured via the daemon.json
   file. For a complete example of this file and its options for both Windows
