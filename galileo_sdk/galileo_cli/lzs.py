@@ -80,8 +80,4 @@ def lzs_cli(main, galileo: GalileoSdk):
         ]
 
         spinner.stop()
-        if items:
-            click.echo(lzs_df.head(items))
-        else:
-            click.echo("(Displaying only first 10 items)\n")
-            click.echo(lzs_df.head(10))
+        click.echo(lzs_df.head(items))
