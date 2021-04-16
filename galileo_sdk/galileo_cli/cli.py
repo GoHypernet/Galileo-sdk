@@ -76,10 +76,7 @@ def main(mode):
         """
         
         if view:
-            try:
-                print("The working directory is currently ", os.environ["WORKDIR"], ".")
-            except:
-                print("The working directory is currently not set.")
+            print("The working directory is currently ", os.environ.get("WORKDIR", "not set"), ".")
         
         if workdir:
             if os.path.exists(workdir):
