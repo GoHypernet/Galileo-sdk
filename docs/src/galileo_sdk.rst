@@ -15,7 +15,7 @@ or if you have the code checked out locally from the Github repo:
 
 .. code-block:: bash
 
-    $ python install -e .
+    $ pip install -e .
 
 Writing your first script
 -------------------------
