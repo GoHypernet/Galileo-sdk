@@ -43,4 +43,4 @@ def cargobays_cli(main, galileo: GalileoSdk):
             click.echo(cargobays_df.head(head))
         else:
             print("Displaying first 10 Cargo Bays.")
-            click.echo(cargobays_df.head(head))
+            click.echo(cargobays_df.head(10))
