@@ -37,11 +37,11 @@ def lzs_cli(main, galileo: GalileoSdk):
         help="Filter by number of items in the page.",
     )
     @click.option(
-        '-a', 
-        '--all', 
+        '-e', 
+        '--everything', 
         is_flag=True
     )
-    def ls(lz_ids, userid, page=0, items=10, all=False):
+    def ls(lz_ids, userid, page=0, items=10, everything=False):
         """
         List all Landing Zones in your Galileo account.
         """
@@ -51,7 +51,7 @@ def lzs_cli(main, galileo: GalileoSdk):
 
         self = galileo.profiles.self()
         userids = []
-        if not all:
+        if not everything:
             userids.append(self.userid)
 
         lzs = galileo.lz.list_lz(
