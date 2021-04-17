@@ -14,3 +14,4 @@ setup.spec
 test_upload_file.txt
 docs/src/references/*
 !docs/src/references/index.rst
+*.ipynb_checkpoints

@@ -1,4 +1,4 @@
-from galileo_sdk.business.objects import Profile, ProfileWallet, ProfileCard
+from galileo_sdk.business.objects import Profile, ProfileCard
 from galileo_sdk.data.repositories.stations import station_dict_to_station
 from galileo_sdk.data.repositories import RequestsRepository
 
@@ -30,15 +30,6 @@ class ProfilesRepository(RequestsRepository):
         stations = json["stations"]
         return [station_dict_to_station(station) for station in stations]
 
-
-def wallet_dict_to_wallet(wallet):
-    return ProfileWallet(
-        wallet=wallet["wallet"],
-        public_key=wallet["public_key"],
-        profilewalletid=wallet["profilewalletid"],
-    )
-
-
 def cards_dict_to_cards(stored_cards):
     return ProfileCard(
         stored_cards["id"],
@@ -53,7 +44,6 @@ def user_dict_to_profile(profile):
         userid=profile["userid"],
         username=profile["username"],
         lz_ids=profile["mids"],
-        wallets=[wallet_dict_to_wallet(wallet) for wallet in profile["wallets"]],
         stripe_customer_id=profile.get("stripe_customer_id", None),
         pricing_tier_id=profile.get("pricing_tier_id", None),
         stored_cards=[cards_dict_to_cards(card) for card in profile["stored_cards"]]

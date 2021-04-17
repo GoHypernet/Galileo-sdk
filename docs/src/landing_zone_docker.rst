@@ -333,3 +333,14 @@ Removing and Restarting
   above. You should not need to reauthenticate if you do not delete
   the landing-zone_tokens docker volume that stores your
   authentication token.
+
+Docker Daemon Configuration
+---------------------------
+
+* The host machine's Docker daemon can be configured via the daemon.json
+  file. For a complete example of this file and its options for both Windows
+  and Linux-based host machines, see the official 
+  `Docker Documentation <https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file>`_. 
+* It is recommended for Linux-based hosts that the `live-restore <https://docs.docker.com/config/containers/live-restore/>`_ option be 
+  enabled. This option will prevent job containers from exiting if the Docker
+  daemon must be restarted for updates. 

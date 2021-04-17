@@ -21,6 +21,12 @@ def missions_cli(main, galileo: GalileoSdk):
         help="Filter by Mission id, can provide multiple options.",
     )
     @click.option(
+        '-s',
+        '--short', 
+        is_flag=True, 
+        help="Show less information for each Mission (only id, name, and Public/Private status)."
+    )
+    @click.option(
         "-n",
         "--name",
         type=str,
@@ -38,10 +44,10 @@ def missions_cli(main, galileo: GalileoSdk):
     @click.option(
         "--items", type=int, help="Filter by number of items in the page.",
     )
-    @click.option('-n', '--head', type=int, help="Number of items to display.")
-    def ls(index, id, name, userid, page, items, head):
+    @click.option('-n', '--head', type=int, help="Number of Missions to display.")
+    def ls(index, id, short, name, userid, page, items, head):
         """
-        List all Missions in your Galileo profile.
+        List the Missions in your Galileo profile.
         """
         spinner = Halo("Retrieving information", spinner="dot").start()
         self = galileo.profiles.self()
@@ -71,15 +77,28 @@ def missions_cli(main, galileo: GalileoSdk):
         missions_df = pandas.json_normalize(missions_ls)
         missions_df['creation_timestamp'] = pandas.to_datetime(missions_df.creation_timestamp)
         missions_df = missions_df.sort_values(by="creation_timestamp", ascending=False)
-        missions_df = missions_df[
-            [
-                "name",
-                "mission_id",
-                "description",
-                "public",
-                "creation_timestamp",
+        if short:
+            missions_df = missions_df[
+                [
+                    "name",
+                    "mission_id",
+                    "public",
+                ]
             ]
-        ]
+        else:
+            missions_df = missions_df[
+                [
+                    "name",
+                    "mission_id",
+                    "source_storage_id",
+                    "source_path",
+                    "destination_storage_id",
+                    "destination_path",
+                    "description",
+                    "public",
+                    "creation_timestamp",
+                ]
+            ]
 
         spinner.stop()
 
@@ -180,7 +199,7 @@ def missions_cli(main, galileo: GalileoSdk):
         try:
             workdir = os.environ['WORKDIR']
         except Exception as e:
-            print("WORKDIR environment variable is not set.")
+            print("WORKDIR environment variable is not set. You can set this with the workdir command.")
             return
             
         spinner = Halo("Uploading files.", spinner="dot").start()    
@@ -214,7 +233,6 @@ def missions_cli(main, galileo: GalileoSdk):
             print("Encountered problem uploading your working directory.", e)
 
     @missions.command()
-    
     @click.option(
         '-p',
         '--public', 
@@ -249,3 +267,90 @@ def missions_cli(main, galileo: GalileoSdk):
         print("Created Mission:", mission.name)
         print("Mission ID: ", mission.mission_id)
         print("Public: ", str(bool(public)))
+        
+        
+    @missions.command()
+    @click.option(
+        "-i",
+        "--id",
+        type=str,
+        multiple=False,
+        help="UUID of the Mission to update.",
+    )
+    @click.option(
+        "-n",
+        "--name",
+        type=str,
+        multiple=False,
+        help="Update the name of a Mission.",
+    )
+    @click.option(
+        "--ssid",
+        type=str,
+        multiple=False,
+        help="Cargo Bay ID for the input data of the Mission.",
+    )
+    @click.option(
+        "--dsid",
+        type=str,
+        multiple=False,
+        help="Cargo Bay ID for the output data of the Mission.",
+    )
+    @click.option(
+        "--spath",
+        type=str,
+        multiple=False,
+        help="Path within the source Cargo Bay to pull the input data of the Mission.",
+    )
+    @click.option(
+        "--dpath",
+        type=str,
+        multiple=False,
+        help="Path within the destination Cargo Bay to put the output data of the Mission.",
+    )
+    @click.option(
+        "--public/--private",
+        default=False,
+        help="Set the Mission to be either publicly or privately viewable.",
+    )
+    def update(id, name, ssid, dsid, spath, dpath, public):
+        """
+        Update the settings of a Mission in your account. 
+        """
+        
+        if not id:
+            print("Please specify a Mission with the -i or --id flag.")
+            return
+        
+        spinner = Halo("Finding Mission.", spinner="dot").start()
+        try:
+            mission = galileo.missions.list_missions(ids=[id])
+        except Exception as e:
+            spinner.stop()
+            print("Error:", e)
+            return
+        
+        spinner.stop()
+        
+        if len(mission) != 1:
+            print("Couldn't find a Mission with that UUID.")
+            return
+        
+        spinner = Halo("Updating Mission.", spinner="dot").start()  
+        try:
+            success = galileo.missions.update_mission(
+                mission_id=id, 
+                name=name, 
+                source_storage_id=ssid, 
+                destination_storage_id=dsid, 
+                source_path=spath, 
+                destination_path=dpath, 
+                public=public
+            )
+        except Exception as e:
+            print("Error:", e)
+            spinner.stop()
+            return
+        
+        spinner.stop()
+        print("Mission Updated")

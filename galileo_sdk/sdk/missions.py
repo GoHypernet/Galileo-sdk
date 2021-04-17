@@ -306,6 +306,7 @@ class MissionsSdk:
         destination_storage_id=None,
         source_path=None,
         destination_path=None,
+        public=None,
         settings=None,
     ):
         """
@@ -318,6 +319,7 @@ class MissionsSdk:
         :param destination_storage_id: Optional[str]: Storage destination Cargo Bay UUID after update
         :param source_storage_id: Optional[str]: Storage source Cargo Bay UUID after update
         :param description: Optional[str]: Mission description after update
+        :param public: Optional[bool]: Boolean flag determining if the Mission is publicly viewable. 
         :param settings: Optional[Dict[str, str]]: Mission framework setting to be applied after update
         :return: Bool: Success flag
         
@@ -335,6 +337,7 @@ class MissionsSdk:
             destination_storage_id=destination_storage_id,
             source_path=source_path,
             destination_path=destination_path,
+            public=public,
             settings=settings,
         )
         return self._missions_service.update_mission(request)

@@ -12,6 +12,9 @@ def universes_cli(main, galileo: GalileoSdk):
 
     @universes.command()
     def ls():
+        """
+        List all Galileo Universes your account belongs to. 
+        """
         spinner = Halo("Checking your Universe membership", spinner="dot").start()
         universes_ls = galileo.universes.list_universes()
         spinner.stop()
@@ -29,7 +32,7 @@ def universes_cli(main, galileo: GalileoSdk):
             ]
         ]
         spinner.stop()
-        click.echo(universes_df.head(1))
+        click.echo(universes_df)
 
     @universes.command()
     @click.option("-i", "--uuid", type=str, multiple=False, help="Set your active Universe by its uuid.")

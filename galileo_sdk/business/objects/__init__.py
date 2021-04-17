@@ -46,7 +46,7 @@ from galileo_sdk.business.objects.lz import (
     LzEvents,
 )
 
-from galileo_sdk.business.objects.profiles import Profile, ProfileCard, ProfileWallet
+from galileo_sdk.business.objects.profiles import Profile, ProfileCard
 
 from galileo_sdk.business.objects.stations import (
     UpdateStationRequest,

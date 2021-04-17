@@ -10,7 +10,6 @@ class ProfilesService:
         userids=None,
         usernames=None,
         partial_usernames=None,
-        wallets=None,
         public_keys=None,
         page=None,
         items=None,
@@ -22,7 +21,6 @@ class ProfilesService:
                 "userids": userids,
                 "usernames": usernames,
                 "partial_usernames": partial_usernames,
-                "wallets": wallets,
                 "public_keys": public_keys,
             }
         )

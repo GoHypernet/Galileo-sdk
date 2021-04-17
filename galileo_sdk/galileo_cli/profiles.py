@@ -43,13 +43,6 @@ def profiles_cli(main, galileo: GalileoSdk):
         help="Filter by partial usernames, can provide multiple options.",
     )
     @click.option(
-        "-w",
-        "--wallet",
-        type=str,
-        multiple=True,
-        help="Filter by wallet address, can provide multiple options.",
-    )
-    @click.option(
         "-k",
         "--publickey",
         type=str,
@@ -61,7 +54,7 @@ def profiles_cli(main, galileo: GalileoSdk):
         "--items", type=int, help="Filter by number of items in the page.",
     )
     @click.option('-n', '--head', type=int, help="Number of items to display.")
-    def ls(index, id, username, partialname, wallet, publickey, page, items, head):
+    def ls(index, id, username, partialname, publickey, page, items, head):
         """
         List of all the profiles.
         """
@@ -70,7 +63,6 @@ def profiles_cli(main, galileo: GalileoSdk):
             userids=list(id),
             usernames=list(username),
             partial_usernames=list(partialname),
-            wallets=list(wallet),
             public_keys=list(publickey),
             page=page,
             items=items,

@@ -11,15 +11,28 @@ Install via pip:
 
     $ pip install galileo-sdk
 
-or if you have the code checked out locally:
+or if you have the code checked out locally from the Github repo:
 
 .. code-block:: bash
 
-    $ python setup.py install
+    $ pip install -e .
 
 Writing your first script
 -------------------------
-:code:`GalileoSdk` takes in 4 optional parameters.
+
+The most convenient and secure method for authentication of your SDK session is to use our AuthSdk helper class. 
+
+.. code-block:: python
+    
+    # On your first time using the sdk, this will open a web browser and ask you to sign in,
+    # or if you are in a headless environment, it will print an activation link to visit.
+    from galileo_sdk import GalileoSdk, AuthSdk
+
+    myauth = AuthSdk()
+    access_token, refresh_token, expiry_time = myauth.initialize()
+    galileo = GalileoSdk(auth_token=access_token, refresh_token=refresh_token)
+
+However, if you prefer a more explicit route, :code:`GalileoSdk` takes in 4 optional parameters.
 
 .. code-block:: python
 
@@ -39,24 +52,6 @@ Alternatively, you can set the environment variables instead of passing in the p
  - :code:`GALILEO_REFRESH_TOKEN`
  - :code:`GALILEO_USER`
  - :code:`GALILEO_PASSWORD`
-
-An example of exporting your environment variable on MacOS:
-
-.. code-block:: bash
-
-    $ export GALILEO_USER=user@galileoapp.io
-
-The most convenient and secure method for authentication is to use our AuthSdk helper class. 
-
-.. code-block:: python
-    
-	# On your first time using the sdk, this will open a web browser and ask you to sign in,
-    # or if you are in a headless environment, it will print an activation link to visit.
-    from galileo_sdk import GalileoSdk, AuthSdk
-
-    myauth = AuthSdk()
-    access_token, refresh_token, expiry_time = myauth.initialize()
-    galileo = GalileoSdk(auth_token=access_token, refresh_token=refresh_token)
 
 :code:`GalileoSdk` exposes the Jobs, Machines, Profiles, Projects, and Stations APIs
 
@@ -93,34 +88,9 @@ You can also write callbacks that will execute upon events. The example below is
     galileo.stations.on_station_admin_request_received(on_request_received)
 
 
-Before you end your script, you must disconnect the Galileo object via:
-
-.. code-block:: python
-
-    galileo.disconnect()
-
-
-.. Using the Galileo Command Line Interface
+Using the Galileo Command Line Interface
 -------------------------------------------
-The Galileo CLI is an application that utilizes the Galileo SDK to view jobs without a GUI.
+The Galileo CLI is an application that utilizes the Galileo SDK to take actions in your Galileo account
+without the need of a Webbrowser. The executable is added to your path when you install the SDK. 
 
-.. Install via pip:
-
-.. .. code-block:: bash
-
-    $ pip install galileo-cli
-
-.. Provide a username and password combination or authorization token and refresh token combination. One way of providing a username is to set environment variables GALILEO_USER and GALILEO_PASSWORD.
-
-.. .. code-block:: bash
-
-..    $ export GALILEO_USER=user@galileoapp.io
-..    $ export GALILEO_PASSWORD=password
-..    $ galileo-cli
-
-.. Another way to login is to provide your username on the command line, where you will be prompted for your password:
-
-.. .. code-block:: bash
-
-..    $ galileo-cli -u user@galileoapp.io
-..    $ Password:
+.. image:: images/cli_demo.gif
