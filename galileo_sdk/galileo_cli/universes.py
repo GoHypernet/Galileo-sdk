@@ -32,7 +32,7 @@ def universes_cli(main, galileo: GalileoSdk):
             ]
         ]
         spinner.stop()
-        click.echo(universes_df.head(10))
+        click.echo(universes_df)
 
     @universes.command()
     @click.option("-i", "--uuid", type=str, multiple=False, help="Set your active Universe by its uuid.")
