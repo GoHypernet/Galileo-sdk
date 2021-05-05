@@ -24,7 +24,7 @@ if is_py3:
         "pyfiglet",
         "click",
         "click-shell",
-        "pandas==1.0.1",
+        "pandas",
         "halo",
         "curses-menu"
     ]
