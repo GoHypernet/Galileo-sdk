@@ -20,7 +20,7 @@ This will bring up a configuration window. Here, you must name the Station and o
 
 .. image:: images/stations_name.gif
 
-After clicking the final "Create Station" button, you will see a new station appear in your Stations tab. At this point, you canF proceed with additional configuration of your Station, such as attaching `Landing Zones <stations.html#adding-a-landing-zone-to-your-station>`_, `inviting collaborators <stations.html#inviting-collaborators>`_, and assigning them permissioned `roles <stations.html#user-roles-and-resource-settings>`_. 
+After clicking the final "Create Station" button, you will see a new station appear in your Stations tab. At this point, you can proceed with additional configuration of your Station, such as attaching `Landing Zones <stations.html#adding-a-landing-zone-to-your-station>`_, `inviting collaborators <stations.html#inviting-collaborators>`_, and assigning them permissioned `roles <stations.html#user-roles-and-resource-settings>`_. 
 
 Adding a Landing Zone to Your Station
 ---------------------------------------
