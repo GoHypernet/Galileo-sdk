@@ -74,7 +74,7 @@ Station administrators can expose `volumes <https://docs.docker.com/storage/volu
 * exposing networked filesystems 
 * sharing data between jobs running on the same LZ 
 
-When a volume is added to a Station, it will only be attached to jobs that where submitted to that specific Station. An LZ attached to multiple Stations will not expose volumes to a job if it is not associated with a Station that has been configured to have a volume.  
+When a volume is added to a Station, it will only be attached to jobs that were submitted to that specific Station. An LZ attached to multiple Stations will not expose volumes to a job if it is not associated with a Station that has been configured to have a volume.  
 
 A volume can be added to a Station by clicking the "VOLUMES" tab in the context of the relevant station. 
 
