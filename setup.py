@@ -22,7 +22,7 @@ if is_py3:
         "termcolor==1.1.0",
         "colorama==0.4.3",
         "pyfiglet",
-        "click",
+        "click==7.1.2",
         "click-shell",
         "pandas",
         "halo",
