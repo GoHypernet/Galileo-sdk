@@ -4,6 +4,7 @@ from galileo_sdk.business.objects.missions import Mission, MissionType
 # Must set env variables before running tests
 CONFIG = "development"
 
+# TODO Give Galileo authentication
 galileo = GalileoSdk(config=CONFIG)
 
 missions = galileo.missions.list_missions(archived=False)

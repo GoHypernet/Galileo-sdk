@@ -22,6 +22,7 @@ auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 job_repo = JobsRepository(settings_repo, auth_provider, NAMESPACE)
 
+# TODO Missing a bunch of key, value pairs
 job = {
     "jobid": "jobid",
     "receiverid": "receiverid",
@@ -29,16 +30,22 @@ job = {
     "time_created": TIMESTAMP,
     "last_updated": TIMESTAMP,
     "status": "uploaded",
-    "container": "container",
+    "cpu_count": 1,
+    "gpu_count": 0,
+    "memory_amount": 0,    
+    "enable_tunnel": False,
+    "tunnel_port": 8080,
+    "tunnel_url": "https://example.com",
     "name": "name",
     "stationid": "stationid",
     "userid": "userid",
     "state": "state",
-    "oaid": "oaid",
     "pay_status": "pay_status",
     "pay_interval": 1,
     "total_runtime": 10000,
     "archived": False,
+    "container": "container",
+    "oaid": "oaid",
     "status_history": [{"timestamp": TIMESTAMP, "status": "uploaded"}],
 }
 

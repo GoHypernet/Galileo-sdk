@@ -6,6 +6,7 @@ CONFIG = "development"
 STATION_ID = "86a32c0b-bad0-456b-b41a-cb2bef9cdafb"
 LZ_ID = "Jaguar2121"
 ROLE_ID = "b67bb82c-f939-4c22-a341-9904675b7c92"
+# TODO Give Galileo authentication
 galileo = GalileoSdk(config=CONFIG)
 user = galileo.profiles.self()
 MISSION_TYPE_ID = "stata_stata"

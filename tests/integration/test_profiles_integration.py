@@ -3,6 +3,7 @@ from galileo_sdk import GalileoSdk
 # Must set env variables before running tests
 CONFIG = "development"
 
+# TODO Give Galileo authentication
 galileo = GalileoSdk(config=CONFIG)
 
 
