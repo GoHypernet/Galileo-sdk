@@ -343,4 +343,22 @@ Docker Daemon Configuration
   `Docker Documentation <https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file>`_. 
 * It is recommended for Linux-based hosts that the `live-restore <https://docs.docker.com/config/containers/live-restore/>`_ option be 
   enabled. This option will prevent job containers from exiting if the Docker
-  daemon must be restarted for updates. 
+  daemon must be restarted for updates.
+
+
+Features
+--------
+
+Custom Notifications
+~~~~~~~~~~~~~~~~~~~~
+Custom notifications let your jobs push emails and web alerts while
+they're running. The Landing Zone injects every Docker job with two
+environment variables: ``GALILEO_LZ_IPV4`` and
+``GALILEO_LZ_PORT``. Those two values define a TCP socket where text
+can be pushed, and that text will show up as notifications to the job
+owner according to their notification settings in the web app. These
+notifications are meant to be fairly concise, so the Landing Zone will
+read a maximum of 4 kilobytes per notification.
+
+:download:`Python Example <./landing_zone_examples/custom_notifications.py>`
+:download:`C Example <./landing_zone_examples/custom_notifications.c>`
