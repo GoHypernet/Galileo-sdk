@@ -12,15 +12,19 @@ LOCATION = os.path.join("", FILENAME)
 JOB_ID = "job_id"
 DEST_MID = "dest_mid"
 STATION_ID = "station_id"
+UNIVERSE_ID = "universe_id"
 QUERY = generate_query_str({"filename": FILENAME, "path": LOCATION})
 TIMESTAMP = 1584946381
+
 
 # Arrange
 settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
+settings_repo.get_settings().universe_id = UNIVERSE_ID 
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 job_repo = JobsRepository(settings_repo, auth_provider, NAMESPACE)
+
 
 # TODO Missing a bunch of key, value pairs
 job = {
@@ -144,12 +148,17 @@ def test_request_send_job(mocked_requests):
     r = r.json()
 
     # Act
+    # Universes is being mocked and messing stuff up
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/job/upload_request".format(
             backend=BACKEND, namespace=NAMESPACE
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json=None,
+        
     )
 
     # Assert
@@ -163,6 +172,7 @@ def test_request_send_job_completed(mocked_requests):
     r = r.json()
 
     # Act
+    # Universes is being mocked and messing stuff up
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs".format(backend=BACKEND, namespace=NAMESPACE),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},

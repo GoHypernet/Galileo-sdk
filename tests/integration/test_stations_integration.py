@@ -26,7 +26,8 @@ def test_create_and_delete_station():
 
     assert "sdk_station_integration_test" == station_details.name
     assert station_details.stationid is not ""
-    assert r_delete_station is True
+    #TODO response is True -> response['success'] is True
+    assert r_delete_station['success'] is True
 
 
 def test_add_and_remove_volumes_to_station():
@@ -47,8 +48,8 @@ def test_add_and_remove_volumes_to_station():
 
     assert EVolumeAccess.READWRITE == volumes.access
     assert "mount_point" == volumes.mount_point
-    assert r_remove_volume is True
-    assert r_delete_station is True
+    assert r_remove_volume['success'] is True
+    assert r_delete_station['success'] is True
 
 
 def test_add_and_delete_host_path_to_volume():
@@ -84,10 +85,11 @@ def test_add_and_delete_host_path_to_volume():
 
     assert [] == volumes.host_paths
     assert "host_path" == volume_host_path.host_paths[0].host_path
-    assert deleted_host_path is True
+    assert deleted_host_path['success'] is True
 
 
 def test_create_station_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     policy = galileo.stations.update_station_resource_policy(STATION_ID)
 
     assert isinstance(policy, ResourcePolicy)
@@ -100,34 +102,43 @@ def test_get_station_resource_policy():
 
 
 def test_delete_station_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     response = galileo.stations.delete_station_resource_policy(STATION_ID)
 
+    # TODO probably is a dictionary
     assert response is True
 
 
 def test_self_resource_limits():
+    # TODO Fix HTTPError('500 Server Error: INTERNAL SERVER ERROR for url: (see Hypernet Intern Logs or Jira comment for full URL) 
     policy, lz_id = galileo.stations.get_self_station_resource_limits(STATION_ID)
     assert isinstance(policy, ResourcePolicy)
 
 
 def test_create_station_user_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     policy = galileo.stations.update_station_user_resource_policy(STATION_ID, user.userid, max_cpu_per_job=10000)
     assert isinstance(policy, ResourcePolicy)
 
 
 def test_get_station_user_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     policy = galileo.stations.get_station_user_resource_policy(STATION_ID, user.userid)
     assert isinstance(policy, ResourcePolicy)
 
 
 def test_delete_station_user_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     response = galileo.stations.delete_station_user_resource_policy(STATION_ID, user.userid)
     policy = galileo.stations.get_station_user_resource_policy(STATION_ID, user.userid)
+
+    # TODO Fix into dict probably
     assert response is True
     assert policy is None
 
 
 def test_update_station_role_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     resource_policy = galileo.stations.update_station_role_resource_policy(
         STATION_ID, ROLE_ID, max_cpu_per_job=1
     )
@@ -135,6 +146,7 @@ def test_update_station_role_resource_policy():
 
 
 def test_get_station_role_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     resource_policy = galileo.stations.get_station_role_resource_policy(
         STATION_ID, ROLE_ID
     )
@@ -143,6 +155,7 @@ def test_get_station_role_resource_policy():
 
 
 def test_crud_station_roles():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     create_station_role = galileo.stations.create_station_role(
         STATION_ID,
         "Subscriber",
@@ -165,6 +178,7 @@ def test_crud_station_roles():
 
 
 def test_delete_station_role_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     response = galileo.stations.delete_station_role_resource_policy(STATION_ID, ROLE_ID)
     resource_policy = galileo.stations.get_station_role_resource_policy(
         STATION_ID, ROLE_ID
@@ -174,6 +188,7 @@ def test_delete_station_role_resource_policy():
 
 
 def test_update_station_lz_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     resource_policy = galileo.stations.update_station_lz_resource_policy(
         STATION_ID, LZ_ID, max_cpu_per_job=1
     )
@@ -181,6 +196,7 @@ def test_update_station_lz_resource_policy():
 
 
 def test_get_station_lz_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     resource_policy = galileo.stations.get_station_lz_resource_policy(
         STATION_ID, LZ_ID
     )
@@ -193,6 +209,7 @@ def test_get_station_lz_resource_policy():
 
 
 def test_delete_station_lz_resource_policy():
+    # TODO Fix 401 Client Error: Unauthorized for url (see Hypernet Intern Logs or Jira comment for full URL)
     response = galileo.stations.delete_station_lz_resource_policy(
         STATION_ID, LZ_ID
     )
