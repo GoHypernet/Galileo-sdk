@@ -70,6 +70,7 @@ def lzs_cli(main, galileo: GalileoSdk):
         lzs_df = lzs_df[
             [
                 "name",
+                "lz_id",
                 "arch",
                 "status",
                 "userid",

@@ -52,11 +52,11 @@ downloads the files and data belonging to the job and uses them to
 construct a container according to the hardware specifications
 collected earlier. The LZ will then initiate the container's execution
 and respond to user requests to pause, unpause, and kill the job. When
-the container process has ended the LZ creates a zip archive of the
+the container process has ended, the LZ creates a zip archive of the
 process' stdout, stderr, and any new or changed files found in the
 ``/home/galileo`` directory. The LZ then uploads that archive to the
 Galileo service so that you can download it and get your results!
-Finally the LZ destroys anything it constructed to create the job
+Finally, the LZ destroys anything it constructed to create the job
 container and releases those resources back to its host.
 
 

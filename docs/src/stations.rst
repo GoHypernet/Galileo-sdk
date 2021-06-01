@@ -20,7 +20,7 @@ This will bring up a configuration window. Here, you must name the Station and o
 
 .. image:: images/stations_name.gif
 
-After clicking the final "Create Station" button, you will see a new station appear in your Stations tab. At this point, you canF proceed with additional configuration of your Station, such as attaching `Landing Zones <stations.html#adding-a-landing-zone-to-your-station>`_, `inviting collaborators <stations.html#inviting-collaborators>`_, and assigning them permissioned `roles <stations.html#user-roles-and-resource-settings>`_. 
+After clicking the final "Create Station" button, you will see a new station appear in your Stations tab. At this point, you can proceed with additional configuration of your Station, such as attaching `Landing Zones <stations.html#adding-a-landing-zone-to-your-station>`_, `inviting collaborators <stations.html#inviting-collaborators>`_, and assigning them permissioned `roles <stations.html#user-roles-and-resource-settings>`_. 
 
 Adding a Landing Zone to Your Station
 ---------------------------------------
@@ -74,7 +74,7 @@ Station administrators can expose `volumes <https://docs.docker.com/storage/volu
 * exposing networked filesystems 
 * sharing data between jobs running on the same LZ 
 
-When a volume is added to a Station, it will only be attached to jobs that where submitted to that specific Station. An LZ attached to multiple Stations will not expose volumes to a job if it is not associated with a Station that has been configured to have a volume.  
+When a volume is added to a Station, it will only be attached to jobs that were submitted to that specific Station. An LZ attached to multiple Stations will not expose volumes to a job if it is not associated with a Station that has been configured to have a volume.  
 
 A volume can be added to a Station by clicking the "VOLUMES" tab in the context of the relevant station. 
 

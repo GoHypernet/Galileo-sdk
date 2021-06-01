@@ -255,21 +255,21 @@ class StationsRepository(RequestsRepository):
 
         return response.json()  # Boolean
 
-    def add_machines_to_station(self, station_id, mids):
+    def add_lz_to_station(self, station_id, mids):
         response = self._post(
             "/station/{station_id}/machines".format(station_id=station_id),
             {"mids": mids},
         )
         return response.json()
 
-    def remove_machines_from_station(self, station_id, mids):
+    def remove_lz_from_station(self, station_id, mids):
         response = self._delete(
             "/station/{station_id}/machines".format(station_id=station_id),
             {"mids": mids},
         )
         return response.json()
 
-    def get_station_machine_resource_policy(self, station_id, machine_id):
+    def get_station_lz_resource_policy(self, station_id, machine_id):
         response = self._get(
             "/stations/{station_id}/machines/{machine_id}/resource_policy".format(
                 station_id=station_id, machine_id=machine_id
@@ -281,7 +281,7 @@ class StationsRepository(RequestsRepository):
             return None
         return resource_policy_dict_to_resource_policy(policy)
 
-    def update_station_machine_resource_policy(self, station_id, machine_id, request):
+    def update_station_lz_resource_policy(self, station_id, machine_id, request):
         response = self._put(
             "/stations/{station_id}/machines/{machine_id}/resource_policy".format(
                 station_id=station_id, machine_id=machine_id
@@ -294,7 +294,7 @@ class StationsRepository(RequestsRepository):
             return None
         return resource_policy_dict_to_resource_policy(policy)
 
-    def delete_station_machine_resource_policy(self, station_id, machine_id):
+    def delete_station_lz_resource_policy(self, station_id, machine_id):
         response = self._delete(
             "/stations/{station_id}/machines/{machine_id}/resource_policy".format(
                 station_id=station_id, machine_id=machine_id
@@ -303,7 +303,7 @@ class StationsRepository(RequestsRepository):
 
         return response.json()
 
-    def get_station_machine_resource_limits(self, station_id, machine_id):
+    def get_station_lz_resource_limits(self, station_id, machine_id):
         response = self._get(
             "/stations/{station_id}/machines/{machine_id}/resource_limits".format(
                 station_id=station_id, machine_id=machine_id

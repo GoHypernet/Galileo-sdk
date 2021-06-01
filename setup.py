@@ -4,7 +4,7 @@ import sys
 from setuptools import setup
 from setuptools.command.install import install
 
-VERSION = "0.0.39"
+VERSION = "0.0.40"
 
 _ver = sys.version_info
 
@@ -22,7 +22,7 @@ if is_py3:
         "termcolor==1.1.0",
         "colorama==0.4.3",
         "pyfiglet",
-        "click",
+        "click==7.1.2",
         "click-shell",
         "pandas",
         "halo",

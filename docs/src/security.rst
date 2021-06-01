@@ -69,7 +69,7 @@ Galileo supports a suite of software and applications in the form of officially 
 Types. Software environments like Python, Julia, and R Language as well as interactive applications like
 Jupyter Notebooks, PCSWMM, and QGIS are officially supported and can be configured through the Mission
 Configuration Wizard. In all instances of Galileo-supported Mission Framework types, processes are executed
-with **non-root** priveledges as a security precaution. Additionally, users are not allowed to directly modify 
+with **non-root** privileges as a security precaution. Additionally, users are not allowed to directly modify 
 the Dockerfile created for them in their Mission context, only the Galileo service can write to this file using 
 the pre-configured rules assigned to the target software. 
 
@@ -102,7 +102,7 @@ structure is strictly controlled by the framework definition. If a user does pro
 Galileo identifies this Mission type as “user-defined.” 
 
 Within the context of a Mission, Galileo users can invite collaborators as role-based 
-members. The role assigned to a member determines if they read access to the input 
+members. The role assigned to a member determines if they have read access to the input 
 data and results data and if they have write/execute permission.
 
 Missions can be used in tandem with the `Cargo Bays <cargobays.html>`_ feature. During the configuration stage of a new Mission, if the user chooses a non-default Cargo Bay (like Dropbox), all input and result files will be stored in that storage resource, the data will not persist in Galileo-hosted resources. If you lose access to your third-party storage provider, Hypernet Labs will not be able to recover it. Deleting a Cargo Bay necessarily deactivates any Mission referencing that resource as a storage provider, but does not delete the data stored there. 

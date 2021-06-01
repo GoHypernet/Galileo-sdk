@@ -153,22 +153,22 @@ class StationsService:
         return self._stations_repo.remove_lz_from_station(station_id, mids)
 
     def get_station_lz_resource_policy(self, station_id, machine_id):
-        return self._stations_repo.get_station_machine_resource_policy(
+        return self._stations_repo.get_station_lz_resource_policy(
             station_id, machine_id
         )
 
     def update_station_lz_resource_policy(self, station_id, lz_id, request):
-        return self._stations_repo.update_station_machine_resource_policy(
+        return self._stations_repo.update_station_lz_resource_policy(
             station_id, lz_id, request
         )
 
     def delete_station_lz_resource_policy(self, station_id, machine_id):
-        return self._stations_repo.delete_station_machine_resource_policy(
+        return self._stations_repo.delete_station_lz_resource_policy(
             station_id, machine_id
         )
 
     def get_station_lz_resource_limits(self, station_id, machine_id):
-        return self._stations_repo.get_station_machine_resource_limits(
+        return self._stations_repo.get_station_lz_resource_limits(
             station_id, machine_id
         )
 

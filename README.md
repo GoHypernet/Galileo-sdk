@@ -1,4 +1,4 @@
-![alt](docs/src/images/galileo_pres.png)
+[![alt](docs/src/images/galileo_pres.png)](https://hypernetlabs.io/galileo)
 
 # Galileo SDK
 

@@ -45,7 +45,7 @@ To delete a file from a Mission, first select the file you wish to remove by cli
 Jobs Results and Job Resources 
 ------------------------------
 
-Each job instance launched from a Mission, buy hitting the run button in the upper right, can be monitored from the Jobs table on that Mission's home page. When a job is in the "Job Running" status, you can check the progress by querying the standard output (what would normally be printed to screen if you were running the job locally on your laptop) and the process logs (to confirm what processes were created by your job). You also have the option (depending on the system you deployed to) to pause the job, cancel the job (which will return any partial results), and terminate the job (which will not return any results from the job). Past results can be downloaded from completed jobs clicking expanding the "Action" column for that job. 
+Each job instance launched from a Mission, by hitting the run button in the upper right, can be monitored from the Jobs table on that Mission's home page. When a job is in the "Job Running" status, you can check the progress by querying the standard output (what would normally be printed to screen if you were running the job locally on your laptop) and the process logs (to confirm what processes were created by your job). You also have the option (depending on the system you deployed to) to pause the job, cancel the job (which will return any partial results), and terminate the job (which will not return any results from the job). Past results can be downloaded from completed jobs clicking expanding the "Action" column for that job. 
 
 .. image:: images/missions_job_download.gif
 
