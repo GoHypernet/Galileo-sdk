@@ -63,6 +63,7 @@ class GalileoSdk:
         :param config: production or development
         """
         self.log = LogService()
+
         if "GALILEO_CONFIG" in os.environ:
             self._settings = SettingsRepository(str(os.environ["GALILEO_CONFIG"]))
         elif config:
@@ -72,7 +73,7 @@ class GalileoSdk:
 
         settings = self._settings.get_settings()
         self.backend = settings.backend
-
+        
         if "GALILEO_TOKEN" in os.environ and "GALILEO_REFRESH_TOKEN" in os.environ:
             self._auth_provider = AuthProvider(
                 settings_repository=self._settings,
@@ -84,7 +85,7 @@ class GalileoSdk:
                 settings_repository=self._settings,
                 username=str(os.environ["GALILEO_USER"]),
                 password=str(os.environ["GALILEO_PASSWORD"]),
-            )
+           )
         elif auth_token and refresh_token:
             self._auth_provider = AuthProvider(
                 settings_repository=self._settings,

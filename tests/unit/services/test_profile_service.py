@@ -1,5 +1,6 @@
 from galileo_sdk.compat import mock
-from galileo_sdk.business.objects.profiles import Profile, ProfileWallet
+# TODO Previously imported ProfileWallet rather than ProfileCard
+from galileo_sdk.business.objects.profiles import Profile, ProfileCard
 from galileo_sdk.business.objects.stations import EStationUserRole, Station, StationUser
 from galileo_sdk.business.services.profiles import ProfilesService
 
@@ -16,8 +17,8 @@ profile_service = ProfilesService(profile_repo)
 
 def test_list_users():
     profile_repo.list_users.return_value = [
-        Profile("userid", "username", ["mids"], [ProfileWallet("0x", "x", "x")]),
-        Profile("userid2", "username2", ["mids2"], [ProfileWallet("0x2", "x2", "x2")]),
+        Profile("userid", "username", ["mids"], [ProfileCard("0x", "x", "x")]),
+        Profile("userid2", "username2", ["mids2"], [ProfileCard("0x2", "x2", "x2")]),
     ]
 
     # Call
@@ -33,7 +34,7 @@ def test_list_users():
 
 def test_get_profile():
     profile_repo.self.return_value = Profile(
-        "userid", "username", ["mids"], [ProfileWallet("0x", "x", "x")]
+        "userid", "username", ["mids"], [ProfileCard("0x", "x", "x")]
     )
 
     # Call
