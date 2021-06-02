@@ -18,10 +18,12 @@ QUERY_STR = generate_query_str(
     {"ids": ["id"], "names": ["name"], "user_ids": ["user_id"], "page": 1, "items": 25,}
 )
 TIMESTAMP = 1584946381
+UNIVERSE_ID = "universe_id"
 
 # Arrange
 settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
+settings_repo.get_settings().universe = UNIVERSE_ID
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = MissionsRepository(settings_repo, auth_provider, NAMESPACE)
@@ -44,6 +46,7 @@ def mocked_requests_get(*args, **kwargs):
                         "destination_path": "destination_path",
                         "user_id": "user_id",
                         "creation_timestamp": "creation_timestamp",
+                        "mission_type_id": "mission_type_id",
                         "project_type_id": "project_type_id",
                     }
                 ]
@@ -119,7 +122,10 @@ def test_list_projects(mocked_requests):
         "{backend}{namespace}/projects?{query}".format(
             backend=BACKEND, namespace=NAMESPACE, query=QUERY_STR
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json=None,
     )
 
@@ -135,6 +141,7 @@ def tests_create_project(mocked_requests):
         CreateMissionRequest(
             name="name",
             description="description",
+            mission_type_id="mission_type_id",
             source_storage_id="source_storage_id",
             destination_storage_id="destination_storage_id",
         )
@@ -143,15 +150,18 @@ def tests_create_project(mocked_requests):
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/projects".format(backend=BACKEND, namespace=NAMESPACE),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json={
             "name": "name",
             "description": "description",
             "source_storage_id": "source_storage_id",
             "destination_storage_id": "destination_storage_id",
+            "project_type_id": "mission_type_id",
             "source_path": None,
             "destination_path": None,
-            "project_type_id": None,
         },
     )
 
@@ -179,7 +189,10 @@ def test_run_job_on_station(mocked_requests):
         "{backend}{namespace}/projects/{project_id}/jobs".format(
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json={"station_id": STATION_ID, "cpu_count": CPU_COUNT, "memory_amount": MEMORY_AMOUNT, "gpu_count": GPU_COUNT},
     )
 
@@ -195,7 +208,10 @@ def test_run_job_on_machine(mocked_requests):
         "{backend}{namespace}/projects/{project_id}/jobs".format(
             backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json={"station_id": STATION_ID, "machine_id": MACHINE_ID, "cpu_count": CPU_COUNT, "memory_amount": MEMORY_AMOUNT, "gpu_count": GPU_COUNT},
     )
 
