@@ -69,7 +69,7 @@ class GalileoSdk:
         elif config:
             self._settings = SettingsRepository(config)
         else:
-            self._settings = SettingsRepository("production")
+            self._settings = SettingsRepository("development")
 
         settings = self._settings.get_settings()
         self.backend = settings.backend
