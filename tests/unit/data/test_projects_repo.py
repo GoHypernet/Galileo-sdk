@@ -15,7 +15,8 @@ CPU_COUNT = "1"
 MEMORY_AMOUNT = "1048"
 GPU_COUNT = "0"
 QUERY_STR = generate_query_str(
-    {"ids": ["id"], "names": ["name"], "user_ids": ["user_id"], "page": 1, "items": 25,}
+    {"ids": ["id"], "names": ["name"], "user_ids": [
+        "user_id"], "page": 1, "items": 25, }
 )
 TIMESTAMP = 1584946381
 UNIVERSE_ID = "universe_id"
@@ -27,6 +28,8 @@ settings_repo.get_settings().universe = UNIVERSE_ID
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = MissionsRepository(settings_repo, auth_provider, NAMESPACE)
+
+# PETER and SHEP: Changed project_type_id to mission_type_id
 
 
 def mocked_requests_get(*args, **kwargs):
@@ -73,7 +76,7 @@ def mocked_requests_post(*args, **kwargs):
                     "destination_path": "destination_path",
                     "user_id": "user_id",
                     "creation_timestamp": "creation_timestamp",
-                    "project_type_id": "project_type_id",
+                    "mission_type_id": "mission_type_id",
                 }
             },
             200,
@@ -94,17 +97,23 @@ def mocked_requests_post(*args, **kwargs):
                     "time_created": TIMESTAMP,
                     "last_updated": TIMESTAMP,
                     "status": "uploaded",
-                    "container": "container",
+                    "cpu_count": 1,
+                    "gpu_count": 0,
+                    "memory_amount": 0,
+                    "enable_tunnel": False,
+                    "tunnel_port": 8080,
+                    "tunnel_url": "https://example.com",
                     "name": "name",
                     "stationid": "stationid",
                     "userid": "userid",
                     "state": "state",
-                    "oaid": "oaid",
                     "pay_status": "pay_status",
                     "pay_interval": 1,
                     "total_runtime": 10000,
                     "archived": False,
-                    "status_history": [{"timestamp": TIMESTAMP, "status": "uploaded",}],
+                    "container": "container",
+                    "oaid": "oaid",
+                    "status_history": [{"timestamp": TIMESTAMP, "status": "uploaded"}],
                 }
             },
             200,
@@ -125,7 +134,7 @@ def test_list_projects(mocked_requests):
         headers={
             "Authorization": "Bearer ACCESS_TOKEN",
             "universe-id": UNIVERSE_ID,
-            },
+        },
         json=None,
     )
 
@@ -147,19 +156,22 @@ def tests_create_project(mocked_requests):
         )
     )
 
+    # FIXME Not sure why source and destination path is non
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/projects".format(backend=BACKEND, namespace=NAMESPACE),
+        "{backend}{namespace}/projects".format(
+            backend=BACKEND, namespace=NAMESPACE),
         headers={
             "Authorization": "Bearer ACCESS_TOKEN",
             "universe-id": UNIVERSE_ID,
-            },
+        },
         json={
             "name": "name",
             "description": "description",
             "source_storage_id": "source_storage_id",
             "destination_storage_id": "destination_storage_id",
-            "project_type_id": "mission_type_id",
+            "mission_type_id": "mission_type_id",
+            "public": False,
             "source_path": None,
             "destination_path": None,
         },
@@ -182,7 +194,8 @@ def tests_upload_file(mocked_requests):
 
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_station(mocked_requests):
-    r = projects_repo.run_job_on_station(PROJECT_ID, STATION_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
+    r = projects_repo.run_job_on_station(
+        PROJECT_ID, STATION_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -192,8 +205,13 @@ def test_run_job_on_station(mocked_requests):
         headers={
             "Authorization": "Bearer ACCESS_TOKEN",
             "universe-id": UNIVERSE_ID,
-            },
-        json={"station_id": STATION_ID, "cpu_count": CPU_COUNT, "memory_amount": MEMORY_AMOUNT, "gpu_count": GPU_COUNT},
+        },
+        json={
+            "station_id": STATION_ID,
+            "cpu_count": CPU_COUNT,
+            "memory_amount": MEMORY_AMOUNT,
+            "gpu_count": GPU_COUNT
+        }
     )
 
     assert isinstance(r, Job)
@@ -201,7 +219,8 @@ def test_run_job_on_station(mocked_requests):
 
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_machine(mocked_requests):
-    r = projects_repo.run_job_on_lz(PROJECT_ID, STATION_ID, MACHINE_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
+    r = projects_repo.run_job_on_lz(
+        PROJECT_ID, STATION_ID, MACHINE_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -211,8 +230,14 @@ def test_run_job_on_machine(mocked_requests):
         headers={
             "Authorization": "Bearer ACCESS_TOKEN",
             "universe-id": UNIVERSE_ID,
-            },
-        json={"station_id": STATION_ID, "machine_id": MACHINE_ID, "cpu_count": CPU_COUNT, "memory_amount": MEMORY_AMOUNT, "gpu_count": GPU_COUNT},
+        },
+        json={
+            "station_id": STATION_ID,
+            "machine_id": MACHINE_ID,
+            "cpu_count": CPU_COUNT,
+            "memory_amount": MEMORY_AMOUNT,
+            "gpu_count": GPU_COUNT
+        }
     )
 
     assert isinstance(r, Job)

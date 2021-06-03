@@ -9,7 +9,8 @@ STATION_ID = "STATION_ID"
 USER_ID = "USER_ID"
 VOLUMES_ID = "VOLUMES_ID"
 HOST_PATH = "HOST_PATH"
-HEADERS = {"Authorization": "Bearer ACCESS_TOKEN"}
+UNIVERSE_ID = "universe_id"
+HEADERS = {"Authorization": "Bearer ACCESS_TOKEN", "universe-id": UNIVERSE_ID}
 NAME = "STATION_NAME"
 USERNAMES = ["USERNAME1", "USERNAME2"]
 DESCRIPTION = "description"
@@ -21,6 +22,7 @@ ROLE_ID = "role_id"
 # Arrange
 settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
+settings_repo.get_settings().universe = UNIVERSE_ID
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 stations_repo = StationsRepository(settings_repo, auth_provider, NAMESPACE)

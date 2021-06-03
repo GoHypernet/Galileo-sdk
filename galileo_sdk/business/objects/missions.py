@@ -136,7 +136,7 @@ class CreateMissionRequest(object):
         self.destination_storage_id = destination_storage_id
         self.source_path = source_path
         self.destination_path = destination_path
-        self.project_type_id = mission_type_id
+        self.mission_type_id = mission_type_id
         self.settings = settings
         self.public = public
 
