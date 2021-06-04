@@ -2,11 +2,12 @@ from galileo_sdk import GalileoSdk, ResourcePolicy, StationRole, EVolumeAccess
 
 # Must set env variables before running tests
 
+# Many of these are not used
 CONFIG = "development"
 STATION_ID = "86a32c0b-bad0-456b-b41a-cb2bef9cdafb"
 LZ_ID = "Jaguar2121"
 ROLE_ID = "b67bb82c-f939-4c22-a341-9904675b7c92"
-# TODO Give Galileo authentication
+
 galileo = GalileoSdk(config=CONFIG)
 user = galileo.profiles.self()
 MISSION_TYPE_ID = "stata_stata"
@@ -26,7 +27,6 @@ def test_create_and_delete_station():
 
     assert "sdk_station_integration_test" == station_details.name
     assert station_details.stationid is not ""
-    #TODO response is True -> response['success'] is True
     assert r_delete_station['success'] is True
 
 
@@ -134,7 +134,6 @@ def test_delete_station_resource_policy():
 
 
 
-# TODO Make sure lz knows that station is deleted
 def test_self_resource_limits():
     station = galileo.stations.create_station(
         name="sdk_station_integration_test", userids=[], description="for testing",
@@ -193,7 +192,6 @@ def test_delete_station_user_resource_policy():
     response = galileo.stations.delete_station_user_resource_policy(station_id, user.userid)
     policy = galileo.stations.get_station_user_resource_policy(station_id, user.userid)
 
-    # TODO Fix into dict probably
     assert response["success"] is True
     assert policy is None
 
@@ -286,7 +284,6 @@ def test_delete_station_role_resource_policy():
     galileo.stations.delete_station(station_id)
 
 
-# FIXME HTTPError 500
 def test_update_station_lz_resource_policy():
     station = galileo.stations.create_station(
         name="sdk_station_integration_test", userids=[], description="for testing",
@@ -339,7 +336,6 @@ def test_get_station_lz_resource_policy():
 
 
 
-# FIXME 500 Server Error: INTERNAL SERVER ERROR for url: https://dev.api.galileoapp.io/galileo/user_interface/v1/stations/0061bc90-23bc-4b06-9544-d6cdccc17f43/machines/Jaguar2121/resource_policy 
 def test_delete_station_lz_resource_policy():
     station = galileo.stations.create_station(
         name="sdk_station_integration_test", userids=[], description="for testing",

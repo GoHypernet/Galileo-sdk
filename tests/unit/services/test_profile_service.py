@@ -1,5 +1,4 @@
 from galileo_sdk.compat import mock
-# TODO Previously imported ProfileWallet rather than ProfileCard
 from galileo_sdk.business.objects.profiles import Profile, ProfileCard
 from galileo_sdk.business.objects.stations import EStationUserRole, Station, StationUser
 from galileo_sdk.business.services.profiles import ProfilesService

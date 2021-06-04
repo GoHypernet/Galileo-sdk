@@ -526,7 +526,6 @@ class StationsSdk(EventsSdk):
         """
         return self._stations_service.create_station(name, description, userids)
 
-    # FIXME Needs role id
     def invite_to_station(self, station_id, userids, role_id):
         """
         Invite user(s) to a station

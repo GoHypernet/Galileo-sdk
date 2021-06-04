@@ -10,7 +10,7 @@ BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
 PROJECT_ID = "project_id"
 STATION_ID = "station_id"
-MACHINE_ID = "machine_id"
+LZ_ID = "lz_id"
 CPU_COUNT = "1"
 MEMORY_AMOUNT = "1048"
 GPU_COUNT = "0"
@@ -156,7 +156,6 @@ def tests_create_project(mocked_requests):
         )
     )
 
-    # FIXME Not sure why source and destination path is non
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/projects".format(
@@ -220,7 +219,7 @@ def test_run_job_on_station(mocked_requests):
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_run_job_on_machine(mocked_requests):
     r = projects_repo.run_job_on_lz(
-        PROJECT_ID, STATION_ID, MACHINE_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
+        PROJECT_ID, STATION_ID, LZ_ID, CPU_COUNT, MEMORY_AMOUNT, GPU_COUNT)
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -233,7 +232,7 @@ def test_run_job_on_machine(mocked_requests):
         },
         json={
             "station_id": STATION_ID,
-            "machine_id": MACHINE_ID,
+            "machine_id": LZ_ID,
             "cpu_count": CPU_COUNT,
             "memory_amount": MEMORY_AMOUNT,
             "gpu_count": GPU_COUNT

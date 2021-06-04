@@ -49,8 +49,8 @@ class GalileoSdk:
         self,
         auth_token=None,
         refresh_token=None,
-        username="",
-        password="",
+        username=None,
+        password=None,
         config=None,
     ):
         """
@@ -69,7 +69,7 @@ class GalileoSdk:
         elif config:
             self._settings = SettingsRepository(config)
         else:
-            self._settings = SettingsRepository("development")
+            self._settings = SettingsRepository("production")
 
         settings = self._settings.get_settings()
         self.backend = settings.backend

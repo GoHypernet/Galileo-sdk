@@ -4,7 +4,6 @@ from galileo_sdk.business.objects.missions import Mission, MissionType
 # Must set env variables before running tests
 CONFIG = "development"
 
-# TODO Give Galileo authentication
 galileo = GalileoSdk(config=CONFIG)
 
 missions = galileo.missions.list_missions(archived=False)
@@ -71,7 +70,6 @@ def test_update_mission_args():
     )
     updated_mission = galileo.missions.get_mission_by_id(missions[0].mission_id)
 
-    #TODO response is True -> response['success'] is True
     assert response['success'] is True
     assert updated_mission.settings["arg"] == ["arg1", "arg2", "arg3"]
 

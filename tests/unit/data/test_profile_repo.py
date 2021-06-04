@@ -26,7 +26,6 @@ auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 profile_repo = ProfilesRepository(settings_repo, auth_provider, NAMESPACE)
 
-# TODO Check if this dictionary for cards is OK
 def mocked_requests_get(*args, **kwargs):
     if args[0] == "{backend}{namespace}/users".format(
         backend=BACKEND, namespace=NAMESPACE
@@ -122,7 +121,6 @@ def mocked_requests_get(*args, **kwargs):
     return MockResponse(None, 404)
 
 
-# FIXME len(stored_cards) == 0. Probably because of account. Test passes without line 138
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_users(mocked_requests):
     # Call

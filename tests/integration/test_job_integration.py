@@ -4,7 +4,7 @@ from galileo_sdk import GalileoSdk
 from galileo_sdk.business.objects import Job
 
 CONFIG = "development"
-# TODO Give Galileo authentication
+
 galileo = GalileoSdk(config=CONFIG)
 job_list = galileo.jobs.list_jobs(sort_by="upload_date", sort_order="desc")
 jobid = ""

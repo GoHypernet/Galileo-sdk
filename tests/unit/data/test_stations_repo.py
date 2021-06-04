@@ -438,9 +438,9 @@ def test_delete_station(mocked_requests):
 
 
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
-def test_add_machines_to_station(mocked_requests):
+def test_add_lzs_to_station(mocked_requests):
     # Call
-    r = stations_repo.add_machines_to_station(STATION_ID, MIDS)
+    r = stations_repo.add_lzs_to_station(STATION_ID, MIDS)
 
     # Act
     mocked_requests.assert_called_once_with(
@@ -456,9 +456,9 @@ def test_add_machines_to_station(mocked_requests):
 
 
 @mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
-def test_remove_machines_from_station(mocked_requests):
+def test_remove_lzs_from_station(mocked_requests):
     # Call
-    r = stations_repo.remove_machines_from_station(STATION_ID, MIDS)
+    r = stations_repo.remove_lzs_from_station(STATION_ID, MIDS)
 
     # Act
     mocked_requests.assert_called_once_with(

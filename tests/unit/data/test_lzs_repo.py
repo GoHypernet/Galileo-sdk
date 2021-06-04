@@ -9,7 +9,7 @@ from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
-MID = "machines_id"
+LZ_ID = "lzs_id"
 AMOUNT = 10
 
 # Arrange
@@ -22,7 +22,7 @@ machines_repo = LzRepository(settings_repo, auth_provider, NAMESPACE)
 
 def mocked_requests_get(*args, **kwargs):
     if args[0] == "{backend}{namespace}/machines/{mid}".format(
-        backend=BACKEND, namespace=NAMESPACE, mid=MID
+        backend=BACKEND, namespace=NAMESPACE, mid=LZ_ID
     ):
         x = 1
         return MockResponse(
@@ -70,7 +70,7 @@ def mocked_requests_get(*args, **kwargs):
 
 def mocked_requests_put(*args, **kwargs):
     if args[0] == "{backend}{namespace}/machines/{mid}".format(
-        backend=BACKEND, namespace=NAMESPACE, mid=MID
+        backend=BACKEND, namespace=NAMESPACE, mid=LZ_ID
     ):
         x = 1
         return MockResponse(
@@ -97,12 +97,12 @@ def mocked_requests_put(*args, **kwargs):
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def get_machine_by_id(mocked_requests):
     # Call
-    r = machines_repo.get_machine_by_id(MID)
+    r = machines_repo.get_machine_by_id(LZ_ID)
 
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/machines/{mid}".format(
-            backend=BACKEND, namespace=NAMESPACE, mid=MID
+            backend=BACKEND, namespace=NAMESPACE, mid=LZ_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json=None,
@@ -134,12 +134,12 @@ def list_machines(mocked_requests):
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def update_max_concurrent_jobs(mocked_requests):
     # Call
-    r = machines_repo.update(UpdateLzRequest(MID))
+    r = machines_repo.update(UpdateLzRequest(LZ_ID))
 
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/machines/{mid}".format(
-            backend=BACKEND, namespace=NAMESPACE, mid=MID
+            backend=BACKEND, namespace=NAMESPACE, mid=LZ_ID
         ),
         headers={"Authorization": "Bearer ACCESS_TOKEN"},
         json={"amount": AMOUNT},
