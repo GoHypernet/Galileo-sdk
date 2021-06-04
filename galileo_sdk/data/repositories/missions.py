@@ -158,7 +158,7 @@ def project_dict_to_project(project):
         project["destination_path"],
         project["user_id"],
         project["creation_timestamp"],
-        project.get("mission_type_id"),
+        project.["mission_type_id"],
         project.get("updated_timestamp", None),
         project.get("organization_id", None),
         project.get("settings", None),
