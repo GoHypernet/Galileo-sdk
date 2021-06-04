@@ -185,7 +185,7 @@ def test_delete_station():
 
 
 def test_add_machines_to_station():
-    stations_repo.add_lz_to_station.return_value = True
+    stations_repo.add_machines_to_station.return_value = True
 
     # Call
     r = stations_service.add_lz_to_station(STATION_ID, MIDS)
@@ -195,7 +195,7 @@ def test_add_machines_to_station():
 
 
 def test_remove_machines_to_station():
-    stations_repo.remove_lz_from_station.return_value = True
+    stations_repo.remove_machines_from_station.return_value = True
 
     # Call
     r = stations_service.remove_lz_from_station(STATION_ID, MIDS)

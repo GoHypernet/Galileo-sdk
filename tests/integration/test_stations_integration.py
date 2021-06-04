@@ -134,12 +134,18 @@ def test_delete_station_resource_policy():
 
 
 
+# TODO Make sure lz knows that station is deleted
 def test_self_resource_limits():
     station = galileo.stations.create_station(
         name="sdk_station_integration_test", userids=[], description="for testing",
     )
+    
     station_id = station.stationid
+    user_id = galileo.profiles.self().userid
+    lz_id = galileo.lz.list_lz(userids=[user_id])[0].lz_id
 
+    galileo.stations.add_lz_to_station(station_id, [lz_id])
+    
     # Create resource policy
     galileo.stations.update_station_resource_policy(station_id)
     
@@ -292,31 +298,39 @@ def test_update_station_lz_resource_policy():
             station_id, ROLE_ID, max_cpu_per_job=1
         )
 
+    user_id = galileo.profiles.self().userid
+    lz_id = galileo.lz.list_lz(userids=[user_id])[0].lz_id
+
+    galileo.stations.add_lz_to_station(station_id, [lz_id])
+
 
     resource_policy = galileo.stations.update_station_lz_resource_policy(
-        station_id, LZ_ID, max_cpu_per_job=1
+        station_id, lz_id, max_cpu_per_job=1
     )
     assert resource_policy.max_cpu_per_job == 1
     galileo.stations.delete_station(station_id)
 
 
-# FIXME 500 Server Error: INTERNAL SERVER ERROR for url: https://dev.api.galileoapp.io/galileo/user_interface/v1/stations/0061bc90-23bc-4b06-9544-d6cdccc17f43/machines/Jaguar2121/resource_policy 
 def test_get_station_lz_resource_policy():
     station = galileo.stations.create_station(
         name="sdk_station_integration_test", userids=[], description="for testing",
     )
     station_id = station.stationid
     # Create role resource policy
-    galileo.stations.update_station_role_resource_policy(
-            station_id, ROLE_ID, max_cpu_per_job=1
-    )
+    user_id = galileo.profiles.self().userid
+    lz_id = galileo.lz.list_lz(userids=[user_id])[0].lz_id
 
+    galileo.stations.add_lz_to_station(station_id, [lz_id])
+
+    galileo.stations.update_station_lz_resource_policy(
+        station_id, lz_id, max_cpu_per_job=1
+    )
 
     resource_policy = galileo.stations.get_station_lz_resource_policy(
-        station_id, LZ_ID
+        station_id, lz_id
     )
     resource_limits = galileo.stations.get_station_lz_resource_limits(
-        station_id, LZ_ID
+        station_id, lz_id
     )
 
     assert isinstance(resource_policy, ResourcePolicy)
@@ -331,16 +345,23 @@ def test_delete_station_lz_resource_policy():
         name="sdk_station_integration_test", userids=[], description="for testing",
     )
     station_id = station.stationid
+    user_id = galileo.profiles.self().userid
+    lz_id = galileo.lz.list_lz(userids=[user_id])[0].lz_id
     # Create role resource policy
-    galileo.stations.update_station_role_resource_policy(
-            station_id, ROLE_ID, max_cpu_per_job=1
+
+    galileo.stations.add_lz_to_station(station_id, [lz_id])
+
+    galileo.stations.update_station_lz_resource_policy(
+        station_id, lz_id, max_cpu_per_job=1
     )
 
     response = galileo.stations.delete_station_lz_resource_policy(
-        station_id, LZ_ID
+        station_id, lz_id
     )
     resource_policy = galileo.stations.get_station_lz_resource_policy(
-        station_id, LZ_ID
+        station_id, lz_id
     )
     assert response["success"] is True
     assert resource_policy is None
+    galileo.stations.delete_station(station_id)
+

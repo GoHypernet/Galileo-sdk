@@ -5,6 +5,7 @@ CONFIG = "development"
 
 # TODO Give Galileo authentication
 galileo = GalileoSdk(config=CONFIG)
+second_galileo = GalileoSdk(config=CONFIG, username="", password="")
 
 # TODO Changed wallets to stored_cards
 
@@ -25,13 +26,14 @@ def test_get_profile():
 
 # TODO Station invites list is empty
 def test_list_station_invites():
-    station = galileo.stations.create_station(
+    station = second_galileo.stations.create_station(
         name="sdk_station_integration_test", userids=[], description="for testing",
     )
     station_id = station.stationid
-    # Create role resource policy
     role_id = station.users[0].role_id
-    galileo.stations.invite_to_station(station_id, [user_id], role_id)
+    user_id = galileo.profiles.self().userid
+    # Create role resource policy
+    second_galileo.stations.invite_to_station(station_id, [user_id], role_id)
     
     
 
@@ -42,7 +44,8 @@ def test_list_station_invites():
     assert station_invites[0].users is not None
     assert station_invites[0].volumes is not None
 
-    galileo.stations.delete_station(station_id)
+    second_galileo.stations.delete_station(station_id)
 
 
 galileo.disconnect()
+second_galileo.disconnect()

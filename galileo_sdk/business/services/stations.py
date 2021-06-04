@@ -146,11 +146,13 @@ class StationsService:
     def remove_member_from_station(self, station_id, userid):
         return self._stations_repo.remove_member_from_station(station_id, userid)
 
+    # ALERT Changed add_lzs to add machines
     def add_lz_to_station(self, station_id, mids):
-        return self._stations_repo.add_lz_to_station(station_id, mids)
+        return self._stations_repo.add_machines_to_station(station_id, mids)
 
+    # ALERT Changed remove_lzs to remove machines
     def remove_lz_from_station(self, station_id, mids):
-        return self._stations_repo.remove_lz_from_station(station_id, mids)
+        return self._stations_repo.remove_machines_from_station(station_id, mids)
 
     def get_station_lz_resource_policy(self, station_id, machine_id):
         return self._stations_repo.get_station_machine_resource_policy(
