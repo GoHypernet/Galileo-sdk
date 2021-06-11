@@ -109,6 +109,15 @@ def mocked_requests_put(*args, **kwargs):
 
     return MockResponse(None, 404)
 
+def mocked_requests_delete(*args, **kwargs):
+    if args[0] == "{backend}{namespace}/machines/{lz_id}".format(
+        backend=BACKEND, namespace=NAMESPACE, lz_id=LZ_ID
+    ):
+        return MockResponse(
+            {
+            "success" : True
+        }, 200)
+    return MockResponse(None, 404)
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_get_lz_by_id(mocked_requests):
@@ -146,7 +155,20 @@ def test_list_lzs(mocked_requests):
         assert r[i].userid == str(i)
         assert r[i].status == ELzStatus.online
 
+@mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
+def test_delete_lz(mocked_requests):
+    # Call
+    r = lz_repo.delete_lz_by_id(LZ_ID)
 
+    # Act
+    mocked_requests.assert_called_once_with(
+        "{backend}{namespace}/machines/{lz_id}".format(backend=BACKEND, namespace=NAMESPACE, lz_id=LZ_ID),
+        headers=HEADERS,
+        json=None,
+    )
+
+    # Assert
+    assert r["success"] is True
 # @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 # def test_update_max_concurrent_jobs(mocked_requests):
     # # Call

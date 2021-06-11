@@ -6,6 +6,7 @@ CONFIG = "development"
 galileo = GalileoSdk(config=CONFIG)
 second_galileo = GalileoSdk(config=CONFIG, username=str(os.environ["SECOND_GALILEO_USER"]), password=str(os.environ["SECOND_GALILEO_PASSWORD"]))
 
+
 def test_list_users():
     users = galileo.profiles.list_users()
     assert users is not None

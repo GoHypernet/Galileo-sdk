@@ -102,3 +102,12 @@ def test_run_job_on_machine():
 
     assert r.project_id == "project_id"
     assert r.job_id == "jobid"
+
+def test_delete_project():
+    projects_repo.delete_mission.return_value = True
+
+    # Call
+    r = projects_service.delete_mission(PROJECT_ID)
+
+    # Assert
+    assert r is True

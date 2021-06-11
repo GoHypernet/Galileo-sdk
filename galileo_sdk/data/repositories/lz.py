@@ -23,6 +23,10 @@ class LzRepository(RequestsRepository):
         machines = json["machines"]
         return [machine_dict_to_machine(machine) for machine in machines]
 
+    def delete_lz_by_id(self, lz_id):
+        response = self._delete("/machines/{lz_id}".format(lz_id=lz_id))
+        return response.json()
+
     def update(self, request):
         response = self._put(
             "/machines/{mid}".format(mid=request.lz_id),
@@ -34,7 +38,6 @@ class LzRepository(RequestsRepository):
         json = response.json()
         machine = json["machine"]
         return machine_dict_to_machine(machine)
-
 
 def machine_dict_to_machine(machine):
     return Lz(

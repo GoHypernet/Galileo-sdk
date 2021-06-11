@@ -121,6 +121,13 @@ def mocked_requests_post(*args, **kwargs):
 
     return MockResponse(None, 404)
 
+def mocked_requests_delete(*args, **kwargs):
+    if args[0] == "{backend}{namespace}/projects/{id}".format(
+        backend=BACKEND, namespace=NAMESPACE, id=PROJECT_ID
+    ):
+        return MockResponse(True, 200)
+
+    return MockResponse(None, 404)
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_projects(mocked_requests):
@@ -244,3 +251,23 @@ def test_run_job_on_machine(mocked_requests):
     assert r.job_id == "jobid"
     assert len(r.status_history) == 1
     assert r.status_history[0].status == EJobStatus.uploaded
+
+@mock.patch("galileo_sdk.compat.requests.delete", side_effect=mocked_requests_delete)
+def test_delete_project(mocked_requests):
+    # Call
+    r = projects_repo.delete_mission(PROJECT_ID)
+
+    # Act
+    mocked_requests.assert_called_once_with(
+        "{backend}{namespace}/projects/{project_id}".format(
+            backend=BACKEND, namespace=NAMESPACE, project_id=PROJECT_ID
+        ),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+        },
+        json=None,
+    )
+
+    # Assert
+    assert r is True
