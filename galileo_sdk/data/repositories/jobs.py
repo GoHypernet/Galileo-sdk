@@ -146,7 +146,6 @@ def file_dict_to_file_listing(file):
         file.get("nonce", None),
     )
 
-
 def job_dict_to_job(job):
     return Job(
         job["jobid"],

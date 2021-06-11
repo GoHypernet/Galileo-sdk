@@ -25,15 +25,9 @@ class LzRepository(RequestsRepository):
 
     def update(self, request):
         response = self._put(
-            "/machines/{mid}".format(mid=request.mid),
+            "/machines/{mid}".format(mid=request.lz_id),
             {
                 "name": request.name,
-                "gpu": request.gpu,
-                "cpu": request.cpu,
-                "os": request.os,
-                "arch": request.arch,
-                "memory": request.memory,
-                "running_jobs_limit": request.running_jobs_limit,
                 "active": request.active,
             },
         )

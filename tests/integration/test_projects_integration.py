@@ -70,7 +70,7 @@ def test_update_mission_args():
     )
     updated_mission = galileo.missions.get_mission_by_id(missions[0].mission_id)
 
-    assert response is True
+    assert response['success'] is True
     assert updated_mission.settings["arg"] == ["arg1", "arg2", "arg3"]
 
 

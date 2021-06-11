@@ -46,7 +46,7 @@ def test_list_projects():
 
 def test_upload():
     projects_repo.upload_single_file.return_value = True
-    r = projects_service.upload(PROJECT_ID, "flatplate")
+    r = projects_service.upload(PROJECT_ID, "python_example")
 
     assert r is True
 
