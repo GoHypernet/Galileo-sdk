@@ -1,4 +1,5 @@
 import os
+import socket
 
 from .business import (
     UniversesService,
@@ -169,3 +170,30 @@ class GalileoSdk:
         :return: None
         """
         self._settings.get_settings().universe = universe_id
+
+    def send_notification(self, message, verbose=False):
+        """
+        Call this function to send a custom notification from Galileo. You must be running in an active Galileo
+        job container for this function to return successful. 
+        
+        :param message: str, the string to be pushed to the user as the notification (max size is 4kb). 
+        :param verbose: boolean, print debug messages to stdout.
+        :return success: boolean, whether the message was sent successfully or not. 
+        """
+
+
+        GALILEO_LZ_IPV4 = os.environ.get('GALILEO_LZ_IPV4')
+        GALILEO_LZ_PORT = os.environ.get('GALILEO_LZ_PORT')
+
+        if not (GALILEO_LZ_IPV4 and GALILEO_LZ_PORT):
+            if verbose:
+                print("Could not retrieve port and IPV4 address for notification service.")
+                print("Are you sure you are running in an active job container?")
+            return False
+
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((GALILEO_LZ_IPV4, int(GALILEO_LZ_PORT)))
+            s.sendall(f"${message}".encode())
+            print("Message send successfully.")
+            
+        return True
