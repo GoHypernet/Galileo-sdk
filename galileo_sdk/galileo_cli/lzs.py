@@ -93,7 +93,7 @@ def lzs_cli(main, galileo: GalileoSdk):
         """
         Delete LZs in your Galileo account.
         """
-        spinner = Halo("Deleting LZs\n", spinner="dot").start()
+        spinner = Halo("Deleting LZs", spinner="dot").start()
 
         for lz in lz_ids:
             try:
