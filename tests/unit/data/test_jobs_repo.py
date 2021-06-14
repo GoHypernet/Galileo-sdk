@@ -12,15 +12,19 @@ LOCATION = os.path.join("", FILENAME)
 JOB_ID = "job_id"
 DEST_MID = "dest_mid"
 STATION_ID = "station_id"
+UNIVERSE_ID = "universe_id"
 QUERY = generate_query_str({"filename": FILENAME, "path": LOCATION})
 TIMESTAMP = 1584946381
+
 
 # Arrange
 settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
+settings_repo.get_settings().universe = UNIVERSE_ID 
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 job_repo = JobsRepository(settings_repo, auth_provider, NAMESPACE)
+
 
 job = {
     "jobid": "jobid",
@@ -29,16 +33,22 @@ job = {
     "time_created": TIMESTAMP,
     "last_updated": TIMESTAMP,
     "status": "uploaded",
-    "container": "container",
+    "cpu_count": 1,
+    "gpu_count": 0,
+    "memory_amount": 0,    
+    "enable_tunnel": False,
+    "tunnel_port": 8080,
+    "tunnel_url": "https://example.com",
     "name": "name",
     "stationid": "stationid",
     "userid": "userid",
     "state": "state",
-    "oaid": "oaid",
     "pay_status": "pay_status",
     "pay_interval": 1,
     "total_runtime": 10000,
     "archived": False,
+    "container": "container",
+    "oaid": "oaid",
     "status_history": [{"timestamp": TIMESTAMP, "status": "uploaded"}],
 }
 
@@ -137,11 +147,15 @@ def test_request_send_job(mocked_requests):
     r = r.json()
 
     # Act
+    # Universes is being mocked and messing stuff up
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/job/upload_request".format(
             backend=BACKEND, namespace=NAMESPACE
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json=None,
     )
 
@@ -156,9 +170,14 @@ def test_request_send_job_completed(mocked_requests):
     r = r.json()
 
     # Act
+    # Universes is being mocked and messing stuff up
+
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs".format(backend=BACKEND, namespace=NAMESPACE),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID  
+            },
         json={
             "destination_mid": DEST_MID,
             "filename": FILENAME,
@@ -181,7 +200,10 @@ def test_request_receive_job(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/results/location".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN", 
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -200,14 +222,16 @@ def test_request_receive_job_completed(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/results/download_complete".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
     # Assert
     assert r.json() == True
     assert r.status_code == 200
-
 
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_submit_job(mocked_requests):
@@ -220,13 +244,15 @@ def test_submit_job(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/run".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+            },
         json=None,
     )
 
     # Assert
     assert r["job"]["status"] == "submit"
-
 
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_request_stop_job(mocked_requests):
@@ -238,13 +264,15 @@ def test_request_stop_job(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/stop".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
     # Assert
     assert r.status == "stop"
-
 
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_request_pause_job(mocked_requests):
@@ -256,13 +284,15 @@ def test_request_pause_job(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/pause".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+            },
         json=None,
     )
 
     # Assert
     assert r.status == "pause"
-
 
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_request_start_job(mocked_requests):
@@ -274,13 +304,15 @@ def test_request_start_job(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/start".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
     # Assert
     assert r.status == "start"
-
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_request_top_from_job(mocked_requests):
@@ -292,7 +324,10 @@ def test_request_top_from_job(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/top".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -308,7 +343,6 @@ def test_request_top_from_job(mocked_requests):
     assert r[1].items[1].title == "title2"
     assert r[1].items[1].detail == "process22"
 
-
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_request_logs_from_job(mocked_requests):
     # Call
@@ -319,13 +353,15 @@ def test_request_logs_from_job(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/logs".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+            },
         json=None,
     )
 
     # Assert
     assert r == "logs"
-
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_list_jobs(mocked_requests):
@@ -335,13 +371,15 @@ def test_list_jobs(mocked_requests):
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs".format(backend=BACKEND, namespace=NAMESPACE),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
     # Assert
     assert r[0].job_id == jobObject.job_id
-
 
 @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
 def test_kill_request(mocked_requests):
@@ -351,12 +389,14 @@ def test_kill_request(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/kill".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
     assert r.status == "kill"
-
 
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_get_results_url(mocked_requests):
@@ -366,7 +406,10 @@ def test_get_results_url(mocked_requests):
         "{backend}{namespace}/jobs/{job_id}/results".format(
             backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 

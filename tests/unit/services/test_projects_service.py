@@ -46,7 +46,7 @@ def test_list_projects():
 
 def test_upload():
     projects_repo.upload_single_file.return_value = True
-    r = projects_service.upload(PROJECT_ID, "flatplate")
+    r = projects_service.upload(PROJECT_ID, "python_example")
 
     assert r is True
 
@@ -102,3 +102,12 @@ def test_run_job_on_machine():
 
     assert r.project_id == "project_id"
     assert r.job_id == "jobid"
+
+def test_delete_project():
+    projects_repo.delete_mission.return_value = True
+
+    # Call
+    r = projects_service.delete_mission(PROJECT_ID)
+
+    # Assert
+    assert r is True

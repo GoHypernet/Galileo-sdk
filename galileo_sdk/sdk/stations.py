@@ -526,7 +526,7 @@ class StationsSdk(EventsSdk):
         """
         return self._stations_service.create_station(name, description, userids)
 
-    def invite_to_station(self, station_id, userids):
+    def invite_to_station(self, station_id, userids, role_id):
         """
         Invite user(s) to a station
 
@@ -534,7 +534,7 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :return: boolean
         """
-        return self._stations_service.invite_to_station(station_id, userids)
+        return self._stations_service.invite_to_station(station_id, userids, role_id)
 
     def accept_station_invite(self, station_id):
         """

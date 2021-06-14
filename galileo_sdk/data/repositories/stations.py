@@ -255,14 +255,14 @@ class StationsRepository(RequestsRepository):
 
         return response.json()  # Boolean
 
-    def add_lz_to_station(self, station_id, mids):
+    def add_lzs_to_station(self, station_id, mids):
         response = self._post(
             "/station/{station_id}/machines".format(station_id=station_id),
             {"mids": mids},
         )
         return response.json()
 
-    def remove_lz_from_station(self, station_id, mids):
+    def remove_lzs_from_station(self, station_id, mids):
         response = self._delete(
             "/station/{station_id}/machines".format(station_id=station_id),
             {"mids": mids},

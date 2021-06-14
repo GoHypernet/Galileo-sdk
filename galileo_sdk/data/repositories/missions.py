@@ -30,7 +30,7 @@ class MissionsRepository(RequestsRepository):
             "destination_storage_id": create_project_request.destination_storage_id,
             "source_path": create_project_request.source_path,
             "destination_path": create_project_request.destination_path,
-            "project_type_id": create_project_request.project_type_id,
+            "mission_type_id": create_project_request.mission_type_id,
             "public": create_project_request.public,
         }
         if create_project_request.settings is not None:

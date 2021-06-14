@@ -99,7 +99,17 @@ class MissionsSdk:
             public=public,
         )
         return self._missions_service.create_mission(request)
+    
+    def delete_mission_by_id(self, mission_id):
+        """
+        Deletes a mission
 
+        :param mission_id: str: Target Mission UUID
+        """
+
+        return self._missions_service.delete_mission(mission_id)
+
+    
     def upload(self, mission_id, payload, rename=None, verbose=False):
         """
         Upload a file or directory to the specified Mission. If the payload is a file, this function 
