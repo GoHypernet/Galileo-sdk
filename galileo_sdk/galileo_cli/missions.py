@@ -354,3 +354,26 @@ def missions_cli(main, galileo: GalileoSdk):
         
         spinner.stop()
         print("Mission Updated")
+
+    @missions.command()
+    @click.argument(
+        "mission_ids", 
+        nargs=-1,
+        type=str, 
+    )
+    def delete(mission_ids):
+        """
+        Delete Missions in your Galileo account.
+        """
+        spinner = Halo("Deleting missions", spinner="dot").start()
+
+        for mission in mission_ids:
+            try:
+                if not galileo.missions.delete_mission_by_id(mission):
+                    spinner.stop()
+                    click.echo("Deletion of mission {id} unsuccessful".format(id=mission))
+                spinner.stop()
+                click.echo("Deleted Mission with id: {id}".format(id=mission))
+            except Exception as e:
+                click.echo("Error: {e}".format(e=e))
+        spinner.stop()
