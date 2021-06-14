@@ -92,3 +92,12 @@ def test_update():
 
     # Assert
     assert r.userid == str(x)
+
+def test_delete_lz():
+    # Arrange
+    lzs_repo.delete_lz.return_value = True
+
+    # Call 
+    r = lzs_service.delete_lz_by_id(LZ_ID)
+
+    assert r["success"] is True

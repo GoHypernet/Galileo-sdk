@@ -48,6 +48,15 @@ class LzSdk(EventsSdk):
         """
         return self._lz_service.get_lz_by_id(lz_id)
 
+    def delete_lz_by_id(self, lz_id):
+        """
+        Remove a specific Landing Zone by its id
+
+        :param lz_id: str
+        :return: boolean 
+        """
+        return self._lz_service.delete_lz_by_id(lz_id).get("success", False)
+
     def list_lz(
         self, lz_ids=None, userids=None, page=1, items=25,
     ):
