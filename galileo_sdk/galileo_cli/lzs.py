@@ -82,3 +82,29 @@ def lzs_cli(main, galileo: GalileoSdk):
 
         spinner.stop()
         click.echo(lzs_df.head(items))
+
+    @lzs.command()
+    @click.option(
+        "--lz_ids", 
+        multiple=True, 
+        type=str, 
+        help="Delete by Landing Zone id.",
+        required=True
+    )
+    def delete(lz_ids):
+        """
+        Delete Landing Zones in your Galileo account.
+        """
+        
+        spinner = Halo("Retrieving lzs\n", spinner="dot")
+        spinner.start()
+
+        self = galileo.profiles.self()
+
+        for lz_id in lz_ids:
+            if not galileo.lz.delete_lz_by_id(lz_id):
+                click.echo("Deletion unsuccessful")
+                spinner.stop()
+                return
+            click.echo("Deleted Landing Zone with id: {id}".format(id=lz_id))
+        spinner.stop()

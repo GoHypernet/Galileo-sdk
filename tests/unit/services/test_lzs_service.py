@@ -95,7 +95,7 @@ def test_update():
 
 def test_delete_lz():
     # Arrange
-    lzs_repo.delete_lz.return_value = True
+    lzs_repo.delete_lz_by_id.return_value = {"success": True}
 
     # Call 
     r = lzs_service.delete_lz_by_id(LZ_ID)
