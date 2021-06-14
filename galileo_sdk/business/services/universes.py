@@ -10,3 +10,9 @@ class UniversesService:
 
     def list_universes(self):
         return self._universes_repo.list_universes()
+        
+    def create_universe(self, name, admin_user_ids, require_positive_credit_balance=True, allow_scheduling_without_quota=True):
+        return self._universes_repo.create_universe(name, admin_user_ids, require_positive_credit_balance=require_positive_credit_balance, allow_scheduling_without_quota=allow_scheduling_without_quota)
+
+
+

@@ -142,7 +142,7 @@ class GalileoSdk:
         self.jobs = JobsSdk(self._jobs_service, connector)
         self.stations = StationsSdk(self._stations_service, connector)
         self.lz = LzSdk(self._lz_service, connector)
-
+        
     def disconnect(self):
         """
         Call disconnect before your application or script ends.
