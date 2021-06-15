@@ -143,7 +143,7 @@ class StationsRepository(RequestsRepository):
 
     def remove_member_from_station(self, station_id, userid):
         response = self._delete(
-            "/station/{station_id}/user/{userid}".format(
+            "/station/{station_id}/user/{userid}/delete".format(
                 station_id=station_id, userid=userid
             )
         )

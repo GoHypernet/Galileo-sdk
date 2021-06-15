@@ -158,8 +158,7 @@ def stations_cli(main, galileo: GalileoSdk):
             spinner.stop()
             click.echo("No station matches that query.")
             return
-
-        users_list = r.stations[0].users
+        users_list = r[0].users
         users_list = [user.__dict__ for user in users_list]
         users_df = pandas.json_normalize(users_list)
         spinner.stop()
@@ -213,3 +212,71 @@ def stations_cli(main, galileo: GalileoSdk):
         spinner.stop()
         pp = pprint.PrettyPrinter(indent=2)
         click.echo(pp.pprint(lz_list))
+
+    @stations.command()
+    @click.option(
+        "-s",
+        "--station-id",
+        type=str,
+        required=True,
+        prompt="Station ID"
+    )
+    @click.option(
+        "-r",
+        "--role",
+        type=str,
+        required=True,
+        default="launcher"
+    )
+    @click.argument(
+        "user-ids",
+        nargs=-1,
+        type=str,
+        required=True,
+    )
+    def invite(station_id, role, user_ids):
+        """
+        Invite users in a Station.
+        """
+        spinner = Halo("Inviting users to station", spinner="dot").start()
+        role_id = galileo.stations.get_station_roles(station_id, names=[role])[0]
+        for user in user_ids:
+            try:
+                spinner.stop()
+                r = galileo.stations.invite_to_station(station_id, [user], role_id.id)
+                username = galileo.profiles.list_users(userids=[user])[0].username
+                station_name = galileo.stations.list_stations(stationids=[station_id])[0].name
+                click.echo("Invited {name} to station {station_name} ({station_id}) with role {role_id}".format(name=username, station_name=station_name, station_id=station_id, role_id=role))
+            except Exception as e:
+                spinner.stop()
+                click.echo("Error", e)
+
+    @stations.command()
+    @click.option(
+        "-s",
+        "--station-id",
+        type=str,
+        required=True,
+        prompt="Station ID"
+    )
+    @click.argument(
+        "user-ids",
+        nargs=-1,
+        type=str,
+        required=True,
+    )
+    def kick(station_id, user_ids):
+        """
+        Remove users from a Station.
+        """
+        spinner = Halo("Removing users from station", spinner="dot").start()
+        for user in user_ids:
+            try:
+                spinner.stop()
+                r = galileo.stations.remove_member_from_station(station_id, user)
+                username = galileo.profiles.list_users(userids=[user])[0].username
+                station_name = galileo.stations.list_stations(stationids=[station_id])[0].name
+                click.echo("Removed {name} from station {station_name} ({station_id})".format(name=username, station_name=station_name, station_id=station_id))
+            except Exception as e:
+                spinner.stop()
+                click.echo("Error", e)

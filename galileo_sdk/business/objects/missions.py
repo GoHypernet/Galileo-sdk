@@ -152,7 +152,6 @@ class UpdateMissionRequest(CreateMissionRequest):
         source_path=None,
         destination_path=None,
         settings=None,
-        public=None,
     ):
         self.mission_id = mission_id
         super(UpdateMissionRequest, self).__init__(
@@ -163,5 +162,4 @@ class UpdateMissionRequest(CreateMissionRequest):
             source_path=source_path,
             destination_path=destination_path,
             settings=settings,
-            public=public,
         )
