@@ -194,7 +194,7 @@ class GalileoSdk:
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((GALILEO_LZ_IPV4, int(GALILEO_LZ_PORT)))
-            s.sendall(f"${message}".encode())
+            s.sendall("{message}".format(message=message).encode())
             print("Message send successfully.")
             
         return True
