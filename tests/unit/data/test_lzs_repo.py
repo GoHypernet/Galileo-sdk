@@ -169,20 +169,3 @@ def test_delete_lz(mocked_requests):
 
     # Assert
     assert r["success"] is True
-# @mock.patch("galileo_sdk.compat.requests.put", side_effect=mocked_requests_put)
-# def test_update_max_concurrent_jobs(mocked_requests):
-    # # Call
-    # r = lz_repo.update(UpdateLzRequest(LZ_ID))
-
-    # # Act
-    # mocked_requests.assert_called_once_with(
-        # "{backend}{namespace}/machines/{mid}".format(
-            # backend=BACKEND, namespace=NAMESPACE, mid=LZ_ID
-        # ),
-        # headers=HEADERS,
-        # json={"amount": AMOUNT},
-    # )
-
-    # # Assert
-    # assert isinstance(r, Lz)
-    # assert r == True
