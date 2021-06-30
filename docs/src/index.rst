@@ -18,6 +18,7 @@ The Galileo `SDK <galileo_sdk.html>`_ allows users to interact with the Galileo 
    :caption: Contents:
 
     Security Overview <security.rst>
+	Billing and Pricing <billing.rst>
 	Universes Guide <universes.rst>
     Stations Guide <stations.rst>
     Missions Guide <missions.rst>

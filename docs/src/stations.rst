@@ -3,7 +3,9 @@
 Stations Guide
 ===============
 
-Stations are a Galileo feature that make it quick and simple to manage permissioned access and user quotas for nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues. 
+Stations are a Galileo feature that make it quick and simple to manage permissioned access and user quotas for nearly any kind of computational asset with an internet connection. They also provide a built-in queueing/scheduling mechanism so that resource administrators can provide fair access to limited computational devices without spending hours setting up access rules and priority queues.
+
+Stations are also how hardware providers can list and price their computational resources in Galileo's open marketplace. In order for a Station Owner to receive payment for running workloads for other Galileo users, they must first register a provider account with Galileo. 
 
 Creating Your Own Galileo Station 
 --------------------------------------
@@ -58,12 +60,24 @@ In addition to the role capabilities, resource limitations and usage quotas can 
 In the example pictured above, any user with the Launcher role can use at most 10 CPUs and 10 GB of RAM at one time and each individual job can use at most 5 CPUs and 5 GB of RAM. Every CPU-hour will cost 4 credits and each GB-hour will cost 1 credit, so if the user runs a job for 1 hour that uses 1 CPU and 1 GB of RAM, it will cost them 5 credits which is subtracted from their quota. A quota can be set for the daily, weekly, and monthly time frame. For example, in the screen shot above, the Launcher role can use 10 credits per day, 500 credits per week, 1000 credits per month, or 10000 credits per year. As soon as the user hits one of these credit limits, they will not be able to run more jobs until the associated time period resets (so if they use up 10 credits before the end of a day, they will have to wait for the next 24 hour period for their daily credit quota to reset). 
 
 Basic Station Settings and Resource Limits
-------------------------------------------------------
+-------------------------------------------
 To get to the Station-level settings page, click the three dots in the upper right corner of the Station main page. In the Basic Info tab of Station Settings, admins can edit the Station name and description. Descriptions must be limited to 250 characters. 
 
 Additionally, basic resource limitations can be set that will apply to all users in the Station context. These limitations can be left empty if you do not wish to impose limitations at the Station level. The Station-level resource and quota limitations are applied to a job if there are no role-level resource/quota limitations associated with the user who submitted the job. See `User Roles and Resource Settings <stations.html#user-roles-and-resource-settings>`_ for more information about setting resource and quotas. 
 
 .. image:: images/stations_settings_button.gif
+
+Station Resource Pricing
+~~~~~~~~~~~~~~~~~~~~~~~~
+Each Station Owner can set credit-per-hour pricing for cpu, gpu, and memory resources for LZs used within the Station's context. When a station is initially created, these resources have no price assigned to them. Additionally, each Station role can be given it's own credit pricing rule. 
+
+Station Visibility and Auto Joining
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+When a Station is first created, it is by default visible only to the Owner of the station and it cannot be found by another Galileo user. The Station Owner must explicitly send invitations to other users to join their Station if the Owner wishes to give them access.
+
+The Station owner can choose to make their Station searchable by setting it to “Public” in the Station’s Resource Control panel. Other Galileo users will then be able to find the Station in the Station search tab, however, they will first have to request access to the Station before they can submit jobs to it.
+
+The Station Owner can choose to make their Station “auto joinable” which would allow other Galileo users to automatically become Station members under the default Launch Role. Ensure that you have appropriate resource, credit, and allowed Mission Type settings before making your Station auto joinable, as this will allow any Galileo User to submit jobs to your resources.
 
 Station Volumes
 ----------------
