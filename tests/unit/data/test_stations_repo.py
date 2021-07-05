@@ -408,7 +408,7 @@ def test_remove_member_from_station(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/station/{station_id}/user/{user_id}".format(
+        "{backend}{namespace}/station/{station_id}/user/{user_id}/delete".format(
             backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID, user_id=USER_ID
         ),
         headers=HEADERS,
