@@ -1,3 +1,4 @@
+from requests.models import HTTPError
 from galileo_sdk import GalileoSdk
 from halo import Halo
 import pandas
@@ -217,7 +218,19 @@ def jobs_cli(main, galileo: GalileoSdk):
         """
         Request to start a job.
         """
-        jobs_list = galileo.jobs.request_start_job(jobid)
+        try:
+            jobs_list = galileo.jobs.request_start_job(jobid)
+        except HTTPError as e:
+            status_code = e.response.status_code
+            if status_code == 405:
+                click.echo("Job cannot be started")
+                return
+            elif status_code == 500:
+                curr_job = galileo.jobs.list_jobs(jobids=[jobid])
+                if not curr_job:
+                    click.echo("Job does not exist")
+                    return
+            raise e
         jobs_list = [job.__dict__ for job in jobs_list]
         jobs_df = pandas.json_normalize(jobs_list)
         jobs_df.time_created = jobs_df.time_created.map(
