@@ -203,7 +203,7 @@ def mocked_requests_put(*args, **kwargs):
 
 
 def mocked_requests_delete(*args, **kwargs):
-    if args[0] == "{backend}{namespace}/station/{station_id}/user/{user_id}".format(
+    if args[0] == "{backend}{namespace}/station/{station_id}/user/{user_id}/delete".format(
         backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID, user_id=USER_ID
     ):
         return MockResponse(True, 200)
