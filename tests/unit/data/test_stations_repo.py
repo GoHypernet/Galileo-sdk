@@ -286,7 +286,7 @@ def test_list_stations(mocked_requests):
 @mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
 def test_get_public_stations(mocked_requests):
     # Call
-    r = stations_repo.get_public_stations()
+    r = stations_repo.get_public_stations("")
 
     # Act
     mocked_requests.assert_called_once_with(
