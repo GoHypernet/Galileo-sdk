@@ -68,9 +68,8 @@ def test_list_stations():
 def test_get_public_stations():
     stations_repo.get_public_stations.return_value = [
         PublicStation(
-            "stationid",
             "name",
-            "description",
+            "stationid",
         )
         for _ in range(5)
     ]
