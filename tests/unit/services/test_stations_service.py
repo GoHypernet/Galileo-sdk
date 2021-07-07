@@ -65,7 +65,7 @@ def test_list_stations():
     assert r[0].users[0].status == EStationUserRole.ADMIN
 
 
-def test_get_stations():
+def test_get_public_stations():
     stations_repo.get_public_stations.return_value = [
         PublicStation(
             "stationid",
