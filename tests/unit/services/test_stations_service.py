@@ -80,7 +80,6 @@ def test_get_public_stations():
     # Assert
     assert len(r) == 5
     assert r[0].stationid == "stationid"
-    assert r[0].users[0].status == EStationUserRole.ADMIN
 
 def test_create_station():
     stations_repo.create_station.return_value = Station(
