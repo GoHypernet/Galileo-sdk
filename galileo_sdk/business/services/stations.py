@@ -45,8 +45,53 @@ class StationsService:
 
         return self._stations_repo.list_stations(query)
      
-    def get_public_stations(self):
-        return self._stations_repo.get_public_stations()
+    def get_public_stations(
+        self, 
+        mission_types=[],
+        mission_cpu_value=None,
+        mission_gpu_value=None,
+        mission_memory_value=None,
+        min_cpu_per_job=None,
+        min_gpu_per_job=None,
+        min_memory_per_job=None,
+        max_cpu_per_job=None,
+        max_gpu_per_job=None,
+        min_cpu_credits_per_hour=None,
+        min_gpu_credits_per_hour=None,
+        min_memory_credits_per_hour=None,
+        max_cpu_credits_per_hour=None,
+        max_gpu_credits_per_hour=None,
+        max_memory_credits_per_hour=None,
+        max_credits_per_hour=None,
+        credits_cost_by_mission=None,
+        page=None,
+        items=None,
+        ):
+        query = generate_query_str(
+            {
+               "mission_types": mission_types,
+               "mission_cpu_value": mission_cpu_value,
+               "mission_gpu_value": mission_gpu_value,
+               "mission_memory_per_job": mission_memory_value,
+               "min_cput_per_job": min_cpu_per_job,
+               "min_gpu_per_job": min_gpu_per_job,
+               "min_memory_per_job": min_memory_per_job,
+               "max_cpu_per_job": max_cpu_per_job,
+               "max_gpu_per_job": max_gpu_per_job,
+               "min_cpu_credits_per_hour": min_cpu_credits_per_hour,
+               "min_gpu_credits_per_hour": min_gpu_credits_per_hour,
+               "min_memory_credits_per_hour": min_memory_credits_per_hour,
+               "max_cpu_credits_per_hour": max_cpu_credits_per_hour,
+               "max_gpu_credits_per_hour": max_gpu_credits_per_hour,
+               "max_memory_credits_per_hour": max_memory_credits_per_hour,
+               "max_credits_per_hour": max_credits_per_hour,
+               "credits_cost_by_mission": credits_cost_by_mission,
+               "page": page,
+               "items": items  
+          }
+        )
+
+        return self._stations_repo.get_public_stations(query)
 
     def create_station(self, name, description, userids=None):
         return self._stations_repo.create_station(name, description, userids)
