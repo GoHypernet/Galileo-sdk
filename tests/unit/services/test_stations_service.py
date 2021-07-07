@@ -71,20 +71,6 @@ def test_get_stations():
             "stationid",
             "name",
             "description",
-            [
-                StationUser(
-                    "stationuserid",
-                    "userid",
-                    EStationUserRole.ADMIN,
-                    "station_id",
-                    "username",
-                    "role_id",
-                    "creation_timestamp",
-                    "updated_timestamp",
-                )
-            ],
-            ["machine_ids"],
-            ["volume_ids"],
         )
         for _ in range(5)
     ]

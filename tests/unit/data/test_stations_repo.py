@@ -71,7 +71,7 @@ def mocked_requests_get(*args, **kwargs):
             },
             200,
         )
-    elif args[1] == "{backend}{namespace}/stations/public".format(
+    elif args[0] == "{backend}{namespace}/stations/public".format(
             backend=BACKEND, namespace=NAMESPACE
         ):
             return MockResponse(
