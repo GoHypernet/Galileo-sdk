@@ -30,7 +30,7 @@ class StationsRepository(RequestsRepository):
         return [station_dict_to_station(station) for station in stations]
 
     def get_public_stations(self, query):
-        response = self._get("/stations/public", query)
+        response = self._get("/stations/public", query=query)
         json = response.json()
         stations = json["stations"]
         return [public_station_dict_to_station(station) for station in stations]
