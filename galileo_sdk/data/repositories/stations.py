@@ -450,6 +450,7 @@ def role_dict_to_station_role(role):
         edit_job_resource_limits=role["edit_job_resource_limits"],
         manage_volumes=role["manage_volumes"],
         reject_user_requests=role["reject_user_requests"],
+        create_tunnels=role["create_tunnels"],
     )
 
 
