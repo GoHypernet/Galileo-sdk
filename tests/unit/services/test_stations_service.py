@@ -3,6 +3,7 @@ from galileo_sdk.business.objects.stations import (
     EStationUserRole,
     EVolumeAccess,
     Station,
+    PublicStation,
     StationUser,
     Volume,
 )
@@ -63,6 +64,38 @@ def test_list_stations():
     assert r[0].stationid == "stationid"
     assert r[0].users[0].status == EStationUserRole.ADMIN
 
+
+def test_get_stations():
+    stations_repo.get_public_stations.return_value = [
+        PublicStation(
+            "stationid",
+            "name",
+            "description",
+            [
+                StationUser(
+                    "stationuserid",
+                    "userid",
+                    EStationUserRole.ADMIN,
+                    "station_id",
+                    "username",
+                    "role_id",
+                    "creation_timestamp",
+                    "updated_timestamp",
+                )
+            ],
+            ["machine_ids"],
+            ["volume_ids"],
+        )
+        for _ in range(5)
+    ]
+
+    # Call
+    r = stations_service.get_public_stations()
+
+    # Assert
+    assert len(r) == 5
+    assert r[0].stationid == "stationid"
+    assert r[0].users[0].status == EStationUserRole.ADMIN
 
 def test_create_station():
     stations_repo.create_station.return_value = Station(

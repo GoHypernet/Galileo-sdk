@@ -71,7 +71,34 @@ def mocked_requests_get(*args, **kwargs):
             },
             200,
         )
-
+    elif args[1] == "{backend}{namespace}/stations/public".format(
+            backend=BACKEND, namespace=NAMESPACE
+        ):
+            return MockResponse(
+                {
+                    "stations": [
+                        {
+                            "allow_auto_join": False,
+                            "allowed_mission_types": None,
+                            "creation_timestamp": "creation",
+                            "description": DESCRIPTION,
+                            "jobs_in_queue_count": 0,
+                            "member_count": 1,
+                            "mid_count": 0,
+                            "name": NAME,
+                            "resource_policy": None,
+                            "stationid": STATION_ID,
+                            "updated_timestamp": "updated",
+                            "user_count": 2,
+                            "user_status": "OWNER",
+                            "volume_count": 0
+            
+                        }
+                        for _ in range(5)
+                    ]
+                },
+                200,
+            )
     return MockResponse(None, 404)
 
 
@@ -256,6 +283,20 @@ def test_list_stations(mocked_requests):
     assert r[0].volumes[0].name == NAME
 
 
+@mock.patch("galileo_sdk.compat.requests.get", side_effect=mocked_requests_get)
+def test_get_public_stations(mocked_requests):
+    # Call
+    r = stations_repo.get_public_stations()
+
+    # Act
+    mocked_requests.assert_called_once_with(
+        "{backend}{namespace}/stations/public".format(backend=BACKEND, namespace=NAMESPACE),
+        headers=HEADERS,
+        json=None,
+    )
+
+    # Assert
+    assert len(r) == 5
 @mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
 def test_create_station(mocked_requests):
     # Call

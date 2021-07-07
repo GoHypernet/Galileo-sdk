@@ -514,6 +514,14 @@ class StationsSdk(EventsSdk):
             lz_count_max=lz_count_max,
             lz_status=lz_status,
         )
+    
+    def get_public_stations(self):
+        """
+        Gets public stations
+
+        :return: Stations
+        """
+        return self._stations_service.get_public_stations()
 
     def create_station(self, name, description="", userids=None):
         """
