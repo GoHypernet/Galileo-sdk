@@ -124,9 +124,9 @@ class PublicStation:
         self.user_status=user_status
         self.volume_count=volume_count
     
-    def __str__(self) -> str:
+    def __str__(self):
         return "Public Station: {name} \n Station ID: {stationid} \n Autojoin:{allow_auto_join}".format(name=self.name, stationid=self.stationid, allow_auto_join=self.allow_auto_join)
-    def __repr__(self) -> str:
+    def __repr__(self):
         return self.__str__()
 class Station:
     def __init__(
@@ -177,9 +177,9 @@ class Station:
         self.mids=mids,
         self.allow_auto_join=allow_auto_join
         self.public=public
-    def __str__(self) -> str:
+    def __str__(self):
         return "Station: {name} \n Station ID: {stationid} \n Autojoin:{allow_auto_join}".format(name=self.name, stationid=self.stationid, allow_auto_join=self.allow_auto_join)
-    def __repr__(self) -> str:
+    def __repr__(self):
         return self.__str__()
 
 
