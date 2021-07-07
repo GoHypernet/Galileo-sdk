@@ -44,6 +44,9 @@ class StationsService:
         )
 
         return self._stations_repo.list_stations(query)
+     
+    def get_public_stations(self):
+        return self._stations_repo.get_public_stations()
 
     def create_station(self, name, description, userids=None):
         return self._stations_repo.create_station(name, description, userids)

@@ -55,6 +55,7 @@ from galileo_sdk.business.objects.stations import (
     Volume,
     EStationUserRole,
     StationUser,
+    PublicStation,
     Station,
     NewStationEvent,
     StationAdminInviteSentEvent,

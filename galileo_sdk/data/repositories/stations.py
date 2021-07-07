@@ -1,6 +1,7 @@
 from galileo_sdk.business.objects import (
     EStationUserRole,
     EVolumeAccess,
+    PublicStation,
     Station,
     StationUser,
     Volume,
@@ -27,6 +28,13 @@ class StationsRepository(RequestsRepository):
         json = response.json()
         stations = json["stations"]
         return [station_dict_to_station(station) for station in stations]
+
+    def get_public_stations(self):
+        response = self._get("/stations/public")
+        json = response.json()
+        stations = json["stations"]
+        return [public_station_dict_to_station(station) for station in stations]
+
 
     def create_station(self, name, description, userids=None):
         response = self._post(
@@ -500,7 +508,6 @@ def station_dict_to_station(station):
             autoscale_settings_dict_to_autoscale_settings(settings)
             for settings in autoscale_settings
         ]
-
     return Station(
         stationid=station["stationid"],
         name=station["name"],
@@ -508,12 +515,36 @@ def station_dict_to_station(station):
         users=[user_dict_to_station_user(user) for user in station["users"]],
         lz_ids=station["mids"],
         volumes=[volume_dict_to_volume(volume) for volume in station["volumes"]],
+        mids=station.get("mids", None),
         status=station.get("status", None),
+        machine_summaries=station.get("machine_summaries", None),
         organization_id=station.get("organization_id", None),
         creation_timestamp=station.get("creation_timestamp", None),
         updated_timestamp=station.get("updated_timestamp", None),
-        autoscale_settings=autoscale_settings,
+        allow_auto_join=station.get("allow_auto_join", None),
+        public=station.get("public", None),
+        autoscale_settings=station.get("autoscale_settings", None),
     )
+
+
+def public_station_dict_to_station(station):
+    return PublicStation(
+        stationid=station["stationid"],
+        name=station["name"],
+        description=station["description"],
+        allow_auto_join=station["allow_auto_join"],
+        creation_timestamp=station.get("creation_timestamp", None),
+        updated_timestamp=station.get("updated_timestamp", None),
+        allowed_mission_types=station.get("allowed_mission_types",None),
+        jobs_in_queue=station.get("jobs_in_queue",None),
+        member_count=station.get("member_count",None),
+        mid_count=station.get("mid_count",None),
+        resource_policy=station.get("resource_policy",None),
+        user_count=station.get("user_count",None),
+        user_status=station.get("user_status",None),
+        volume_count=station.get("volume_count",None)
+    )
+    
 
 
 def user_dict_to_station_user(user):
