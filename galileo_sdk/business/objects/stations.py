@@ -68,7 +68,66 @@ class StationUser:
         self.creation_timestamp = creation_timestamp
         self.updated_timestamp = updated_timestamp
 
+class PublicStation:
+    def __init__(
+        self,
+        name, 
+        stationid,
+        description=None,
+        creation_timestamp=None,
+        updated_timestamp=None,
+        public=True,
+        allowed_mission_types=None,
+        allow_auto_join=None,
+        jobs_in_queue=None,
+        member_count=None,
+        mid_count=None,
+        resource_policy=None,
+        user_count=None,
+        user_status=None,
+        volume_count=None,
+    ):
 
+        """
+        Public Station Object
+
+        :param name: str: Human readable name of the Station
+        :param stationid: str: UUID of the Station
+        :param description: Optional[str]: Optional description of the Station
+        :param creation_timestamp: Optional[str]: Time the Station was created
+        :param updated_timestamp: Optional[str]: Time the Station was last updated
+        :param allow_auto_join: Optional[bool] Station automatically accepts user requests to join
+        :param public: Optional[bool]: Is station public or not (should always be public)
+        :param allowed_mission_types: Mission types allowed for this station
+        :param job_in_queue_count: [int]: Number of jobs in the queue
+        :param member_count: [int]: Number of members in the station
+        :param mid_count: [int]: Number of mids in the station
+        :param resource_policy: Resource policies for the station
+        :param user_count: [int]: Number of users in the station
+        :param user_status: Status of the user in the station
+        :param volume_count: Number of volumes in the station
+        """
+        self.stationid = stationid
+        self.name = name
+        self.description = description
+
+        self.creation_timestamp=creation_timestamp
+        self.updated_timestamp=updated_timestamp
+        self.public=public
+        self.allow_auto_join=allow_auto_join
+        self.allowed_mission_types=allowed_mission_types
+        self.jobs_in_queue=jobs_in_queue
+        self.member_count=member_count
+        self.mid_count=mid_count
+        self.resource_policy=resource_policy
+        self.user_count=user_count
+        self.user_status=user_status
+        self.volume_count=volume_count
+    
+    def __str__(self):
+        return "Public Station: {name} \n Station ID: {stationid} \n Autojoin:{allow_auto_join}".format(name=self.name, stationid=self.stationid, allow_auto_join=self.allow_auto_join)
+    def __repr__(self):
+        return self.__str__()
 class Station:
     def __init__(
         self,
@@ -76,7 +135,11 @@ class Station:
         name,
         description,
         users,
+        allow_auto_join=None,
+        public=None,
         lz_ids=None,
+        machine_summaries=None,
+        mids=None,
         volumes=None,
         status=None,
         organization_id=None,
@@ -110,6 +173,14 @@ class Station:
         self.creation_timestamp = creation_timestamp
         self.updated_timestamp = updated_timestamp
         self.autoscale_settings = autoscale_settings
+        self.machine_summaries=machine_summaries,
+        self.mids=mids,
+        self.allow_auto_join=allow_auto_join
+        self.public=public
+    def __str__(self):
+        return "Station: {name} \n Station ID: {stationid} \n Autojoin:{allow_auto_join}".format(name=self.name, stationid=self.stationid, allow_auto_join=self.allow_auto_join)
+    def __repr__(self):
+        return self.__str__()
 
 
 class NewStationEvent:
