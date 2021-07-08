@@ -96,6 +96,20 @@ class MissionType:
         active=None,
         container_type=None,
         wizard_spec=None,
+        enable_tunnels=None,
+        generate_credentials=None,
+        distributed=None,
+        min_cpu_count=None,
+        max_cpu_count=None,
+        default_cpu_count= None,
+        min_memory_amount= None,
+        max_memory_amount= None,
+        default_memory_amount= None,
+        min_gpu_count= None,
+        max_gpu_count= None,
+        default_gpu_count= None,
+        logo_url= None,
+        credits_per_hour= None
     ):
         """
         Mission Framework Type Object
@@ -107,6 +121,20 @@ class MissionType:
         :param active: Is the framework actively supported (False means depricated)
         :param container_type: Target container OS type (i.e. Windows, Linux, Singularity)
         :param wizard_spec: JSON specs for UI configuration wizard
+        :param enable_tunnels: Enable tunnels
+        :param generate_credentials: Generate Credentials for mission
+        :param distributed: Distributed mission
+        :param min_cpu_count: Minimum CPU count for jobs of this mission type.
+        :param max_cpu_count: Maximum CPU count for jobs of this mission type.
+        :param default_cpu_count: Default CPU count for jobs of this mission type.
+        :param min_memory_amount: Minimum memory amount for jobs of this mission type.
+        :param max_memory_amount: Maximum memory amount for jobs of this mission type.
+        :param default_memory_amount: Default memory amount for jobs of this mission type.
+        :param min_gpu_count: Minimum GPU count for jobs of this mission type.
+        :param max_gpu_count: Maximum GPU count for jobs of this mission type.
+        :param default_gpu_count: Default GPU count for jobs of this mission type.
+        :param logo_url: URL for MissionType URL
+        :param credits_per_hour: Credit amount per hour
         """
         self.id = id
         self.name = name
@@ -115,8 +143,20 @@ class MissionType:
         self.active = active
         self.container_type = container_type
         self.wizard_spec = wizard_spec
-
-
+        self.enable_tunnels = enable_tunnels
+        self.generate_credentials = generate_credentials
+        self.distributed = distributed
+        self.min_cpu_count = min_cpu_count
+        self.max_cpu_count = max_cpu_count
+        self.default_cpu_count = default_cpu_count
+        self.min_memory_amount = min_memory_amount
+        self.max_memory_amount = max_memory_amount
+        self.default_memory_amount = default_memory_amount
+        self.min_gpu_count = min_gpu_count
+        self.max_gpu_count = max_gpu_count
+        self.default_gpu_count = default_gpu_count
+        self.logo_url = logo_url
+        self.credits_per_hour = credits_per_hour
 class CreateMissionRequest(object):
     def __init__(
         self,

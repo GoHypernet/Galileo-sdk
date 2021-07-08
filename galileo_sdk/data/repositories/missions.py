@@ -129,6 +129,20 @@ def projecttype_dict_to_projecttype(projecttype):
         projecttype.get("active", None),
         projecttype.get("container_type", None),
         projecttype.get("wizard_spec", None),
+        projecttype.get("enable_tunnels", None),
+        projecttype.get("generate_credentials", None),
+        projecttype.get("distributed", None),
+        projecttype.get("min_cpu_count", None),
+        projecttype.get("max_cpu_count", None),
+        projecttype.get("default_cpu_count", None),
+        projecttype.get("min_memory_amount", None),
+        projecttype.get("max_memory_amount", None),
+        projecttype.get("default_memory_amount", None),
+        projecttype.get("min_gpu_count", None),
+        projecttype.get("max_gpu_count", None),
+        projecttype.get("default_gpu_count", None),
+        projecttype.get("logo_url", None),
+        projecttype.get("credits_per_hour", None),
     )
 
 

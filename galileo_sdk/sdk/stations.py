@@ -514,6 +514,58 @@ class StationsSdk(EventsSdk):
             lz_count_max=lz_count_max,
             lz_status=lz_status,
         )
+    
+    def get_public_stations(
+        self,
+        mission_types=[],
+        mission_cpu_value=None,
+        mission_gpu_value=None,
+        mission_memory_value=None,
+        min_cpu_per_job=None,
+        min_gpu_per_job=None,
+        min_memory_per_job=None,
+        max_cpu_per_job=None,
+        max_gpu_per_job=None,
+        min_cpu_credits_per_hour=None,
+        min_gpu_credits_per_hour=None,
+        min_memory_credits_per_hour=None,
+        max_cpu_credits_per_hour=None,
+        max_gpu_credits_per_hour=None,
+        max_memory_credits_per_hour=None,
+        max_credits_per_hour=None,
+        credits_cost_by_mission=None,
+        page=None,
+        items=None,
+        ):
+
+
+        """
+        Gets public stations
+
+        :return: Stations
+        """
+        
+        return self._stations_service.get_public_stations(
+            mission_types=mission_types,
+            mission_cpu_value=mission_cpu_value,
+            mission_gpu_value=mission_gpu_value,
+            mission_memory_value=mission_memory_value,
+            min_cpu_per_job=min_cpu_per_job,
+            min_gpu_per_job=min_gpu_per_job,
+            min_memory_per_job=min_memory_per_job,
+            max_cpu_per_job=max_cpu_per_job,
+            max_gpu_per_job=max_gpu_per_job,
+            min_cpu_credits_per_hour=min_cpu_credits_per_hour,
+            min_gpu_credits_per_hour=min_gpu_credits_per_hour,
+            min_memory_credits_per_hour=min_memory_credits_per_hour,
+            max_cpu_credits_per_hour=max_cpu_credits_per_hour,
+            max_gpu_credits_per_hour=max_gpu_credits_per_hour,
+            max_memory_credits_per_hour=max_memory_credits_per_hour,
+            max_credits_per_hour=max_credits_per_hour,
+            credits_cost_by_mission=credits_cost_by_mission,
+            page=page,
+            items=items
+        )
 
     def create_station(self, name, description="", userids=None):
         """
@@ -534,6 +586,7 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :return: boolean
         """
+
         return self._stations_service.invite_to_station(station_id, userids, role_id)
 
     def accept_station_invite(self, station_id):
@@ -684,7 +737,7 @@ class StationsSdk(EventsSdk):
         """
         return self._stations_service.remove_volume_from_station(station_id, volume_id)
 
-    def update_station(self, station_id, name=None, description=None):
+    def update_station(self, station_id, name=None, description=None, public=None, allow_auto_join=None):
         """
         Update a station
 
@@ -694,7 +747,7 @@ class StationsSdk(EventsSdk):
         :return:
         """
         request = UpdateStationRequest(
-            station_id=station_id, name=name, description=description
+            station_id=station_id, name=name, description=description, public=public, allow_auto_join=allow_auto_join
         )
         return self._stations_service.update_station(request)
 
@@ -1075,7 +1128,8 @@ class StationsSdk(EventsSdk):
         edit_user_policy=None,
         edit_job_resource_limits=None,
         manage_volumes=None,
-        reject_user_requests=None
+        reject_user_requests=None,
+        create_tunnels=None
     ):
         """
         Updates an existing role
@@ -1110,6 +1164,7 @@ class StationsSdk(EventsSdk):
         :param edit_job_resource_limits: bool
         :param manage_volumes: bool
         :param reject_user_requests: bool
+        :param create_tunnels: bool
         :return: StationRole
         """
         request = CreateStationRoleRequest(
@@ -1140,7 +1195,8 @@ class StationsSdk(EventsSdk):
             edit_user_policy,
             edit_job_resource_limits,
             manage_volumes,
-            reject_user_requests
+            reject_user_requests,
+            create_tunnels
         )
         return self._stations_service.update_station_role(
             station_id, station_role_id, request

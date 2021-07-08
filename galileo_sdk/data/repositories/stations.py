@@ -1,6 +1,7 @@
 from galileo_sdk.business.objects import (
     EStationUserRole,
     EVolumeAccess,
+    PublicStation,
     Station,
     StationUser,
     Volume,
@@ -28,6 +29,13 @@ class StationsRepository(RequestsRepository):
         stations = json["stations"]
         return [station_dict_to_station(station) for station in stations]
 
+    def get_public_stations(self, query):
+        response = self._get("/stations/public", query=query)
+        json = response.json()
+        stations = json["stations"]
+        return [public_station_dict_to_station(station) for station in stations]
+
+
     def create_station(self, name, description, userids=None):
         response = self._post(
             "/station", {"name": name, "user_ids": userids, "description": description}
@@ -43,6 +51,8 @@ class StationsRepository(RequestsRepository):
                 "name": request.name,
                 "description": request.description,
                 "user_ids": request.user_ids,
+                "public": request.public,
+                "allow_auto_join": request.allow_auto_join
             },
         )
         json = response.json()
@@ -412,6 +422,7 @@ def station_role_request_to_dict(request):
         "remove_autoscale": request.remove_autoscale,
         "manage_volumes": request.manage_volumes,
         "reject_user_requests": request.reject_user_requests,
+        "create_tunnels": request.create_tunnels,
     }
 
 
@@ -450,6 +461,8 @@ def role_dict_to_station_role(role):
         edit_job_resource_limits=role["edit_job_resource_limits"],
         manage_volumes=role["manage_volumes"],
         reject_user_requests=role["reject_user_requests"],
+        create_tunnels=role["create_tunnels"],
+        allowed_mission_types=["allowed_mission_types"],
     )
 
 
@@ -499,7 +512,6 @@ def station_dict_to_station(station):
             autoscale_settings_dict_to_autoscale_settings(settings)
             for settings in autoscale_settings
         ]
-
     return Station(
         stationid=station["stationid"],
         name=station["name"],
@@ -507,12 +519,36 @@ def station_dict_to_station(station):
         users=[user_dict_to_station_user(user) for user in station["users"]],
         lz_ids=station["mids"],
         volumes=[volume_dict_to_volume(volume) for volume in station["volumes"]],
+        mids=station.get("mids", None),
         status=station.get("status", None),
+        machine_summaries=station.get("machine_summaries", None),
         organization_id=station.get("organization_id", None),
         creation_timestamp=station.get("creation_timestamp", None),
         updated_timestamp=station.get("updated_timestamp", None),
-        autoscale_settings=autoscale_settings,
+        allow_auto_join=station.get("allow_auto_join", None),
+        public=station.get("public", None),
+        autoscale_settings=station.get("autoscale_settings", None),
     )
+
+
+def public_station_dict_to_station(station):
+    return PublicStation(
+        stationid=station["stationid"],
+        name=station["name"],
+        description=station["description"],
+        allow_auto_join=station["allow_auto_join"],
+        creation_timestamp=station.get("creation_timestamp", None),
+        updated_timestamp=station.get("updated_timestamp", None),
+        allowed_mission_types=station.get("allowed_mission_types",None),
+        jobs_in_queue=station.get("jobs_in_queue",None),
+        member_count=station.get("member_count",None),
+        mid_count=station.get("mid_count",None),
+        resource_policy=station.get("resource_policy",None),
+        user_count=station.get("user_count",None),
+        user_status=station.get("user_status",None),
+        volume_count=station.get("volume_count",None)
+    )
+    
 
 
 def user_dict_to_station_user(user):

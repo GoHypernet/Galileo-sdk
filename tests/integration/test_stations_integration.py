@@ -17,6 +17,9 @@ def test_list_stations():
     station_list = galileo.stations.list_stations()
     assert station_list is not None
 
+def test_get_public_stations():
+    station_list = galileo.stations.get_public_stations()
+    assert station_list is not None
 
 def test_create_and_delete_station():
     station_details = galileo.stations.create_station(
