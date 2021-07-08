@@ -422,7 +422,7 @@ def station_role_request_to_dict(request):
         "remove_autoscale": request.remove_autoscale,
         "manage_volumes": request.manage_volumes,
         "reject_user_requests": request.reject_user_requests,
-        "enable_tunnel": request.enable_tunnel,
+        "create_tunnels": request.create_tunnels,
     }
 
 
