@@ -516,7 +516,7 @@ class CreateStationRoleRequest:
         control_jobs_on_own_machines=0,
         view_own_jobs=0,
         control_own_jobs=0,
-        create_tunnels=False,
+        create_tunnels=None,
         view_complete_activity=0,
         edit_station_policy=0,
         edit_own_machine_policy=0,
