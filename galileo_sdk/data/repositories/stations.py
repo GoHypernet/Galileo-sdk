@@ -51,6 +51,8 @@ class StationsRepository(RequestsRepository):
                 "name": request.name,
                 "description": request.description,
                 "user_ids": request.user_ids,
+                "public": request.public,
+                "allow_auto_join": request.allow_auto_join
             },
         )
         json = response.json()
@@ -420,6 +422,7 @@ def station_role_request_to_dict(request):
         "remove_autoscale": request.remove_autoscale,
         "manage_volumes": request.manage_volumes,
         "reject_user_requests": request.reject_user_requests,
+        "create_tunnels": request.create_tunnels,
     }
 
 

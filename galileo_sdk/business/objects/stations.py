@@ -5,11 +5,13 @@ from ...business.objects.event import EventEmitter
 
 class UpdateStationRequest:
     def __init__(
-        self, station_id, name=None, description=None,
+        self, station_id, name=None, description=None, public=None, allow_auto_join=None,
     ):
         self.station_id = station_id
         self.name = name
         self.description = description
+        self.public = public
+        self.allow_auto_join = allow_auto_join
 
 
 class EVolumeAccess(enum.Enum):
@@ -514,7 +516,7 @@ class CreateStationRoleRequest:
         control_jobs_on_own_machines=0,
         view_own_jobs=0,
         control_own_jobs=0,
-        create_tunnels=False,
+        create_tunnels=None,
         view_complete_activity=0,
         edit_station_policy=0,
         edit_own_machine_policy=0,
