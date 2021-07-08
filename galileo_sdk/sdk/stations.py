@@ -737,7 +737,7 @@ class StationsSdk(EventsSdk):
         """
         return self._stations_service.remove_volume_from_station(station_id, volume_id)
 
-    def update_station(self, station_id, name=None, description=None):
+    def update_station(self, station_id, name=None, description=None, public=None, allow_auto_join=None):
         """
         Update a station
 
@@ -747,7 +747,7 @@ class StationsSdk(EventsSdk):
         :return:
         """
         request = UpdateStationRequest(
-            station_id=station_id, name=name, description=description
+            station_id=station_id, name=name, description=description, public=public, allow_auto_join=allow_auto_join
         )
         return self._stations_service.update_station(request)
 
@@ -1128,7 +1128,8 @@ class StationsSdk(EventsSdk):
         edit_user_policy=None,
         edit_job_resource_limits=None,
         manage_volumes=None,
-        reject_user_requests=None
+        reject_user_requests=None,
+        enable_tunnel=None
     ):
         """
         Updates an existing role
@@ -1193,7 +1194,8 @@ class StationsSdk(EventsSdk):
             edit_user_policy,
             edit_job_resource_limits,
             manage_volumes,
-            reject_user_requests
+            reject_user_requests,
+            enable_tunnel
         )
         return self._stations_service.update_station_role(
             station_id, station_role_id, request

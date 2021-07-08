@@ -5,11 +5,13 @@ from ...business.objects.event import EventEmitter
 
 class UpdateStationRequest:
     def __init__(
-        self, station_id, name=None, description=None,
+        self, station_id, name=None, description=None, public=None, allow_auto_join=None,
     ):
         self.station_id = station_id
         self.name = name
         self.description = description
+        self.public = public
+        self.allow_auto_join = allow_auto_join
 
 
 class EVolumeAccess(enum.Enum):
