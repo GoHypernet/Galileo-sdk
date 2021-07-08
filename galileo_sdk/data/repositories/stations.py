@@ -29,8 +29,8 @@ class StationsRepository(RequestsRepository):
         stations = json["stations"]
         return [station_dict_to_station(station) for station in stations]
 
-    def get_public_stations(self):
-        response = self._get("/stations/public")
+    def get_public_stations(self, query):
+        response = self._get("/stations/public", query=query)
         json = response.json()
         stations = json["stations"]
         return [public_station_dict_to_station(station) for station in stations]
@@ -458,6 +458,8 @@ def role_dict_to_station_role(role):
         edit_job_resource_limits=role["edit_job_resource_limits"],
         manage_volumes=role["manage_volumes"],
         reject_user_requests=role["reject_user_requests"],
+        create_tunnels=role["create_tunnels"],
+        allowed_mission_types=["allowed_mission_types"],
     )
 
 

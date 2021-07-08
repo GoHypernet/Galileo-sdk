@@ -515,13 +515,57 @@ class StationsSdk(EventsSdk):
             lz_status=lz_status,
         )
     
-    def get_public_stations(self):
+    def get_public_stations(
+        self,
+        mission_types=[],
+        mission_cpu_value=None,
+        mission_gpu_value=None,
+        mission_memory_value=None,
+        min_cpu_per_job=None,
+        min_gpu_per_job=None,
+        min_memory_per_job=None,
+        max_cpu_per_job=None,
+        max_gpu_per_job=None,
+        min_cpu_credits_per_hour=None,
+        min_gpu_credits_per_hour=None,
+        min_memory_credits_per_hour=None,
+        max_cpu_credits_per_hour=None,
+        max_gpu_credits_per_hour=None,
+        max_memory_credits_per_hour=None,
+        max_credits_per_hour=None,
+        credits_cost_by_mission=None,
+        page=None,
+        items=None,
+        ):
+
+
         """
         Gets public stations
 
         :return: Stations
         """
-        return self._stations_service.get_public_stations()
+        
+        return self._stations_service.get_public_stations(
+            mission_types=mission_types,
+            mission_cpu_value=mission_cpu_value,
+            mission_gpu_value=mission_gpu_value,
+            mission_memory_value=mission_memory_value,
+            min_cpu_per_job=min_cpu_per_job,
+            min_gpu_per_job=min_gpu_per_job,
+            min_memory_per_job=min_memory_per_job,
+            max_cpu_per_job=max_cpu_per_job,
+            max_gpu_per_job=max_gpu_per_job,
+            min_cpu_credits_per_hour=min_cpu_credits_per_hour,
+            min_gpu_credits_per_hour=min_gpu_credits_per_hour,
+            min_memory_credits_per_hour=min_memory_credits_per_hour,
+            max_cpu_credits_per_hour=max_cpu_credits_per_hour,
+            max_gpu_credits_per_hour=max_gpu_credits_per_hour,
+            max_memory_credits_per_hour=max_memory_credits_per_hour,
+            max_credits_per_hour=max_credits_per_hour,
+            credits_cost_by_mission=credits_cost_by_mission,
+            page=page,
+            items=items
+        )
 
     def create_station(self, name, description="", userids=None):
         """
@@ -542,6 +586,7 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :return: boolean
         """
+
         return self._stations_service.invite_to_station(station_id, userids, role_id)
 
     def accept_station_invite(self, station_id):

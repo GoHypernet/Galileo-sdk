@@ -514,6 +514,7 @@ class CreateStationRoleRequest:
         control_jobs_on_own_machines=0,
         view_own_jobs=0,
         control_own_jobs=0,
+        create_tunnels=False,
         view_complete_activity=0,
         edit_station_policy=0,
         edit_own_machine_policy=0,
@@ -525,6 +526,7 @@ class CreateStationRoleRequest:
         remove_autoscale=0,
         manage_volumes=0,
         reject_user_requests=0,
+        allowed_mission_types=None,
     ):
         self.name = name
         self.description = description
@@ -558,6 +560,8 @@ class CreateStationRoleRequest:
         self.remove_autoscale = remove_autoscale
         self.manage_volumes = manage_volumes
         self.reject_user_requests = reject_user_requests
+        self.create_tunnels = create_tunnels
+        self.allowed_mission_types = allowed_mission_types
 
 
 class UpdateStationRoleRequest:
@@ -591,6 +595,8 @@ class UpdateStationRoleRequest:
         edit_job_resource_limits=None,
         manage_volumes=None,
         reject_user_requests=None,
+        create_tunnels=None,
+        allowed_mission_types=None,
     ):
         self.name = name
         self.description = description
@@ -620,6 +626,8 @@ class UpdateStationRoleRequest:
         self.edit_job_resource_limits = edit_job_resource_limits
         self.manage_volumes = manage_volumes
         self.reject_user_requests = reject_user_requests
+        self.create_tunnels = create_tunnels
+        self.allowed_mission_types = allowed_mission_types
 
 
 class AutoscaleSettings:
@@ -690,6 +698,8 @@ class StationRole:
         edit_job_resource_limits,
         manage_volumes,
         reject_user_requests,
+        create_tunnels,
+        allowed_mission_types,
     ):
         self.id = id
         self.station_id = station_id
@@ -724,7 +734,8 @@ class StationRole:
         self.edit_job_resource_limits = edit_job_resource_limits
         self.manage_volumes = manage_volumes
         self.reject_user_requests = reject_user_requests
-
+        self.create_tunnels = create_tunnels 
+        self.allowed_mission_types = allowed_mission_types
 
 class StationsEvents:
     def __init__(self):
