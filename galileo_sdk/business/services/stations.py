@@ -66,7 +66,8 @@ class StationsService:
         credits_cost_by_mission=None,
         page=None,
         items=None,
-        allow_tunnels=None
+        allow_tunnels=None,
+        auto_join_enabled=None
         ):
         query = generate_query_str(
             {
@@ -89,7 +90,8 @@ class StationsService:
                "credits_cost_by_mission": credits_cost_by_mission,
                "page": page,
                "items": items,
-               "allow_tunnels": allow_tunnels
+               "allow_tunnels": allow_tunnels,
+               "auto_join_enabled": auto_join_enabled
           }
         )
 
