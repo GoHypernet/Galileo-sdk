@@ -80,7 +80,7 @@ def profiles_cli(main, galileo: GalileoSdk):
 
         users_list = [user.__dict__ for user in users_list]
         users_df = pandas.json_normalize(users_list)
-        users_df = users_df[["username", "userid", "mids"]]
+        users_df = users_df[["username", "userid", "lz_ids"]]
 
         spinner.stop()
         if head:

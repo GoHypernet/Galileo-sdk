@@ -29,8 +29,6 @@ auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 projects_repo = MissionsRepository(settings_repo, auth_provider, NAMESPACE)
 
-# PETER and SHEP: Changed project_type_id to mission_type_id
-
 
 def mocked_requests_get(*args, **kwargs):
     if args[0] == "{backend}{namespace}/projects?{query}".format(

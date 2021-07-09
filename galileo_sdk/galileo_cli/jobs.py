@@ -1,3 +1,4 @@
+from requests.models import HTTPError
 from galileo_sdk import GalileoSdk
 from halo import Halo
 import pandas
@@ -22,7 +23,7 @@ def jobs_cli(main, galileo: GalileoSdk):
             statuses=list(status),
             page=page,
             items=items,
-            projectid=list(projectid)
+            projectids=list(projectid)
         )
 
         if len(r) == 0:
@@ -81,7 +82,7 @@ def jobs_cli(main, galileo: GalileoSdk):
     )
     @click.option(
         "-u",
-        "--userid",
+        "--user-ids",
         type=str,
         multiple=True,
         help="Filter by user id, can provide multiple options.",
@@ -109,16 +110,16 @@ def jobs_cli(main, galileo: GalileoSdk):
     )
     @click.option('--received', is_flag=True)
     @click.option('--sent', is_flag=True)
-    def ls(index, id, receiver, sid, userid, status, page, items, head, received, sent, projectid):
+    def ls(index, id, receiver, sid, user_ids, status, page, items, head, received, sent, projectid):
         """
         List all jobs.
         """
         spinner = Halo("Retrieving information", spinner="dots").start()
-        self = galileo.profiles.self()
-        userid_filter = userid
-        userid_filter += (self.userid,)
-        received_filter = receiver
-        received_filter += tuple(self.mids)
+
+        #Testing purpose
+        my_id = galileo.profiles.self().userid
+        user_ids = list(user_ids) + [my_id]
+        receiver_ids = list(receiver) + galileo.lz.list_lz(userids=[my_id])
         spinner.stop()
 
         if not received and not sent:
@@ -127,7 +128,7 @@ def jobs_cli(main, galileo: GalileoSdk):
 
         if sent:
             spinner = Halo("Retrieving jobs sent by you", spinner="dots").start()
-            sent_jobs_df = get_jobs(index, id, receiver, sid, userid_filter, status, page, items, spinner, projectid)
+            sent_jobs_df = get_jobs(index, id, receiver, sid, user_ids, status, page, items, spinner, projectid)
             spinner.stop()
             click.echo("SENT JOBS\n=========\n")
             if head:
@@ -138,7 +139,7 @@ def jobs_cli(main, galileo: GalileoSdk):
 
         if received:
             spinner = Halo("\nRetrieving jobs you received", spinner="dots").start()
-            received_jobs_df = get_jobs(index, id, received_filter, sid, userid, status, page, items, spinner, projectid)
+            received_jobs_df = get_jobs(index, id, receiver_ids, sid, user_ids, status, page, items, spinner, projectid)
             spinner.stop()
             click.echo("\nRECEIVED JOBS\n===========\n")
             if head:
@@ -155,20 +156,20 @@ def jobs_cli(main, galileo: GalileoSdk):
         """
         Request to stop a job.
         """
-        jobs_list = galileo.jobs.request_stop_job(jobid)
+        jobs_list = [galileo.jobs.request_stop_job(jobid)]
         jobs_list = [job.__dict__ for job in jobs_list]
         jobs_df = pandas.json_normalize(jobs_list)
         jobs_df.time_created = jobs_df.time_created.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
+            lambda x: x
         )
         jobs_df.last_updated = jobs_df.last_updated.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
+            lambda x: x
         )
         jobs_df = jobs_df[
             [
-                "jobid",
-                "stationid",
-                "receiverid",
+                "job_id",
+                "station_id",
+                "receiver_id",
                 "name",
                 "total_runtime",
                 "status",
@@ -217,7 +218,19 @@ def jobs_cli(main, galileo: GalileoSdk):
         """
         Request to start a job.
         """
-        jobs_list = galileo.jobs.request_start_job(jobid)
+        try:
+            jobs_list = galileo.jobs.request_start_job(jobid)
+        except HTTPError as e:
+            status_code = e.response.status_code
+            if status_code == 405:
+                click.echo("Job cannot be started")
+                return
+            elif status_code == 500:
+                curr_job = galileo.jobs.list_jobs(jobids=[jobid])
+                if not curr_job:
+                    click.echo("Job does not exist")
+                    return
+            raise e
         jobs_list = [job.__dict__ for job in jobs_list]
         jobs_df = pandas.json_normalize(jobs_list)
         jobs_df.time_created = jobs_df.time_created.map(

@@ -8,6 +8,9 @@ class LzService:
     def get_lz_by_id(self, lz_id):
         return self._lz_repo.get_lz_by_id(lz_id)
 
+    def delete_lz_by_id(self, lz_id):
+        return self._lz_repo.delete_lz_by_id(lz_id)
+
     def list_lz(
         self, lz_ids=None, userids=None, page=1, items=25,
     ):

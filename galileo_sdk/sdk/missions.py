@@ -316,7 +316,6 @@ class MissionsSdk:
         destination_storage_id=None,
         source_path=None,
         destination_path=None,
-        public=None,
         settings=None,
     ):
         """
@@ -347,7 +346,6 @@ class MissionsSdk:
             destination_storage_id=destination_storage_id,
             source_path=source_path,
             destination_path=destination_path,
-            public=public,
             settings=settings,
         )
         return self._missions_service.update_mission(request)

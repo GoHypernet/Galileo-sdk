@@ -87,11 +87,9 @@ class MissionsRepository(RequestsRepository):
             "destination_storage_id": update_project_request.destination_storage_id,
             "source_path": update_project_request.source_path,
             "destination_path": update_project_request.destination_path,
-            "public":update_project_request.public
         }
         if update_project_request.settings is not None:
             body.update({"settings": update_project_request.settings})
-
         response = self._put(
             "/projects/{mission_id}".format(
                 mission_id=update_project_request.mission_id

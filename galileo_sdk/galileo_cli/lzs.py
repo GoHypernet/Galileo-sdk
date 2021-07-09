@@ -81,4 +81,27 @@ def lzs_cli(main, galileo: GalileoSdk):
         ]
 
         spinner.stop()
-        click.echo(lzs_df.head(items))
+        click.echo(lzs_df.head(items)) 
+        
+    @lzs.command()
+    @click.argument(
+        "lz_ids", 
+        nargs=-1,
+        type=str, 
+    )
+    def delete(lz_ids):
+        """
+        Delete LZs in your Galileo account.
+        """
+        spinner = Halo("Deleting LZs", spinner="dot").start()
+
+        for lz in lz_ids:
+            try:
+                if not galileo.lz.delete_lz_by_id(lz):
+                    spinner.stop()
+                    click.echo("Deletion of lz {id} unsuccessful".format(id=lz))
+                spinner.stop()
+                click.echo("Deleted lz with id: {id}".format(id=lz))
+            except Exception as e:
+                click.echo("Error: {e}".format(e=e))
+        spinner.stop()
