@@ -66,6 +66,7 @@ class StationsService:
         credits_cost_by_mission=None,
         page=None,
         items=None,
+        allow_tunnels=None
         ):
         query = generate_query_str(
             {
@@ -87,7 +88,8 @@ class StationsService:
                "max_credits_per_hour": max_credits_per_hour,
                "credits_cost_by_mission": credits_cost_by_mission,
                "page": page,
-               "items": items  
+               "items": items,
+               "allow_tunnels": allow_tunnels
           }
         )
 
