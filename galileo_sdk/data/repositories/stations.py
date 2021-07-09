@@ -50,7 +50,6 @@ class StationsRepository(RequestsRepository):
             {
                 "name": request.name,
                 "description": request.description,
-                "user_ids": request.user_ids,
                 "public": request.public,
                 "allow_auto_join": request.allow_auto_join
             },
