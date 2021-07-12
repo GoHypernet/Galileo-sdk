@@ -537,6 +537,7 @@ def public_station_dict_to_station(station):
         name=station["name"],
         description=station["description"],
         allow_auto_join=station["allow_auto_join"],
+        allow_tunnels=station.get("allow_tunnels", None),
         creation_timestamp=station.get("creation_timestamp", None),
         updated_timestamp=station.get("updated_timestamp", None),
         allowed_mission_types=station.get("allowed_mission_types",None),

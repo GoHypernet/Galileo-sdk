@@ -81,6 +81,7 @@ class PublicStation:
         public=True,
         allowed_mission_types=None,
         allow_auto_join=None,
+        allow_tunnels=None,
         jobs_in_queue=None,
         member_count=None,
         mid_count=None,
@@ -117,6 +118,7 @@ class PublicStation:
         self.updated_timestamp=updated_timestamp
         self.public=public
         self.allow_auto_join=allow_auto_join
+        self.allow_tunnels=allow_tunnels
         self.allowed_mission_types=allowed_mission_types
         self.jobs_in_queue=jobs_in_queue
         self.member_count=member_count
