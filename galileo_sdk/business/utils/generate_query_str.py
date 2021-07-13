@@ -16,7 +16,7 @@ def generate_query_str(*args, **kwargs):
                 value = params[key]
                 if type(value) == bool:
                     value = str(value).lower()
-                param_str += "{key}={param}&".format(key=key, param=params[key])
+                param_str += "{key}={param}&".format(key=key, param=value)
 
     param_str = param_str[:-1]
     return param_str
