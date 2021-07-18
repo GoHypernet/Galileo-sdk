@@ -17,21 +17,60 @@ def test_list_stations():
     station_list = galileo.stations.list_stations()
     assert station_list is not None
 
+
 def test_get_public_stations():
     station_list = galileo.stations.get_public_stations()
     assert station_list is not None
 
+
 def test_get_public_stations_filters():
+    # Create a public station
+    auto_join_station = galileo.stations.create_station(
+        name="public_sdk_station_integration_test_allow_auto_join",
+        user_ids=[],
+        description="for testing",
+    )
+
+    tunnels_station = galileo.stations.create_station(
+        name="public_sdk_station_integration_test_allow_tunnels",
+        user_ids=[],
+        description="for testing",
+    )
+
+    # TODO: Make sure I don't accidentally set public to default to False
+    auto_join_station = galileo.stations.update_station(
+        auto_join_station.stationid, public=True, allow_auto_join=True)
+
+    tunnels_station = galileo.stations.update_station(
+        tunnels_station.stationid, public=True)
+    launcher_role = galileo.stations.get_station_roles(
+        tunnels_station.stationid, names=["launcher"])[0]
+    launcher_role = galileo.stations.update_station_role(
+        tunnels_station.stationid, launcher_role.id, create_tunnels=True)
+
     station_list = galileo.stations.get_public_stations(auto_join_enabled=True)
     for station in station_list:
         assert station.allow_auto_join
+    station_list = galileo.stations.get_public_stations(allow_tunnels=True)
+
+    for station in station_list:
+        launcher_role = galileo.stations.get_station_roles(station.stationid,
+                                                           names=["launcher"
+                                                                  ])[0]
+        print(station, launcher_role.create_tunnels)
+    galileo.stations.delete_station(auto_join_station.stationid)
+    galileo.stations.delete_station(tunnels_station.stationid)
+
 
 def test_create_and_delete_station():
     station_details = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
 
-    r_delete_station = galileo.stations.delete_station(station_details.stationid)
+    r_delete_station = galileo.stations.delete_station(
+        station_details.stationid)
 
     assert "sdk_station_integration_test" == station_details.name
     assert station_details.stationid is not ""
@@ -40,17 +79,18 @@ def test_create_and_delete_station():
 
 def test_add_and_remove_volumes_to_station():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
-    volumes = galileo.stations.add_volumes_to_station(
+    volumes = galileo.stations.add_volume_to_station(
         station_id=station.stationid,
         name="volume",
         mount_point="mount_point",
         access=EVolumeAccess.READWRITE,
     )
     r_remove_volume = galileo.stations.remove_volume_from_station(
-        station_id=station.stationid, volume_id=volumes.volumeid
-    )
+        station_id=station.stationid, volume_id=volumes.volumeid)
 
     r_delete_station = galileo.stations.delete_station(station.stationid)
 
@@ -62,14 +102,16 @@ def test_add_and_remove_volumes_to_station():
 
 def test_add_and_delete_host_path_to_volume():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
 
     self = galileo.profiles.self()
 
     station_id = station.stationid
 
-    volumes = galileo.stations.add_volumes_to_station(
+    volumes = galileo.stations.add_volume_to_station(
         station_id=station_id,
         name="volume",
         mount_point="mount_point",
@@ -99,7 +141,9 @@ def test_add_and_delete_host_path_to_volume():
 def test_create_station_resource_policy():
 
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
 
@@ -111,7 +155,9 @@ def test_create_station_resource_policy():
 
 def test_get_station_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
 
@@ -127,7 +173,9 @@ def test_get_station_resource_policy():
 
 def test_delete_station_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
 
@@ -141,112 +189,135 @@ def test_delete_station_resource_policy():
     galileo.stations.delete_station(station_id)
 
 
-
 def test_self_resource_limits():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
-    
+
     station_id = station.stationid
     user_id = galileo.profiles.self().userid
     lz_id = galileo.lz.list_lz(userids=[user_id])[0].lz_id
 
     galileo.stations.add_lz_to_station(station_id, [lz_id])
-    
+
     # Create resource policy
     galileo.stations.update_station_resource_policy(station_id)
-    
-    policy, lz_id = galileo.stations.get_self_station_resource_limits(station_id)
+
+    policy, lz_id = galileo.stations.get_self_station_resource_limits(
+        station_id)
     assert isinstance(policy, ResourcePolicy)
 
     galileo.stations.delete_station(station_id)
 
+
 def test_create_station_user_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
 
     station_id = station.stationid
-    
+
     # Create resource policy
-    policy = galileo.stations.update_station_user_resource_policy(station_id, user.userid, max_cpu_per_job=10000)
-    
+    policy = galileo.stations.update_station_user_resource_policy(
+        station_id, user.userid, max_cpu_per_job=10000)
+
     assert isinstance(policy, ResourcePolicy)
     galileo.stations.delete_station(station_id)
 
 
 def test_get_station_user_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
 
     # Create resource policy
-    galileo.stations.update_station_user_resource_policy(station_id, user.userid, max_cpu_per_job=10000)
-    policy = galileo.stations.get_station_user_resource_policy(station_id, user.userid)
-    
+    galileo.stations.update_station_user_resource_policy(station_id,
+                                                         user.userid,
+                                                         max_cpu_per_job=10000)
+    policy = galileo.stations.get_station_user_resource_policy(
+        station_id, user.userid)
+
     assert isinstance(policy, ResourcePolicy)
     galileo.stations.delete_station(station_id)
 
 
 def test_delete_station_user_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
-    # Create user resource policy 
-    galileo.stations.update_station_user_resource_policy(station_id, user.userid, max_cpu_per_job=10000)
+    # Create user resource policy
+    galileo.stations.update_station_user_resource_policy(station_id,
+                                                         user.userid,
+                                                         max_cpu_per_job=10000)
     # Delete user resource policy
-    response = galileo.stations.delete_station_user_resource_policy(station_id, user.userid)
-    policy = galileo.stations.get_station_user_resource_policy(station_id, user.userid)
+    response = galileo.stations.delete_station_user_resource_policy(
+        station_id, user.userid)
+    policy = galileo.stations.get_station_user_resource_policy(
+        station_id, user.userid)
 
     assert response["success"] is True
     assert policy is None
 
     galileo.stations.delete_station(station_id)
 
+
 def test_update_station_role_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
 
     resource_policy = galileo.stations.update_station_role_resource_policy(
-        station_id, ROLE_ID, max_cpu_per_job=1
-    )
+        station_id, ROLE_ID, max_cpu_per_job=1)
     assert resource_policy.max_cpu_per_job == 1
 
     galileo.stations.delete_station(station_id)
 
+
 def test_get_station_role_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
     # Create role resource policy
-    galileo.stations.update_station_role_resource_policy(
-            station_id, ROLE_ID, max_cpu_per_job=1
-        )
+    galileo.stations.update_station_role_resource_policy(station_id,
+                                                         ROLE_ID,
+                                                         max_cpu_per_job=1)
 
     resource_policy = galileo.stations.get_station_role_resource_policy(
-        station_id, ROLE_ID
-    )
+        station_id, ROLE_ID)
 
     assert isinstance(resource_policy, ResourcePolicy)
 
     galileo.stations.delete_station(station_id)
 
+
 def test_crud_station_roles():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
-    
-    # Create role resource policy
-    galileo.stations.update_station_role_resource_policy(
-            station_id, ROLE_ID, max_cpu_per_job=1
-        )
 
+    # Create role resource policy
+    galileo.stations.update_station_role_resource_policy(station_id,
+                                                         ROLE_ID,
+                                                         max_cpu_per_job=1)
 
     create_station_role = galileo.stations.create_station_role(
         station_id,
@@ -254,10 +325,14 @@ def test_crud_station_roles():
         "Subscribes to activity in the station, should not be able to do anything in it",
     )
 
-    get_station_role = galileo.stations.get_station_roles(station_id, role_ids=[create_station_role.id])
-    updated_station_role = galileo.stations.update_station_role(station_id, create_station_role.id, "Follower")
-    delete_response = galileo.stations.delete_station_role(station_id, create_station_role.id)
-    delete_station_role = galileo.stations.get_station_roles(station_id, role_ids=[create_station_role.id])
+    get_station_role = galileo.stations.get_station_roles(
+        station_id, role_ids=[create_station_role.id])
+    updated_station_role = galileo.stations.update_station_role(
+        station_id, create_station_role.id, "Follower")
+    delete_response = galileo.stations.delete_station_role(
+        station_id, create_station_role.id)
+    delete_station_role = galileo.stations.get_station_roles(
+        station_id, role_ids=[create_station_role.id])
 
     assert isinstance(create_station_role, StationRole)
     assert create_station_role.name == "Subscriber"
@@ -270,22 +345,24 @@ def test_crud_station_roles():
 
     galileo.stations.delete_station(station_id)
 
+
 def test_delete_station_role_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
 
     station_id = station.stationid
     # Create role resource policy
-    galileo.stations.update_station_role_resource_policy(
-            station_id, ROLE_ID, max_cpu_per_job=1
-        )
+    galileo.stations.update_station_role_resource_policy(station_id,
+                                                         ROLE_ID,
+                                                         max_cpu_per_job=1)
 
-
-    response = galileo.stations.delete_station_role_resource_policy(station_id, ROLE_ID)
+    response = galileo.stations.delete_station_role_resource_policy(
+        station_id, ROLE_ID)
     resource_policy = galileo.stations.get_station_role_resource_policy(
-        station_id, ROLE_ID
-    )
+        station_id, ROLE_ID)
     assert response["success"] is True
     assert resource_policy is None
 
@@ -294,31 +371,33 @@ def test_delete_station_role_resource_policy():
 
 def test_update_station_lz_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
 
     station_id = station.stationid
     # Create role resource policy
-    galileo.stations.update_station_role_resource_policy(
-            station_id, ROLE_ID, max_cpu_per_job=1
-        )
+    galileo.stations.update_station_role_resource_policy(station_id,
+                                                         ROLE_ID,
+                                                         max_cpu_per_job=1)
 
     user_id = galileo.profiles.self().userid
     lz_id = galileo.lz.list_lz(userids=[user_id])[0].lz_id
 
     galileo.stations.add_lz_to_station(station_id, [lz_id])
 
-
     resource_policy = galileo.stations.update_station_lz_resource_policy(
-        station_id, lz_id, max_cpu_per_job=1
-    )
+        station_id, lz_id, max_cpu_per_job=1)
     assert resource_policy.max_cpu_per_job == 1
     galileo.stations.delete_station(station_id)
 
 
 def test_get_station_lz_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
     # Create role resource policy
@@ -327,26 +406,25 @@ def test_get_station_lz_resource_policy():
 
     galileo.stations.add_lz_to_station(station_id, [lz_id])
 
-    galileo.stations.update_station_lz_resource_policy(
-        station_id, lz_id, max_cpu_per_job=1
-    )
+    galileo.stations.update_station_lz_resource_policy(station_id,
+                                                       lz_id,
+                                                       max_cpu_per_job=1)
 
     resource_policy = galileo.stations.get_station_lz_resource_policy(
-        station_id, lz_id
-    )
+        station_id, lz_id)
     resource_limits = galileo.stations.get_station_lz_resource_limits(
-        station_id, lz_id
-    )
+        station_id, lz_id)
 
     assert isinstance(resource_policy, ResourcePolicy)
     assert isinstance(resource_limits, ResourcePolicy)
     galileo.stations.delete_station(station_id)
 
 
-
 def test_delete_station_lz_resource_policy():
     station = galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
     user_id = galileo.profiles.self().userid
@@ -355,17 +433,14 @@ def test_delete_station_lz_resource_policy():
 
     galileo.stations.add_lz_to_station(station_id, [lz_id])
 
-    galileo.stations.update_station_lz_resource_policy(
-        station_id, lz_id, max_cpu_per_job=1
-    )
+    galileo.stations.update_station_lz_resource_policy(station_id,
+                                                       lz_id,
+                                                       max_cpu_per_job=1)
 
     response = galileo.stations.delete_station_lz_resource_policy(
-        station_id, lz_id
-    )
+        station_id, lz_id)
     resource_policy = galileo.stations.get_station_lz_resource_policy(
-        station_id, lz_id
-    )
+        station_id, lz_id)
     assert response["success"] is True
     assert resource_policy is None
     galileo.stations.delete_station(station_id)
-

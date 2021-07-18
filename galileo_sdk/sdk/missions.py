@@ -24,7 +24,7 @@ class MissionsSdk:
         :param page: Optional[int]: Return a particular page number
         :param items: Optional[int]: Number of Missions to return per page
         :param mission_type_ids: Optional[List[str]]: Filter by mission_type_ids
-        :param archived: Optional[bool]: Filter for archived projects
+        :param archived: Optional[bool]: Filter for archived missions
         :return: List[Mission]
         
         Example:

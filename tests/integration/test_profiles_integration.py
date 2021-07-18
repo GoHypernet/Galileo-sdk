@@ -4,7 +4,13 @@ import os
 CONFIG = "development"
 
 galileo = GalileoSdk(config=CONFIG)
-second_galileo = GalileoSdk(config=CONFIG, username=str(os.environ["SECOND_GALILEO_USER"]), password=str(os.environ["SECOND_GALILEO_PASSWORD"]))
+#second_galileo = GalileoSdk(config=CONFIG, username=str(os.environ["SECOND_GALILEO_USER"]), password=str(os.environ["SECOND_GALILEO_PASSWORD"]))
+second_galileo = GalileoSdk(config=CONFIG,
+                            username="peter@hyperdyne.io",
+                            password="DistributedComputation$")
+""" 
+Tests the "list_users" method.
+"""
 
 
 def test_list_users():
@@ -22,17 +28,18 @@ def test_get_profile():
     assert self.lz_ids is not None
     assert self.stored_cards is not None
 
+
 def test_list_station_invites():
     station = second_galileo.stations.create_station(
-        name="sdk_station_integration_test", userids=[], description="for testing",
+        name="sdk_station_integration_test",
+        user_ids=[],
+        description="for testing",
     )
     station_id = station.stationid
     role_id = station.users[0].role_id
     user_id = galileo.profiles.self().userid
     # Create role resource policy
     second_galileo.stations.invite_to_station(station_id, [user_id], role_id)
-    
-    
 
     station_invites = galileo.profiles.list_station_invites()
     assert station_invites is not None

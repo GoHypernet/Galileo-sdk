@@ -29,10 +29,10 @@ job_repo = JobsRepository(settings_repo, auth_provider, NAMESPACE)
 job = {
     "jobid": "jobid",
     "receiverid": "receiverid",
-    "project_id": "project_id",
+    "mission_id": "mission_id",
     "time_created": TIMESTAMP,
     "last_updated": TIMESTAMP,
-    "status": "uploaded",
+        "status": "uploaded",
     "cpu_count": 1,
     "gpu_count": 0,
     "memory_amount": 0,    

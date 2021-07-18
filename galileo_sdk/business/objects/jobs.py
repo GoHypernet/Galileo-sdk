@@ -65,7 +65,7 @@ class Job:
         self,
         jobid,
         receiverid,
-        project_id,
+        mission_id,
         time_created,
         last_updated,
         status=None,
@@ -90,7 +90,7 @@ class Job:
         
         :param jobid: UUID of the Job
         :param receiver_id: UUID of the recipient Landing Zone
-        :param project_id: UUID of the originating Mission
+        :param mission_id: UUID of the originating Mission
         :param time_created: Time stamp of the Job run time
         :param last_updated: Time stamp of last Job update
         :param status: Current status of the Job
@@ -112,8 +112,7 @@ class Job:
         """
         self.job_id = jobid
         self.receiver_id = receiverid
-        self.project_id = project_id
-        self.mission_id = project_id
+        self.mission_id = mission_id
         self.time_created = time_created
         self.last_updated = last_updated
         self.status = status

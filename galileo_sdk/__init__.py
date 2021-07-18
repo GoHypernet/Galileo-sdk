@@ -80,8 +80,7 @@ from .business.objects import (
     StationsEvents,
     ResourcePolicy,
     UpdateResourcePolicyRequest,
-    CreateStationRoleRequest,
-    UpdateStationRoleRequest,
+    StationRoleRequest,
     AutoscaleSettings,
     StationRole,
 )

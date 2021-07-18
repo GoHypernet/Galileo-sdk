@@ -38,9 +38,9 @@ class Mission:
         name,
         description,
         source_storage_id,
-        source_path,  # default will be project_id
+        source_path,  # default will be mission_id
         destination_storage_id,
-        destination_path,  # default will be project_id
+        destination_path,  # default will be mission_id
         user_id,
         creation_timestamp,
         mission_type_id,

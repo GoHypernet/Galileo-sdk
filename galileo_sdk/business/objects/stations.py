@@ -81,8 +81,7 @@ class PublicStation:
         public=True,
         allowed_mission_types=None,
         allow_auto_join=None,
-        allow_tunnels=None,
-        jobs_in_queue=None,
+        jobs_in_queue_count=None,
         member_count=None,
         mid_count=None,
         resource_policy=None,
@@ -118,9 +117,8 @@ class PublicStation:
         self.updated_timestamp=updated_timestamp
         self.public=public
         self.allow_auto_join=allow_auto_join
-        self.allow_tunnels=allow_tunnels
         self.allowed_mission_types=allowed_mission_types
-        self.jobs_in_queue=jobs_in_queue
+        self.jobs_in_queue_count=jobs_in_queue_count
         self.member_count=member_count
         self.mid_count=mid_count
         self.resource_policy=resource_policy
@@ -129,7 +127,7 @@ class PublicStation:
         self.volume_count=volume_count
     
     def __str__(self):
-        return "Public Station: {name} \n Station ID: {stationid} \n Autojoin:{allow_auto_join}".format(name=self.name, stationid=self.stationid, allow_auto_join=self.allow_auto_join)
+        return "Public Station: {name} (autojoin:{allow_auto_join})".format(name=self.name, allow_auto_join=self.allow_auto_join)
     def __repr__(self):
         return self.__str__()
 class Station:
@@ -142,11 +140,11 @@ class Station:
         allow_auto_join=None,
         public=None,
         lz_ids=None,
+        crew_ids=None,
         machine_summaries=None,
-        mids=None,
         volumes=None,
         status=None,
-        organization_id=None,
+        universe_id=None,
         creation_timestamp=None,
         updated_timestamp=None,
         autoscale_settings=None,
@@ -171,18 +169,18 @@ class Station:
         self.description = description
         self.users = users
         self.lz_ids = lz_ids
+        self.crew_ids = crew_ids
         self.volumes = volumes
         self.status = status
-        self.organization_id = organization_id
+        self.universe_id = universe_id
         self.creation_timestamp = creation_timestamp
         self.updated_timestamp = updated_timestamp
         self.autoscale_settings = autoscale_settings
         self.machine_summaries=machine_summaries,
-        self.mids=mids,
         self.allow_auto_join=allow_auto_join
         self.public=public
     def __str__(self):
-        return "Station: {name} \n Station ID: {stationid} \n Autojoin:{allow_auto_join}".format(name=self.name, stationid=self.stationid, allow_auto_join=self.allow_auto_join)
+        return "Station: {name} (autojoin:{allow_auto_join})".format(name=self.name, allow_auto_join=self.allow_auto_join)
     def __repr__(self):
         return self.__str__()
 
@@ -494,7 +492,7 @@ class UpdateResourcePolicyRequest:
         self.gpu_credits_per_hour = gpu_credits_per_hour
 
 
-class CreateStationRoleRequest:
+class StationRoleRequest:
     def __init__(
         self,
         name,
@@ -510,19 +508,19 @@ class CreateStationRoleRequest:
         remove_invited_users=0,
         view_all_users=0,
         edit_metadata=0,
-        add_machine=0,
-        remove_any_machine=0,
+        add_lz=0,
+        remove_any_lz=0,
         view_all_jobs=0,
         control_all_jobs=0,
-        view_jobs_on_own_machines=0,
-        control_jobs_on_own_machines=0,
+        view_jobs_on_own_lzs=0,
+        control_jobs_on_own_lzs=0,
         view_own_jobs=0,
         control_own_jobs=0,
         create_tunnels=None,
         view_complete_activity=0,
         edit_station_policy=0,
-        edit_own_machine_policy=0,
-        edit_machine_policy=0,
+        edit_own_lz_policy=0,
+        edit_lz_policy=0,
         edit_user_policy=0,
         edit_job_resource_limits=0,
         add_autoscale=0,
@@ -545,18 +543,18 @@ class CreateStationRoleRequest:
         self.remove_invited_users = remove_invited_users
         self.view_all_users = view_all_users
         self.edit_metadata = edit_metadata
-        self.add_machine = add_machine
-        self.remove_any_machine = remove_any_machine
+        self.add_lz = add_lz
+        self.remove_any_lz = remove_any_lz
         self.view_all_jobs = view_all_jobs
         self.control_all_jobs = control_all_jobs
-        self.view_jobs_on_own_machines = view_jobs_on_own_machines
-        self.control_jobs_on_own_machines = control_jobs_on_own_machines
+        self.view_jobs_on_own_lzs = view_jobs_on_own_lzs
+        self.control_jobs_on_own_lzs = control_jobs_on_own_lzs
         self.view_own_jobs = view_own_jobs
         self.control_own_jobs = control_own_jobs
         self.view_complete_activity = view_complete_activity
         self.edit_station_policy = edit_station_policy
-        self.edit_own_machine_policy = edit_own_machine_policy
-        self.edit_machine_policy = edit_machine_policy
+        self.edit_own_lz_policy = edit_own_lz_policy
+        self.edit_lz_policy = edit_lz_policy
         self.edit_user_policy = edit_user_policy
         self.edit_job_resource_limits = edit_job_resource_limits
         self.add_autoscale = add_autoscale
@@ -566,73 +564,6 @@ class CreateStationRoleRequest:
         self.reject_user_requests = reject_user_requests
         self.create_tunnels = create_tunnels
         self.allowed_mission_types = allowed_mission_types
-
-
-class UpdateStationRoleRequest:
-    def __init__(
-        self,
-        name=None,
-        description=None,
-        protected_role=None,
-        edit_station_role=None,
-        assign_user_roles=None,
-        assign_protected_user_roles=None,
-        launch_jobs=None,
-        invite_users=None,
-        remove_all_users=None,
-        remove_invited_users=None,
-        view_all_users=None,
-        edit_metadata=None,
-        add_machine=None,
-        remove_any_machine=None,
-        view_all_jobs=None,
-        control_all_jobs=None,
-        view_jobs_on_own_machines=None,
-        control_jobs_on_own_machines=None,
-        view_own_jobs=None,
-        control_own_jobs=None,
-        view_complete_activity=None,
-        edit_station_policy=None,
-        edit_own_machine_policy=None,
-        edit_machine_policy=None,
-        edit_user_policy=None,
-        edit_job_resource_limits=None,
-        manage_volumes=None,
-        reject_user_requests=None,
-        create_tunnels=None,
-        allowed_mission_types=None,
-    ):
-        self.name = name
-        self.description = description
-        self.protected_role = protected_role
-        self.edit_station_role = edit_station_role
-        self.assign_user_roles = assign_user_roles
-        self.assign_protected_user_roles = assign_protected_user_roles
-        self.launch_jobs = launch_jobs
-        self.invite_users = invite_users
-        self.remove_all_users = remove_all_users
-        self.remove_invited_users = remove_invited_users
-        self.view_all_users = view_all_users
-        self.edit_metadata = edit_metadata
-        self.add_machine = add_machine
-        self.remove_any_machine = remove_any_machine
-        self.view_all_jobs = view_all_jobs
-        self.control_all_jobs = control_all_jobs
-        self.view_jobs_on_own_machines = view_jobs_on_own_machines
-        self.control_jobs_on_own_machines = control_jobs_on_own_machines
-        self.view_own_jobs = view_own_jobs
-        self.control_own_jobs = control_own_jobs
-        self.view_complete_activity = view_complete_activity
-        self.edit_station_policy = edit_station_policy
-        self.edit_own_machine_policy = edit_own_machine_policy
-        self.edit_machine_policy = edit_machine_policy
-        self.edit_user_policy = edit_user_policy
-        self.edit_job_resource_limits = edit_job_resource_limits
-        self.manage_volumes = manage_volumes
-        self.reject_user_requests = reject_user_requests
-        self.create_tunnels = create_tunnels
-        self.allowed_mission_types = allowed_mission_types
-
 
 class AutoscaleSettings:
     def __init__(
@@ -686,18 +617,18 @@ class StationRole:
         remove_invited_users,
         view_all_users,
         edit_metadata,
-        add_machine,
-        remove_any_machine,
+        add_lz,
+        remove_any_lz,
         view_all_jobs,
         control_all_jobs,
-        view_jobs_on_own_machines,
-        control_jobs_on_own_machines,
+        view_jobs_on_own_lzs,
+        control_jobs_on_own_lzs,
         view_own_jobs,
         control_own_jobs,
         view_complete_activity,
         edit_station_policy,
-        edit_own_machine_policy,
-        edit_machine_policy,
+        edit_own_lz_policy,
+        edit_lz_policy,
         edit_user_policy,
         edit_job_resource_limits,
         manage_volumes,
@@ -722,18 +653,18 @@ class StationRole:
         self.remove_invited_users = remove_invited_users
         self.view_all_users = view_all_users
         self.edit_metadata = edit_metadata
-        self.add_machine = add_machine
-        self.remove_any_machine = remove_any_machine
+        self.add_lz = add_lz
+        self.remove_any_lz = remove_any_lz
         self.view_all_jobs = view_all_jobs
         self.control_all_jobs = control_all_jobs
-        self.view_jobs_on_own_machines = view_jobs_on_own_machines
-        self.control_jobs_on_own_machines = control_jobs_on_own_machines
+        self.view_jobs_on_own_lzs = view_jobs_on_own_lzs
+        self.control_jobs_on_own_lzs = control_jobs_on_own_lzs
         self.view_own_jobs = view_own_jobs
         self.control_own_jobs = control_own_jobs
         self.view_complete_activity = view_complete_activity
         self.edit_station_policy = edit_station_policy
-        self.edit_own_machine_policy = edit_own_machine_policy
-        self.edit_machine_policy = edit_machine_policy
+        self.edit_own_lz_policy = edit_own_lz_policy
+        self.edit_lz_policy = edit_lz_policy
         self.edit_user_policy = edit_user_policy
         self.edit_job_resource_limits = edit_job_resource_limits
         self.manage_volumes = manage_volumes

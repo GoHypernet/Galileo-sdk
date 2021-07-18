@@ -2,7 +2,7 @@ from .event import EventsSdk
 from ..business.objects import (
     UpdateStationRequest,
     UpdateResourcePolicyRequest,
-    CreateStationRoleRequest,
+    StationRoleRequest,
 )
 
 
@@ -10,7 +10,8 @@ class StationsSdk(EventsSdk):
     def __init__(self, stations_service, connector=None, events=None):
         self._stations_service = stations_service
         super(StationsSdk, self).__init__(
-            connector=connector, events=events,
+            connector=connector,
+            events=events,
         )
 
     def on_new_station(self, func):
@@ -145,7 +146,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_user_request_accepted(func)
 
     def on_station_admin_request_rejected(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a request to join a station has been rejected
@@ -158,7 +160,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_request_rejected(func)
 
     def on_station_user_request_rejected(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a request to join a station has been rejected
@@ -171,7 +174,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_user_request_rejected(func)
 
     def on_station_admin_member_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a member has been removed from a station
@@ -184,7 +188,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_member_removed(func)
 
     def on_station_admin_lz_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a machine has been removed from a station
@@ -197,7 +202,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_machine_removed(func)
 
     def on_station_member_member_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a member has been removed from a station
@@ -210,7 +216,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_member_member_removed(func)
 
     def on_station_member_lz_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a lz has been removed from a station
@@ -223,7 +230,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_member_lz_removed(func)
 
     def on_station_user_withdrawn(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a user has withdrawn from the station
@@ -236,7 +244,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_user_withdrawn(func)
 
     def on_station_user_expelled(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a user has been expelled from the station
@@ -249,7 +258,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_user_expelled(func)
 
     def on_station_admin_destroyed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -262,7 +272,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_destroyed(func)
 
     def on_station_member_destroyed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -275,7 +286,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_member_destroyed(func)
 
     def on_station_user_invite_destroyed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -288,7 +300,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_user_invite_destroyed(func)
 
     def on_station_user_request_destroyed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a station has been destroyed
@@ -301,7 +314,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_user_request_destroyed(func)
 
     def on_station_admin_lz_added(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a lz has been added to the station
@@ -314,7 +328,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_lz_added(func)
 
     def on_station_member_lz_added(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a lz has been added to the station
@@ -338,7 +353,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_volume_added(func)
 
     def on_station_member_volume_added(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a volume has been added to the station
@@ -351,7 +367,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_member_volume_added(func)
 
     def on_station_admin_volume_host_path_added(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a volume host path has been added
@@ -364,7 +381,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_volume_host_path_added(func)
 
     def on_station_member_volume_host_path_added(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a volume host path has been added
@@ -377,7 +395,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_member_volume_host_path_added(func)
 
     def on_station_admin_volume_host_path_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a volume host path has been removed
@@ -390,7 +409,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_volume_host_path_removed(func)
 
     def on_station_member_volume_host_path_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a volume host path has been removed
@@ -403,7 +423,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_member_volume_host_path_removed(func)
 
     def on_station_admin_volume_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a volume has been removed
@@ -416,7 +437,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_volume_removed(func)
 
     def on_station_member_volume_removed(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a volume has been removed
@@ -429,7 +451,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_member_volume_removed(func)
 
     def on_station_admin_station_updated(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a station has been updated
@@ -442,7 +465,8 @@ class StationsSdk(EventsSdk):
         self._events.on_station_admin_station_updated(func)
 
     def on_station_member_station_updated(
-        self, func,
+        self,
+        func,
     ):
         """
         Callback will execute when a station has been updated
@@ -454,18 +478,33 @@ class StationsSdk(EventsSdk):
         self._set_event_handler("stations")
         self._events.on_station_member_station_updated(func)
 
+    def get_station_by_id(self, station_id):
+        """
+        Get station by id
+
+        :param station_id: int
+        :return: Station
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> station = galileo.stations.get_station_by_id(station_id)
+
+        """
+        # Get first station with id = station_id, else return None
+        return next(iter(self.list_stations(station_ids=[station_id])), None)
+
     def list_stations(
         self,
-        stationids=None,
+        station_ids=None,
         names=None,
         lz_ids=None,
         user_roles=None,
-        volumeids=None,
+        volume_ids=None,
         descriptions=None,
         page=1,
         items=25,
         active="true",
-        userids=None,
+        user_ids=None,
         partial_names=None,
         updated=None,
         lz_count_min=None,
@@ -475,16 +514,16 @@ class StationsSdk(EventsSdk):
         """
         Get a filtered list of Galileo Stations that are accessible in your account.
         
-        :param stationids: Optional[List[str]]: Filter based on station ids
+        :param station_ids: Optional[List[str]]: Filter based on station ids
         :param names: Optional[List[str]]: Filter based on names
         :param lz_ids: Optional[List[str]]: Filter based on landing zone ids
         :param user_roles: Optional[List[str]]: Filter based on user roles
-        :param volumeids: Optional[List[str]]: Filter based on volumeids
+        :param volume_ids: Optional[List[str]]: Filter based on volumeids
         :param descriptions: Optional[List[str]]: Filter based on descriptions
         :param page: Optional[int]: Page #
         :param items: Optional[int]: Items per page
         :param active: Optional[str]: Filter for all active stations ("true","false"). Default is 'true'.
-        :param userids: Optional[List[str]]: Filter based on userid
+        :param user_ids: Optional[List[str]]: Filter based on userid
         :param lz_status: Optional[List[str]]
         :param lz_count_max: Optional[int]
         :param lz_count_min: Optional[int]
@@ -498,24 +537,24 @@ class StationsSdk(EventsSdk):
             >>>    print(station.name)
         """
         return self._stations_service.list_stations(
-            stationids=stationids,
+            stationids=station_ids,
             names=names,
             lz_ids=lz_ids,
             user_roles=user_roles,
-            volumeids=volumeids,
+            volumeids=volume_ids,
             descriptions=descriptions,
             page=page,
             items=items,
             active=active,
-            userids=userids,
+            userids=user_ids,
             partial_names=partial_names,
             updated=updated,
             lz_count_min=lz_count_min,
             lz_count_max=lz_count_max,
             lz_status=lz_status,
         )
-    
-    def get_public_stations(
+
+    def list_public_stations(
         self,
         mission_types=[],
         mission_cpu_value=None,
@@ -538,15 +577,38 @@ class StationsSdk(EventsSdk):
         items=None,
         allow_tunnels=None,
         auto_join_enabled=None,
-        ):
-
-
+    ):
         """
-        Gets public stations
-
-        :return: Stations
-        """
+        Get a filtered list of public stations
         
+        :param mission_types: Optional[List[str]]: Filter based on mission types
+        :param mission_cpu_value: Optional[int]: Filter based on mission cpu value
+        :param mission_gpu_value: Optional[int]: Filter based on mission gpu value
+        :param mission_memory_value: Optional[int]: Filter based on mission memory value
+        :param min_cpu_per_job: Optional[int]: Filter based on minimum cpu per job
+        :param min_gpu_per_job: Optional[int]: Filter based on minimum gpu per job
+        :param min_memory_per_job: Optional[int]: Filter based on minimum memory per job
+        :param max_cpu_per_job: Optional[int]: Filter based on maximum cpu per job
+        :param max_gpu_per_job: Optional[int]: Filter based on maximum gpu per job
+        :param min_cpu_credits_per_hour: Optional[int]: Filter based on minimum cpu credits per hour
+        :param min_gpu_credits_per_hour: Optional[int]: Filter based on minimum gpu credits per hour
+        :param min_memory_credits_per_hour: Optional[int]: Filter based on minimum memory credits per hour
+        :param max_cpu_credits_per_hour: Optional[int]: Filter based on maximum cpu credits per hour
+        :param max_gpu_credits_per_hour: Optional[int]: Filter based on maximum gpu credits per hour
+        :param max_memory_credits_per_hour: Optional[int]: Filter based on maximum memory credits per hour
+        :param max_credits_per_hour: Optional[int]: Filter based on maximum credits per hour
+        :param credits_cost_by_mission: Optional[int]: Filter based on credits cost by mission
+        :param page: Optional[int]: Page #
+        :param items: Optional[int]: Items per page
+        :param allow_tunnels: Optional[bool]: Filter based on whether tunnels are allowed
+        :param auto_join_enabled: Optional[bool]: Filter based on whether auto join is enabled
+        :return: List[PublicStation]
+
+        Example:
+            >>> public_stations = galileo.stations.list_stations()
+            >>> for station in public_stations:
+            >>>    print(station.name)
+        """
         return self._stations_service.get_public_stations(
             mission_types=mission_types,
             mission_cpu_value=mission_cpu_value,
@@ -568,30 +630,44 @@ class StationsSdk(EventsSdk):
             page=page,
             items=items,
             allow_tunnels=allow_tunnels,
-            auto_join_enabled=auto_join_enabled
-        )
+            auto_join_enabled=auto_join_enabled)
 
-    def create_station(self, name, description="", userids=None):
+    def create_station(self, name, description="", user_ids=None):
         """
         Create a new station
 
         :param name: str: name of station
-        :param userids: List[str]: list of members's user ids to invite
         :param description: str: description of station
+        :param user_ids: List[str]: list of members's user ids to invite
         :return: Station
-        """
-        return self._stations_service.create_station(name, description, userids)
 
-    def invite_to_station(self, station_id, userids, role_id):
+        Example:
+            >>> station = galileo.stations.create_station("My Station", description="My Description")
+            >>> print(station.name)
+        """
+        return self._stations_service.create_station(name, description,
+                                                     user_ids)
+
+    def invite_to_station(self, station_id, user_ids, role_id):
         """
         Invite user(s) to a station
 
-        :param userids: List[str]: list of user's ids to invite
         :param station_id: str
+        :param user_ids: List[str]: list of user's ids to invite
+        :param role_id: str: role id to assign to user
+
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id" 
+            >>> user_ids = ["user-id-1", "user-id-2"] 
+            >>> # Get the role id of the launcher role
+            >>> role_id = galileo.stations.get_station_roles(station_id, names=["launcher"])[0].id 
+            >>> galileo.stations.invite_to_station(station_id, user_ids=user_ids, role_id=role_id)
         """
 
-        return self._stations_service.invite_to_station(station_id, userids, role_id)
+        return self._stations_service.invite_to_station(
+            station_id, user_ids, role_id)
 
     def accept_station_invite(self, station_id):
         """
@@ -599,6 +675,11 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "invited-station-id"
+            >>> galileo.stations.accept_station_invite(station_id)
+
         """
         return self._stations_service.accept_station_invite(station_id)
 
@@ -608,6 +689,11 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "invited-station-id"
+            >>> galileo.stations.reject_station_invite(station_id)
+
         """
         return self._stations_service.reject_station_invite(station_id)
 
@@ -617,28 +703,47 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "desired-station-id"
+            >>> galileo.stations.request_to_join(station_id)
+
         """
         return self._stations_service.request_to_join(station_id)
 
-    def approve_request_to_join(self, station_id, userids):
+    def approve_request_to_join(self, station_id, user_ids):
         """
         Admins and owners can approve members to join a station
 
         :param station_id: str
-        :param userids: List[str]: list of user ids that will be approved
+        :param user_ids: List[str]: list of user ids that will be approved
         :return: boolean
-        """
-        return self._stations_service.approve_request_to_join(station_id, userids)
 
-    def reject_request_to_join(self, station_id, userids):
+        Example:
+            >>> station_id = "my-station-id"
+            >>> applicant_ids = ["user-id-1", "user-id-2"]
+            >>> galileo.stations.approve_request_to_join(station_id, applicant_ids)
+
+        """
+        return self._stations_service.approve_request_to_join(
+            station_id, user_ids)
+
+    def reject_request_to_join(self, station_id, user_ids):
         """
         Admins and owners can reject members that want to join a station
 
         :param station_id: str
-        :param userids: List[str]: list of user ids that will be rejected
+        :param user_ids: List[str]: list of user ids that will be rejected
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> applicant_ids = ["user-id-1", "user-id-2"]
+            >>> galileo.stations.reject_request_to_join(station_id, applicant_ids)
+
         """
-        return self._stations_service.reject_request_to_join(station_id, userids)
+        return self._stations_service.reject_request_to_join(
+            station_id, user_ids)
 
     def leave_station(self, station_id):
         """
@@ -646,18 +751,30 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "current-station-id"
+            >>> galileo.stations.leave_station(station_id)
+
         """
         return self._stations_service.leave_station(station_id)
 
-    def remove_member_from_station(self, station_id, userid):
+    def remove_member_from_station(self, station_id, user_id):
         """
         Remove a member from a station
 
         :param station_id: str
         :param userid: List[str]: the id of the user you want to remove
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> user_id = "user-id-1"
+            >>> galileo.stations.remove_member_from_station(station_id, user_id)
+
         """
-        return self._stations_service.remove_member_from_station(station_id, userid)
+        return self._stations_service.remove_member_from_station(
+            station_id, user_id)
 
     def delete_station(self, station_id):
         """
@@ -665,6 +782,11 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> galileo.stations.delete_station(station_id)
+
         """
         return self._stations_service.delete_station(station_id)
 
@@ -675,6 +797,12 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param lz_ids: List[str]: list of landing zone ids that will be added
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> lz_ids = ["lz-id-1", "lz-id-2"]
+            >>> galileo.stations.add_lz_to_station(station_id, lz_ids)
+
         """
         return self._stations_service.add_lz_to_station(station_id, lz_ids)
 
@@ -685,22 +813,36 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param lz_ids: List[str]: list of landing zone ids that will be added
         :return: boolean
-        """
-        return self._stations_service.remove_lz_from_station(station_id, lz_ids)
 
-    def add_volumes_to_station(self, station_id, name, mount_point, access):
+        Example:
+            >>> station_id = "my-station-id"
+            >>> lz_ids = ["lz-id-1", "lz-id-2"]
+            >>> galileo.stations.remove_lz_from_station(station_id, lz_ids)
+
         """
-        Add volumes to a station
+        return self._stations_service.remove_lz_from_station(
+            station_id, lz_ids)
+
+    def add_volume_to_station(self, station_id, name, mount_point, access):
+        """
+        Add volume to a station
 
         :param station_id: str
         :param name: str: volume name
         :param mount_point: str: directory path from inside the container
         :param access: EVolumeAccess: read/write access: either 'r' or 'rw'
         :return: Volume
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> name = "my-volume-name"
+            >>> mount_point = "/mnt/my-volume-name"
+            >>> access = EVolumeAccess.READ_WRITE
+            >>> volume = galileo.stations.add_volume_to_station(station_id, name, mount_point, access)
+            >>> print(volume.name)
         """
         return self._stations_service.add_volumes_to_station(
-            station_id, name, mount_point, access
-        )
+            station_id, name, mount_point, access)
 
     def add_host_path_to_volume(self, station_id, volume_id, lz_id, host_path):
         """
@@ -712,12 +854,21 @@ class StationsSdk(EventsSdk):
         :param lz_id: str: landing zone id
         :param host_path: str: directory path for landing zone
         :return: Volume
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> volume_id = "my-volume-id"
+            >>> lz_id = "my-lz-id"
+            >>> host_path = "/mnt/my-lz-path"
+            >>> updated_volume = galileo.stations.add_host_path_to_volume(station_id, volume_id, lz_id, host_path)
+            >>> print(updated_volume.host_paths)
+
         """
         return self._stations_service.add_host_path_to_volume(
-            station_id, volume_id, lz_id, host_path
-        )
+            station_id, volume_id, lz_id, host_path)
 
-    def delete_host_path_from_volume(self, station_id, volume_id, host_path_id):
+    def delete_host_path_from_volume(self, station_id, volume_id,
+                                     host_path_id):
         """
         Remove a host path
         Host path is where the landing zone will store the results of a job
@@ -726,10 +877,17 @@ class StationsSdk(EventsSdk):
         :param volume_id: srt
         :param host_path_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> volume_id = "my-volume-id"
+            >>> lz_id = "my-lz-id"
+            >>> host_path = "/mnt/my-lz-path"
+            >>> galileo.stations.delete_host_path_from_volume(station_id, volume_id, host_path)
+
         """
         return self._stations_service.delete_host_path_from_volume(
-            station_id, volume_id, host_path_id
-        )
+            station_id, volume_id, host_path_id)
 
     def remove_volume_from_station(self, station_id, volume_id):
         """
@@ -738,21 +896,47 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param volume_id: str
         :return: boolean
-        """
-        return self._stations_service.remove_volume_from_station(station_id, volume_id)
 
-    def update_station(self, station_id, name=None, description=None, public=None, allow_auto_join=None):
+        Example:
+            >>> station_id = "my-station-id"
+            >>> volume_id = "my-volume-id"  
+            >>> galileo.stations.remove_volume_from_station(station_id, volume_id)
+
+        """
+        return self._stations_service.remove_volume_from_station(
+            station_id, volume_id)
+
+    def update_station(self,
+                       station_id,
+                       name=None,
+                       description=None,
+                       public=None,
+                       allow_auto_join=None):
         """
         Update a station
 
         :param station_id: str
         :param name: str
         :param description: str
-        :return:
+        :param public: boolean
+        :param allow_auto_join: boolean
+
+        :return: Station
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> current_station = galileo.stations.get_station(station_id)
+            >>> current_name = current_station.name
+            >>> new_name = current_name + "_updated"
+            >>> updated_station = galileo.stations.update_station(station_id, name=new_name)
+            >>> print(updated_station.name)
+
         """
-        request = UpdateStationRequest(
-            station_id=station_id, name=name, description=description, public=public, allow_auto_join=allow_auto_join
-        )
+        request = UpdateStationRequest(station_id=station_id,
+                                       name=name,
+                                       description=description,
+                                       public=public,
+                                       allow_auto_join=allow_auto_join)
         return self._stations_service.update_station(request)
 
     def get_station_resource_policy(self, station_id):
@@ -761,6 +945,12 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> resource_policy = galileo.stations.get_station_resource_policy(station_id)
+            >>> print(resource_policy.max_cpu_per_job)
+
         """
         return self._stations_service.get_station_resource_policy(station_id)
 
@@ -813,8 +1003,15 @@ class StationsSdk(EventsSdk):
         :param max_spend_per_year: int
         :param cpu_credits_per_hour: int
         :param memory_credits_per_hour: int
-        :param gpu_credits_per_hour: int
+
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> resource_policy = galileo.stations.get_station_resource_policy(station_id)
+            >>> new_max_cpu_per_job = resource_policy.max_cpu_per_job + 1
+            >>> updated_resource_policy = galileo.stations.update_station_resource_policy(station_id, max_cpu_per_job=new_max_cpu_per_job)
+            >>> print(updated_resource_policy.max_cpu_per_job)
         """
         request = UpdateResourcePolicyRequest(
             max_cpu_per_job=max_cpu_per_job,
@@ -840,8 +1037,7 @@ class StationsSdk(EventsSdk):
             gpu_credits_per_hour=gpu_credits_per_hour,
         )
         return self._stations_service.update_station_resource_policy(
-            station_id, request
-        )
+            station_id, request)
 
     def delete_station_resource_policy(self, station_id):
         """
@@ -849,8 +1045,13 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> galileo.stations.delete_station_resource_policy(station_id)
         """
-        return self._stations_service.delete_station_resource_policy(station_id)
+        return self._stations_service.delete_station_resource_policy(
+            station_id)
 
     def get_self_station_resource_limits(self, station_id):
         """
@@ -858,36 +1059,53 @@ class StationsSdk(EventsSdk):
 
         :param station_id: str
         :return: Tuple(ResourcePolicy, lz_id)
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> resource_policy, lz_id = galileo.stations.get_self_station_resource_limits(station_id)
         """
         return self._stations_service.get_self_resource_limits(station_id)
 
-    def update_station_member(self, station_id, userid, role_id):
+    def update_station_member(self, station_id, user_id, role_id):
         """
         Updates a user in a station.
 
         :param station_id: str
-        :param userid: str
+        :param user_id: str
         :param role_id: str
-        :return: Station
-        """
-        return self._stations_service.update_station_member(station_id, userid, role_id)
 
-    def get_station_user_resource_policy(self, station_id, userid):
+        :return: StationUser
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> user_id = "my-user-id"
+            >>> role_id = galileo.stations.get_station_roles(station_id, names=["admin"])[0].id 
+            >>> updated_station_user = galileo.stations.update_station_member(station_id, user_id, role_id)
+            >>> print(updated_station_user.role_id)
+        """
+        return self._stations_service.update_station_member(
+            station_id, user_id, role_id)
+
+    def get_station_user_resource_policy(self, station_id, user_id):
         """
         Gets the resource policy for a station user.
 
         :param station_id: str
-        :param userid: str
+        :param user_id: str
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> user_id = "my-user-id"
+            >>> resource_policy = galileo.stations.get_station_user_resource_policy(station_id, user_id)
         """
         return self._stations_service.get_station_user_resource_policy(
-            station_id, userid
-        )
+            station_id, user_id)
 
     def update_station_user_resource_policy(
         self,
         station_id,
-        userid,
+        user_id,
         max_cpu_per_job=None,
         max_memory_per_job=None,
         max_gpu_per_job=None,
@@ -914,7 +1132,7 @@ class StationsSdk(EventsSdk):
         Updates an the resource policy attached to the station user. Creates the policy if it does not exist.
 
         :param station_id: str
-        :param userid: str
+        :param user_id: str
         :param max_cpu_per_job: int
         :param max_memory_per_job: int
         :param max_gpu_per_job: int
@@ -936,7 +1154,14 @@ class StationsSdk(EventsSdk):
         :param cpu_credits_per_hour: int
         :param memory_credits_per_hour: int
         :param gpu_credits_per_hour: int
+
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> user_id = "my-user-id"
+            >>> max_cpu_per_job = 100
+            >>> updated_policy = galileo.stations.update_station_user_resource_policy(station_id, user_id, max_cpu_per_job=max_cpu_per_job)
         """
         request = UpdateResourcePolicyRequest(
             max_cpu_per_job=max_cpu_per_job,
@@ -962,20 +1187,23 @@ class StationsSdk(EventsSdk):
             gpu_credits_per_hour=gpu_credits_per_hour,
         )
         return self._stations_service.update_station_user_resource_policy(
-            station_id, userid, request
-        )
+            station_id, user_id, request)
 
-    def delete_station_user_resource_policy(self, station_id, userid):
+    def delete_station_user_resource_policy(self, station_id, user_id):
         """
         Deletes the resource policy associated with the station user.
 
         :param station_id: str
-        :param userid: str
+        :param user_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> user_id = "my-user-id"
+            >>> galileo.stations.delete_station_user_resource_policy(station_id, user_id)
         """
         return self._stations_service.delete_station_user_resource_policy(
-            station_id, userid
-        )
+            station_id, user_id)
 
     def get_station_roles(
         self,
@@ -998,10 +1226,16 @@ class StationsSdk(EventsSdk):
         :param names: str
         :param role_ids: List[str]
         :return: List[StationRole]
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> # get admin and launcher roles
+            >>> admin_and_launcher_roles = galileo.stations.get_station_roles(station_id, names=["admin", "launcher"])
+            >>> # print admin and launcher role ids
+            >>> print([role.id for role in admin_and_launcher_roles]) 
         """
         return self._stations_service.get_station_roles(
-            station_id, page, items, names, role_ids, user_ids, description
-        )
+            station_id, page, items, names, role_ids, user_ids, description)
 
     def create_station_role(
         self,
@@ -1068,8 +1302,16 @@ class StationsSdk(EventsSdk):
         :param manage_volumes: bool
         :param reject_user_requests: bool
         :return: StationRole
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> name = "my-new-role-name"
+            >>> description = "my-role-description"
+            >>> manage_volumes = True
+            >>> new_role = galileo.stations.create_station_role(station_id, name, description=description, manage_volumes=manage_volumes)
+            >>> print(new_role.name)
         """
-        request = CreateStationRoleRequest(
+        request = StationRoleRequest(
             name,
             description,
             protected_role,
@@ -1101,40 +1343,38 @@ class StationsSdk(EventsSdk):
         )
         return self._stations_service.create_station_role(station_id, request)
 
-    def update_station_role(
-        self,
-        station_id,
-        station_role_id,
-        name=None,
-        description=None,
-        protected_role=None,
-        edit_station_roles=None,
-        assign_user_roles=None,
-        assign_protected_user_roles=None,
-        launch_jobs=None,
-        invite_users=None,
-        remove_all_users=None,
-        remove_invited_users=None,
-        view_all_users=None,
-        edit_metadata=None,
-        add_lz=None,
-        remove_any_lz=None,
-        view_all_jobs=None,
-        control_all_jobs=None,
-        view_jobs_on_own_lzs=None,
-        control_jobs_on_own_lzs=None,
-        view_own_jobs=None,
-        control_own_jobs=None,
-        view_complete_activity=None,
-        edit_station_policy=None,
-        edit_own_lz_policy=None,
-        edit_lz_policy=None,
-        edit_user_policy=None,
-        edit_job_resource_limits=None,
-        manage_volumes=None,
-        reject_user_requests=None,
-        create_tunnels=None
-    ):
+    def update_station_role(self,
+                            station_id,
+                            station_role_id,
+                            name=None,
+                            description=None,
+                            protected_role=None,
+                            edit_station_roles=None,
+                            assign_user_roles=None,
+                            assign_protected_user_roles=None,
+                            launch_jobs=None,
+                            invite_users=None,
+                            remove_all_users=None,
+                            remove_invited_users=None,
+                            view_all_users=None,
+                            edit_metadata=None,
+                            add_lz=None,
+                            remove_any_lz=None,
+                            view_all_jobs=None,
+                            control_all_jobs=None,
+                            view_jobs_on_own_lzs=None,
+                            control_jobs_on_own_lzs=None,
+                            view_own_jobs=None,
+                            control_own_jobs=None,
+                            view_complete_activity=None,
+                            edit_station_policy=None,
+                            edit_own_lz_policy=None,
+                            edit_lz_policy=None,
+                            edit_user_policy=None,
+                            edit_job_resource_limits=None,
+                            manage_volumes=None,
+                            reject_user_requests=None,
+                            create_tunnels=None):
         """
         Updates an existing role
 
@@ -1170,41 +1410,26 @@ class StationsSdk(EventsSdk):
         :param reject_user_requests: bool
         :param create_tunnels: bool
         :return: StationRole
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> station_role_id = "my-station-role-id"
+            >>> name = "my-new-role-name"
+            >>> updated_role = galileo.stations.update_station_role(station_id, station_role_id, name=name)
+            >>> print(updated_role.name)
         """
-        request = CreateStationRoleRequest(
-            name,
-            description,
-            protected_role,
-            edit_station_roles,
-            assign_user_roles,
-            assign_protected_user_roles,
-            launch_jobs,
-            invite_users,
-            remove_all_users,
-            remove_invited_users,
-            view_all_users,
-            edit_metadata,
-            add_lz,
-            remove_any_lz,
-            view_all_jobs,
-            control_all_jobs,
-            view_jobs_on_own_lzs,
-            control_jobs_on_own_lzs,
-            view_own_jobs,
-            control_own_jobs,
-            view_complete_activity,
-            edit_station_policy,
-            edit_own_lz_policy,
-            edit_lz_policy,
-            edit_user_policy,
-            edit_job_resource_limits,
-            manage_volumes,
-            reject_user_requests,
-            create_tunnels
-        )
+        request = StationRoleRequest(
+            name, description, protected_role, edit_station_roles,
+            assign_user_roles, assign_protected_user_roles, launch_jobs,
+            invite_users, remove_all_users, remove_invited_users,
+            view_all_users, edit_metadata, add_lz, remove_any_lz,
+            view_all_jobs, control_all_jobs, view_jobs_on_own_lzs,
+            control_jobs_on_own_lzs, view_own_jobs, control_own_jobs,
+            view_complete_activity, edit_station_policy, edit_own_lz_policy,
+            edit_lz_policy, edit_user_policy, edit_job_resource_limits,
+            manage_volumes, reject_user_requests, create_tunnels)
         return self._stations_service.update_station_role(
-            station_id, station_role_id, request
-        )
+            station_id, station_role_id, request)
 
     def delete_station_role(self, station_id, role_id):
         """
@@ -1213,6 +1438,11 @@ class StationsSdk(EventsSdk):
         :param role_id: str
         :param station_id: str
         :return: boolean
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> role_id = "my-role-id"
+            >>> galileo.stations.delete_station_role(station_id, role_id)
         """
         return self._stations_service.delete_station_role(station_id, role_id)
 
@@ -1223,10 +1453,14 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param role_id: str
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> role_id = "my-role-id"
+            >>> role_resource_policy = galileo.stations.get_station_role_resource_policy(station_id, role_id)
         """
         return self._stations_service.get_station_role_resource_policy(
-            station_id, role_id
-        )
+            station_id, role_id)
 
     def update_station_role_resource_policy(
         self,
@@ -1281,6 +1515,12 @@ class StationsSdk(EventsSdk):
         :param memory_credits_per_hour:
         :param gpu_credits_per_hour:
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> role_id = "my-role-id"
+            >>> max_cpu_per_job = 2
+            >>> updated_role_policy = galileo.stations.update_station_role_resource_policy(station_id, role_id, max_cpu_per_job=max_cpu_per_job)
         """
         request = UpdateResourcePolicyRequest(
             max_cpu_per_job=max_cpu_per_job,
@@ -1306,8 +1546,7 @@ class StationsSdk(EventsSdk):
             gpu_credits_per_hour=gpu_credits_per_hour,
         )
         return self._stations_service.update_station_role_resource_policy(
-            station_id, role_id, request
-        )
+            station_id, role_id, request)
 
     def delete_station_role_resource_policy(self, station_id, role_id):
         """
@@ -1316,10 +1555,14 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param role_id: str
         :return: bool
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> role_id = "my-role-id"
+            >>> galileo.stations.delete_station_role_resource_policy(station_id, role_id)
         """
         return self._stations_service.delete_station_role_resource_policy(
-            station_id, role_id
-        )
+            station_id, role_id)
 
     def get_station_lz_resource_policy(self, station_id, lz_id):
         """
@@ -1328,10 +1571,15 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param lz_id: str
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> lz_id = "my-lz-id"
+            >>> resource_policy = galileo.stations.get_station_lz_resource_policy(station_id, lz_id)
+
         """
         return self._stations_service.get_station_lz_resource_policy(
-            station_id, lz_id
-        )
+            station_id, lz_id)
 
     def update_station_lz_resource_policy(
         self,
@@ -1386,6 +1634,12 @@ class StationsSdk(EventsSdk):
         :param memory_credits_per_hour: int
         :param gpu_credits_per_hour: int
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> lz_id = "my-lz-id"
+            >>> gpu_credits_per_hour = 100
+            >>> lz_policy = galileo.stations.update_station_lz_resource_policy(station_id, lz_id, gpu_credits_per_hour=gpu_credits_per_hour)
         """
         request = UpdateResourcePolicyRequest(
             max_cpu_per_job=max_cpu_per_job,
@@ -1411,8 +1665,7 @@ class StationsSdk(EventsSdk):
             gpu_credits_per_hour=gpu_credits_per_hour,
         )
         return self._stations_service.update_station_lz_resource_policy(
-            station_id, lz_id, request
-        )
+            station_id, lz_id, request)
 
     def delete_station_lz_resource_policy(self, station_id, lz_id):
         """
@@ -1421,10 +1674,14 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param lz_id: str
         :return: bool
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> lz_id = "my-lz-id"
+            >>> galileo.stations.delete_station_lz_resource_policy(station_id, lz_id)
         """
         return self._stations_service.delete_station_lz_resource_policy(
-            station_id, lz_id
-        )
+            station_id, lz_id)
 
     def get_station_lz_resource_limits(self, station_id, lz_id):
         """
@@ -1433,7 +1690,11 @@ class StationsSdk(EventsSdk):
         :param station_id: str
         :param lz_id: str
         :return: ResourcePolicy
+
+        Example:
+            >>> station_id = "my-station-id"
+            >>> lz_id = "my-lz-id"
+            >>> resource_limits = galileo.stations.get_station_lz_resource_limits(station_id, lz_id)
         """
         return self._stations_service.get_station_lz_resource_limits(
-            station_id, lz_id
-        )
+            station_id, lz_id)

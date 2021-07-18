@@ -19,26 +19,26 @@ class MissionsRepository(RequestsRepository):
     def list_missions(self, query):
         response = self._get("/projects", query=query)
         json = response.json()
-        projects = json["projects"]
-        return [project_dict_to_project(project) for project in projects]
+        missions = json["projects"]
+        return [mission_dict_to_mission(mission) for mission in missions]
 
-    def create_mission(self, create_project_request):
+    def create_mission(self, create_mission_request):
         body = {
-            "name": create_project_request.name,
-            "description": create_project_request.description,
-            "source_storage_id": create_project_request.source_storage_id,
-            "destination_storage_id": create_project_request.destination_storage_id,
-            "source_path": create_project_request.source_path,
-            "destination_path": create_project_request.destination_path,
-            "mission_type_id": create_project_request.mission_type_id,
-            "public": create_project_request.public,
+            "name": create_mission_request.name,
+            "description": create_mission_request.description,
+            "source_storage_id": create_mission_request.source_storage_id,
+            "destination_storage_id": create_mission_request.destination_storage_id,
+            "source_path": create_mission_request.source_path,
+            "destination_path": create_mission_request.destination_path,
+            "mission_type_id": create_mission_request.mission_type_id,
+            "public": create_mission_request.public,
         }
-        if create_project_request.settings is not None:
-            body.update(create_project_request.settings)
+        if create_mission_request.settings is not None:
+            body.update(create_mission_request.settings)
         response = self._post("/projects", data=body)
         json = response.json()
-        project = json["project"]
-        return project_dict_to_project(project)
+        mission = json["project"]
+        return mission_dict_to_mission(mission)
 
     def upload_single_file(self, mission_id, file, filename):
         r = self._post(
@@ -108,41 +108,41 @@ class MissionsRepository(RequestsRepository):
     def list_mission_types(self):
         response = self._get("/projecttypes/summaries")
         json = response.json()
-        projecttypes = json["project_types"]
+        missiontypes = json["project_types"]
         return [
-            projecttype_dict_to_projecttype(projecttype) for projecttype in projecttypes
+            missiontype_dict_to_missiontype(missiontype) for missiontype in missiontypes
         ]
 
     def get_mission_type(self, query):
         response = self._get("/projecttypes", query=query)
         json = response.json()
-        projecttype = json["projecttypes"]
-        return projecttype_dict_to_projecttype(projecttype[0])
+        missiontypes = json["projecttypes"]
+        return missiontype_dict_to_missiontype(missiontypes[0])
 
 
-def projecttype_dict_to_projecttype(projecttype):
+def missiontype_dict_to_missiontype(missiontype):
     return MissionType(
-        projecttype["id"],
-        projecttype["name"],
-        projecttype["description"],
-        projecttype["version"],
-        projecttype.get("active", None),
-        projecttype.get("container_type", None),
-        projecttype.get("wizard_spec", None),
-        projecttype.get("enable_tunnels", None),
-        projecttype.get("generate_credentials", None),
-        projecttype.get("distributed", None),
-        projecttype.get("min_cpu_count", None),
-        projecttype.get("max_cpu_count", None),
-        projecttype.get("default_cpu_count", None),
-        projecttype.get("min_memory_amount", None),
-        projecttype.get("max_memory_amount", None),
-        projecttype.get("default_memory_amount", None),
-        projecttype.get("min_gpu_count", None),
-        projecttype.get("max_gpu_count", None),
-        projecttype.get("default_gpu_count", None),
-        projecttype.get("logo_url", None),
-        projecttype.get("credits_per_hour", None),
+        missiontype["id"],
+        missiontype["name"],
+        missiontype["description"],
+        missiontype["version"],
+        missiontype.get("active", None),
+        missiontype.get("container_type", None),
+        missiontype.get("wizard_spec", None),
+        missiontype.get("enable_tunnels", None),
+        missiontype.get("generate_credentials", None),
+        missiontype.get("distributed", None),
+        missiontype.get("min_cpu_count", None),
+        missiontype.get("max_cpu_count", None),
+        missiontype.get("default_cpu_count", None),
+        missiontype.get("min_memory_amount", None),
+        missiontype.get("max_memory_amount", None),
+        missiontype.get("default_memory_amount", None),
+        missiontype.get("min_gpu_count", None),
+        missiontype.get("max_gpu_count", None),
+        missiontype.get("default_gpu_count", None),
+        missiontype.get("logo_url", None),
+        missiontype.get("credits_per_hour", None),
     )
 
 
@@ -159,23 +159,23 @@ def directory_dict_to_directory_listing(directory):
     )
 
 
-def project_dict_to_project(project):
+def mission_dict_to_mission(mission):
     return Mission(
-        project["id"],
-        project["name"],
-        project["description"],
-        project["source_storage_id"],
-        project["source_path"],
-        project["destination_storage_id"],
-        project["destination_path"],
-        project["user_id"],
-        project["creation_timestamp"],
-        project["mission_type_id"],
-        project.get("updated_timestamp", None),
-        project.get("organization_id", None),
-        project.get("settings", None),
-        project.get("mission_type_name"),
-        project.get("public", None)
+        mission["id"],
+        mission["name"],
+        mission["description"],
+        mission["source_storage_id"],
+        mission["source_path"],
+        mission["destination_storage_id"],
+        mission["destination_path"],
+        mission["user_id"],
+        mission["creation_timestamp"],
+        mission["mission_type_id"],
+        mission.get("updated_timestamp", None),
+        mission.get("organization_id", None),
+        mission.get("settings", None),
+        mission.get("mission_type_name"),
+        mission.get("public", None)
     )
 
 
@@ -194,7 +194,7 @@ def job_dict_to_job(job):
     return Job(
         jobid=job["jobid"],
         receiverid=job["receiverid"],
-        project_id=job["project_id"],
+        mission_id=job["mission_id"],
         time_created=datetime.fromtimestamp(job["time_created"]),
         last_updated=datetime.fromtimestamp(job["last_updated"]),
         status=job["status"],

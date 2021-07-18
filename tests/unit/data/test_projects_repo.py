@@ -8,7 +8,7 @@ from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
-PROJECT_ID = "project_id"
+PROJECT_ID = "mission_id"
 STATION_ID = "station_id"
 LZ_ID = "lz_id"
 CPU_COUNT = "1"
@@ -91,7 +91,7 @@ def mocked_requests_post(*args, **kwargs):
                 "job": {
                     "jobid": "jobid",
                     "receiverid": "receiverid",
-                    "project_id": "project_id",
+                    "mission_id": "mission_id",
                     "time_created": TIMESTAMP,
                     "last_updated": TIMESTAMP,
                     "status": "uploaded",
@@ -245,7 +245,7 @@ def test_run_job_on_machine(mocked_requests):
     )
 
     assert isinstance(r, Job)
-    assert r.project_id == "project_id"
+    assert r.mission_id == "mission_id"
     assert r.job_id == "jobid"
     assert len(r.status_history) == 1
     assert r.status_history[0].status == EJobStatus.uploaded

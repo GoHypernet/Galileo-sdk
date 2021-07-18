@@ -99,6 +99,54 @@ def mocked_requests_get(*args, **kwargs):
                 },
                 200,
             )
+    elif args[0] == "{backend}{namespace}/stations/{station_id}/roles".format(
+            backend=BACKEND, namespace=NAMESPACE, station_id=STATION_ID
+        ):
+            return MockResponse(
+                {
+                    "roles": [
+                        {
+                            "add_machine": False,
+                            "allowed_mission_types": [],
+                            "assign_protected_user_roles": False,
+                            "assign_user_roles": False,
+                            "control_all_jobs": False,
+                            "control_jobs_on_own_machines": False,
+                            "control_own_jobs": False,
+                            "create_tunnels": True,
+                            "creation_timestamp": "Mon, 24 May 2021 23:03:25 GMT",
+                            "description": "Base users that can launch jobs in the station",
+                            "edit_job_resource_limits": False,
+                            "edit_machine_policy": False,
+                            "edit_metadata": False,
+                            "edit_own_machine_policy": False,
+                            "edit_station_policy": False,
+                            "edit_station_roles": False,
+                            "edit_user_policy": False,
+                            "id": ROLE_ID, 
+                            "invite_users": False,
+                            "launch_jobs": True,
+                            "manage_volumes": False,
+                            "name": "Launcher",
+                            "protected_role": False,
+                            "reject_user_requests": False,
+                            "remove_all_users": False,
+                            "remove_any_machine": False,
+                            "remove_invited_users": False,
+                            "role_type": "LAUNCHER",
+                            "station_id": STATION_ID,
+                            "updated_timestamp": "Mon, 24 May 2021 23:03:25 GMT",
+                            "view_all_jobs": False,
+                            "view_all_users": False,
+                            "view_complete_activity": True,
+                            "view_jobs_on_own_machines": False,
+                            "view_own_jobs":False 
+                        }
+                    ],
+                    "total_items": 1
+                },
+                200,
+            )
     return MockResponse(None, 404)
 
 
