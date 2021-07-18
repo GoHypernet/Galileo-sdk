@@ -6,6 +6,7 @@ from halo import Halo
 
 from galileo_sdk import GalileoSdk
 
+
 def missions_cli(main, galileo: GalileoSdk):
     @main.group()
     def missions():
@@ -22,9 +23,10 @@ def missions_cli(main, galileo: GalileoSdk):
     )
     @click.option(
         '-s',
-        '--short', 
-        is_flag=True, 
-        help="Show less information for each Mission (only id, name, and Public/Private status)."
+        '--short',
+        is_flag=True,
+        help=
+        "Show less information for each Mission (only id, name, and Public/Private status)."
     )
     @click.option(
         "-n",
@@ -42,9 +44,14 @@ def missions_cli(main, galileo: GalileoSdk):
     )
     @click.option("--page", type=int, help="Filter by page number.")
     @click.option(
-        "--items", type=int, help="Filter by number of items in the page.",
+        "--items",
+        type=int,
+        help="Filter by number of items in the page.",
     )
-    @click.option('-n', '--head', type=int, help="Number of Missions to display.")
+    @click.option('-n',
+                  '--head',
+                  type=int,
+                  help="Number of Missions to display.")
     def ls(index, id, short, name, userid, page, items, head):
         """
         List the Missions in your Galileo profile.
@@ -53,7 +60,7 @@ def missions_cli(main, galileo: GalileoSdk):
         self = galileo.profiles.self()
         spinner.stop()
         spinner = Halo("Retrieving your Mission", spinner="dot").start()
-        userid += (self.userid,)
+        userid += (self.userid, )
         missions = galileo.missions.list_missions(
             ids=list(id),
             names=list(name),
@@ -75,30 +82,28 @@ def missions_cli(main, galileo: GalileoSdk):
         missions_ls = [mission.__dict__ for mission in missions_ls]
 
         missions_df = pandas.json_normalize(missions_ls)
-        missions_df['creation_timestamp'] = pandas.to_datetime(missions_df.creation_timestamp)
-        missions_df = missions_df.sort_values(by="creation_timestamp", ascending=False)
+        missions_df['creation_timestamp'] = pandas.to_datetime(
+            missions_df.creation_timestamp)
+        missions_df = missions_df.sort_values(by="creation_timestamp",
+                                              ascending=False)
         if short:
-            missions_df = missions_df[
-                [
-                    "name",
-                    "mission_id",
-                    "public",
-                ]
-            ]
+            missions_df = missions_df[[
+                "name",
+                "mission_id",
+                "public",
+            ]]
         else:
-            missions_df = missions_df[
-                [
-                    "name",
-                    "mission_id",
-                    "source_storage_id",
-                    "source_path",
-                    "destination_storage_id",
-                    "destination_path",
-                    "description",
-                    "public",
-                    "creation_timestamp",
-                ]
-            ]
+            missions_df = missions_df[[
+                "name",
+                "mission_id",
+                "source_storage_id",
+                "source_path",
+                "destination_storage_id",
+                "destination_path",
+                "description",
+                "public",
+                "creation_timestamp",
+            ]]
 
         spinner.stop()
 
@@ -111,9 +116,10 @@ def missions_cli(main, galileo: GalileoSdk):
     @missions.command()
     @click.option(
         '-e',
-        '--everything', 
-        is_flag=True, 
-        help="Save all files in this Job's working directory (echo $WORKDIR) to its Galileo Mission (carefull, this could be time-consuming)."
+        '--everything',
+        is_flag=True,
+        help=
+        "Save all files in this Job's working directory (echo $WORKDIR) to its Galileo Mission (carefull, this could be time-consuming)."
     )
     @click.option(
         "-f",
@@ -126,7 +132,8 @@ def missions_cli(main, galileo: GalileoSdk):
         """
         Save files from the current job session to its Galileo Mission. 
         """
-        spinner = Halo("Retrieving your job session info.", spinner="dot").start()
+        spinner = Halo("Retrieving your job session info.",
+                       spinner="dot").start()
         try:
             # container hostnames are set based on their Galileo job id
             jobid = os.environ["HOSTNAME"]
@@ -134,12 +141,11 @@ def missions_cli(main, galileo: GalileoSdk):
             print("You are not in an active Galileo job session.")
             spinner.stop()
             return
-        
+
         # Retrieve the meta-data associated with this job
-        jobs = galileo.jobs.list_jobs(jobids=[jobid])
+        jobs = galileo.jobs.list_jobs(job_ids=[jobid])
         spinner.stop()
-        
-        
+
         if len(jobs) == 0:
             print("You are not in a recognized Galileo job session.")
             return
@@ -148,97 +154,96 @@ def missions_cli(main, galileo: GalileoSdk):
         else:
             print("The are multiple jobs associated with the session.")
             return
-            
-        spinner = Halo("Retrieving the associated Mission.", spinner="dot").start()    
+
+        spinner = Halo("Retrieving the associated Mission.",
+                       spinner="dot").start()
         # Find this jobs Mission id
         try:
             missions_ls = galileo.missions.list_missions(ids=[job.mission_id])
         except Exception as e:
             print("Problem getting Mission details.", e)
             spinner.stop()
-        
+
         missions_ls = [mission.__dict__ for mission in missions_ls]
 
         missions_df = pandas.json_normalize(missions_ls)
-        missions_df['creation_timestamp'] = pandas.to_datetime(missions_df.creation_timestamp)
-        missions_df = missions_df.sort_values(by="creation_timestamp", ascending=False)
-        missions_df = missions_df[
-            [
-                "name",
-                "description"
-            ]
-        ]
+        missions_df['creation_timestamp'] = pandas.to_datetime(
+            missions_df.creation_timestamp)
+        missions_df = missions_df.sort_values(by="creation_timestamp",
+                                              ascending=False)
+        missions_df = missions_df[["name", "description"]]
         spinner.stop()
         click.echo("\nMission Details")
         click.echo(missions_df.head(1))
-        
-        spinner = Halo("Retrieving the Mission's file list.", spinner="dot").start()    
+
+        spinner = Halo("Retrieving the Mission's file list.",
+                       spinner="dot").start()
         # Find this Mission's files
         try:
-            missions_files = galileo.missions.get_mission_files(missions_ls[0]["mission_id"])
-        
+            missions_files = galileo.missions.get_mission_files(
+                missions_ls[0]["mission_id"])
+
             missions_files = [thing.__dict__ for thing in missions_files]
 
             files_df = pandas.json_normalize(missions_files)
-            files_df['creation_timestamp'] = pandas.to_datetime(files_df.creation_timestamp)
-            files_df = files_df.sort_values(by="creation_timestamp", ascending=False)
-            files_df = files_df[
-                [
-                    "filename",
-                    "path",
-                    "file_size"
-                ]
-            ]
+            files_df['creation_timestamp'] = pandas.to_datetime(
+                files_df.creation_timestamp)
+            files_df = files_df.sort_values(by="creation_timestamp",
+                                            ascending=False)
+            files_df = files_df[["filename", "path", "file_size"]]
             spinner.stop()
             click.echo("\nMission Files:")
             click.echo(files_df)
         except Exception as e:
             spinner.stop()
             print("Problem getting Mission file listing.", e)
-            
+
         try:
             workdir = os.environ['WORKDIR']
         except Exception as e:
-            print("WORKDIR environment variable is not set. You can set this with the workdir command.")
+            print(
+                "WORKDIR environment variable is not set. You can set this with the workdir command."
+            )
             return
-            
-        spinner = Halo("Uploading files.", spinner="dot").start()    
+
+        spinner = Halo("Uploading files.", spinner="dot").start()
         # Find this Mission's files
         try:
-            
+
             rename = None
             if file:
-                
+
                 payload = Path(file)
                 if not payload.exists():
                     spinner.stop()
-                    print(payload,"does not exist.")
+                    print(payload, "does not exist.")
                     return
-                
+
                 # we will rename the file based on it relative location to the Job's WORKDIR
                 rename = os.path.relpath(payload.absolute(), workdir)
                 print(payload)
             elif everything:
                 payload = workdir
-                
-            else:                
+
+            else:
                 spinner.stop()
                 print("Please tell me what you'd like to save.")
                 return
-                
-            success = galileo.missions.upload(missions_ls[0]["mission_id"], os.fspath(payload), rename=rename, verbose=True)
+
+            success = galileo.missions.upload(missions_ls[0]["mission_id"],
+                                              os.fspath(payload),
+                                              rename=rename,
+                                              verbose=True)
             spinner.stop()
         except Exception as e:
             spinner.stop()
             print("Encountered problem uploading your working directory.", e)
 
     @missions.command()
-    @click.option(
-        '-p',
-        '--public', 
-        is_flag=True, 
-        help="Create the Mission as a Publicly searchable Mission."
-    )
+    @click.option('-p',
+                  '--public',
+                  is_flag=True,
+                  help="Create the Mission as a Publicly searchable Mission.")
     @click.option(
         "-n",
         "--name",
@@ -250,24 +255,24 @@ def missions_cli(main, galileo: GalileoSdk):
         """
         Create a new Mission in your account.
         """
-        
+
         if not name:
             print("Please specify a name with the -n or --name flag.")
             return
-        
-        spinner = Halo("Uploading files.", spinner="dot").start()  
+
+        spinner = Halo("Uploading files.", spinner="dot").start()
         try:
-            mission = galileo.missions.create_mission(name,public=public)
+            mission = galileo.missions.create_mission(name, public=public)
         except Exception as e:
             print("Error:", e)
             spinner.stop()
             return
-        
+
         spinner.stop()
         print("Created Mission:", mission.name)
         print("Mission ID: ", mission.mission_id)
         print("Public: ", str(bool(public)))
-        
+
     @missions.command()
     @click.option(
         "-i",
@@ -299,23 +304,25 @@ def missions_cli(main, galileo: GalileoSdk):
         "--spath",
         type=str,
         multiple=False,
-        help="Path within the source Cargo Bay to pull the input data of the Mission.",
+        help=
+        "Path within the source Cargo Bay to pull the input data of the Mission.",
     )
     @click.option(
         "--dpath",
         type=str,
         multiple=False,
-        help="Path within the destination Cargo Bay to put the output data of the Mission.",
+        help=
+        "Path within the destination Cargo Bay to put the output data of the Mission.",
     )
     def update(id, name, ssid, dsid, spath, dpath):
         """
         Update the settings of a Mission in your account. 
         """
-        
+
         if not id:
             print("Please specify a Mission with the -i or --id flag.")
             return
-        
+
         spinner = Halo("Finding Mission.", spinner="dot").start()
         try:
             mission = galileo.missions.list_missions(ids=[id])
@@ -323,36 +330,35 @@ def missions_cli(main, galileo: GalileoSdk):
             spinner.stop()
             print("Error:", e)
             return
-        
+
         spinner.stop()
-        
+
         if len(mission) != 1:
             print("Couldn't find a Mission with that UUID.")
             return
-        
-        spinner = Halo("Updating Mission.", spinner="dot").start()  
+
+        spinner = Halo("Updating Mission.", spinner="dot").start()
         try:
             success = galileo.missions.update_mission(
-                id, 
-                name=name, 
-                source_storage_id=ssid, 
-                destination_storage_id=dsid, 
-                source_path=spath, 
-                destination_path=dpath
-            )
+                id,
+                name=name,
+                source_storage_id=ssid,
+                destination_storage_id=dsid,
+                source_path=spath,
+                destination_path=dpath)
         except Exception as e:
             print("Error:", e)
             spinner.stop()
             return
-        
+
         spinner.stop()
         print("Mission Updated")
 
     @missions.command()
     @click.argument(
-        "mission_ids", 
+        "mission_ids",
         nargs=-1,
-        type=str, 
+        type=str,
     )
     def delete(mission_ids):
         """
@@ -364,7 +370,8 @@ def missions_cli(main, galileo: GalileoSdk):
             try:
                 if not galileo.missions.delete_mission_by_id(mission):
                     spinner.stop()
-                    click.echo("Deletion of mission {id} unsuccessful".format(id=mission))
+                    click.echo("Deletion of mission {id} unsuccessful".format(
+                        id=mission))
                 spinner.stop()
                 click.echo("Deleted Mission with id: {id}".format(id=mission))
             except Exception as e:
