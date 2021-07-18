@@ -5,16 +5,14 @@ class MissionsSdk:
     def __init__(self, missions_service):
         self._missions_service = missions_service
 
-    def list_missions(
-        self,
-        ids=None,
-        names=None,
-        user_ids=None,
-        page=1,
-        items=25,
-        mission_type_ids=None,
-        archived=None
-    ):
+    def list_missions(self,
+                      ids=None,
+                      names=None,
+                      user_ids=None,
+                      page=1,
+                      items=25,
+                      mission_type_ids=None,
+                      archived=None):
         """
         Get list of Missions associated with your account
 
@@ -39,8 +37,7 @@ class MissionsSdk:
             page=page,
             items=items,
             mission_type_ids=mission_type_ids,
-            archived=archived
-        )
+            archived=archived)
 
     def get_mission_by_id(self, mission_id):
         """
@@ -56,18 +53,16 @@ class MissionsSdk:
         """
         return self._missions_service.get_mission_by_id(mission_id)
 
-    def create_mission(
-        self,
-        name,
-        description="",
-        source_storage_id=None,
-        destination_storage_id=None,
-        source_path=None,
-        destination_path=None,
-        mission_type_id=None,
-        settings=None,
-        public=False
-    ):
+    def create_mission(self,
+                       name,
+                       description="",
+                       source_storage_id=None,
+                       destination_storage_id=None,
+                       source_path=None,
+                       destination_path=None,
+                       mission_type_id=None,
+                       settings=None,
+                       public=False):
         """
         Create a new Mission in your Galileo account.
 
@@ -99,17 +94,19 @@ class MissionsSdk:
             public=public,
         )
         return self._missions_service.create_mission(request)
-    
+
     def delete_mission_by_id(self, mission_id):
         """
         Deletes a mission
 
         :param mission_id: str: Target Mission UUID
+
+        Example:
+            >>> galileo.missions.delete_mission_by_id(mission_id="mission-id")
         """
 
         return self._missions_service.delete_mission(mission_id)
 
-    
     def upload(self, mission_id, payload, rename=None, verbose=False):
         """
         Upload a file or directory to the specified Mission. If the payload is a file, this function 
@@ -124,25 +121,26 @@ class MissionsSdk:
         :return: bool
         
         Example:
-        
-        >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
-        >>> UUID = my_missions[0].mission_id
-        >>> payload = 'C:\\Users\\Galileo\\Hypernet Labs, Inc. Dropbox\\Julia Example' # a Windows path, put your path here
-        >>> success = galileo.missions.upload(UUID, payload) # upload a whole directory
-        >>> if success:
-        >>>     print("It worked")
-        >>> else:
-        >>>     print("I don't think this Mission exists")
+            >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
+            >>> UUID = my_missions[0].mission_id
+            >>> payload = 'C:\\Users\\Galileo\\Hypernet Labs, Inc. Dropbox\\Julia Example' # a Windows path, put your path here
+            >>> success = galileo.missions.upload(UUID, payload) # upload a whole directory
+            >>> if success:
+            >>>     print("It worked")
+            >>> else:
+            >>>     print("I don't think this Mission exists")
         """
-        return self._missions_service.upload(mission_id, payload, rename, verbose)
+        return self._missions_service.upload(mission_id, payload, rename,
+                                             verbose)
 
-    def run_job_on_station(self, mission_id, station_id, cpu_count=None, memory_amount=None, gpu_count=None):
+    def run_job_on_station(self,
+                           mission_id,
+                           station_id,
+                           cpu_count=None,
+                           memory_amount=None,
+                           gpu_count=None):
         """
         Run a job on a station
-
-        Example::
-
-            galileo.missions.run_job_on_station(mission.mission_id,station.stationid,cpu_count=1,memory_amount=1048)
 
         :param mission_id: str: Reference ID of Mission to launch job from
         :param station_id: str: Reference ID of the Station to deploy job to
@@ -150,16 +148,27 @@ class MissionsSdk:
         :param memory_amount: int: Memory in MB for this job to request
         :param gpu_count: int: Number of gpus for this job to request
         :return: Job
-        """
-        return self._missions_service.run_job_on_station(mission_id, station_id, cpu_count=cpu_count, memory_amount=memory_amount, gpu_count=gpu_count)
 
-    def run_job_on_lz(self, mission_id, station_id, lz_id, cpu_count=None, memory_amount=None, gpu_count=None):
+        Example:
+            >>> galileo.missions.run_job_on_station(mission.mission_id,station.stationid,cpu_count=1,memory_amount=1048)
+
+        """
+        return self._missions_service.run_job_on_station(
+            mission_id,
+            station_id,
+            cpu_count=cpu_count,
+            memory_amount=memory_amount,
+            gpu_count=gpu_count)
+
+    def run_job_on_lz(self,
+                      mission_id,
+                      station_id,
+                      lz_id,
+                      cpu_count=None,
+                      memory_amount=None,
+                      gpu_count=None):
         """
         Run a job on a landing zone
-
-        Example::
-
-            galileo.missions.run_job_on_lz(mission.mission_id,station.stationid,lzid,cpu_count=1,memory_amount=1048)
 
         :param mission_id: str: Reference ID of Mission to launch job from
         :param station_id: str: Reference ID of the Station to deploy job to
@@ -168,8 +177,17 @@ class MissionsSdk:
         :param memory_amount: int: Memory in MB for this job to request
         :param gpu_count: int: Number of gpus for this job to request
         :return: Job
+
+        Example:
+            >>> galileo.missions.run_job_on_lz(mission.mission_id,station.stationid,lzid,cpu_count=1,memory_amount=1048)
         """
-        return self._missions_service.run_job_on_lz(mission_id, station_id, lz_id, cpu_count=cpu_count, memory_amount=memory_amount, gpu_count=gpu_count)
+        return self._missions_service.run_job_on_lz(
+            mission_id,
+            station_id,
+            lz_id,
+            cpu_count=cpu_count,
+            memory_amount=memory_amount,
+            gpu_count=gpu_count)
 
     def create_and_upload_mission(
         self,
@@ -201,10 +219,9 @@ class MissionsSdk:
         :return: Mission
         
         Example:
-        
-        >>> project_folder = 'C:\\Users\\Galileo\\SWMM_Project' # put your path here
-        >>> swmm_mission = galileo.missions.create_and_upload_mission(name="SWMM Test2",directory=project_folder,description="testing",mission_type_id='f1934063-034a-4eba-adaa-e28bd95f138a',settings={"cpu_count":"1","memory_count":"3000","filename":"river","swmmversion":"5.1.007"})
-        >>> print(swmm_mission.mission_id)
+            >>> project_folder = 'C:\\Users\\Galileo\\SWMM_Project' # put your path here
+            >>> swmm_mission = galileo.missions.create_and_upload_mission(name="SWMM Test2",directory=project_folder,description="testing",mission_type_id='f1934063-034a-4eba-adaa-e28bd95f138a',settings={"cpu_count":"1","memory_count":"3000","filename":"river","swmmversion":"5.1.007"})
+            >>> print(swmm_mission.mission_id)
         """
         request = CreateMissionRequest(
             name=name,
@@ -253,6 +270,10 @@ class MissionsSdk:
          missions.get_mission_type_settings_info()
         :param public: Optional[bool]: Boolean indicating if the resulting Mission should be listed as public (True) or private (False - default)
         :return: Job
+
+        Example:
+            >>> project_folder = 'C:\\Users\\Galileo\\SWMM_Project' # put your path here
+            >>> swmm_mission = galileo.missions.create_and_run_job("SWMM Test2",project_folder,"my-station-id")
         """
         request = CreateMissionRequest(
             name=name,
@@ -266,7 +287,10 @@ class MissionsSdk:
             public=public,
         )
         return self._missions_service.create_mission_and_run_job(
-            request=request, directory=directory, station_id=station_id, lz_id=lz_id,
+            request=request,
+            directory=directory,
+            station_id=station_id,
+            lz_id=lz_id,
         )
 
     def get_mission_files(self, mission_id):
@@ -277,12 +301,11 @@ class MissionsSdk:
         :return: List[FileListing]
         
         Example:
-        
-        >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
-        >>> UUID = my_missions[0].mission_id
-        >>> mission_files = galileo.missions.get_mission_files(UUID)
-        >>> for file in mission_files:
-        >>>     print(file.filename, file.path, file.file_size)
+            >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
+            >>> UUID = my_missions[0].mission_id
+            >>> mission_files = galileo.missions.get_mission_files(UUID)
+            >>> for file in mission_files:
+            >>>     print(file.filename, file.path, file.file_size)
         
         """
 
@@ -298,12 +321,12 @@ class MissionsSdk:
         
         Example:
         
-        >>> # Delete all files in a Mission, including the results
-        >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
-        >>> UUID = my_missions[0].mission_id
-        >>> mission_files = galileo.missions.get_mission_files(UUID)
-        >>> for mission_file in mission_files:
-        >>>     success = galileo.missions.delete_file(UUID,os.path.join(mission_file.path,mission_file.name))
+            >>> # Delete all files in a Mission, including the results
+            >>> my_missions = galileo.missions.list_missions() # get the UUID of the mission you want
+            >>> UUID = my_missions[0].mission_id
+            >>> mission_files = galileo.missions.get_mission_files(UUID)
+            >>> for mission_file in mission_files:
+            >>>     success = galileo.missions.delete_file(UUID,os.path.join(mission_file.path,mission_file.name))
         """
         return self._missions_service.delete_file(mission_id, file_path)
 
@@ -334,9 +357,9 @@ class MissionsSdk:
         
         Example:
         
-        >>> my_missions = galileo.missions.list_missions()
-        >>> print("Old Mission Name: ", my_missions[0].name)
-        >>> success = galileo.missions.update_mission(my_missions[0].mission_id, "New Name")        
+            >>> my_missions = galileo.missions.list_missions()
+            >>> print("Old Mission Name: ", my_missions[0].name)
+            >>> success = galileo.missions.update_mission(my_missions[0].mission_id, "New Name")        
         """
         request = UpdateMissionRequest(
             mission_id,
@@ -356,7 +379,13 @@ class MissionsSdk:
 
         :param mission_id: str: Mission's id
         :param arg: List[str]: Please supply them as a list of str ["arg1", "arg2"]
+        TODO: Add return type
         :return:
+
+        Example:
+            >>> my_missions = galileo.missions.list_missions()
+            >>> print("Old Mission Name: ", my_missions[0].name)
+            >>> galileo.missions.update_mission_args(my_missions[0].mission_id, ["arg1", "arg2"])
         """
         return self._missions_service.update_mission_args(mission_id, arg)
 
@@ -407,4 +436,5 @@ class MissionsSdk:
         >>> for parameter in framework_settings:
         >>>     print(parameter, framework_settings[parameter])
         """
-        return self._missions_service.get_mission_type_settings_info(mission_type_id)
+        return self._missions_service.get_mission_type_settings_info(
+            mission_type_id)
