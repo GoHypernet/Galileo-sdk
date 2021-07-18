@@ -6,7 +6,8 @@ class JobsSdk(EventsSdk):
     def __init__(self, jobs_service, connector=None, events=None):
         self._jobs_service = jobs_service
         super(JobsSdk, self).__init__(
-            connector=connector, events=events,
+            connector=connector,
+            events=events,
         )
 
     def on_job_launcher_updated(self, func):
@@ -85,40 +86,40 @@ class JobsSdk(EventsSdk):
 
     def list_jobs(
         self,
-        jobids=None,
-        receiverids=None,
-        oaids=None,
-        userids=None,
-        stationids=None,
+        job_ids=None,
+        receiver_ids=None,
+        oa_ids=None,
+        user_ids=None,
+        station_ids=None,
         statuses=None,
         page=1,
         items=25,
-        projectids=None,
+        mission_ids=None,
         archived=False,
         receiver_archived=False,
         partial_names=None,
-        machines=None,
-        ownerids=None,
+        lzs=None,
+        owner_ids=None,
         sort_by=None,
         sort_order=None,
     ):
         """
         Get a filtered list of all jobs run under your Galileo account.
         
-        :param jobids: List[str]: Filter by job ids
-        :param receiverids: List[str]: Filter by receiver ids
-        :param oaids: List[str]: Filter by offer acceptance ids
-        :param userids: List[str]: Filter by user ids
-        :param stationids: List[str]: Filter by station ids
+        :param job_ids: List[str]: Filter by job ids
+        :param receiver_ids: List[str]: Filter by receiver ids
+        :param oa_ids: List[str]: Filter by offer acceptance ids
+        :param user_ids: List[str]: Filter by user ids
+        :param station_ids: List[str]: Filter by station ids
         :param statuses: List[str]: Filter by statuses
         :param page: int: Filter by page
         :param items: int: Filter by items
-        :param projectids: List[str]: Filter by projectid
+        :param mission_ids: List[str]: Filter by mission ids 
         :param archived: boolean: Filter by archived
         :param receiver_archived: boolean: Filter by receiver archived
         :param partial_names: List[str]: Filter by partial names
-        :param machines: List[str]: Filter by machines id
-        :param ownerids: List[str]: Filter by ownerid
+        :param lzs: List[str]: Filter by lz id
+        :param owner_ids: List[str]: Filter by owner id
         :param sort_by: EJobSort
         :param sort_order: str: "asc" or "desc"
         :return: List[Job]
@@ -130,20 +131,20 @@ class JobsSdk(EventsSdk):
             >>>     print(job.name)
         """
         return self._jobs_service.list_jobs(
-            jobids=jobids,
-            receiverids=receiverids,
-            oaids=oaids,
-            userids=userids,
-            stationids=stationids,
+            jobids=job_ids,
+            receiverids=receiver_ids,
+            oaids=oa_ids,
+            userids=user_ids,
+            stationids=station_ids,
             statuses=statuses,
             page=page,
             items=items,
-            projectids=projectids,
+            projectids=mission_ids,
             archived=archived,
             receiver_archived=receiver_archived,
             partial_names=partial_names,
-            lz=machines,
-            ownerids=ownerids,
+            lz=lzs,
+            ownerids=owner_ids,
             sort_by=sort_by,
             sort_order=sort_order,
         )
@@ -156,6 +157,11 @@ class JobsSdk(EventsSdk):
         :param path: str: path to directory, where results will be saved
         :param nonce: str: can still download the file if provide an auth token
         :return: List[str]: list of filenames that were downloaded
+
+        Example:
+            >>> job_id = "my_job_id"
+            >>> path = "results_folder"
+            >>> results = galileo.jobs.download_job_results(job_id, path)
         """
         return self._jobs_service.download_job_results(job_id, path, nonce)
 
@@ -165,6 +171,11 @@ class JobsSdk(EventsSdk):
         :param job_id:
         :param archived: bool: Archive a job
         return: Job
+
+
+        Example:
+            >>> job_id = "my_job_id"
+            >>> galileo.jobs.update_job(job_id, archived=True)        
         """
         request = UpdateJobRequest(job_id, archived)
 
@@ -176,6 +187,10 @@ class JobsSdk(EventsSdk):
 
         :param job_id: str
         :return: Job
+
+        Example:
+            >>> job_id = "my_job_id"
+            >>> galileo.jobs.request_kill_job(job_id)
         """
         return self._jobs_service.request_kill_job(job_id)
 
@@ -187,5 +202,11 @@ class JobsSdk(EventsSdk):
         :param path: str: path to directory, where results will be saved
         :param nonce: str: can still download the file if provide an auth token
         :return: List[str]: list of filenames that were downloaded
+
+        Example:
+            >>> job_id = "my_job_id"
+            >>> path = "results_folder"
+            >>> results = galileo.jobs.download_and_extract_job_results(job_id, path)
         """
-        return self._jobs_service.download_and_extract_job_results(job_id, path, nonce)
+        return self._jobs_service.download_and_extract_job_results(
+            job_id, path, nonce)
