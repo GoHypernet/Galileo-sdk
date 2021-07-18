@@ -6,7 +6,8 @@ class LzSdk(EventsSdk):
     def __init__(self, lz_service, connector=None, events=None):
         self._lz_service = lz_service
         super(LzSdk, self).__init__(
-            connector=connector, events=events,
+            connector=connector,
+            events=events,
         )
 
     def on_lz_status_update(self, func):
@@ -45,6 +46,10 @@ class LzSdk(EventsSdk):
 
         :param lz_id: str
         :return: Lz
+
+        Example:
+            >>> lz = galileo.lz.get_lz_by_id("lz_id")
+            >>> print(lz.name)
         """
         return self._lz_service.get_lz_by_id(lz_id)
 
@@ -54,17 +59,24 @@ class LzSdk(EventsSdk):
 
         :param lz_id: str
         :return: boolean 
+
+        Example:
+            >>> galileo.lz.delete_lz_by_id("lz_id")
         """
         return self._lz_service.delete_lz_by_id(lz_id).get("success", False)
 
     def list_lz(
-        self, lz_ids=None, userids=None, page=1, items=25,
+        self,
+        lz_ids=None,
+        user_ids=None,
+        page=1,
+        items=25,
     ):
         """
         Get a filtered list of landing zones Landing Zones and their stats. 
 
         :param lz_ids: List[str]: Filter by landing zone id
-        :param userids: List[str]: Filter by user id
+        :param user_ids: List[str]: Filter by user id
         :param page: int: Page number you would like returned
         :param items: int: Number of Landing Zones per page
         :return: List[Lz]
@@ -74,12 +86,16 @@ class LzSdk(EventsSdk):
             >>> for lz in lzs:
             >>>    print(lz.name)
         """
-        return self._lz_service.list_lz(
-            lz_ids=lz_ids, userids=userids, page=page, items=items
-        )
+        return self._lz_service.list_lz(lz_ids=lz_ids,
+                                        userids=user_ids,
+                                        page=page,
+                                        items=items)
 
     def update_lz(
-        self, lz_id, name=None, active=None,
+        self,
+        lz_id,
+        name=None,
+        active=None,
     ):
         """
         Update the info about a Landing Zone
@@ -88,6 +104,10 @@ class LzSdk(EventsSdk):
         :param name: update lz name
         :param active: bool
         :return: Lz
+
+        Example:
+            >>> lz = galileo.lz.update_lz("lz_id", name="new_name")
+            >>> print(lz.name)
         """
         request = UpdateLzRequest(lz_id, name, active)
 
