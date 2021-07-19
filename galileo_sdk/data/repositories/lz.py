@@ -4,7 +4,10 @@ from galileo_sdk.data.repositories import RequestsRepository
 
 class LzRepository(RequestsRepository):
     def __init__(
-        self, settings_repository, auth_provider, namespace,
+        self,
+        settings_repository,
+        auth_provider,
+        namespace,
     ):
         super(LzRepository, self).__init__(
             settings_repository=settings_repository,
@@ -13,7 +16,8 @@ class LzRepository(RequestsRepository):
         )
 
     def get_lz_by_id(self, machine_id):
-        response = self._get("/machines/{machine_id}".format(machine_id=machine_id))
+        response = self._get(
+            "/machines/{machine_id}".format(machine_id=machine_id))
         json = response.json()
         return machine_dict_to_machine(json)
 
@@ -39,10 +43,11 @@ class LzRepository(RequestsRepository):
         machine = json["machine"]
         return machine_dict_to_machine(machine)
 
+
 def machine_dict_to_machine(machine):
     return Lz(
         name=machine["name"],
-        userid=machine["userid"],
+        user_id=machine["userid"],
         status=ELzStatus[machine["status"]],
         lz_id=machine["mid"],
         gpu_count=machine["gpu_count"],

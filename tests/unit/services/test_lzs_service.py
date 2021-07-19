@@ -30,7 +30,7 @@ def test_get_lz_by_id():
         name=str(x),
         operating_system=str(x),
         status=ELzStatus.online,
-        userid=str(x),
+        user_id=str(x),
         container_technology="container_tech",
         job_runner="job runner",
         memory_amount=str(x),
@@ -54,12 +54,11 @@ def test_list_machines():
             name=str(x),
             operating_system=str(x),
             status=ELzStatus.online,
-            userid=str(x),
+            user_id=str(x),
             container_technology="container_tech",
             job_runner="job runner",
             memory_amount=str(x),
-        )
-        for x in range(5)
+        ) for x in range(5)
     ]
 
     # Call
@@ -81,7 +80,7 @@ def test_update():
         name=str(x),
         operating_system=str(x),
         status=ELzStatus.online,
-        userid=str(x),
+        user_id=str(x),
         container_technology="container_tech",
         job_runner="job runner",
         memory_amount=str(x),
@@ -93,11 +92,12 @@ def test_update():
     # Assert
     assert r.userid == str(x)
 
+
 def test_delete_lz():
     # Arrange
     lzs_repo.delete_lz_by_id.return_value = {"success": True}
 
-    # Call 
+    # Call
     r = lzs_service.delete_lz_by_id(LZ_ID)
 
     assert r["success"] is True
