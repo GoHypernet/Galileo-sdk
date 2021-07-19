@@ -45,26 +45,73 @@ class EPaymentStatus(enum.Enum):
 
 
 class UpdateJobRequest:
+    """
+    A class representing a Job Update Request
+    
+    """
     def __init__(self, job_id, archived):
+        """
+        :param job_id: UUID of the Job
+        :type job_id: str
+        :param archived: A boolean value indicating whether the job is archived
+        :type archived: bool
+        """
         self.job_id = job_id
         self.archived = archived
 
+    def __str__(self):
+        return "Update Job Request: job_id: {job_id}, archived={archived}".format(
+            job_id=self.job_id, archived=self.archived)
+
+    def __repr__(self):
+        return "Update Job Request Object"
+
 
 class JobStatus:
+    """
+    A class representing a Job Status
+    """
     def __init__(
-        self, timestamp, status, jobstatusid=None, jobid=None,
+        self,
+        timestamp,
+        status,
+        job_status_id=None,
+        job_id=None,
     ):
-        self.jobstatusid = jobstatusid
-        self.jobid = jobid
+        """
+        :param timestamp: Job timestamp
+        :type timestamp: int
+
+        :param status: The status of the job
+        :type status: EJobStatus
+
+        :param job_status_id: The id of the job status
+        :type job_status_id: str
+
+        :param job_id: The id of the job
+        :type job_id: str
+        """
+        self.jobstatusid = job_status_id
+        self.jobid = job_id
         self.timestamp = timestamp
         self.status = status
 
+    def __str__(self):
+        return "Job Status: job_id: {job_id}, status: {status}".format(
+            job_id=self.jobid,
+            job_status_id=self.jobstatusid,
+            status=self.status,
+        )
+
 
 class Job:
+    """
+    Job Object 
+    """
     def __init__(
         self,
-        jobid,
-        receiverid,
+        job_id,
+        receiver_id,
         mission_id,
         time_created,
         last_updated,
@@ -76,8 +123,8 @@ class Job:
         tunnel_port=None,
         tunnel_url=None,
         name=None,
-        stationid=None,
-        userid=None,
+        station_id=None,
+        user_id=None,
         state=None,
         pay_status=None,
         pay_interval=None,
@@ -86,9 +133,8 @@ class Job:
         status_history=None,
     ):
         """
-        Job Object 
         
-        :param jobid: UUID of the Job
+        :param job_id: UUID of the Job
         :param receiver_id: UUID of the recipient Landing Zone
         :param mission_id: UUID of the originating Mission
         :param time_created: Time stamp of the Job run time
@@ -101,8 +147,8 @@ class Job:
         :param tunnel_port: The container port exposed if tunneling is enabled
         :param tunnel_url: The URL of the tunnel exposing the container if the job has tunneling enabled
         :param name: Human readable name of the Job
-        :param stationid: UUID of the Station the Job was deployed to
-        :param userid: UUID of the user who deployed the Job
+        :param station_id: UUID of the Station the Job was deployed to
+        :param user_id: UUID of the user who deployed the Job
         :param state: Current state of the Job (potentially superceded by status)
         :param pay_status: Currently unused
         :param pay_interval: Currently unused
@@ -110,8 +156,8 @@ class Job:
         :param archived: Boolean indicating if job is archived 
         :param status_history: Dictionary of Job status and time stamp history
         """
-        self.job_id = jobid
-        self.receiver_id = receiverid
+        self.job_id = job_id
+        self.receiver_id = receiver_id
         self.mission_id = mission_id
         self.time_created = time_created
         self.last_updated = last_updated
@@ -123,8 +169,8 @@ class Job:
         self.tunnel_port = tunnel_port,
         self.tunnel_url = tunnel_url,
         self.name = name
-        self.station_id = stationid
-        self.user_id = userid
+        self.station_id = station_id
+        self.user_id = user_id
         self.state = state
         self.pay_status = pay_status
         self.pay_interval = pay_interval
@@ -132,51 +178,69 @@ class Job:
         self.status_history = status_history
         self.archived = archived
 
+    def __str__(self):
+        return "Job: job_id: {job_id}, mission_id: {mission_id}".format(
+            job_id=self.job_id,
+            mission_id=self.mission_id,
+        )
 
+    def __repr__(self):
+        return "Job Object"
+
+
+#TODO: Add Docstring to class
 class JobLauncherUpdatedEvent:
     def __init__(self, job):
         self.job = job
 
 
+#TODO: Add Docstring to class
 class JobLauncherResultsDownloadedEvent:
     def __init__(self, resultsid, status):
         self.resultsid = resultsid
         self.status = status
 
 
+#TODO: Add Docstring to class
 class StationJobUpdatedEvent:
     def __init__(self, job):
         self.job = job
 
 
+#TODO: Add Docstring to class
 class JobTopEvent:
     def __init__(self, job, top):
         self.job = job
         self.top = top
 
 
+#TODO: Add Docstring to class
 class JobLogEvent:
     def __init__(self, job, log):
         self.job = job
         self.log = log
 
 
+#TODO: Add Docstring to class
 class JobLauncherSubmittedEvent:
     def __init__(self, job):
         self.job = job
 
 
+#TODO: Add Docstring to class
 class TopDetails:
     def __init__(self, title, detail):
         self.title = title
         self.detail = detail
 
 
+#TODO: Add Docstring to class
 class TopProcess:
     def __init__(self, items):
         self.items = items
 
 
+#TODO: Add Docstring to class
 class JobsEvents:
     def __init__(self):
         self._events = EventEmitter()

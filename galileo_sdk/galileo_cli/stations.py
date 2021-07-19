@@ -241,7 +241,7 @@ def stations_cli(main, galileo: GalileoSdk):
                 r = galileo.stations.invite_to_station(station_id, [user],
                                                        role_id.id)
                 username = galileo.profiles.list_users(
-                    userids=[user])[0].username
+                    user_ids=[user])[0].username
                 station_name = galileo.stations.list_stations(
                     station_ids=[station_id])[0].name
                 click.echo(
@@ -277,7 +277,7 @@ def stations_cli(main, galileo: GalileoSdk):
                 r = galileo.stations.remove_member_from_station(
                     station_id, user)
                 username = galileo.profiles.list_users(
-                    userids=[user])[0].username
+                    user_ids=[user])[0].username
                 station_name = galileo.stations.list_stations(
                     station_ids=[station_id])[0].name
                 click.echo(
