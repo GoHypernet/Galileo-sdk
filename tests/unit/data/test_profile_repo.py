@@ -141,7 +141,7 @@ def test_list_users(mocked_requests):
     assert len(r[0].lz_ids) == 1
     assert len(r[0].stored_cards) == 1
     for i in range(5):
-        assert r[i].userid == "user{i}".format(i=i)
+        assert r[i].user_id == "user{i}".format(i=i)
         assert r[i].username == "username{i}".format(i=i)
 
 
@@ -161,7 +161,7 @@ def test_get_profile(mocked_requests):
     )
 
     # Assert
-    assert r.userid == "userid"
+    assert r.user_id == "userid"
     assert r.username == "username"
     assert r.stored_cards[0].id == "0x"
     assert r.lz_ids == ["mids"]

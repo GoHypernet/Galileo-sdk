@@ -5,7 +5,10 @@ from galileo_sdk.data.repositories import RequestsRepository
 
 class ProfilesRepository(RequestsRepository):
     def __init__(
-        self, settings_repository, auth_provider, namespace,
+        self,
+        settings_repository,
+        auth_provider,
+        namespace,
     ):
         super(ProfilesRepository, self).__init__(
             settings_repository=settings_repository,
@@ -30,6 +33,7 @@ class ProfilesRepository(RequestsRepository):
         stations = json["stations"]
         return [station_dict_to_station(station) for station in stations]
 
+
 def cards_dict_to_cards(stored_cards):
     return ProfileCard(
         stored_cards["id"],
@@ -41,12 +45,12 @@ def cards_dict_to_cards(stored_cards):
 
 def user_dict_to_profile(profile):
     return Profile(
-        userid=profile["userid"],
+        user_id=profile["userid"],
         username=profile["username"],
         lz_ids=profile["mids"],
         stripe_customer_id=profile.get("stripe_customer_id", None),
         pricing_tier_id=profile.get("pricing_tier_id", None),
-        stored_cards=[cards_dict_to_cards(card) for card in profile["stored_cards"]]
-        if profile.get("stored_cards", None) is not None
-        else None,
+        stored_cards=[
+            cards_dict_to_cards(card) for card in profile["stored_cards"]
+        ] if profile.get("stored_cards", None) is not None else None,
     )

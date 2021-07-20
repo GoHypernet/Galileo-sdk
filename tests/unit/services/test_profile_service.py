@@ -16,8 +16,24 @@ profile_service = ProfilesService(profile_repo)
 
 def test_list_users():
     profile_repo.list_users.return_value = [
-        Profile(userid="userid",  username="username", lz_ids=["mids"], stored_cards=[ProfileCard(id="0x", user_id="x", stripe_payment_method_id="x", creation_timestamp="x")]),
-        Profile(userid="userid2", username="username2", lz_ids=["mids2"], stored_cards=[ProfileCard(id="0x2", user_id="x", stripe_payment_method_id="x", creation_timestamp="x")]),
+        Profile(user_id="userid",
+                username="username",
+                lz_ids=["mids"],
+                stored_cards=[
+                    ProfileCard(id="0x",
+                                user_id="x",
+                                stripe_payment_method_id="x",
+                                creation_timestamp="x")
+                ]),
+        Profile(user_id="userid2",
+                username="username2",
+                lz_ids=["mids2"],
+                stored_cards=[
+                    ProfileCard(id="0x2",
+                                user_id="x",
+                                stripe_payment_method_id="x",
+                                creation_timestamp="x")
+                ]),
     ]
 
     # Call
@@ -32,9 +48,16 @@ def test_list_users():
 
 
 def test_get_profile():
-    profile_repo.self.return_value = Profile(userid="userid",  username="username", lz_ids=["mids"], stored_cards=[ProfileCard(id="0x", user_id="x", stripe_payment_method_id="x", creation_timestamp="x")])
-    
-    
+    profile_repo.self.return_value = Profile(
+        user_id="userid",
+        username="username",
+        lz_ids=["mids"],
+        stored_cards=[
+            ProfileCard(id="0x",
+                        user_id="x",
+                        stripe_payment_method_id="x",
+                        creation_timestamp="x")
+        ])
 
     # Call
     r = profile_service.self()
