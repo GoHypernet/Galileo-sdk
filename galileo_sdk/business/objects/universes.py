@@ -16,5 +16,8 @@ class Universe:
         self.name = name
         self.creation_timestamp = creation_timestamp
 
-    def __str__(self) -> str:
+    def __str__(self):
         return "Universe: {universe_name}".format(universe_name=self.name)
+
+    def __repr__(self):
+        return self.__str__()
