@@ -230,6 +230,15 @@ class CreateMissionRequest(object):
         self.settings = settings
         self.public = public
 
+    def __str__(self):
+        model_string = "Create Mission Request: "
+        for key, value in self.__dict__.items():
+            if "_" not in key and value is not None:
+                model_string += "{key}={value}, ".format(key=key, value=value)
+
+    def __repr__(self):
+        return "Create Mission Request: {name}".format(name=self.name)
+
 
 class UpdateMissionRequest(CreateMissionRequest):
     def __init__(
@@ -277,3 +286,12 @@ class UpdateMissionRequest(CreateMissionRequest):
             settings=settings,
             public=public,
         )
+
+    def __str__(self):
+        model_string = "Update Mission Request: "
+        for key, value in self.__dict__.items():
+            if "_" not in key and value is not None:
+                model_string += "{key}={value}, ".format(key=key, value=value)
+
+    def __repr__(self):
+        return "Update Mission Request: {name}".format(name=self.name)
