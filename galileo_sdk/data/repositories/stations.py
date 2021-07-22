@@ -15,7 +15,10 @@ from galileo_sdk.data.repositories import RequestsRepository
 
 class StationsRepository(RequestsRepository):
     def __init__(
-        self, settings_repository, auth_provider, namespace,
+        self,
+        settings_repository,
+        auth_provider,
+        namespace,
     ):
         super(StationsRepository, self).__init__(
             settings_repository=settings_repository,
@@ -33,13 +36,16 @@ class StationsRepository(RequestsRepository):
         response = self._get("/stations/public", query=query)
         json = response.json()
         stations = json["stations"]
-        return [public_station_dict_to_station(station) for station in stations]
-
+        return [
+            public_station_dict_to_station(station) for station in stations
+        ]
 
     def create_station(self, name, description, userids=None):
-        response = self._post(
-            "/station", {"name": name, "user_ids": userids, "description": description}
-        )
+        response = self._post("/station", {
+            "name": name,
+            "user_ids": userids,
+            "description": description
+        })
         json = response.json()
         station = json["station"]
         return station_dict_to_station(station)
@@ -59,20 +65,21 @@ class StationsRepository(RequestsRepository):
         return station_dict_to_station(station)
 
     def delete_station(self, station_id):
-        response = self._delete("/station/{station_id}".format(station_id=station_id))
+        response = self._delete(
+            "/station/{station_id}".format(station_id=station_id))
         return response.json()  # Boolean
 
     def get_station_resource_policy(self, station_id):
-        response = self._get(
-            "/stations/{station_id}/resource_policy".format(station_id=station_id)
-        )
+        response = self._get("/stations/{station_id}/resource_policy".format(
+            station_id=station_id))
         response = response.json()
         policy = response["resource_policy"]
         return resource_policy_dict_to_resource_policy(policy)
 
     def update_station_resource_policy(self, station_id, request):
         response = self._put(
-            "/stations/{station_id}/resource_policy".format(station_id=station_id),
+            "/stations/{station_id}/resource_policy".format(
+                station_id=station_id),
             resource_policy_request_to_dict(request),
         )
         response = response.json()
@@ -81,14 +88,13 @@ class StationsRepository(RequestsRepository):
 
     def delete_station_resource_policy(self, station_id):
         response = self._delete(
-            "/stations/{station_id}/resource_policy".format(station_id=station_id)
-        )
+            "/stations/{station_id}/resource_policy".format(
+                station_id=station_id))
         return response.json()  # Boolean
 
     def get_self_resource_limits(self, station_id):
-        response = self._get(
-            "/stations/{station_id}/resource_limits".format(station_id=station_id)
-        )
+        response = self._get("/stations/{station_id}/resource_limits".format(
+            station_id=station_id))
         response = response.json()
         policy = response["resource_policy"]
         machine_id = response["machine_id"]
@@ -97,53 +103,53 @@ class StationsRepository(RequestsRepository):
     def invite_to_station(self, station_id, userids, role_id):
         response = self._post(
             "/station/{station_id}/users/invite".format(station_id=station_id),
-            {"userids": userids, "role_id": role_id},
+            {
+                "userids": userids,
+                "role_id": role_id
+            },
         )
         return response.json()  # Boolean
 
     def accept_station_invite(self, station_id):
         response = self._put(
-            "/station/{station_id}/users/accept".format(station_id=station_id)
-        )
+            "/station/{station_id}/users/accept".format(station_id=station_id))
         return response.json()  # Boolean
 
     def reject_station_invite(self, station_id):
         response = self._put(
-            "/station/{station_id}/users/reject".format(station_id=station_id)
-        )
+            "/station/{station_id}/users/reject".format(station_id=station_id))
         return response.json()  # Boolean
 
     def request_to_join(self, station_id):
         response = self._post(
-            "/station/{station_id}/requests".format(station_id=station_id)
-        )
+            "/station/{station_id}/requests".format(station_id=station_id))
         return response.json()  # Boolean
 
     def approve_request_to_join(self, station_id, userids):
         response = self._put(
-            "/station/{station_id}/requests/approve".format(station_id=station_id),
+            "/station/{station_id}/requests/approve".format(
+                station_id=station_id),
             {"userids": userids},
         )
         return response.json()  # Boolean
 
     def reject_request_to_join(self, station_id, userids):
         response = self._put(
-            "/station/{station_id}/requests/reject".format(station_id=station_id),
+            "/station/{station_id}/requests/reject".format(
+                station_id=station_id),
             {"userids": userids},
         )
         return response.json()  # Boolean
 
     def leave_station(self, station_id):
-        response = self._put(
-            "/station/{station_id}/user/withdraw".format(station_id=station_id)
-        )
+        response = self._put("/station/{station_id}/user/withdraw".format(
+            station_id=station_id))
         return response.json()  # Boolean
 
     def update_station_member(self, station_id, userid, role_id):
         response = self._put(
-            "/station/{station_id}/user/{userid}".format(
-                station_id=station_id, userid=userid
-            ),
+            "/station/{station_id}/user/{userid}".format(station_id=station_id,
+                                                         userid=userid),
             {"role_id": role_id},
         )
         response = response.json()
@@ -153,28 +159,24 @@ class StationsRepository(RequestsRepository):
     def remove_member_from_station(self, station_id, userid):
         response = self._delete(
             "/station/{station_id}/user/{userid}/delete".format(
-                station_id=station_id, userid=userid
-            )
-        )
+                station_id=station_id, userid=userid))
         return response.json()  # Boolean
 
     def get_station_user_resource_policy(self, station_id, userid):
         response = self._get(
             "/stations/{station_id}/users/{user_id}/resource_policy".format(
-                station_id=station_id, user_id=userid
-            )
-        )
+                station_id=station_id, user_id=userid))
         response = response.json()
         policy = response["resource_policy"]
         if policy is None:
             return None
         return resource_policy_dict_to_resource_policy(policy)
 
-    def update_station_user_resource_policy(self, station_id, user_id, request):
+    def update_station_user_resource_policy(self, station_id, user_id,
+                                            request):
         response = self._put(
             "/stations/{station_id}/users/{user_id}/resource_policy".format(
-                station_id=station_id, user_id=user_id
-            ),
+                station_id=station_id, user_id=user_id),
             resource_policy_request_to_dict(request),
         )
         response = response.json()
@@ -186,16 +188,14 @@ class StationsRepository(RequestsRepository):
     def delete_station_user_resource_policy(self, station_id, userid):
         response = self._delete(
             "/stations/{station_id}/users/{user_id}/resource_policy".format(
-                station_id=station_id, user_id=userid
-            )
-        )
+                station_id=station_id, user_id=userid))
 
         return response.json()  # Boolean
 
     def get_station_roles(self, station_id, query):
         response = self._get(
-            "/stations/{station_id}/roles".format(station_id=station_id), query=query
-        )
+            "/stations/{station_id}/roles".format(station_id=station_id),
+            query=query)
         response = response.json()
         roles = response["roles"]
         return [role_dict_to_station_role(role) for role in roles]
@@ -213,8 +213,7 @@ class StationsRepository(RequestsRepository):
     def update_station_role(self, station_id, station_role_id, request):
         response = self._put(
             "/stations/{station_id}/roles/{role_id}".format(
-                station_id=station_id, role_id=station_role_id
-            ),
+                station_id=station_id, role_id=station_role_id),
             station_role_request_to_dict(request),
         )
         response = response.json()
@@ -224,29 +223,25 @@ class StationsRepository(RequestsRepository):
     def delete_station_role(self, station_id, station_role_id):
         response = self._delete(
             "/stations/{station_id}/roles/{role_id}".format(
-                station_id=station_id, role_id=station_role_id
-            )
-        )
+                station_id=station_id, role_id=station_role_id))
 
         return response.json()  # Boolean
 
     def get_station_role_resource_policy(self, station_id, role_id):
         response = self._get(
             "/stations/{station_id}/roles/{role_id}/resource_policy".format(
-                station_id=station_id, role_id=role_id
-            )
-        )
+                station_id=station_id, role_id=role_id))
         response = response.json()
         policy = response["resource_policy"]
         if policy is None:
             return None
         return resource_policy_dict_to_resource_policy(policy)
 
-    def update_station_role_resource_policy(self, station_id, role_id, request):
+    def update_station_role_resource_policy(self, station_id, role_id,
+                                            request):
         response = self._put(
             "/stations/{station_id}/roles/{role_id}/resource_policy".format(
-                station_id=station_id, role_id=role_id
-            ),
+                station_id=station_id, role_id=role_id),
             resource_policy_request_to_dict(request),
         )
         response = response.json()
@@ -258,9 +253,7 @@ class StationsRepository(RequestsRepository):
     def delete_station_role_resource_policy(self, station_id, role_id):
         response = self._delete(
             "/stations/{station_id}/roles/{role_id}/resource_policy".format(
-                station_id=station_id, role_id=role_id
-            )
-        )
+                station_id=station_id, role_id=role_id))
 
         return response.json()  # Boolean
 
@@ -280,21 +273,19 @@ class StationsRepository(RequestsRepository):
 
     def get_station_lz_resource_policy(self, station_id, machine_id):
         response = self._get(
-            "/stations/{station_id}/machines/{machine_id}/resource_policy".format(
-                station_id=station_id, machine_id=machine_id
-            )
-        )
+            "/stations/{station_id}/machines/{machine_id}/resource_policy".
+            format(station_id=station_id, machine_id=machine_id))
         response = response.json()
         policy = response["resource_policy"]
         if policy is None:
             return None
         return resource_policy_dict_to_resource_policy(policy)
 
-    def update_station_lz_resource_policy(self, station_id, machine_id, request):
+    def update_station_lz_resource_policy(self, station_id, machine_id,
+                                          request):
         response = self._put(
-            "/stations/{station_id}/machines/{machine_id}/resource_policy".format(
-                station_id=station_id, machine_id=machine_id
-            ),
+            "/stations/{station_id}/machines/{machine_id}/resource_policy".
+            format(station_id=station_id, machine_id=machine_id),
             resource_policy_request_to_dict(request),
         )
         response = response.json()
@@ -305,19 +296,15 @@ class StationsRepository(RequestsRepository):
 
     def delete_station_lz_resource_policy(self, station_id, machine_id):
         response = self._delete(
-            "/stations/{station_id}/machines/{machine_id}/resource_policy".format(
-                station_id=station_id, machine_id=machine_id
-            )
-        )
+            "/stations/{station_id}/machines/{machine_id}/resource_policy".
+            format(station_id=station_id, machine_id=machine_id))
 
         return response.json()
 
     def get_station_lz_resource_limits(self, station_id, machine_id):
         response = self._get(
-            "/stations/{station_id}/machines/{machine_id}/resource_limits".format(
-                station_id=station_id, machine_id=machine_id
-            )
-        )
+            "/stations/{station_id}/machines/{machine_id}/resource_limits".
+            format(station_id=station_id, machine_id=machine_id))
         response = response.json()
         policy = response["resource_policy"]
         if policy is None:
@@ -327,7 +314,11 @@ class StationsRepository(RequestsRepository):
     def add_volumes_to_station(self, station_id, name, mount_point, access):
         response = self._post(
             "/station/{station_id}/volumes".format(station_id=station_id),
-            {"name": name, "mount_point": mount_point, "access": access.value},
+            {
+                "name": name,
+                "mount_point": mount_point,
+                "access": access.value
+            },
         )
         json = response.json()
         volume = json["volumes"]
@@ -336,28 +327,29 @@ class StationsRepository(RequestsRepository):
     def add_host_path_to_volume(self, station_id, volume_id, mid, host_path):
         response = self._post(
             "/station/{station_id}/volumes/{volume_id}/host_paths".format(
-                station_id=station_id, volume_id=volume_id
-            ),
-            {"mid": mid, "host_path": host_path},
+                station_id=station_id, volume_id=volume_id),
+            {
+                "mid": mid,
+                "host_path": host_path
+            },
         )
         json = response.json()
         volume = json["volume"]
         return volume_dict_to_volume(volume)
 
-    def delete_host_path_from_volume(self, station_id, volume_id, host_path_id):
+    def delete_host_path_from_volume(self, station_id, volume_id,
+                                     host_path_id):
         response = self._delete(
-            "/station/{station_id}/volumes/{volume_id}/host_paths/{host_path_id}".format(
-                station_id=station_id, volume_id=volume_id, host_path_id=host_path_id
-            )
-        )
+            "/station/{station_id}/volumes/{volume_id}/host_paths/{host_path_id}"
+            .format(station_id=station_id,
+                    volume_id=volume_id,
+                    host_path_id=host_path_id))
         return response.json()
 
     def remove_volume_from_station(self, station_id, volume_id):
         response = self._delete(
             "/station/{station_id}/volumes/{volume_id}".format(
-                station_id=station_id, volume_id=volume_id
-            )
-        )
+                station_id=station_id, volume_id=volume_id))
         return response.json()
 
 
@@ -372,10 +364,10 @@ def resource_policy_request_to_dict(request):
         "max_cpu_global": request.max_cpu_global,
         "max_memory_global": request.max_memory_global,
         "max_gpu_global": request.max_gpu_global,
-        "max_projects": request.max_projects,
+        "max_projects": request.max_missions,
         "max_users_in_station": request.max_users_in_station,
         "max_stations": request.max_stations,
-        "max_project_types": request.max_project_types,
+        "max_project_types": request.max_mission_types,
         "max_cloud_storage_space": request.max_cloud_storage_space,
         "max_spend_per_day": request.max_spend_per_day,
         "max_spend_per_week": request.max_spend_per_week,
@@ -481,7 +473,8 @@ def volume_dict_to_volume(volume):
         stationid=volume["stationid"],
         access=EVolumeAccess(volume["access"]),
         host_paths=[
-            host_path_dict_to_host_path(host_path) for host_path in volume["host_paths"]
+            host_path_dict_to_host_path(host_path)
+            for host_path in volume["host_paths"]
         ],
     )
 
@@ -517,7 +510,9 @@ def station_dict_to_station(station):
         description=station["description"],
         users=[user_dict_to_station_user(user) for user in station["users"]],
         lz_ids=station["mids"],
-        volumes=[volume_dict_to_volume(volume) for volume in station["volumes"]],
+        volumes=[
+            volume_dict_to_volume(volume) for volume in station["volumes"]
+        ],
         status=station.get("status", None),
         machine_summaries=station.get("machine_summaries", None),
         universe_id=station.get("organization_id", None),
@@ -538,16 +533,14 @@ def public_station_dict_to_station(station):
         allow_auto_join=station["allow_auto_join"],
         creation_timestamp=station.get("creation_timestamp", None),
         updated_timestamp=station.get("updated_timestamp", None),
-        allowed_mission_types=station.get("allowed_mission_types",None),
-        jobs_in_queue_count=station.get("jobs_in_queue",None),
-        member_count=station.get("member_count",None),
-        mid_count=station.get("mid_count",None),
-        resource_policy=station.get("resource_policy",None),
-        user_count=station.get("user_count",None),
-        user_status=station.get("user_status",None),
-        volume_count=station.get("volume_count",None)
-    )
-    
+        allowed_mission_types=station.get("allowed_mission_types", None),
+        jobs_in_queue_count=station.get("jobs_in_queue", None),
+        member_count=station.get("member_count", None),
+        mid_count=station.get("mid_count", None),
+        resource_policy=station.get("resource_policy", None),
+        user_count=station.get("user_count", None),
+        user_status=station.get("user_status", None),
+        volume_count=station.get("volume_count", None))
 
 
 def user_dict_to_station_user(user):
@@ -574,10 +567,10 @@ def resource_policy_dict_to_resource_policy(policy):
         max_cpu_global=policy["max_cpu_global"],
         max_memory_global=policy["max_memory_global"],
         max_gpu_global=policy["max_gpu_global"],
-        max_projects=policy["max_projects"],
+        max_missions=policy["max_projects"],
         max_users_in_station=policy["max_users_in_station"],
         max_stations=policy["max_stations"],
-        max_project_types=policy["max_project_types"],
+        max_mission_types=policy["max_project_types"],
         max_cloud_storage_space=policy["max_cloud_storage_space"],
         max_spend_per_day=policy.get("max_spend_per_day", None),
         max_spend_per_week=policy.get("max_spend_per_week", None),
