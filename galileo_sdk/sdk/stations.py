@@ -1375,7 +1375,8 @@ class StationsSdk(EventsSdk):
                             edit_job_resource_limits=None,
                             manage_volumes=None,
                             reject_user_requests=None,
-                            create_tunnels=None):
+                            create_tunnels=None,
+                            allowed_mission_types=None):
         """
         Updates an existing role
 
@@ -1410,6 +1411,7 @@ class StationsSdk(EventsSdk):
         :param manage_volumes: bool
         :param reject_user_requests: bool
         :param create_tunnels: bool
+        :param allowed_mission_types: list(str)
         :return: StationRole
 
         Example:
@@ -1449,6 +1451,7 @@ class StationsSdk(EventsSdk):
             manage_volumes=manage_volumes,
             reject_user_requests=reject_user_requests,
             create_tunnels=create_tunnels,
+            allowed_mission_types=allowed_mission_types,
         )
         return self._stations_service.update_station_role(
             station_id, station_role_id, request)
