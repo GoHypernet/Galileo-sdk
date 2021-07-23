@@ -22,5 +22,5 @@ class CargoBay:
     def __str__(self):
         return "CargoBay: {name}".format(name=self.name)
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return self.__str__()
