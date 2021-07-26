@@ -571,7 +571,7 @@ def test_remove_lzs_from_station(mocked_requests):
 def test_add_volumes_to_station(mocked_requests):
     # Call
     r = stations_repo.add_volume_to_station(STATION_ID, NAME, MOUNT_POINT,
-                                            ACCESS)
+                                             ACCESS)
 
     # Act
     mocked_requests.assert_called_once_with(

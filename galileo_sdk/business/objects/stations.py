@@ -25,24 +25,24 @@ class EVolumeAccess(enum.Enum):
 
 
 class VolumeHostPath:
-    def __init__(self, volumehostpathid, mid, host_path):
+    def __init__(self, volumehostpathid, lz_id, host_path):
         self.volumehostpathid = volumehostpathid
-        self.mid = mid
+        self.lz_id = lz_id
         self.host_path = host_path
 
 
 class Volume:
     def __init__(
         self,
-        stationid,
+        station_id,
         name,
         mount_point,
         access,
         host_paths,
-        volumeid,
+        volume_id,
     ):
-        self.volumeid = volumeid
-        self.stationid = stationid
+        self.volumeid = volume_id
+        self.stationid = station_id
         self.name = name
 
         self.mount_point = mount_point
@@ -63,8 +63,8 @@ class EStationUserRole(enum.Enum):
 class StationUser:
     def __init__(
         self,
-        stationuserid,
-        userid,
+        stationuser_id,
+        user_id,
         status=None,
         station_id=None,
         username=None,
@@ -72,8 +72,8 @@ class StationUser:
         creation_timestamp=None,
         updated_timestamp=None,
     ):
-        self.stationuserid = stationuserid
-        self.userid = userid
+        self.stationuser_id = stationuser_id
+        self.user_id = user_id
         self.status = status
         self.station_id = station_id
         self.username = username
@@ -86,7 +86,7 @@ class PublicStation:
     def __init__(
         self,
         name,
-        stationid,
+        station_id,
         description=None,
         creation_timestamp=None,
         updated_timestamp=None,
@@ -95,7 +95,7 @@ class PublicStation:
         allow_auto_join=None,
         jobs_in_queue_count=None,
         member_count=None,
-        mid_count=None,
+        lz_id_count=None,
         resource_policy=None,
         user_count=None,
         user_status=None,
@@ -120,7 +120,7 @@ class PublicStation:
         :param user_status: Status of the user in the station
         :param volume_count: Number of volumes in the station
         """
-        self.stationid = stationid
+        self.station_id = station_id
         self.name = name
         self.description = description
 
@@ -131,7 +131,7 @@ class PublicStation:
         self.allowed_mission_types = allowed_mission_types
         self.jobs_in_queue_count = jobs_in_queue_count
         self.member_count = member_count
-        self.mid_count = mid_count
+        self.lz_id_count = lz_id_count
         self.resource_policy = resource_policy
         self.user_count = user_count
         self.user_status = user_status
