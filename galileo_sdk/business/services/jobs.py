@@ -154,7 +154,7 @@ class JobsService:
         :type mission_ids: List[str], optional
         :param archived: Search only archived missions, defaults to False
         :type archived: bool, optional
-        :param receiver_archived: Filter by receiver archived TODO: ?, defaults to False
+        :param receiver_archived: Filter by jobs archived by the receiver, defaults to False
         :type receiver_archived: bool, optional
         :param partial_names: Filter by partial names, defaults to None
         :type partial_names: List[str], optional

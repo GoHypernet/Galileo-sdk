@@ -13,6 +13,16 @@ class MissionsRepository(RequestsRepository):
         auth_provider,
         namespace,
     ):
+        """
+        Mission repository
+
+        :param settings_repository: Settings repository
+        :type settings_repository: SettingsRepository
+        :param auth_provider: Authentication provider
+        :type auth_provider: AuthProvider
+        :param namespace: Backend URL
+        :type namespace: str
+        """
         super(MissionsRepository, self).__init__(
             settings_repository=settings_repository,
             auth_provider=auth_provider,
@@ -20,12 +30,28 @@ class MissionsRepository(RequestsRepository):
         )
 
     def list_missions(self, query):
+        """
+        List missions
+
+        :param query: Query string to filter missions
+        :type query: str
+        :return: List of missions
+        :rtype: List[Mission]
+        """
         response = self._get("/projects", query=query)
         json = response.json()
         missions = json["projects"]
         return [mission_dict_to_mission(mission) for mission in missions]
 
     def create_mission(self, create_mission_request):
+        """
+        Create a new mission
+
+        :param request: Create mission request
+        :type request: CreateMissionRequest
+        :return: New mission
+        :rtype: Mission
+        """
         body = {
             "name": create_mission_request.name,
             "description": create_mission_request.description,
@@ -45,6 +71,17 @@ class MissionsRepository(RequestsRepository):
         return mission_dict_to_mission(mission)
 
     def upload_single_file(self, mission_id, file, filename):
+        """
+        Upload a single file to a mission
+        :param mission_id: Mission ID
+        :type mission_id: str
+        :param file: File to upload
+        :type file: File
+        :param filename: Filename
+        :type filename: str
+        :return: Succesfully uploaded files
+        :rtype: bool
+        """
         r = self._post(
             "/projects/{mission_id}/files".format(mission_id=mission_id),
             files=file,
@@ -58,6 +95,22 @@ class MissionsRepository(RequestsRepository):
                            cpu_count=None,
                            memory_amount=None,
                            gpu_count=None):
+        """
+        Run a job on a station
+        
+        :param mission_id: Mission id of the mission to run the job on
+        :type mission_id: str
+        :param station_id: Station id of the station to run the job on
+        :type station_id: str
+        :param cpu_count: Cpu count to run the job with, defaults to None
+        :type cpu_count: number, optional
+        :param memory_amount: Memory amount to run the job with, defaults to None
+        :type memory_amount: number, optional
+        :param gpu_count: GPU count to run the job with, defaults to None
+        :type gpu_count: number, optional
+        :return: Job that was run
+        :rtype: Job #TODO Double Check
+        """
         response = self._post(
             "/projects/{mission_id}/jobs".format(mission_id=mission_id),
             data={
@@ -78,6 +131,24 @@ class MissionsRepository(RequestsRepository):
                       cpu_count=None,
                       memory_amount=None,
                       gpu_count=None):
+        """
+        Run a job on a specific LZ
+
+        :param mission_id: Mission id of the mission to run the job on
+        :type mission_id: str
+        :param station_id: Station id of the station to run the job on
+        :type station_id: str
+        :param lz_id: Specific LZ to run the job on
+        :type lz_id: str
+        :param cpu_count: Cpu count to run the job with, defaults to None
+        :type cpu_count: number, optional
+        :param memory_amount: Memory amount to run the job with, defaults to None
+        :type memory_amount: number, optional
+        :param gpu_count: GPU count to run the job with, defaults to None
+        :type gpu_count: number, optional
+        :return: Job that was run
+        :rtype: Job 
+        """
         response = self._post(
             "/projects/{mission_id}/jobs".format(mission_id=mission_id),
             data={
@@ -93,6 +164,15 @@ class MissionsRepository(RequestsRepository):
         return job_dict_to_job(job)
 
     def get_mission_files(self, mission_id):
+        """
+        Get files for/from a mission
+
+        :param mission_id: Mission id of the mission to get files for/from
+        :type mission_id: str
+        :return: Files for/from the mission
+        :rtype: List[FileListing]
+
+        """
         response = self._get(
             "/projects/{mission_id}/files".format(mission_id=mission_id))
         json = response.json()
@@ -100,11 +180,27 @@ class MissionsRepository(RequestsRepository):
         return [file_dict_to_file_listing(file) for file in json]
 
     def delete_mission(self, mission_id):
+        """
+        Delete a mission
+
+        :param mission_id: Mission id of the mission to delete
+        :type mission_id: str
+        :return: True if mission was deleted, False otherwise
+        :rtype: bool
+        """
         response = self._delete(
             "/projects/{mission_id}".format(mission_id=mission_id))
         return response.json()
 
     def update_mission(self, update_project_request):
+        """
+        Update a mission
+
+        :param update_mission_request: Update mission request
+        :type update_mission_request: UpdateMissionRequest
+        :return: Updated Mission
+        :rtype: Mission #TODO Double Check 
+        """
         body = {
             "id": update_project_request.mission_id,
             "name": update_project_request.name,
@@ -126,12 +222,28 @@ class MissionsRepository(RequestsRepository):
         return json
 
     def delete_file(self, mission_id, query):
+        """
+        Delete a file
+
+        :param mission_id: Determines the mission to delete the file from
+        :type mission_id: str
+        :param query: Query to use to find the file
+        :type query: str
+        :return: Misssion ID of the mission the file was deleted from
+        :rtype: str
+        """
         self._delete(
             "projects/{mission_id}/files".format(mission_id=mission_id),
             query=query)
         return mission_id
 
     def list_mission_types(self):
+        """
+        List all mission types
+
+        :return: All mission types
+        :rtype: List[MissionType]
+        """
         response = self._get("/projecttypes/summaries")
         json = response.json()
         missiontypes = json["project_types"]
@@ -141,6 +253,14 @@ class MissionsRepository(RequestsRepository):
         ]
 
     def get_mission_type(self, query):
+        """
+        Get a mission type
+
+        :param query: Filter mission type by this query
+        :type query: str
+        :return: Selected mission type
+        :rtype: MissionType
+        """
         response = self._get("/projecttypes", query=query)
         json = response.json()
         missiontypes = json["projecttypes"]
@@ -148,6 +268,14 @@ class MissionsRepository(RequestsRepository):
 
 
 def missiontype_dict_to_missiontype(missiontype):
+    """
+    Convert a mission type dictionary to a mission type object
+
+    :param missiontype: A mission type dictionary
+    :type missiontype: Dict
+    :return: A mission type object
+    :rtype: MissionType
+    """
     return MissionType(
         missiontype["id"],
         missiontype["name"],
@@ -174,6 +302,14 @@ def missiontype_dict_to_missiontype(missiontype):
 
 
 def directory_dict_to_directory_listing(directory):
+    """
+    Recursively convert a directory dictionary to a directory listing object
+
+    :param directory: A directory dictionary
+    :type directory: Dict
+    :return: Directory listing object
+    :rtype: DirectoryListing
+    """
     return DirectoryListing(
         directory["storage_id"],
         directory["path"],
@@ -186,6 +322,14 @@ def directory_dict_to_directory_listing(directory):
 
 
 def mission_dict_to_mission(mission):
+    """
+    Convert a mission dictionary to a mission object
+
+    :param mission: Mission dictionary
+    :type mission: Dict
+    :return: Mission object
+    :rtype: Mission
+    """
     return Mission(mission["id"], mission["name"], mission["description"],
                    mission["source_storage_id"], mission["source_path"],
                    mission["destination_storage_id"],
@@ -199,6 +343,14 @@ def mission_dict_to_mission(mission):
 
 
 def file_dict_to_file_listing(file):
+    """
+    Convert a file dictionary to a file listing object
+
+    :param file: File dictionary
+    :type file: Dict
+    :return: File listing object
+    :rtype: FileListing
+    """
     return FileListing(
         file["filename"],
         file["path"],
@@ -210,6 +362,13 @@ def file_dict_to_file_listing(file):
 
 
 def job_dict_to_job(job):
+    """
+    Convert a job dictionary to a job object
+    :param job: Job dictionary
+    :type job: Dict
+    :return: Job object
+    :rtype: Job
+    """
     return Job(
         job_id=job["jobid"],
         receiver_id=job["receiverid"],
@@ -239,6 +398,13 @@ def job_dict_to_job(job):
 
 
 def job_status_dict_to_job_status(job_status):
+    """
+    Json to JobStatus object
+    :param job_status: Job status dictionary
+    :type job_status: Dict
+    :return: JobStatus object
+    :rtype: JobStatus
+    """
     status = JobStatus(
         datetime.fromtimestamp(job_status["timestamp"]),
         EJobStatus[job_status["status"]],
