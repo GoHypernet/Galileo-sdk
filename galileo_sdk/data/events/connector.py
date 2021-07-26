@@ -56,7 +56,7 @@ if sys.version_info[0] == 3:
         StationUserWithdrawnEvent,
     )
     from galileo_sdk.data.repositories.jobs import job_dict_to_job
-    from galileo_sdk.data.repositories.lz import machine_dict_to_machine
+    from galileo_sdk.data.repositories.lz import lz_dict_to_lz
     from galileo_sdk.data.repositories.stations import (
         station_dict_to_station,
         volume_dict_to_volume,
@@ -64,7 +64,10 @@ if sys.version_info[0] == 3:
 
     class GalileoConnector:
         def __init__(
-            self, settings_repo, auth_provider, namespace,
+            self,
+            settings_repo,
+            auth_provider,
+            namespace,
         ):
             self._settings_repo = settings_repo
             self._auth_provider = auth_provider
@@ -87,10 +90,11 @@ if sys.version_info[0] == 3:
             token = self._auth_provider.get_access_token()
             self._socket = socketio.Client()
             self._socket.connect(
-                "{backend}{namespace}".format(
-                    backend=settings.backend, namespace=self.namespace
-                ),
-                headers={"Authorization": "Bearer {token}".format(token=token)},
+                "{backend}{namespace}".format(backend=settings.backend,
+                                              namespace=self.namespace),
+                headers={
+                    "Authorization": "Bearer {token}".format(token=token)
+                },
                 transports="websocket",
                 namespaces=[self.namespace],
             )
@@ -118,202 +122,182 @@ if sys.version_info[0] == 3:
             @self.on("machine/status_updated")
             def on_lz_status_update(data):
                 self.lz_events.lz_status_update(
-                    LzStatusUpdateEvent(
-                        lz_id=data["mid"], status=ELzStatus[data["status"]]
-                    )
-                )
+                    LzStatusUpdateEvent(lz_id=data["mid"],
+                                        status=ELzStatus[data["status"]]))
 
             @self.on("machine/registered")
             def on_lz_registered(data):
                 self.lz_events.lz_registered(
-                    LzRegisteredEvent(machine_dict_to_machine(data["machine"]))
-                )
+                    LzRegisteredEvent(lz_dict_to_lz(data["machine"])))
 
             @self.on("machine/hardware_updated")
             def on_machine_hardware_updated(data):
                 self.lz_events.lz_hardware_update(
-                    LzHardwareUpdateEvent(machine_dict_to_machine(data["machine"]))
-                )
+                    LzHardwareUpdateEvent(lz_dict_to_lz(data["machine"])))
 
         def _register_jobs_listeners(self):
             # Jobs
             @self.on("job_launcher_updated")
             def on_job_launcher_updated(data):
                 self.jobs_events.job_launcher_updated(
-                    JobLauncherUpdatedEvent(job_dict_to_job(data["job"]))
-                )
+                    JobLauncherUpdatedEvent(job_dict_to_job(data["job"])))
 
             @self.on("station_job_updated")
             def on_station_job_updated(data):
                 self.jobs_events.station_job_updated(
-                    StationJobUpdatedEvent(job_dict_to_job(data["job"]))
-                )
+                    StationJobUpdatedEvent(job_dict_to_job(data["job"])))
 
             @self.on("job_launcher_submitted")
             def on_job_launcher_submitted(data):
                 self.jobs_events.job_launcher_submitted(
-                    JobLauncherSubmittedEvent(job_dict_to_job(data["job"]))
-                )
+                    JobLauncherSubmittedEvent(job_dict_to_job(data["job"])))
 
         def _register_stations_listeners(self):
             # Stations
             @self.on("new_station")
             def on_new_station(data):
                 self.stations_events.new_station(
-                    NewStationEvent(station_dict_to_station(data["station"]))
-                )
+                    NewStationEvent(station_dict_to_station(data["station"])))
 
             @self.on("station_admin_invite_sent")
             def on_station_admin_invite_sent(data):
                 self.stations_events.station_admin_invite_sent(
-                    StationAdminInviteSentEvent(data["stationid"], data["userids"])
-                )
+                    StationAdminInviteSentEvent(data["stationid"],
+                                                data["userids"]))
 
             @self.on("station_user_invite_received")
             def on_station_user_invite_received(data):
                 self.stations_events.station_user_invite_received(
                     StationUserInviteReceivedEvent(
-                        station_dict_to_station(data["station"])
-                    )
-                )
+                        station_dict_to_station(data["station"])))
 
             @self.on("station_admin_invite_accepted")
             def on_station_admin_invite_accepted(data):
                 self.stations_events.station_admin_invite_accepted(
-                    StationAdminInviteAcceptedEvent(data["stationid"], data["userid"])
-                )
+                    StationAdminInviteAcceptedEvent(data["stationid"],
+                                                    data["userid"]))
 
             @self.on("station_member_member_added")
             def on_station_member_member_added(data):
                 self.stations_events.station_member_member_added(
-                    StationMemberMemberEvent(data["stationid"], data["userid"])
-                )
+                    StationMemberMemberEvent(data["stationid"],
+                                             data["userid"]))
 
             @self.on("station_user_invite_accepted")
             def on_station_user_invite_accepted(data):
                 self.stations_events.station_user_invite_accepted(
-                    StationUserInviteAcceptedEvent(data["stationid"], data["userid"])
-                )
+                    StationUserInviteAcceptedEvent(data["stationid"],
+                                                   data["userid"]))
 
             @self.on("station_admin_invite_rejected")
             def on_station_admin_invite_rejected(data):
                 self.stations_events.station_admin_invite_rejected(
-                    StationAdminInviteRejectedEvent(data["stationid"], data["userids"])
-                )
+                    StationAdminInviteRejectedEvent(data["stationid"],
+                                                    data["userids"]))
 
             @self.on("station_user_invite_rejected")
             def on_station_user_invite_rejected(data):
                 self.stations_events.station_user_invite_rejected(
-                    StationUserInviteRejectedEvent(data["stationid"], data["userids"])
-                )
+                    StationUserInviteRejectedEvent(data["stationid"],
+                                                   data["userids"]))
 
             @self.on("station_admin_request_received")
             def on_station_admin_request_received(data):
                 self.stations_events.station_admin_request_received(
-                    StationAdminRequestReceivedEvent(data["stationid"], data["userid"])
-                )
+                    StationAdminRequestReceivedEvent(data["stationid"],
+                                                     data["userid"]))
 
             @self.on("station_user_request_sent")
             def on_station_user_request_sent(data):
                 self.stations_events.station_user_request_sent(
-                    StationUserRequestSentEvent(data["stationid"], data["userid"])
-                )
+                    StationUserRequestSentEvent(data["stationid"],
+                                                data["userid"]))
 
             @self.on("station_admin_request_accepted")
             def on_station_admin_request_accepted(data):
                 self.stations_events.station_admin_request_accepted(
-                    StationAdminRequestAcceptedEvent(data["stationid"], data["userid"])
-                )
+                    StationAdminRequestAcceptedEvent(data["stationid"],
+                                                     data["userid"]))
 
             @self.on("station_user_request_accepted")
             def on_station_user_request_accepted(data):
                 self.stations_events.station_user_request_accepted(
-                    StationUserRequestAcceptedEvent(data["stationid"])
-                )
+                    StationUserRequestAcceptedEvent(data["stationid"]))
 
             @self.on("station_admin_request_rejected")
             def on_station_admin_request_rejected(data):
                 self.stations_events.station_admin_request_rejected(
-                    StationAdminRequestRejectedEvent(data["stationid"], data["userid"])
-                )
+                    StationAdminRequestRejectedEvent(data["stationid"],
+                                                     data["userid"]))
 
             @self.on("station_user_request_rejected")
             def on_station_user_request_rejected(data):
                 self.stations_events.station_user_request_rejected(
-                    StationUserRequestRejectedEvent(data["stationid"])
-                )
+                    StationUserRequestRejectedEvent(data["stationid"]))
 
             @self.on("station_admin_member_removed")
             def on_station_admin_member_removed(data):
                 self.stations_events.station_admin_member_removed(
-                    StationAdminMemberRemovedEvent(data["stationid"], data["userids"])
-                )
+                    StationAdminMemberRemovedEvent(data["stationid"],
+                                                   data["userids"]))
 
             @self.on("station_admin_machine_removed")
             def on_station_admin_machine_removed(data):
                 self.stations_events.station_admin_machine_removed(
-                    StationAdminLzRemovedEvent(data["stationid"], data["mids"])
-                )
+                    StationAdminLzRemovedEvent(data["stationid"],
+                                               data["mids"]))
 
             @self.on("station_member_member_removed")
             def on_station_member_member_removed(data):
                 self.stations_events.station_member_member_removed(
-                    StationMemberMemberRemovedEvent(data["stationid"], data["userids"])
-                )
+                    StationMemberMemberRemovedEvent(data["stationid"],
+                                                    data["userids"]))
 
             @self.on("station_member_machine_removed")
             def on_station_member_machine_removed(data):
                 self.stations_events.station_member_machine_removed(
-                    StationMemberLzRemovedEvent(data["stationid"], data["mids"])
-                )
+                    StationMemberLzRemovedEvent(data["stationid"],
+                                                data["mids"]))
 
             @self.on("station_user_withdrawn")
             def on_station_user_withdrawn(data):
                 self.stations_events.station_user_withdrawn(
-                    StationUserWithdrawnEvent(data["stationid"], data["mids"])
-                )
+                    StationUserWithdrawnEvent(data["stationid"], data["mids"]))
 
             @self.on("station_user_expelled")
             def on_station_user_expelled(data):
                 self.stations_events.station_user_expelled(
-                    StationUserExpelledEvent(data["stationid"])
-                )
+                    StationUserExpelledEvent(data["stationid"]))
 
             @self.on("station_admin_destroyed")
             def on_station_admin_destroyed(data):
                 self.stations_events.station_admin_destroyed(
-                    StationAdminDestroyedEvent(data["stationid"])
-                )
+                    StationAdminDestroyedEvent(data["stationid"]))
 
             @self.on("station_member_destroyed")
             def on_station_member_destroyed(data):
                 self.stations_events.station_member_destroyed(
-                    StationMemberDestroyedEvent(data["stationid"])
-                )
+                    StationMemberDestroyedEvent(data["stationid"]))
 
             @self.on("station_user_invite_destroyed")
             def on_station_user_invite_destroyed(data):
                 self.stations_events.station_user_invite_destroyed(
-                    StationUserInviteDestroyedEvent(data["stationid"])
-                )
+                    StationUserInviteDestroyedEvent(data["stationid"]))
 
             @self.on("station_user_request_destroyed")
             def on_station_user_request_destroyed(data):
                 self.stations_events.station_user_request_destroyed(
-                    StationUserRequestDestroyedEvent(data["stationid"])
-                )
+                    StationUserRequestDestroyedEvent(data["stationid"]))
 
             @self.on("station_admin_machine_added")
             def on_station_admin_machine_added(data):
                 self.stations_events.station_admin_machine_added(
-                    StationAdminLzAddedEvent(data["stationid"], data["mids"])
-                )
+                    StationAdminLzAddedEvent(data["stationid"], data["mids"]))
 
             @self.on("station_member_machine_added")
             def on_station_member_machine_added(data):
                 self.stations_events.station_member_machine_added(
-                    StationMemberLzAddedEvent(data["stationid"], data["mids"])
-                )
+                    StationMemberLzAddedEvent(data["stationid"], data["mids"]))
 
             @self.on("station_admin_volume_added")
             def on_station_admin_volume_added(data):
@@ -324,8 +308,7 @@ if sys.version_info[0] == 3:
                             volume_dict_to_volume(value)
                             for key, value in data["volumes"].items()
                         ],
-                    )
-                )
+                    ))
 
             @self.on("station_member_volume_added")
             def on_station_member_volume_added(data):
@@ -336,8 +319,7 @@ if sys.version_info[0] == 3:
                             volume_dict_to_volume(value)
                             for key, value in data["volumes"].items()
                         ],
-                    )
-                )
+                    ))
 
             @self.on("station_admin_volume_host_path_added")
             def on_station_admin_volume_host_path_added(data):
@@ -348,8 +330,7 @@ if sys.version_info[0] == 3:
                             volume_dict_to_volume(value)
                             for key, value in data["volumes"].items()
                         ],
-                    )
-                )
+                    ))
 
             @self.on("station_member_volume_host_path_added")
             def on_station_member_volume_host_path_added(data):
@@ -360,8 +341,7 @@ if sys.version_info[0] == 3:
                             volume_dict_to_volume(value)
                             for key, value in data["volumes"].items()
                         ],
-                    )
-                )
+                    ))
 
             @self.on("station_admin_volume_host_path_removed")
             def on_station_admin_volume_host_path_removed(data):
@@ -372,8 +352,7 @@ if sys.version_info[0] == 3:
                             volume_dict_to_volume(value)
                             for key, value in data["volumes"].items()
                         ],
-                    )
-                )
+                    ))
 
             @self.on("station_member_volume_host_path_removed")
             def on_station_member_volume_host_path_removed(data):
@@ -384,38 +363,31 @@ if sys.version_info[0] == 3:
                             volume_dict_to_volume(value)
                             for key, value in data["volumes"].items()
                         ],
-                    )
-                )
+                    ))
 
             @self.on("station_admin_volume_removed")
             def on_station_admin_volume_removed(data):
                 self.stations_events.station_admin_volume_removed(
-                    StationAdminVolumeRemovedEvent(
-                        data["stationid"], data["volume_names"]
-                    )
-                )
+                    StationAdminVolumeRemovedEvent(data["stationid"],
+                                                   data["volume_names"]))
 
             @self.on("station_member_volume_removed")
             def on_station_member_volume_removed(data):
                 self.stations_events.station_member_volume_removed(
-                    StationMemberVolumeRemovedEvent(
-                        data["stationid"], data["volume_names"]
-                    )
-                )
+                    StationMemberVolumeRemovedEvent(data["stationid"],
+                                                    data["volume_names"]))
 
             @self.on("station_admin_station_updated")
             def on_station_admin_station_updated(data):
                 self.stations_events.station_admin_station_updated(
-                    StationAdminStationUpdated(station_dict_to_station(data["station"]))
-                )
+                    StationAdminStationUpdated(
+                        station_dict_to_station(data["station"])))
 
             @self.on("station_member_station_updated")
             def on_station_member_station_updated(data):
                 self.stations_events.station_member_station_updated(
                     StationMemberStationUpdated(
-                        station_dict_to_station(data["station"])
-                    )
-                )
+                        station_dict_to_station(data["station"])))
 
         def disconnect(self):
             if self._socket is None:
