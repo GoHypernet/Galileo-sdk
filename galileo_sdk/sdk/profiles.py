@@ -24,6 +24,8 @@ class ProfilesSdk:
 
         Example:
             >>> users = galileo.profiles.list_users()
+            >>> profile_name = users[0].username
+            >>> profile_id = users[0].user_id
         """
         return self._profile_service.list_users(
             userids=user_ids,
@@ -42,7 +44,7 @@ class ProfilesSdk:
 
         Example:
             >>> profile = galileo.profiles.self()
-            >>> print(profile.id, profile.username)
+            >>> print(profile.user_id, profile.username)
         """
         return self._profile_service.self()
 

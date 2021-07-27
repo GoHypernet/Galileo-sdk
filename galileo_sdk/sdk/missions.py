@@ -413,9 +413,10 @@ class MissionsSdk:
         
         Example:
         
-        >>> my_missions = galileo.missions.list_missions()
-        >>> framework_type = galileo.missions.get_mission_type(my_missions[0].mission_type_id)
-        >>> print("Framework Name: ", framework_type.name)
+        >>> mission_types = galileo.missions.list_mission_types()
+        >>> mission_type_id = mission_types[0].id
+        >>> my_mission_type = galileo.missions.get_mission_type(mission_type_id)
+        >>> print("Mission Type Name: ", my_mission_type.name)
         """
         return self._missions_service.get_mission_type(mission_type_id)
 
@@ -430,11 +431,13 @@ class MissionsSdk:
         
         Example:
         
-        >>> my_missions = galileo.missions.list_missions()
-        >>> framework_type = galileo.missions.get_mission_type(my_missions[0].mission_type_id)
-        >>> framework_settings = galileo.missions.get_mission_type_settings_info(framework_type)
-        >>> for parameter in framework_settings:
-        >>>     print(parameter, framework_settings[parameter])
+        >>> mission_types = galileo.missions.list_mission_types()
+        >>> mission_type_id = mission_types[0].id
+        >>> my_mission_type = galileo.missions.get_mission_type(mission_type_id)
+       
+        >>> my_mission_type_settings = galileo.missions.get_mission_type_settings_info(my_mission_type.id)
+        >>> for parameter in my_missin_type_settings:
+        >>>     print(parameter, my_mission_type_settings[parameter])
         """
         return self._missions_service.get_mission_type_settings_info(
             mission_type_id)
