@@ -109,7 +109,7 @@ class MissionsRepository(RequestsRepository):
         :param gpu_count: GPU count to run the job with, defaults to None
         :type gpu_count: number, optional
         :return: Job that was run
-        :rtype: Job #TODO Double Check
+        :rtype: Job 
         """
         response = self._post(
             "/projects/{mission_id}/jobs".format(mission_id=mission_id),
@@ -192,34 +192,34 @@ class MissionsRepository(RequestsRepository):
             "/projects/{mission_id}".format(mission_id=mission_id))
         return response.json()
 
-    def update_mission(self, update_project_request):
+    def update_mission(self, update_mission_request):
         """
         Update a mission
 
         :param update_mission_request: Update mission request
         :type update_mission_request: UpdateMissionRequest
         :return: Updated Mission
-        :rtype: Mission #TODO Double Check 
+        :rtype: Mission
         """
         body = {
-            "id": update_project_request.mission_id,
-            "name": update_project_request.name,
-            "description": update_project_request.description,
-            "source_storage_id": update_project_request.source_storage_id,
+            "id": update_mission_request.mission_id,
+            "name": update_mission_request.name,
+            "description": update_mission_request.description,
+            "source_storage_id": update_mission_request.source_storage_id,
             "destination_storage_id":
-            update_project_request.destination_storage_id,
-            "source_path": update_project_request.source_path,
-            "destination_path": update_project_request.destination_path,
+            update_mission_request.destination_storage_id,
+            "source_path": update_mission_request.source_path,
+            "destination_path": update_mission_request.destination_path,
         }
-        if update_project_request.settings is not None:
-            body.update({"settings": update_project_request.settings})
+        if update_mission_request.settings is not None:
+            body.update({"settings": update_mission_request.settings})
         response = self._put(
             "/projects/{mission_id}".format(
-                mission_id=update_project_request.mission_id),
+                mission_id=update_mission_request.mission_id),
             data=body,
         )
         json = response.json()
-        return json
+        return mission_dict_to_mission(json)
 
     def delete_file(self, mission_id, query):
         """

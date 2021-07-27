@@ -190,7 +190,7 @@ class MissionsService:
         :param gpu_count: GPU count to run the job with, defaults to None
         :type gpu_count: number, optional
         :return: Job that was run
-        :rtype: Job #TODO Double Check
+        :rtype: Job 
         """
         return self._missions_repo.run_job_on_station(mission_id, station_id,
                                                       cpu_count, memory_amount,
@@ -371,28 +371,26 @@ class MissionsService:
 
         return settings
 
-    # TODO - List vs single, test with postman
-    def get_mission_type(self, mission_type_ids):
+    def get_mission_type(self, mission_type_id):
         """
         Gets a mission type
 
-        :param mission_type_id: Mission type IDs of the mission
-        :type mission_type_id: List[str]
-        :return: List of mission type objects
-        :rtype: List[MissionType]
+        :param mission_type_id: Mission type ID of the mission
+        :type mission_type_id: str
+        :return: Get a mission type
+        :rtype: MissionType
         """
-        query = generate_query_str({"ids": mission_type_ids})
+        query = generate_query_str({"ids": [mission_type_id]})
         return self._missions_repo.get_mission_type(query)
 
-    # TODO - List vs single, test with postman
-    def get_mission_type_settings_info(self, mission_type_ids):
+    def get_mission_type_settings_info(self, mission_type_id):
         """
         Gets mission type settings
 
-        :param mission_type_ids: Mission IDs to get settings from
-        :type mission_type_ids: List[str]
+        :param mission_type_id: Mission ID to get settings from
+        :type mission_type_id: str
         :return: Dict of mission type settings
         :rtype: Dict
         """
-        mission_type = self.get_mission_type(mission_type_ids)
+        mission_type = self.get_mission_type(mission_type_id)
         return self._get_settings(mission_type.wizard_spec)
