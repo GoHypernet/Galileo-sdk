@@ -7,7 +7,6 @@ class ProfilesSdk:
         user_ids=None,
         usernames=None,
         partial_usernames=None,
-        public_keys=None,
         page=None,
         items=None,
     ):
@@ -17,7 +16,6 @@ class ProfilesSdk:
         :param user_ids: Optional[List[str]]: filter by list of userids
         :param usernames: Optional[List[str]]: filter by list of usernames
         :param partial_usernames: Optional[List[str]]: filter by partial usernames
-        :param public_keys: Optional[List[str]]: filter by public key
         :param page: Optional[int]: page #
         :param items: Optional[int]: items per page
         :return: List[Profile]
@@ -31,7 +29,6 @@ class ProfilesSdk:
             user_ids=user_ids,
             usernames=usernames,
             partial_usernames=partial_usernames,
-            public_keys=public_keys,
             page=page,
             items=items,
         )

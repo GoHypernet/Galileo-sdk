@@ -3,6 +3,12 @@ from ..utils.generate_query_str import generate_query_str
 
 class StationsService:
     def __init__(self, stations_repo):
+        """
+        Station service 
+
+        :param stations_repo: Station repository
+        :type stations_repo: StationsRepository
+        """
         self._stations_repo = stations_repo
 
     def list_stations(
@@ -11,7 +17,7 @@ class StationsService:
         names=None,
         lz_ids=None,
         user_roles=None,
-        volumeids=None,
+        volume_ids=None,
         descriptions=None,
         page=1,
         items=25,
@@ -31,6 +37,35 @@ class StationsService:
         :param names: Station names to filter by
         :type names: List[str], optional
         :param lz_ids: Landing Zone ids to filter by
+        :type lz_ids: List[str], optional
+        :param user_roles: User roles to filter by
+        :type user_roles: List[str], optional
+        :param volume_ids: Volume ids to filter by
+        :type volume_ids: List[str], optional
+        :param descriptions: Descriptions to filter by
+        :type descriptions: List[str], optional
+        :param page: Page to get
+        :type page: int, optional
+        :param items: Items per page
+        :type items: int, optional
+        :param active: Filter by active stations, defaults to True
+        :type active: bool, optional
+        :param user_ids: User ids to filter by
+        :type user_ids: List[str], optional
+        :param partial_names: Partial station names to filter by
+        :type partial_names: List[str], optional
+        :param updated: Filter by updated stations, defaults to None
+        :type updated: str, optional
+        :param lz_count_min: Filter by stations with at least this many landing zones, defaults to None
+        :type lz_count_min: int, optional
+
+        :param lz_count_max: Filter by stations with at most this many landing zones, defaults to None
+        :type lz_count_max: int, optional
+        :param lz_status: Filter by stations with this landing zone status, defaults to None
+        :type lz_status: str, optional
+        :return: List of stations
+        :rtype: List[Station]
+
         """
         query = generate_query_str({
             "page": page,
@@ -39,7 +74,7 @@ class StationsService:
             "names": names,
             "mids": lz_ids,
             "user_roles": user_roles,
-            "volumeids": volumeids,
+            "volumeids": volume_ids,
             "descriptions": descriptions,
             "active": active,
             "userids": user_ids,

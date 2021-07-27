@@ -41,7 +41,7 @@ def test_list_users():
 
     # Assert
     assert len(r) == 2
-    assert r[0].userid == "userid"
+    assert r[0].user_id == "userid"
     assert r[1].username == "username2"
     assert r[1].lz_ids[0] == "mids2"
     assert r[1].stored_cards[0].id == "0x2"
@@ -63,7 +63,7 @@ def test_get_profile():
     r = profile_service.self()
 
     # Assert
-    assert r.userid == "userid"
+    assert r.user_id == "userid"
     assert r.username == "username"
     assert r.stored_cards[0].id == "0x"
     assert r.lz_ids[0] == "mids"
@@ -72,7 +72,7 @@ def test_get_profile():
 def test_list_station_invites():
     profile_repo.list_station_invites.return_value = [
         Station(
-            stationid="stationid",
+            station_id="stationid",
             description="description",
             name="name",
             users=[

@@ -538,11 +538,11 @@ class StationsSdk(EventsSdk):
             >>>    print(station.name)
         """
         return self._stations_service.list_stations(
-            stationids=station_ids,
+            station_ids=station_ids,
             names=names,
             lz_ids=lz_ids,
             user_roles=user_roles,
-            volumeids=volume_ids,
+            volume_ids=volume_ids,
             descriptions=descriptions,
             page=page,
             items=items,

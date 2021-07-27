@@ -105,7 +105,7 @@ class PublicStation:
         Public Station Object
 
         :param name: str: Human readable name of the Station
-        :param stationid: str: UUID of the Station
+        :param station_id: str: UUID of the Station
         :param description: Optional[str]: Optional description of the Station
         :param creation_timestamp: Optional[str]: Time the Station was created
         :param updated_timestamp: Optional[str]: Time the Station was last updated
@@ -148,7 +148,7 @@ class PublicStation:
 class Station:
     def __init__(
         self,
-        stationid,
+        station_id,
         name,
         description,
         users,
@@ -167,7 +167,7 @@ class Station:
         """
         Station Object
 
-        :param stationid: Optional[List[str]]: UUID of the Station
+        :param station_id: Optional[List[str]]: UUID of the Station
         :param name: Optional[List[str]]: Human readable name of the Station
         :param description: Optional[List[str]]: Optional description of the Station
         :param users: Optional[int]: List of users that belong to the Station
@@ -179,7 +179,7 @@ class Station:
         :param updated_timestamp: Time the Station was last updated
         :param autoscale_settings: Currently not used
         """
-        self.stationid = stationid
+        self.station_id = station_id
         self.name = name
         self.description = description
         self.users = users
@@ -209,9 +209,9 @@ class NewStationEvent:
 
 
 class StationAdminInviteSentEvent:
-    def __init__(self, stationid, userids):
-        self.stationid = stationid
-        self.userids = userids
+    def __init__(self, station_id, user_ids):
+        self.station_id = station_id
+        self.user_ids = user_ids
 
 
 class StationUserInviteReceivedEvent:
@@ -220,96 +220,96 @@ class StationUserInviteReceivedEvent:
 
 
 class StationAdminInviteAcceptedEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.station_id = station_id
+        self.user_id = user_id
 
 
 class StationMemberMemberEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.stationid = station_id
+        self.user_id = user_id
 
 
 class StationUserInviteAcceptedEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.stationid = station_id
+        self.user_id = user_id
 
 
 class StationAdminInviteRejectedEvent:
-    def __init__(self, stationid, userids):
-        self.stationid = stationid
-        self.userids = userids
+    def __init__(self, station_id, user_ids):
+        self.station_id = station_id
+        self.user_ids = user_ids
 
 
 class StationUserInviteRejectedEvent:
-    def __init__(self, stationid, userids):
-        self.stationid = stationid
-        self.userids = userids
+    def __init__(self, station_id, user_ids):
+        self.stationid = station_id
+        self.user_ids = user_ids
 
 
 class StationAdminRequestReceivedEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.station_id = station_id
+        self.user_id = user_id
 
 
 class StationUserRequestSentEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.station_id = station_id
+        self.user_id = user_id
 
 
 class StationAdminRequestAcceptedEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.station_id = station_id
+        self.user_id = user_id
 
 
 class StationUserRequestAcceptedEvent:
-    def __init__(self, stationid):
-        self.stationid = stationid
+    def __init__(self, station_id):
+        self.station_id = station_id
 
 
 class StationAdminRequestRejectedEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.station_id = station_id
+        self.user_id = user_id
 
 
 class StationUserRequestRejectedEvent:
-    def __init__(self, stationid):
-        self.stationid = stationid
+    def __init__(self, station_id):
+        self.station_id = station_id
 
 
 class StationAdminMemberRemovedEvent:
-    def __init__(self, stationid, userids):
-        self.stationid = stationid
-        self.userids = userids
+    def __init__(self, station_id, user_ids):
+        self.station_id = station_id
+        self.user_ids = user_ids
 
 
 class StationAdminLzRemovedEvent:
-    def __init__(self, stationid, lz_ids):
-        self.stationid = stationid
+    def __init__(self, station_id, lz_ids):
+        self.station_id = station_id
         self.lz_ids = lz_ids
 
 
 class StationMemberMemberRemovedEvent:
-    def __init__(self, stationid, userid):
-        self.stationid = stationid
-        self.userid = userid
+    def __init__(self, station_id, user_id):
+        self.station_id = station_id
+        self.user_id = user_id
 
 
 class StationMemberLzRemovedEvent:
-    def __init__(self, stationid, lz_ids):
-        self.stationid = stationid
+    def __init__(self, station_id, lz_ids):
+        self.station_id = station_id
         self.lz_ids = lz_ids
 
 
 class StationUserWithdrawnEvent:
-    def __init__(self, stationid, lz_ids):
-        self.stationid = stationid
+    def __init__(self, station_id, lz_ids):
+        self.stationid = station_id
         self.lz_ids = lz_ids
 
 
@@ -319,82 +319,82 @@ class StationUserExpelledEvent:
 
 
 class StationAdminDestroyedEvent:
-    def __init__(self, stationid):
-        self.stationid = stationid
+    def __init__(self, station_id):
+        self.station_id = station_id
 
 
 class StationMemberDestroyedEvent:
-    def __init__(self, stationid):
-        self.stationid = stationid
+    def __init__(self, station_id):
+        self.station_id = station_id
 
 
 class StationUserInviteDestroyedEvent:
-    def __init__(self, stationid):
-        self.stationid = stationid
+    def __init__(self, station_id):
+        self.station_id = station_id
 
 
 class StationUserRequestDestroyedEvent:
-    def __init__(self, stationid):
-        self.stationid = stationid
+    def __init__(self, station_id):
+        self.station_id = station_id
 
 
 class StationAdminLzAddedEvent:
-    def __init__(self, stationid, mids):
-        self.stationid = stationid
+    def __init__(self, station_id, mids):
+        self.station_id = station_id
         self.mids = mids
 
 
 class StationMemberLzAddedEvent:
-    def __init__(self, stationid, mids):
-        self.stationid = stationid
+    def __init__(self, station_id, mids):
+        self.station_id = station_id
         self.mids = mids
 
 
 class StationAdminVolumeAddedEvent:
-    def __init__(self, stationid, volumes):
-        self.stationid = stationid
+    def __init__(self, station_id, volumes):
+        self.station_id = station_id
         self.volumes = volumes
 
 
 class StationMemberVolumeAddedEvent:
-    def __init__(self, stationid, volumes):
-        self.stationid = stationid
+    def __init__(self, station_id, volumes):
+        self.station_id = station_id
         self.volumes = volumes
 
 
 class StationAdminVolumeHostPathAddedEvent:
-    def __init__(self, stationid, volumes):
-        self.stationid = stationid
+    def __init__(self, station_id, volumes):
+        self.station_id = station_id
         self.volumes = volumes
 
 
 class StationMemberVolumeHostPathAddedEvent:
-    def __init__(self, stationid, volumes):
-        self.stationid = stationid
+    def __init__(self, station_id, volumes):
+        self.station_id = station_id
         self.volumes = volumes
 
 
 class StationAdminVolumeHostPathRemovedEvent:
-    def __init__(self, stationid, volumes):
-        self.stationid = stationid
+    def __init__(self, station_id, volumes):
+        self.station_id = station_id
         self.volumes = volumes
 
 
 class StationMemberVolumeHostPathRemovedEvent:
-    def __init__(self, stationid, volumes):
-        self.stationid = stationid
+    def __init__(self, station_id, volumes):
+        self.station_id = station_id
         self.volumes = volumes
 
 
 class StationAdminVolumeRemovedEvent:
-    def __init__(self, stationid, volume_names):
-        self.stationid = stationid
+    def __init__(self, station_id, volume_names):
+        self.station_id = station_id
         self.volume_names = volume_names
 
 
 class StationMemberVolumeRemovedEvent:
-    def __init__(self, stationid, volume_names):
-        self.stationid = stationid
+    def __init__(self, station_id, volume_names):
+        self.station_id = station_id
         self.volume_names = volume_names
 
 

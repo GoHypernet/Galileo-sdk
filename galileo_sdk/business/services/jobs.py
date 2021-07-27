@@ -171,7 +171,7 @@ class JobsService:
         """
         if user_ids is None:
             self_profile = self._profile_repo.self()
-            user_ids = [self_profile.userid]
+            user_ids = [self_profile.user_id]
         query = generate_query_str(
             {
                 "page": page,

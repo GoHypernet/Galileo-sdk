@@ -62,7 +62,7 @@ def missions_cli(main, galileo: GalileoSdk):
         spinner = Halo("Retrieving your Mission", spinner="dot").start()
         userid += (self.userid, )
         missions = galileo.missions.list_missions(
-            ids=list(id),
+            mission_ids=list(id),
             names=list(name),
             user_ids=list(userid),
             page=page,
@@ -159,7 +159,8 @@ def missions_cli(main, galileo: GalileoSdk):
                        spinner="dot").start()
         # Find this jobs Mission id
         try:
-            missions_ls = galileo.missions.list_missions(ids=[job.mission_id])
+            missions_ls = galileo.missions.list_missions(
+                mission_ids=[job.mission_id])
         except Exception as e:
             print("Problem getting Mission details.", e)
             spinner.stop()
@@ -325,7 +326,7 @@ def missions_cli(main, galileo: GalileoSdk):
 
         spinner = Halo("Finding Mission.", spinner="dot").start()
         try:
-            mission = galileo.missions.list_missions(ids=[id])
+            mission = galileo.missions.list_missions(mission_ids=[id])
         except Exception as e:
             spinner.stop()
             print("Error:", e)

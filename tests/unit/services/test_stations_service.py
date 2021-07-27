@@ -77,7 +77,7 @@ def test_get_public_stations():
 
     # Assert
     assert len(r) == 5
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
 
 
 def test_create_station():

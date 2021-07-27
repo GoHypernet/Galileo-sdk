@@ -50,8 +50,8 @@ class GalileoSdk:
         self,
         auth_token=None,
         refresh_token=None,
-        username="peter@hyperdyne.io",
-        password="DistributedComputation$",
+        username="",
+        password="",
         config=None,
     ):
         """
@@ -63,7 +63,6 @@ class GalileoSdk:
         :param password: Galileo password
         :param config: production or development
         """
-        config = "http://localhost:8080"
         self.log = LogService()
 
         if "GALILEO_CONFIG" in os.environ:
