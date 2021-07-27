@@ -87,7 +87,7 @@ class LzSdk(EventsSdk):
             >>>    print(lz.name)
         """
         return self._lz_service.list_lz(lz_ids=lz_ids,
-                                        userids=user_ids,
+                                        user_ids=user_ids,
                                         page=page,
                                         items=items)
 
@@ -109,6 +109,6 @@ class LzSdk(EventsSdk):
             >>> lz = galileo.lz.update_lz("lz_id", name="new_name")
             >>> print(lz.name)
         """
-        request = UpdateLzRequest(lz_id, name, active)
+        request = UpdateLzRequest(lz_id, name=name, active=active)
 
         return self._lz_service.update(request)

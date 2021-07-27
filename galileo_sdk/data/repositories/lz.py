@@ -51,6 +51,7 @@ class LzRepository(RequestsRepository):
         lzs = json["machines"]
         return [lz_dict_to_lz(lz) for lz in lzs]
 
+    # FIXME: Could return success object rather than bool
     def delete_lz_by_id(self, lz_id):
         """
         Delete a Landing Zone by ID
