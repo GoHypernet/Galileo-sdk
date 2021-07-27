@@ -7,7 +7,7 @@ class StationsService:
 
     def list_stations(
         self,
-        stationids=None,
+        station_ids=None,
         names=None,
         lz_ids=None,
         user_roles=None,
@@ -26,8 +26,8 @@ class StationsService:
         """
         Gets a list of stations filtered by the query parameters
 
-        :param stationids: Station ids to filter by, default None
-        :type stationids: List[str], optional
+        :param station_ids: Station ids to filter by, default None
+        :type station_ids: List[str], optional
         :param names: Station names to filter by
         :type names: List[str], optional
         :param lz_ids: Landing Zone ids to filter by
@@ -35,7 +35,7 @@ class StationsService:
         query = generate_query_str({
             "page": page,
             "items": items,
-            "stationids": stationids,
+            "stationids": station_ids,
             "names": names,
             "mids": lz_ids,
             "user_roles": user_roles,
