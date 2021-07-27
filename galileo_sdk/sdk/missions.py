@@ -6,7 +6,7 @@ class MissionsSdk:
         self._missions_service = missions_service
 
     def list_missions(self,
-                      ids=None,
+                      mission_ids=None,
                       names=None,
                       user_ids=None,
                       page=1,
@@ -16,7 +16,7 @@ class MissionsSdk:
         """
         Get list of Missions associated with your account
 
-        :param ids: Optional[List[str]]: Filter by Mission UUID
+        :param mission_ids: Optional[List[str]]: Filter by Mission UUID
         :param names: Optional[List[str]]: Filter by Mission name
         :param user_ids: Optional[List[str]]: Filter by user UUID
         :param page: Optional[int]: Return a particular page number
@@ -31,7 +31,7 @@ class MissionsSdk:
             >>>    print(mission.name)
         """
         return self._missions_service.list_missions(
-            ids=ids,
+            mission_ids=mission_ids,
             names=names,
             user_ids=user_ids,
             page=page,

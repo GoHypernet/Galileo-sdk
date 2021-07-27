@@ -28,7 +28,7 @@ class ProfilesSdk:
             >>> profile_id = users[0].user_id
         """
         return self._profile_service.list_users(
-            userids=user_ids,
+            user_ids=user_ids,
             usernames=usernames,
             partial_usernames=partial_usernames,
             public_keys=public_keys,
