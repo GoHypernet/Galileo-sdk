@@ -547,7 +547,7 @@ class StationsSdk(EventsSdk):
             page=page,
             items=items,
             active=active,
-            userids=user_ids,
+            user_ids=user_ids,
             partial_names=partial_names,
             updated=updated,
             lz_count_min=lz_count_min,

@@ -16,7 +16,7 @@ class StationsService:
         page=1,
         items=25,
         active=True,
-        userids=None,
+        user_ids=None,
         partial_names=None,
         updated=None,
         lz_count_min=None,
@@ -42,7 +42,7 @@ class StationsService:
             "volumeids": volumeids,
             "descriptions": descriptions,
             "active": active,
-            "userids": userids,
+            "userids": user_ids,
             "partial_names": partial_names,
             "updated": updated,
             "machine_count_min": lz_count_min,
@@ -288,7 +288,7 @@ class StationsService:
         :param station_id: Station ID of the station to accept the request from
         :type station_id: str
         :param user_ids: List of user_ids to accept
-        :type userids: List[str]
+        :type user_ids: List[str]
         :return: Success
         :rtype: bool
         """
