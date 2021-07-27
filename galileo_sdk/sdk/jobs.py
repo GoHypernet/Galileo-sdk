@@ -1,3 +1,4 @@
+from galileo_sdk.business.services.jobs import JobsService
 from .event import EventsSdk
 from ..business.objects.jobs import UpdateJobRequest
 
@@ -88,7 +89,6 @@ class JobsSdk(EventsSdk):
         self,
         job_ids=None,
         receiver_ids=None,
-        oa_ids=None,
         user_ids=None,
         station_ids=None,
         statuses=None,
@@ -108,7 +108,6 @@ class JobsSdk(EventsSdk):
         
         :param job_ids: List[str]: Filter by job ids
         :param receiver_ids: List[str]: Filter by receiver ids
-        :param oa_ids: List[str]: Filter by offer acceptance ids
         :param user_ids: List[str]: Filter by user ids
         :param station_ids: List[str]: Filter by station ids
         :param statuses: List[str]: Filter by statuses
@@ -131,20 +130,19 @@ class JobsSdk(EventsSdk):
             >>>     print(job.name)
         """
         return self._jobs_service.list_jobs(
-            jobids=job_ids,
-            receiverids=receiver_ids,
-            oaids=oa_ids,
-            userids=user_ids,
-            stationids=station_ids,
+            job_ids=job_ids,
+            receiver_ids=receiver_ids,
+            user_ids=user_ids,
+            station_ids=station_ids,
             statuses=statuses,
             page=page,
             items=items,
-            projectids=mission_ids,
+            mission_ids=mission_ids,
             archived=archived,
             receiver_archived=receiver_archived,
             partial_names=partial_names,
-            lz=lzs,
-            ownerids=owner_ids,
+            lz_ids=lzs,
+            owner_ids=owner_ids,
             sort_by=sort_by,
             sort_order=sort_order,
         )
@@ -163,7 +161,9 @@ class JobsSdk(EventsSdk):
             >>> path = "results_folder"
             >>> results = galileo.jobs.download_job_results(job_id, path)
         """
-        return self._jobs_service.download_job_results(job_id, path, nonce)
+        return self._jobs_service.download_job_results(job_id,
+                                                       path,
+                                                       nonce=nonce)
 
     def update_job(self, job_id, archived=None):
         """ Updates an existing job
@@ -208,5 +208,6 @@ class JobsSdk(EventsSdk):
             >>> path = "results_folder"
             >>> results = galileo.jobs.download_and_extract_job_results(job_id, path)
         """
-        return self._jobs_service.download_and_extract_job_results(
-            job_id, path, nonce)
+        return self._jobs_service.download_and_extract_job_results(job_id,
+                                                                   path,
+                                                                   nonce=nonce)
