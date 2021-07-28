@@ -35,7 +35,7 @@ Storj DCS
 
 `Storj DCS <https://storj.io/signup/?partner=hypernet>`_ is a secure, decentralized, object storage provider. Using Storj with Galileo requires that you first create an account in one of their three availability regions and configure an initial Storj Project. 
 
-Once you have an active Stroj Project, select the Storj option, this will bring up the fields you must enter to connect your Storj bucket to Galileo. 
+Once you have an active Storj Project, select the Storj option, this will bring up the fields you must enter to connect your Storj bucket to Galileo. 
 
 The "API Key" field refers to the API key associated with the Tardigrade Project you are using. If you want to point to an existing bucket, enter that bucket name in the "Bucket Name" field and enter the bucket's encryption phrase into the "Encryption Passphrase" field. If you do not have an existing bucket, you can enter an arbitrary name and encryption phrase and Galileo will create a new bucket for you in the Tardigrade project associated with the provided API key. **WARNING**: If you do not save your encryption phrase, we cannot recover it for you. 
 
