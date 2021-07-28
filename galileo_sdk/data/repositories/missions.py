@@ -218,8 +218,8 @@ class MissionsRepository(RequestsRepository):
                 mission_id=update_mission_request.mission_id),
             data=body,
         )
-        json = response.json()
-        return mission_dict_to_mission(json)
+        json = response.json() 
+        return json
 
     def delete_file(self, mission_id, query):
         """

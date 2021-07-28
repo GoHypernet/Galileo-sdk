@@ -70,10 +70,10 @@ def test_create_and_delete_station():
     )
 
     r_delete_station = galileo.stations.delete_station(
-        station_details.stationid)
+        station_details.station_id)
 
     assert "sdk_station_integration_test" == station_details.name
-    assert station_details.stationid is not ""
+    assert station_details.station_id is not ""
     assert r_delete_station['success'] is True
 
 
@@ -90,9 +90,9 @@ def test_add_and_remove_volumes_to_station():
         access=EVolumeAccess.READWRITE,
     )
     r_remove_volume = galileo.stations.remove_volume_from_station(
-        station_id=station.stationid, volume_id=volumes.volumeid)
+        station_id=station.station_id, volume_id=volumes.volumeid)
 
-    r_delete_station = galileo.stations.delete_station(station.stationid)
+    r_delete_station = galileo.stations.delete_station(station.station_id)
 
     assert EVolumeAccess.READWRITE == volumes.access
     assert "mount_point" == volumes.mount_point
@@ -109,7 +109,7 @@ def test_add_and_delete_host_path_to_volume():
 
     self = galileo.profiles.self()
 
-    station_id = station.stationid
+    station_id = station.station_id
 
     volumes = galileo.stations.add_volume_to_station(
         station_id=station_id,
@@ -145,7 +145,7 @@ def test_create_station_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
 
     policy = galileo.stations.update_station_resource_policy(station_id)
     assert isinstance(policy, ResourcePolicy)
@@ -159,7 +159,7 @@ def test_get_station_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
 
     # Create resource policy
     galileo.stations.update_station_resource_policy(station_id)
@@ -177,7 +177,7 @@ def test_delete_station_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
 
     # Create resource policy
     galileo.stations.update_station_resource_policy(station_id)
@@ -196,8 +196,8 @@ def test_self_resource_limits():
         description="for testing",
     )
 
-    station_id = station.stationid
-    user_id = galileo.profiles.self().userid
+    station_id = station.station_id
+    user_id = galileo.profiles.self().user_id
     lz_id = galileo.lz.list_lz(user_ids=[user_id])[0].lz_id
 
     galileo.stations.add_lz_to_station(station_id, [lz_id])
@@ -219,11 +219,11 @@ def test_create_station_user_resource_policy():
         description="for testing",
     )
 
-    station_id = station.stationid
+    station_id = station.station_id
 
     # Create resource policy
     policy = galileo.stations.update_station_user_resource_policy(
-        station_id, user.userid, max_cpu_per_job=10000)
+        station_id, user.user_id, max_cpu_per_job=10000)
 
     assert isinstance(policy, ResourcePolicy)
     galileo.stations.delete_station(station_id)
@@ -235,14 +235,14 @@ def test_get_station_user_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
 
     # Create resource policy
     galileo.stations.update_station_user_resource_policy(station_id,
-                                                         user.userid,
+                                                         user.user_id,
                                                          max_cpu_per_job=10000)
     policy = galileo.stations.get_station_user_resource_policy(
-        station_id, user.userid)
+        station_id, user.user_id)
 
     assert isinstance(policy, ResourcePolicy)
     galileo.stations.delete_station(station_id)
@@ -254,16 +254,16 @@ def test_delete_station_user_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
     # Create user resource policy
     galileo.stations.update_station_user_resource_policy(station_id,
-                                                         user.userid,
+                                                         user.user_id,
                                                          max_cpu_per_job=10000)
     # Delete user resource policy
     response = galileo.stations.delete_station_user_resource_policy(
-        station_id, user.userid)
+        station_id, user.user_id)
     policy = galileo.stations.get_station_user_resource_policy(
-        station_id, user.userid)
+        station_id, user.user_id)
 
     assert response["success"] is True
     assert policy is None
@@ -277,7 +277,7 @@ def test_update_station_role_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
 
     resource_policy = galileo.stations.update_station_role_resource_policy(
         station_id, ROLE_ID, max_cpu_per_job=1)
@@ -292,7 +292,7 @@ def test_get_station_role_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
     # Create role resource policy
     galileo.stations.update_station_role_resource_policy(station_id,
                                                          ROLE_ID,
@@ -312,7 +312,7 @@ def test_crud_station_roles():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
 
     # Create role resource policy
     galileo.stations.update_station_role_resource_policy(station_id,
@@ -353,7 +353,7 @@ def test_delete_station_role_resource_policy():
         description="for testing",
     )
 
-    station_id = station.stationid
+    station_id = station.station_id
     # Create role resource policy
     galileo.stations.update_station_role_resource_policy(station_id,
                                                          ROLE_ID,
@@ -376,13 +376,13 @@ def test_update_station_lz_resource_policy():
         description="for testing",
     )
 
-    station_id = station.stationid
+    station_id = station.station_id
     # Create role resource policy
     galileo.stations.update_station_role_resource_policy(station_id,
                                                          ROLE_ID,
                                                          max_cpu_per_job=1)
 
-    user_id = galileo.profiles.self().userid
+    user_id = galileo.profiles.self().user_id
     lz_id = galileo.lz.list_lz(user_ids=[user_id])[0].lz_id
 
     galileo.stations.add_lz_to_station(station_id, [lz_id])
@@ -399,9 +399,9 @@ def test_get_station_lz_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
     # Create role resource policy
-    user_id = galileo.profiles.self().userid
+    user_id = galileo.profiles.self().user_id
     lz_id = galileo.lz.list_lz(user_ids=[user_id])[0].lz_id
 
     galileo.stations.add_lz_to_station(station_id, [lz_id])
@@ -426,8 +426,8 @@ def test_delete_station_lz_resource_policy():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
-    user_id = galileo.profiles.self().userid
+    station_id = station.station_id
+    user_id = galileo.profiles.self().user_id
     lz_id = galileo.lz.list_lz(user_ids=[user_id])[0].lz_id
     # Create role resource policy
 

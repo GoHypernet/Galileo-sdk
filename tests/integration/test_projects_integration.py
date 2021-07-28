@@ -65,7 +65,6 @@ def test_update_mission():
     assert response is True
     assert updated_mission.name == "new name"
 
-
 def test_delete_mission():
     mission = galileo.missions.create_mission("test_mission")
 

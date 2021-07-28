@@ -260,8 +260,8 @@ class MissionsService:
         """
         try:
             response = self._missions_repo.update_mission(
-                update_mission_request)
-            return True
+                update_mission_request) 
+            return True 
         except Exception as e:
             print("Error: ", e)
             return False

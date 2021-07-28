@@ -842,7 +842,7 @@ class StationsSdk(EventsSdk):
             >>> volume = galileo.stations.add_volume_to_station(station_id, name, mount_point, access)
             >>> print(volume.name)
         """
-        return self._stations_service.add_volumes_to_station(
+        return self._stations_service.add_volume_to_station(
             station_id, name, mount_point, access)
 
     def add_host_path_to_volume(self, station_id, volume_id, lz_id, host_path):

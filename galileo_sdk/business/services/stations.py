@@ -646,7 +646,7 @@ class StationsService:
         :return: Volume
         :rtype: Volume
         """
-        return self._stations_repo.add_volumes_to_station(
+        return self._stations_repo.add_volume_to_station(
             station_id, name, mount_point, access)
 
     def add_host_path_to_volume(self, station_id, volume_id, lz_id, host_path):

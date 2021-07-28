@@ -918,7 +918,7 @@ def station_dict_to_station(station):
             for settings in autoscale_settings
         ]
     return Station(
-        stationid=station["stationid"],
+        station_id=station["stationid"],
         name=station["name"],
         description=station["description"],
         users=[user_dict_to_station_user(user) for user in station["users"]],

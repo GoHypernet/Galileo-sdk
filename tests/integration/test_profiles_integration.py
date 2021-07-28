@@ -7,7 +7,9 @@ galileo = GalileoSdk(config=CONFIG)
 second_galileo = GalileoSdk(config=CONFIG,
                             username=str(os.environ["SECOND_GALILEO_USER"]),
                             password=str(
-                                os.environ["SECOND_GALILEO_PASSWORD"]))
+                            os.environ["SECOND_GALILEO_PASSWORD"]))
+
+
 """ 
 Tests the "list_users" method.
 """
@@ -35,7 +37,7 @@ def test_list_station_invites():
         user_ids=[],
         description="for testing",
     )
-    station_id = station.stationid
+    station_id = station.station_id
     role_id = station.users[0].role_id
     user_id = galileo.profiles.self().user_id
     # Create role resource policy
