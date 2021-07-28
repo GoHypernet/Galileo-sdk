@@ -1,14 +1,14 @@
 .. _missions:
 
 Missions Guide
-==============================================
+===============
 
 Missions are a feature of Galileo that allow users to easily configure complex simulators and scripting environments to run repeatably and reliably on any `LZ <landing_zone_main.html>`_ that they have launch access to through a `Station <stations.html>`_. A Galileo Mission can be configured as either public or private. Public Missions can be cloned from the "Explore Missions" sub-tab and are a great way to share work with people in the Galileo community. 
 
 After initial configuration, your Mission environment (which consists of your input files and framework parameters) can be updated quickly through the Mission settings page. See the `Galileo Tutorials <https://galileo-tutorial-pages.readthedocs.io/en/latest/>`_ page for instructions on how to configure a Mission for specific applications. 
 
 Creating a Mission 
------------------------
+-------------------
 
 Cloning an Existing Public Mission
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,7 +27,7 @@ To start a new Mission in Galileo, go to the Missions tab on the left side of th
 This will launch the Mission configuration wizard which is covered in the next subsection. See the `Galileo Tutorials <https://galileo-tutorial-pages.readthedocs.io/en/latest/>`_ for step-by-step instructions for specific frameworks. 
 
 Configuring Your Mission Type
--------------------------------
+-----------------------------
 
 Galileo supports many scripting languages (such as R, Python, Julia, and Stata) and simulators (Gromacs, HECRAS, AmberTools, etc.) right out-of-the-box. The first step in configuring your Mission is to select your target framework from the drop-down list as shown in the gif in the previous section. Once you have selected the application type and version, fill in the required datum in the prompts. These settings can be changed later on once you have finished the initial creation step. 
 
