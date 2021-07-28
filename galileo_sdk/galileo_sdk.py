@@ -50,8 +50,8 @@ class GalileoSdk:
         self,
         auth_token=None,
         refresh_token=None,
-        username="",
-        password="",
+        username=None,
+        password=None,
         config=None,
     ):
         """

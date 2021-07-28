@@ -25,8 +25,8 @@ class EVolumeAccess(enum.Enum):
 
 
 class VolumeHostPath:
-    def __init__(self, volumehostpathid, lz_id, host_path):
-        self.volumehostpathid = volumehostpathid
+    def __init__(self, volume_hostpath_id, lz_id, host_path):
+        self.volume_hostpath_id = volume_hostpath_id
         self.lz_id = lz_id
         self.host_path = host_path
 

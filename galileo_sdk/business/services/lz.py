@@ -1,6 +1,7 @@
 from ..utils.generate_query_str import generate_query_str
 
 
+#TODO Replace some bool return types with Success objects
 class LzService:
     def __init__(self, lz_repo):
         """

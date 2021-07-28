@@ -2,6 +2,7 @@ from galileo_sdk.business.objects.lz import ELzStatus, Lz
 from galileo_sdk.data.repositories import RequestsRepository
 
 
+#TODO Replace some bool return types with Success objects
 class LzRepository(RequestsRepository):
     def __init__(
         self,

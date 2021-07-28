@@ -60,7 +60,7 @@ def test_list_stations():
 
     # Assert
     assert len(r) == 5
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
     assert r[0].users[0].status == EStationUserRole.ADMIN
 
 
@@ -105,7 +105,7 @@ def test_create_station():
     r = stations_service.create_station(NAME, DESCRIPTION, USERNAMES)
 
     # Assert
-    assert r.stationid == "stationid"
+    assert r.station_id == "stationid"
     assert r.users[0].status == EStationUserRole.ADMIN
 
 
@@ -221,7 +221,7 @@ def test_remove_machines_to_station():
 
 
 def test_add_volumes_to_station():
-    stations_repo.add_volumes_to_station.return_value = Volume(
+    stations_repo.add_volume_to_station.return_value = Volume(
         STATION_ID,
         "name",
         "mount_point",

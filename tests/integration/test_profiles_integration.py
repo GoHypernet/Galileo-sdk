@@ -7,9 +7,7 @@ galileo = GalileoSdk(config=CONFIG)
 second_galileo = GalileoSdk(config=CONFIG,
                             username=str(os.environ["SECOND_GALILEO_USER"]),
                             password=str(
-                            os.environ["SECOND_GALILEO_PASSWORD"]))
-
-
+                                os.environ["SECOND_GALILEO_PASSWORD"]))
 """ 
 Tests the "list_users" method.
 """

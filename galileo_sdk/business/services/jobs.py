@@ -6,6 +6,7 @@ from ..utils.generate_query_str import generate_query_str
 from galileo_sdk.compat import quote
 
 
+# TODO: Check some endpoints
 class JobsService:
     def __init__(self, jobs_repo, profile_repo):
         """

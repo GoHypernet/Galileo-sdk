@@ -848,7 +848,7 @@ def host_path_dict_to_host_path(hostpath):
     :rtype: VolumeHostPath
     """
     return VolumeHostPath(
-        volumehostpathid=hostpath["volumehostpathid"],
+        volume_hostpath_id=hostpath["volumehostpathid"],
         lz_id=hostpath["mid"],
         host_path=hostpath["host_path"],
     )

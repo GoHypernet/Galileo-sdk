@@ -6,6 +6,7 @@ from galileo_sdk.business.objects.missions import FileListing
 from galileo_sdk.data.repositories import RequestsRepository
 
 
+#TODO Replace some bool return types with Success objects
 class MissionsRepository(RequestsRepository):
     def __init__(
         self,
@@ -185,8 +186,8 @@ class MissionsRepository(RequestsRepository):
 
         :param mission_id: Mission id of the mission to delete
         :type mission_id: str
-        :return: True if mission was deleted, False otherwise
-        :rtype: bool
+        :return: Success object
+        :rtype: Dict
         """
         response = self._delete(
             "/projects/{mission_id}".format(mission_id=mission_id))
@@ -218,7 +219,7 @@ class MissionsRepository(RequestsRepository):
                 mission_id=update_mission_request.mission_id),
             data=body,
         )
-        json = response.json() 
+        json = response.json()
         return json
 
     def delete_file(self, mission_id, query):

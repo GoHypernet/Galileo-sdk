@@ -95,6 +95,6 @@ def test_list_station_invites():
 
     # Assert
     assert len(r) == 1
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
     assert r[0].description == "description"
     assert r[0].name == "name"

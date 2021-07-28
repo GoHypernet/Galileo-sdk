@@ -14,6 +14,7 @@ is_py2 = _ver[0] == 2
 is_py3 = _ver[0] == 3
 
 
+#TODO Check some of these endpoints
 class JobsRepository(RequestsRepository):
     def __init__(
         self,

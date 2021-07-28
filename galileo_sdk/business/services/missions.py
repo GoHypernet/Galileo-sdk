@@ -5,6 +5,7 @@ from ..objects import UpdateMissionRequest
 from galileo_sdk.compat import quote
 
 
+#TODO Replace some bool return types with Success objects
 class MissionsService:
     def __init__(self, missions_repo):
         """
@@ -260,8 +261,8 @@ class MissionsService:
         """
         try:
             response = self._missions_repo.update_mission(
-                update_mission_request) 
-            return True 
+                update_mission_request)
+            return True
         except Exception as e:
             print("Error: ", e)
             return False

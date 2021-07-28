@@ -185,7 +185,7 @@ def test_list_station_invites(mocked_requests):
     )
 
     # Assert
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
     assert r[0].lz_ids[0] == "1"
     assert r[0].name == "name"
     assert r[0].users[0].stationuser_id == "stationuserid"
