@@ -15,9 +15,9 @@ jobs:
           name: Install Dependencies
           command: pip install -r requirements-test.txt
       - python/save-cache
-      - run:
-          command: python -m pytest
-          name: Test
+#      - run:
+#          command: python -m pytest
+#          name: Test
   publish-pip:
     docker:
       - image: circleci/python:3.6
