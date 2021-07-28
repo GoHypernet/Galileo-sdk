@@ -19,10 +19,10 @@ The Galileo `SDK <galileo_sdk.html>`_ allows users to interact with the Galileo 
 
     Security Overview <security.rst>
 	Billing and Pricing <billing.rst>
-	Universes Guide <universes.rst>
-    Stations Guide <stations.rst>
-    Missions Guide <missions.rst>
+	Missions Guide <missions.rst>
 	Cargo Bay Guide <cargobays.rst>
+    Stations Guide <stations.rst>
+	Universes Guide <universes.rst>
     Quickstart for Landing Zones <landing_zone_main.rst>
     Python SDK and CLI <galileo_sdk.rst>
     SDK References <references/index.rst>
