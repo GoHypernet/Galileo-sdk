@@ -113,6 +113,25 @@ Command Line Flags
   location, then it will be utilized and the LZ will authenticate
   automatically without prompting the user.
 
+``--cloudflare-cert <FILE PATH>`` and ``--tunnel-hostname <TEXT>``
+  If you have added a website to a Cloudflare account and that
+  website's domain nameservers are managed by Cloudflare, then you can
+  use these flags to force jobs on this LZ to produce tunnel URLs
+  belonging to that website's URL. Neither flag can be present without
+  the other.
+
+  ``--cloudflare-cert`` refers to a ``cert.pem`` file that is
+  generated outside of Galileo by `authenticating with the Cloudflare
+  tunnel service
+  <https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/setup>`_. You
+  will probably need to mount this file onto the Landing Zone
+  container with a volume.
+
+  ``--tunnel-hostname`` is the Cloudflare managed hostname through
+  which traffic will be routed. E.g. ``--tunnel-hostname example.com``
+  will route traffice through your ``example.com`` domain managed by
+  Cloudflare and will produce tunnel URLs like
+  ``<JOB_ID>.example.com``.
 
 Configuration File
 ------------------
