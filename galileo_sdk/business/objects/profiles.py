@@ -64,5 +64,5 @@ class Profile:
             return "Profile: {username}".format(username=self.username)
         return "Profile: ID {id}".format(id=self.user_id)
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return self.__str__()
