@@ -765,7 +765,7 @@ class CreateStationRoleRequest:
             name=self.name)
 
 
-class UpdateStationRoleRequest(CreateStationRoleRequest):
+class UpdateStationRoleRequest(CreateStationRoleRequest, object):
     def __init__(
         self,
         name=None,
