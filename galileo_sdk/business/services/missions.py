@@ -381,6 +381,8 @@ class MissionsService:
         :return: Get a mission type
         :rtype: MissionType
         """
+        if not mission_type_id:
+            raise Exception("Mission type ID must be provided")
         query = generate_query_str({"ids": [mission_type_id]})
         return self._missions_repo.get_mission_type(query)
 

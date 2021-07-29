@@ -236,7 +236,7 @@ def test_add_volumes_to_station():
 
     # Assert
     assert r.name == "name"
-    assert r.stationid == STATION_ID
+    assert r.station_id == STATION_ID
 
 
 def test_add_host_path_to_volume():
@@ -255,7 +255,7 @@ def test_add_host_path_to_volume():
 
     # Assert
     assert r.name == "name"
-    assert r.stationid == STATION_ID
+    assert r.station_id == STATION_ID
 
 
 def test_remove_path_from_volume():

@@ -65,6 +65,7 @@ def test_update_mission():
     assert response is True
     assert updated_mission.name == "new name"
 
+
 def test_delete_mission():
     mission = galileo.missions.create_mission("test_mission")
 
@@ -88,9 +89,20 @@ def test_update_mission_args():
 
 
 def test_mission_type_settings():
-    mission = galileo.missions.create_mission("test_mission")
-    # TODO How did this work before?
-    # FIXME This is broken
+
+    mission = galileo.missions.create_mission(
+        "test_mission",
+        mission_type_id="jupyter-notebook_lab",
+        settings={
+            'interface': 'lab',
+            'jupyterversion': 'datascience-notebook',
+            'dependencies': [],
+            'manualdependencies': [],
+            'reqstxt': None,
+            'vim': False,
+            'proxy': False
+        })
+
     settings = galileo.missions.get_mission_type_settings_info(
         mission.mission_type_id)
     assert isinstance(settings, dict)

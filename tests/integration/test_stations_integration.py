@@ -90,7 +90,7 @@ def test_add_and_remove_volumes_to_station():
         access=EVolumeAccess.READWRITE,
     )
     r_remove_volume = galileo.stations.remove_volume_from_station(
-        station_id=station.station_id, volume_id=volumes.volumeid)
+        station_id=station.station_id, volume_id=volumes.volume_id)
 
     r_delete_station = galileo.stations.delete_station(station.station_id)
 
@@ -120,15 +120,15 @@ def test_add_and_delete_host_path_to_volume():
 
     volume_host_path = galileo.stations.add_host_path_to_volume(
         station_id=station_id,
-        volume_id=volumes.volumeid,
+        volume_id=volumes.volume_id,
         lz_id=self.lz_ids[0],
         host_path="host_path",
     )
 
     deleted_host_path = galileo.stations.delete_host_path_from_volume(
         station_id=station_id,
-        volume_id=volumes.volumeid,
-        host_path_id=volume_host_path.host_paths[0].volumehostpathid,
+        volume_id=volumes.volume_id,
+        host_path_id=volume_host_path.host_paths[0].volume_hostpath_id,
     )
 
     galileo.stations.delete_station(station_id)

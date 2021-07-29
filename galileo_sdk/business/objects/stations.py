@@ -41,8 +41,8 @@ class Volume:
         host_paths,
         volume_id,
     ):
-        self.volumeid = volume_id
-        self.stationid = station_id
+        self.volume_id = volume_id
+        self.station_id = station_id
         self.name = name
 
         self.mount_point = mount_point

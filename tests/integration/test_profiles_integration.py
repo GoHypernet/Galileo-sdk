@@ -36,7 +36,8 @@ def test_list_station_invites():
         description="for testing",
     )
     station_id = station.station_id
-    role_id = station.users[0].role_id
+    role_id = galileo.stations.get_station_roles(station_id,
+                                                 names=["launcher"])[0].id
     user_id = galileo.profiles.self().user_id
     # Create role resource policy
     second_galileo.stations.invite_to_station(station_id, [user_id], role_id)
