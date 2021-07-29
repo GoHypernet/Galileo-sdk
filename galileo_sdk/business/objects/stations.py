@@ -806,7 +806,7 @@ class UpdateStationRoleRequest(CreateStationRoleRequest):
         """
         Update a station role request
         """
-        super().__init__(
+        super(UpdateStationRoleRequest, self).__init__(
             name=name,
             description=description,
             role_type=role_type,
