@@ -19,13 +19,9 @@ from galileo_sdk.business.objects.jobs import (
     JobsEvents,
 )
 
-from galileo_sdk.business.objects.universes import (
-    Universe
-)
+from galileo_sdk.business.objects.universes import (Universe)
 
-from galileo_sdk.business.objects.cargobays import (
-    CargoBay
-)
+from galileo_sdk.business.objects.cargobays import (CargoBay)
 
 from galileo_sdk.business.objects.missions import (
     UpdateMissionRequest,

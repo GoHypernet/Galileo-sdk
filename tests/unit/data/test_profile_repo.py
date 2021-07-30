@@ -141,7 +141,7 @@ def test_list_users(mocked_requests):
     assert len(r[0].lz_ids) == 1
     assert len(r[0].stored_cards) == 1
     for i in range(5):
-        assert r[i].userid == "user{i}".format(i=i)
+        assert r[i].user_id == "user{i}".format(i=i)
         assert r[i].username == "username{i}".format(i=i)
 
 
@@ -161,7 +161,7 @@ def test_get_profile(mocked_requests):
     )
 
     # Assert
-    assert r.userid == "userid"
+    assert r.user_id == "userid"
     assert r.username == "username"
     assert r.stored_cards[0].id == "0x"
     assert r.lz_ids == ["mids"]
@@ -185,7 +185,7 @@ def test_list_station_invites(mocked_requests):
     )
 
     # Assert
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
     assert r[0].lz_ids[0] == "1"
     assert r[0].name == "name"
-    assert r[0].users[0].stationuserid == "stationuserid"
+    assert r[0].users[0].stationuser_id == "stationuserid"

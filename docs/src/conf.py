@@ -13,6 +13,7 @@
 from os import path
 import sys
 import sphinx_material
+
 root = path.realpath(path.join(path.dirname(__file__), '..', '..'))
 sys.path.insert(1, root)
 import galileo_sdk
@@ -22,6 +23,7 @@ autosummary_generate = True
 autosummary_imported_members = True
 
 # -- Python specific configuration -------------------------------------------
+
 
 # Make sure that __init__ methods are documented
 def skip(app, what, name, obj, would_skip, options):
@@ -42,7 +44,6 @@ author = "Hypernet Labs"
 
 # The full version, including alpha/beta/rc tags
 # release = "0.0.13"
-
 
 # -- General configuration ---------------------------------------------------
 # Add any Sphinx extension module names here, as strings. They can be
@@ -74,7 +75,6 @@ master_doc = "index"
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -104,7 +104,6 @@ html_theme_options = {
 html_sidebars = {"**": ["globaltoc.html"]}
 
 html_logo = "_static/galileo-logo.png"
-
 html_favicon = "_static/galileo-icon.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,

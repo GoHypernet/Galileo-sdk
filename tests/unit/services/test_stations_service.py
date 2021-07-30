@@ -52,8 +52,7 @@ def test_list_stations():
             ],
             ["machine_ids"],
             ["volume_ids"],
-        )
-        for _ in range(5)
+        ) for _ in range(5)
     ]
 
     # Call
@@ -61,7 +60,7 @@ def test_list_stations():
 
     # Assert
     assert len(r) == 5
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
     assert r[0].users[0].status == EStationUserRole.ADMIN
 
 
@@ -70,8 +69,7 @@ def test_get_public_stations():
         PublicStation(
             "name",
             "stationid",
-        )
-        for _ in range(5)
+        ) for _ in range(5)
     ]
 
     # Call
@@ -79,7 +77,8 @@ def test_get_public_stations():
 
     # Assert
     assert len(r) == 5
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
+
 
 def test_create_station():
     stations_repo.create_station.return_value = Station(
@@ -106,7 +105,7 @@ def test_create_station():
     r = stations_service.create_station(NAME, DESCRIPTION, USERNAMES)
 
     # Assert
-    assert r.stationid == "stationid"
+    assert r.station_id == "stationid"
     assert r.users[0].status == EStationUserRole.ADMIN
 
 
@@ -222,38 +221,49 @@ def test_remove_machines_to_station():
 
 
 def test_add_volumes_to_station():
-    stations_repo.add_volumes_to_station.return_value = Volume(
-        STATION_ID, "name", "mount_point", EVolumeAccess.READWRITE, [], "volumeid",
+    stations_repo.add_volume_to_station.return_value = Volume(
+        STATION_ID,
+        "name",
+        "mount_point",
+        EVolumeAccess.READWRITE,
+        [],
+        "volumeid",
     )
 
     # Call
-    r = stations_service.add_volumes_to_station(STATION_ID, NAME, MOUNT_POINT, ACCESS)
+    r = stations_service.add_volume_to_station(STATION_ID, NAME, MOUNT_POINT,
+                                               ACCESS)
 
     # Assert
     assert r.name == "name"
-    assert r.stationid == STATION_ID
+    assert r.station_id == STATION_ID
 
 
 def test_add_host_path_to_volume():
     stations_repo.add_host_path_to_volume.return_value = Volume(
-        STATION_ID, "name", "mount_point", EVolumeAccess.READWRITE, [], "volumeid",
+        STATION_ID,
+        "name",
+        "mount_point",
+        EVolumeAccess.READWRITE,
+        [],
+        "volumeid",
     )
 
     # Call
-    r = stations_service.add_host_path_to_volume(
-        STATION_ID, VOLUMES_ID, MIDS[0], HOST_PATH
-    )
+    r = stations_service.add_host_path_to_volume(STATION_ID, VOLUMES_ID,
+                                                 MIDS[0], HOST_PATH)
 
     # Assert
     assert r.name == "name"
-    assert r.stationid == STATION_ID
+    assert r.station_id == STATION_ID
 
 
 def test_remove_path_from_volume():
     stations_repo.delete_host_path_from_volume.return_value = True
 
     # Call
-    r = stations_service.delete_host_path_from_volume(STATION_ID, VOLUMES_ID, HOST_PATH)
+    r = stations_service.delete_host_path_from_volume(STATION_ID, VOLUMES_ID,
+                                                      HOST_PATH)
 
     # Assert
     assert r is True

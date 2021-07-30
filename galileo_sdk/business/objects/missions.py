@@ -1,6 +1,12 @@
 class FileListing:
     def __init__(
-        self, filename, path, modification_date, creation_date, file_size, nonce=None,
+        self,
+        filename,
+        path,
+        modification_date,
+        creation_date,
+        file_size,
+        nonce=None,
     ):
         """
         Mission File Listing Object
@@ -21,10 +27,20 @@ class FileListing:
         self.file_size = file_size
         self.nonce = nonce
 
+    def __str__(self):
+        return 'Filelisting: {path}/{filename}'.format(path=self.path,
+                                                       filename=self.filename)
+
+    def __repr__(self):
+        return str(self)
+
 
 class DirectoryListing:
     def __init__(
-        self, storage_id, path, listings,
+        self,
+        storage_id,
+        path,
+        listings,
     ):
         self.storage_id = storage_id
         self.path = path
@@ -33,23 +49,22 @@ class DirectoryListing:
 
 class Mission:
     def __init__(
-        self,
-        mission_id,
-        name,
-        description,
-        source_storage_id,
-        source_path,  # default will be project_id
-        destination_storage_id,
-        destination_path,  # default will be project_id
-        user_id,
-        creation_timestamp,
-        mission_type_id,
-        updated_timestamp=None,
-        organization_id=None,
-        settings=None,
-        mission_type_name=None,
-        public=False
-    ):
+            self,
+            mission_id,
+            name,
+            description,
+            source_storage_id,
+            source_path,  # default will be mission_id
+            destination_storage_id,
+            destination_path,  # default will be mission_id
+            user_id,
+            creation_timestamp,
+            mission_type_id,
+            updated_timestamp=None,
+            organization_id=None,
+            settings=None,
+            mission_type_name=None,
+            public=False):
         """
         Mission Object
 
@@ -85,38 +100,42 @@ class Mission:
         self.mission_type_name = mission_type_name
         self.public = public
 
+    def __str__(self):
+        return 'Mission: {name}'.format(name=self.name)
+
+    def __repr__(self):
+        return str(self)
+
 
 class MissionType:
-    def __init__(
-        self,
-        id,
-        name,
-        description,
-        version,
-        active=None,
-        container_type=None,
-        wizard_spec=None,
-        enable_tunnels=None,
-        generate_credentials=None,
-        distributed=None,
-        min_cpu_count=None,
-        max_cpu_count=None,
-        default_cpu_count= None,
-        min_memory_amount= None,
-        max_memory_amount= None,
-        default_memory_amount= None,
-        min_gpu_count= None,
-        max_gpu_count= None,
-        default_gpu_count= None,
-        logo_url= None,
-        credits_per_hour= None
-    ):
+    def __init__(self,
+                 id,
+                 name,
+                 description,
+                 version,
+                 active=None,
+                 container_type=None,
+                 wizard_spec=None,
+                 enable_tunnels=None,
+                 generate_credentials=None,
+                 distributed=None,
+                 min_cpu_count=None,
+                 max_cpu_count=None,
+                 default_cpu_count=None,
+                 min_memory_amount=None,
+                 max_memory_amount=None,
+                 default_memory_amount=None,
+                 min_gpu_count=None,
+                 max_gpu_count=None,
+                 default_gpu_count=None,
+                 logo_url=None,
+                 credits_per_hour=None):
         """
         Mission Framework Type Object
 
         :param id: UUID of the Mission Framework Type
         :param name: Human readable name of the Framework Type
-        :param description: Optional description of the Framework Type
+        :param description: description of the Framework Type
         :param version: Specific version of the overall Framework Type
         :param active: Is the framework actively supported (False means depricated)
         :param container_type: Target container OS type (i.e. Windows, Linux, Singularity)
@@ -157,6 +176,15 @@ class MissionType:
         self.default_gpu_count = default_gpu_count
         self.logo_url = logo_url
         self.credits_per_hour = credits_per_hour
+
+    def __str__(self):
+        return 'Mission Type: {name} Version: {version}'.format(
+            name=self.name, version=self.version)
+
+    def __repr__(self):
+        return str(self)
+
+
 class CreateMissionRequest(object):
     def __init__(
         self,
@@ -170,6 +198,28 @@ class CreateMissionRequest(object):
         settings=None,
         public=False,
     ):
+        """
+        Mission Request Object
+
+        :param name: Mission name
+        :type name: str
+        :param description: Description of the mission
+        :type description: str
+        :param source_storage_id: TODO: storage id for source storage, defaults to None
+        :type source_storage_id: str, optional
+        :param destination_storage_id: TODO: storage id for destination storage, defaults to None
+        :type destination_storage_id: str, optional
+        :param source_path: File path to source, defaults to None
+        :type source_path: str, optional
+        :param destination_path: Destination file path, defaults to None
+        :type destination_path: str, optional
+        :param mission_type_id: Mission type id, defaults to None
+        :type mission_type_id: str, optional
+        :param settings: Custom settings for mission, defaults to None
+        :type settings: Dict, optional
+        :param public: Create a public or private mission, defaults to False
+        :type public: bool, optional
+        """
         self.name = name
         self.description = description
         self.source_storage_id = source_storage_id
@@ -179,6 +229,15 @@ class CreateMissionRequest(object):
         self.mission_type_id = mission_type_id
         self.settings = settings
         self.public = public
+
+    def __str__(self):
+        model_string = "Create Mission Request: "
+        for key, value in self.__dict__.items():
+            if "_" not in key and value is not None:
+                model_string += "{key}={value}, ".format(key=key, value=value)
+
+    def __repr__(self):
+        return "Create Mission Request: {name}".format(name=self.name)
 
 
 class UpdateMissionRequest(CreateMissionRequest):
@@ -192,7 +251,30 @@ class UpdateMissionRequest(CreateMissionRequest):
         source_path=None,
         destination_path=None,
         settings=None,
+        public=None,
     ):
+        """
+        Update Mission Request Object
+
+        :param mission_id: Mission ID of the mission to update
+        :type mission_id: str
+        :param name: Updated name, defaults to None
+        :type name: str, optional
+        :param description: Updated description, defaults to None
+        :type description: str, optional
+        :param source_storage_id: Updated source storage id, defaults to None
+        :type source_storage_id: str, optional
+        :param destination_storage_id: Updated destination storage id, defaults to None
+        :type destination_storage_id: str, optional
+        :param source_path: Updated source file path, defaults to None
+        :type source_path: str, optional
+        :param destination_path: Updated Destination file path, defaults to None
+        :type destination_path: str, optional
+        :param settings: Updated mission settings, defaults to None
+        :type settings: Dict, optional
+        :param public: Update mission access/visiblity, defaults to None
+        :type public: bool, optional
+        """
         self.mission_id = mission_id
         super(UpdateMissionRequest, self).__init__(
             name=name,
@@ -202,4 +284,14 @@ class UpdateMissionRequest(CreateMissionRequest):
             source_path=source_path,
             destination_path=destination_path,
             settings=settings,
+            public=public,
         )
+
+    def __str__(self):
+        model_string = "Update Mission Request: "
+        for key, value in self.__dict__.items():
+            if "_" not in key and value is not None:
+                model_string += "{key}={value}, ".format(key=key, value=value)
+
+    def __repr__(self):
+        return "Update Mission Request: {name}".format(name=self.name)

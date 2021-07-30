@@ -10,11 +10,10 @@ class ELzStatus(enum.Enum):
 
 
 class Lz:
-
     def __init__(
         self,
         name,
-        userid,
+        user_id,
         status,
         lz_id,
         gpu_count,
@@ -30,7 +29,7 @@ class Lz:
         Landing Zone Object
 
         :param name: Optional[List[str]]: Human readable name name of the Landing Zone
-        :param userid: Optional[List[str]]: User ID the LZ belongs to
+        :param user_id: Optional[List[str]]: User ID the LZ belongs to
         :param status: Optional[List[str]]: Status of the Landing Zone (i.e. online or offline)
         :param lz_id: Optional[int]: UUID of the Landing Zone
         :param gpu_count: Optional[int]: Number of GPUs the LZ has
@@ -44,7 +43,7 @@ class Lz:
         """
         self.lz_id = lz_id
         self.name = name
-        self.userid = userid
+        self.userid = user_id
         self.status = status
         self.gpu_count = gpu_count
         self.cpu_count = cpu_count
@@ -54,6 +53,14 @@ class Lz:
         self.memory = memory
         self.memory_amount = memory_amount
         self.container_technology = container_technology
+
+    def __str__(self):
+        operating_system_str = "Windows" if self.operating_system else "Linux"
+        return "{operating_system} LZ: {name}".format(
+            operating_system=operating_system_str, name=self.name)
+
+    def __repr__(self):
+        return str(self)
 
 
 class LzStatusUpdateEvent:
@@ -73,9 +80,22 @@ class LzHardwareUpdateEvent:
 
 
 class UpdateLzRequest:
+    """Class representing a request to update a Landing Zone
+    """
     def __init__(
-        self, lz_id, name=None, active=None,
+        self,
+        lz_id,
+        name=None,
+        active=None,
     ):
+        """
+        :param lz_id: UUID of the LZ to update
+        :type lz_id: str
+        :param name: Updated name, defaults to None
+        :type name: str, optional
+        :param active: Set the LZ to be active or inactive, defaults to None
+        :type active: bool, optional
+        """
         self.lz_id = lz_id
         self.name = name
         self.active = active
