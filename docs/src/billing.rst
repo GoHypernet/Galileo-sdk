@@ -36,7 +36,7 @@ Software applications are available to users of the Galileo platform in the form
 Hardware
 --------
 
-Hardware resources fall into three categories: CPUs, GPUs, and Memory. The cost for these resources is denoted in credits per CPU-hrs, credits per GPU-hrs, and credits per Gigabyte-hrs respectively and are configured at the `Station level <stations.html#station-resource-pricing>`_ (different Stations can have different prices which are set by the Station administrators). Additionally, Station administrators can choose to enable spend limits based on user roles and restrict the software that is allowed to run within the context of a specific Station<link to station admin settings>.
+Hardware resources fall into three categories: CPUs, GPUs, and Memory. The cost for these resources is denoted in credits per CPU-hrs, credits per GPU-hrs, and credits per Gigabyte-hrs respectively and are configured at the `Station level <stations.html#station-resource-pricing>`_ (different Stations can have different prices which are set by the Station administrators). Additionally, Station administrators can choose to enable spend limits based on user roles and restrict the software that is allowed to run within the context of a specific `Station <stations.html#user-roles-and-resource-settings>`_.
 
 Invoicing Frequency
 -------------------
