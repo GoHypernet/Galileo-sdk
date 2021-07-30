@@ -65,6 +65,38 @@ A global view of all jobs, regardless of what Mission they were launched from, c
 
 .. image:: images/jobs_tab.png
 
+.. _missions-tunnels:
+
+Tunnels
+---------------------------
+
+Some missions produce a tunnel when they are executed on a Landing
+Zone as a job. A tunnel provides a URL directed at some port into the
+job. For example, Jupyter Notebooks start a server listening for
+connections on port 8888; our Jupyter based missions provide a tunnel
+to that port so that you can interact with the Notebook from anywhere
+with the tunnel URL.
+
+Normally the URL produced is of the form
+``https://<random-prefix>.trycloudflare.com``, but that domain can be
+overriden if you have access to a domain who's nameservers are managed
+by Cloudflare. You can achieve this override at the :ref:`Landing Zone
+level <landing_zone_main-tunnnel-overrides>` or the mission level. If
+overriding at the mission level, then two files must be uploaded to a
+folder called ``.cloudflared`` in the top directory of your mission:
+
+* ``.cloudflared/tunnel_cert.pem``: a ``cert.pem`` file that is
+  generated outside of Galileo by `authenticating with the Cloudflare
+  tunnel service
+  <https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/setup>`_.
+
+* ``.cloudflared/tunnel_hostname.txt``: A plain text file containing
+  the Cloudflare managed hostname through which traffic will be
+  routed. E.g. if ``tunnel-hostname.txt`` contains only the string
+  ``example.com``, then traffic will be routed through your
+  ``example.com`` domain managed by Cloudflare and will produce tunnel
+  URLs like ``<JOB_ID>.example.com``.
+
 Mission Collaborators
 ---------------------
 
