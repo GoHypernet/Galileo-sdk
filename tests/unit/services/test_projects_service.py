@@ -8,7 +8,7 @@ from galileo_sdk.business.services.missions import MissionsService
 BACKEND = "http://BACKEND"
 NAME = "test_name"
 DESCRIPTION = "description"
-PROJECT_ID = "project_id"
+PROJECT_ID = "mission_id"
 STATION_ID = "station_id"
 MACHINE_ID = "machine_id"
 
@@ -24,7 +24,7 @@ projects_service = MissionsService(projects_repo)
 def test_list_projects():
     projects_repo.list_missions.return_value = [
         Mission(
-            "project_id",
+            "mission_id",
             "name",
             "description",
             "source_storage_id",
@@ -34,19 +34,18 @@ def test_list_projects():
             "user_id",
             datetime.now(),
             "project_type_id",
-        )
-        for _ in range(5)
+        ) for _ in range(5)
     ]
 
     r = projects_service.list_missions()
 
     assert len(r) == 5
-    assert r[0].mission_id == "project_id"
+    assert r[0].mission_id == "mission_id"
 
 
 def test_upload():
     projects_repo.upload_single_file.return_value = True
-    r = projects_service.upload(PROJECT_ID, "flatplate")
+    r = projects_service.upload(PROJECT_ID, "python_example")
 
     assert r is True
 
@@ -55,7 +54,7 @@ def test_run_job_on_station():
     projects_repo.run_job_on_station.return_value = Job(
         "jobid",
         "receiverid",
-        "project_id",
+        "mission_id",
         datetime.now(),
         datetime.now(),
         "status",
@@ -73,7 +72,7 @@ def test_run_job_on_station():
     )
     r = projects_service.run_job_on_station(PROJECT_ID, STATION_ID)
 
-    assert r.project_id == "project_id"
+    assert r.mission_id == "mission_id"
     assert r.job_id == "jobid"
 
 
@@ -81,7 +80,7 @@ def test_run_job_on_machine():
     projects_repo.run_job_on_lz.return_value = Job(
         "jobid",
         "receiverid",
-        "project_id",
+        "mission_id",
         datetime.now(),
         datetime.now(),
         "status",
@@ -100,5 +99,15 @@ def test_run_job_on_machine():
 
     r = projects_service.run_job_on_lz(PROJECT_ID, STATION_ID, MACHINE_ID)
 
-    assert r.project_id == "project_id"
+    assert r.mission_id == "mission_id"
     assert r.job_id == "jobid"
+
+
+def test_delete_project():
+    projects_repo.delete_mission.return_value = True
+
+    # Call
+    r = projects_service.delete_mission(PROJECT_ID)
+
+    # Assert
+    assert r is True

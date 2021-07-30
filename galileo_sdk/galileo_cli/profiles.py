@@ -4,6 +4,7 @@ import click
 from galileo_sdk import GalileoSdk
 from halo import Halo
 
+
 def profiles_cli(main, galileo: GalileoSdk):
     @main.group()
     def profiles():
@@ -51,7 +52,9 @@ def profiles_cli(main, galileo: GalileoSdk):
     )
     @click.option("--page", type=int, help="Filter by page number.")
     @click.option(
-        "--items", type=int, help="Filter by number of items in the page.",
+        "--items",
+        type=int,
+        help="Filter by number of items in the page.",
     )
     @click.option('-n', '--head', type=int, help="Number of items to display.")
     def ls(index, id, username, partialname, publickey, page, items, head):
@@ -60,7 +63,7 @@ def profiles_cli(main, galileo: GalileoSdk):
         """
         spinner = Halo("Retrieving users", spinner="dot").start()
         r = galileo.profiles.list_users(
-            userids=list(id),
+            user_ids=list(id),
             usernames=list(username),
             partial_usernames=list(partialname),
             public_keys=list(publickey),
@@ -80,7 +83,7 @@ def profiles_cli(main, galileo: GalileoSdk):
 
         users_list = [user.__dict__ for user in users_list]
         users_df = pandas.json_normalize(users_list)
-        users_df = users_df[["username", "userid", "mids"]]
+        users_df = users_df[["username", "userid", "lz_ids"]]
 
         spinner.stop()
         if head:
@@ -104,6 +107,4 @@ def profiles_cli(main, galileo: GalileoSdk):
 
         invites_list = [invites.__dict__ for invites in r]
         spinner.stop()
-        click.echo(
-            pandas.json_normalize(invites_list)
-        )
+        click.echo(pandas.json_normalize(invites_list))

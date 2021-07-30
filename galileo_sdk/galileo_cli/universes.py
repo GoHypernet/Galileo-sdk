@@ -79,3 +79,19 @@ def universes_cli(main, galileo: GalileoSdk):
         else:
             print(f'Universe context set to default')
         return
+
+    @universes.command()
+    @click.option("-u", "--user-id", required=True, type=str, multiple=False, help="Set your active Universe by its uuid.")
+    @click.option("-n", "--name", required=True, type=str, multiple=False, help="Set your active Universe by its name.")
+    def create(user_id, name):
+        """
+        Create a Universe. 
+        """
+        spinner = Halo("Creating your universe", spinner="dot").start()
+        try:
+            universe = galileo.universes.create_universe(name, [user_id])
+            spinner.stop()
+            click.echo("Created universe: with name {name} and id {id}".format(name=universe.name, id=universe.universe_id))
+        except Exception as e:
+            spinner.stop()
+            click.echo("Error", e)

@@ -11,9 +11,9 @@ from colorama import init
 
 from galileo_sdk import GalileoSdk, AuthSdk
 #from .rain import *
-#from .jobs import jobs_cli
+from .jobs import jobs_cli
 from .lzs import lzs_cli
-#from .profiles import profiles_cli
+from .profiles import profiles_cli
 from .missions import missions_cli
 from .universes import universes_cli
 from .cargobays import cargobays_cli
@@ -76,21 +76,33 @@ def main(mode):
         """
         
         if view:
-            print("The working directory is currently ", os.environ.get("WORKDIR", "not set"), ".")
+            print("The working directory is currently ", os.environ.get("GALILEO_RESULTS_DIR", "not set"), ".")
         
         if workdir:
             if os.path.exists(workdir):
-                os.environ["WORKDIR"] = workdir
-                print("Working directory is now ", os.environ["WORKDIR"], ".")
+                os.environ["GALILEO_RESULTS_DIR"] = workdir
+                print("Working directory is now ", os.environ["GALILEO_RESULTS_DIR"], ".")
             else:
                 print("This directory does not exist.")
         else:
             print("Please provide an existing path to use as this session's working directory.")
-    
+
+    @main.command()
+    @click.option('-m', '--message', help="Send a notification with the provided text." )
+    def notification(message):
+        """
+        Provide a string (in quotes if there are spaces) to this command and have it delivered as a notification in Galileo. 
+        """
+
+        if message:
+            success = galileo.send_notification(message, verbose=True)
+        else: 
+            print("Please provide a text message to send as a notification.")
+
     universes_cli(main, galileo)
     cargobays_cli(main, galileo)
-    #profiles_cli(main, galileo)
+    profiles_cli(main, galileo)
     lzs_cli(main, galileo)
     missions_cli(main, galileo)
     stations_cli(main, galileo)
-    #jobs_cli(main, galileo)
+    jobs_cli(main, galileo)

@@ -1,4 +1,5 @@
 import os
+import socket
 
 from .business import (
     UniversesService,
@@ -22,12 +23,12 @@ from .data import (
     StationsRepository,
 )
 from .sdk import (
-    UniversesSdk, 
-    CargoBaysSdk, 
-    JobsSdk, 
-    LzSdk, 
-    ProfilesSdk, 
-    MissionsSdk, 
+    UniversesSdk,
+    CargoBaysSdk,
+    JobsSdk,
+    LzSdk,
+    ProfilesSdk,
+    MissionsSdk,
     StationsSdk,
 )
 
@@ -63,8 +64,10 @@ class GalileoSdk:
         :param config: production or development
         """
         self.log = LogService()
+
         if "GALILEO_CONFIG" in os.environ:
-            self._settings = SettingsRepository(str(os.environ["GALILEO_CONFIG"]))
+            self._settings = SettingsRepository(
+                str(os.environ["GALILEO_CONFIG"]))
         elif config:
             self._settings = SettingsRepository(config)
         else:
@@ -79,6 +82,11 @@ class GalileoSdk:
                 auth_token=str(os.environ["GALILEO_TOKEN"]),
                 refresh_token=str(os.environ["GALILEO_REFRESH_TOKEN"]),
             )
+        elif username and password:
+            self._auth_provider = AuthProvider(
+                settings_repository=self._settings,
+                username=username,
+                password=password)
         elif "GALILEO_USER" in os.environ and "GALILEO_PASSWORD" in os.environ:
             self._auth_provider = AuthProvider(
                 settings_repository=self._settings,
@@ -91,33 +99,31 @@ class GalileoSdk:
                 auth_token=auth_token,
                 refresh_token=refresh_token,
             )
-        elif username and password:
-            self._auth_provider = AuthProvider(
-                settings_repository=self._settings, username=username, password=password
-            )
         else:
             raise ValueError(
                 "Authentication token AND refresh token (OR) username AND password, must be provided"
             )
 
         # Set up feature repositories
-        self._universes_repo = UniversesRepository(
-            self._settings, self._auth_provider, NAMESPACE
-        )
-        self._cargo_bays_repo = CargoBaysRepository(
-            self._settings, self._auth_provider, NAMESPACE
-        )
-        self._jobs_repo = JobsRepository(self._settings, self._auth_provider, NAMESPACE)
-        self._stations_repo = StationsRepository(
-            self._settings, self._auth_provider, NAMESPACE
-        )
-        self._profiles_repo = ProfilesRepository(
-            self._settings, self._auth_provider, NAMESPACE
-        )
-        self._lz_repo = LzRepository(self._settings, self._auth_provider, NAMESPACE)
-        self._missions_repo = MissionsRepository(
-            self._settings, self._auth_provider, NAMESPACE
-        )
+        self._universes_repo = UniversesRepository(self._settings,
+                                                   self._auth_provider,
+                                                   NAMESPACE)
+        self._cargo_bays_repo = CargoBaysRepository(self._settings,
+                                                    self._auth_provider,
+                                                    NAMESPACE)
+        self._jobs_repo = JobsRepository(self._settings, self._auth_provider,
+                                         NAMESPACE)
+        self._stations_repo = StationsRepository(self._settings,
+                                                 self._auth_provider,
+                                                 NAMESPACE)
+        self._profiles_repo = ProfilesRepository(self._settings,
+                                                 self._auth_provider,
+                                                 NAMESPACE)
+        self._lz_repo = LzRepository(self._settings, self._auth_provider,
+                                     NAMESPACE)
+        self._missions_repo = MissionsRepository(self._settings,
+                                                 self._auth_provider,
+                                                 NAMESPACE)
 
         # set up feature services
         self._universes_service = UniversesService(self._universes_repo)
@@ -136,7 +142,8 @@ class GalileoSdk:
 
         connector = None
         if is_py3:
-            connector = GalileoConnector(self._settings, self._auth_provider, NAMESPACE)
+            connector = GalileoConnector(self._settings, self._auth_provider,
+                                         NAMESPACE)
 
         self.jobs = JobsSdk(self._jobs_service, connector)
         self.stations = StationsSdk(self._stations_service, connector)
@@ -159,7 +166,7 @@ class GalileoSdk:
         :return: None
         """
         self._auth_provider.set_access_token(auth_token)
-        
+
     def set_universe(self, universe_id):
         """
         Call this function to set your Galileo Universe context. The Hypernet Labs Universe is the
@@ -169,3 +176,35 @@ class GalileoSdk:
         :return: None
         """
         self._settings.get_settings().universe = universe_id
+
+    def send_notification(self, message, verbose=False):
+        """
+        Call this function to send a custom notification from Galileo. You must be running in an active Galileo
+        job container for this function to return successful. 
+        
+        :param message: str, the string to be pushed to the user as the notification (max size is 4kb). 
+        :param verbose: boolean, print debug messages to stdout.
+        :return success: boolean, whether the message was sent successfully or not. 
+
+        Example:
+            >>> success = galileo.send_notification("This is a test notification", verbose=True)
+        """
+
+        GALILEO_LZ_IPV4 = os.environ.get('GALILEO_LZ_IPV4')
+        GALILEO_LZ_PORT = os.environ.get('GALILEO_LZ_PORT')
+
+        if not (GALILEO_LZ_IPV4 and GALILEO_LZ_PORT):
+            if verbose:
+                print(
+                    "Could not retrieve port and IPV4 address for notification service."
+                )
+                print(
+                    "Are you sure you are running in an active job container?")
+            return False
+
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((GALILEO_LZ_IPV4, int(GALILEO_LZ_PORT)))
+            s.sendall("{message}".format(message=message).encode())
+            print("Message send successfully.")
+
+        return True

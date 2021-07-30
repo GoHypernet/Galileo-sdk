@@ -5,6 +5,7 @@ from galileo_sdk.mock_response import MockResponse
 
 BACKEND = "http://BACKEND"
 NAMESPACE = "/galileo/user_interface/v1"
+UNIVERSE_ID = "universe_id"
 QUERY = generate_query_str(
     {
         "userids": ["userids"],
@@ -20,10 +21,10 @@ QUERY = generate_query_str(
 # Arrange
 settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
+settings_repo.get_settings().universe = UNIVERSE_ID
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 profile_repo = ProfilesRepository(settings_repo, auth_provider, NAMESPACE)
-
 
 def mocked_requests_get(*args, **kwargs):
     if args[0] == "{backend}{namespace}/users".format(
@@ -35,11 +36,12 @@ def mocked_requests_get(*args, **kwargs):
                     {
                         "userid": "user{i}".format(i=i),
                         "username": "username{i}".format(i=i),
-                        "wallets": [
+                        "stored_cards": [
                             {
-                                "wallet": "{i}".format(i=i),
-                                "public_key": "x",
-                                "profilewalletid": "x",
+                                "id": "x",
+                                "user_id": "user{i}".format(i=i),
+                                "stripe_payment_method_id": "stripe{i}".format(i=1),
+                                "creation_timestamp": "timestamp{i}".format(i=i)
                             }
                         ],
                         "mids": ["{i}".format(i=i)],
@@ -56,8 +58,13 @@ def mocked_requests_get(*args, **kwargs):
             {
                 "userid": "userid",
                 "username": "username",
-                "wallets": [
-                    {"wallet": "0x", "public_key": "x", "profilewalletid": "x"}
+                "stored_cards": [
+                    {
+                        "id": "0x",
+                        "user_id": "userid",
+                        "stripe_payment_method_id": "stripeid",
+                        "creation_timestamp": "timestamp"
+                    }
                 ],
                 "mids": ["mids"],
             },
@@ -122,16 +129,19 @@ def test_list_users(mocked_requests):
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/users".format(backend=BACKEND, namespace=NAMESPACE),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+          headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json=None,
     )
 
     # Assert
     assert len(r) == 5
     assert len(r[0].lz_ids) == 1
-    assert len(r[0].wallets) == 1
+    assert len(r[0].stored_cards) == 1
     for i in range(5):
-        assert r[i].userid == "user{i}".format(i=i)
+        assert r[i].user_id == "user{i}".format(i=i)
         assert r[i].username == "username{i}".format(i=i)
 
 
@@ -143,14 +153,17 @@ def test_get_profile(mocked_requests):
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/users/self".format(backend=BACKEND, namespace=NAMESPACE),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+          headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json=None,
     )
 
     # Assert
-    assert r.userid == "userid"
+    assert r.user_id == "userid"
     assert r.username == "username"
-    assert r.wallets[0].wallet == "0x"
+    assert r.stored_cards[0].id == "0x"
     assert r.lz_ids == ["mids"]
 
 
@@ -164,12 +177,15 @@ def test_list_station_invites(mocked_requests):
         "{backend}{namespace}/users/invites".format(
             backend=BACKEND, namespace=NAMESPACE
         ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+          headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+            },
         json=None,
     )
 
     # Assert
-    assert r[0].stationid == "stationid"
+    assert r[0].station_id == "stationid"
     assert r[0].lz_ids[0] == "1"
     assert r[0].name == "name"
-    assert r[0].users[0].stationuserid == "stationuserid"
+    assert r[0].users[0].stationuser_id == "stationuserid"

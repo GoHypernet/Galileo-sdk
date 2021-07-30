@@ -57,28 +57,56 @@ def test_get_mission_files():
 
 
 def test_update_mission():
-    response = galileo.missions.update_mission(missions[0].mission_id, "new name")
-    updated_mission = galileo.missions.get_mission_by_id(missions[0].mission_id)
+    response = galileo.missions.update_mission(missions[0].mission_id,
+                                               "new name")
+    updated_mission = galileo.missions.get_mission_by_id(
+        missions[0].mission_id)
 
     assert response is True
     assert updated_mission.name == "new name"
 
 
-def test_update_mission_args():
-    response = galileo.missions.update_mission_args(
-        missions[0].mission_id, ["arg1", "arg2", "arg3"]
-    )
-    updated_mission = galileo.missions.get_mission_by_id(missions[0].mission_id)
+def test_delete_mission():
+    mission = galileo.missions.create_mission("test_mission")
 
-    assert response is True
+    response = galileo.missions.delete_mission_by_id(mission.mission_id)
+
+    assert response["success"] is True
+
+
+def test_update_mission_args():
+    mission = galileo.missions.create_mission("test_mission")
+
+    # FIXME: This is broken
+    response = galileo.missions.update_mission_args(mission.mission_id,
+                                                    ["arg1", "arg2", "arg3"])
+    updated_mission = galileo.missions.get_mission_by_id(mission.mission_id)
+
+    assert response['success'] is True
     assert updated_mission.settings["arg"] == ["arg1", "arg2", "arg3"]
+
+    galileo.missions.delete_mission_by_id(mission.mission_id)
 
 
 def test_mission_type_settings():
+
+    mission = galileo.missions.create_mission(
+        "test_mission",
+        mission_type_id="jupyter-notebook_lab",
+        settings={
+            'interface': 'lab',
+            'jupyterversion': 'datascience-notebook',
+            'dependencies': [],
+            'manualdependencies': [],
+            'reqstxt': None,
+            'vim': False,
+            'proxy': False
+        })
+
     settings = galileo.missions.get_mission_type_settings_info(
-        missions[0].mission_type_id
-    )
+        mission.mission_type_id)
     assert isinstance(settings, dict)
+    galileo.missions.delete_mission_by_id(mission.mission_id)
 
 
 galileo.disconnect()

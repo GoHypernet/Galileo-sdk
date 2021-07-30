@@ -113,11 +113,13 @@ Command Line Flags
   location, then it will be utilized and the LZ will authenticate
   automatically without prompting the user.
 
+.. _landing_zone_main-tunnnel-overrides:
+
 ``--cloudflare-cert <FILE PATH>`` and ``--tunnel-hostname <TEXT>``
-  If you have added a website to a Cloudflare account and that
-  website's domain nameservers are managed by Cloudflare, then you can
+  If you have added a domain to a Cloudflare account and that
+  domain's nameservers are managed by Cloudflare, then you can
   use these flags to force jobs on this LZ to produce tunnel URLs
-  belonging to that website's URL. Neither flag can be present without
+  belonging to that domain. Neither flag can be present without
   the other.
 
   ``--cloudflare-cert`` refers to a ``cert.pem`` file that is
@@ -129,9 +131,13 @@ Command Line Flags
 
   ``--tunnel-hostname`` is the Cloudflare managed hostname through
   which traffic will be routed. E.g. ``--tunnel-hostname example.com``
-  will route traffice through your ``example.com`` domain managed by
+  will route traffic through your ``example.com`` domain managed by
   Cloudflare and will produce tunnel URLs like
   ``<JOB_ID>.example.com``.
+
+  A job may override these values by poviding its own certfile and
+  hostname in the mission files; see :ref:`here
+  <missions-tunnels>`.
 
 Configuration File
 ------------------

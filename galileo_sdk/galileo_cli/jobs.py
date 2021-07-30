@@ -1,3 +1,4 @@
+from requests.models import HTTPError
 from galileo_sdk import GalileoSdk
 from halo import Halo
 import pandas
@@ -13,17 +14,16 @@ def jobs_cli(main, galileo: GalileoSdk):
         """
         pass
 
-    def get_jobs(index, id, receiver, sid, userid, status, page, items, spinner, projectid):
-        r = galileo.jobs.list_jobs(
-            jobids=list(id),
-            receiverids=list(receiver),
-            stationids=list(sid),
-            userids=list(userid),
-            statuses=list(status),
-            page=page,
-            items=items,
-            projectid=list(projectid)
-        )
+    def get_jobs(index, id, receiver, sid, userid, status, page, items,
+                 spinner, projectid):
+        r = galileo.jobs.list_jobs(job_ids=list(id),
+                                   receiver_ids=list(receiver),
+                                   station_ids=list(sid),
+                                   user_ids=list(userid),
+                                   statuses=list(status),
+                                   page=page,
+                                   items=items,
+                                   mission_ids=list(projectid))
 
         if len(r) == 0:
             spinner.stop()
@@ -37,22 +37,22 @@ def jobs_cli(main, galileo: GalileoSdk):
 
         jobs_list = [job.__dict__ for job in jobs_list]
         jobs_df = pandas.json_normalize(jobs_list)
-        jobs_df['time_created'] = pandas.to_datetime(jobs_df.time_created, unit='s')
-        jobs_df['last_updated'] = pandas.to_datetime(jobs_df.last_updated, unit='s')
+        jobs_df['time_created'] = pandas.to_datetime(jobs_df.time_created,
+                                                     unit='s')
+        jobs_df['last_updated'] = pandas.to_datetime(jobs_df.last_updated,
+                                                     unit='s')
         jobs_df = jobs_df.sort_values(by="last_updated", ascending=False)
         jobs_df.total_runtime = jobs_df.total_runtime.map(lambda x: x / 60)
-        jobs_df = jobs_df[
-            [
-                "job_id",
-                "station_id",
-                "receiver_id",
-                "name",
-                "total_runtime",
-                "status",
-                "time_created",
-                "last_updated",
-            ]
-        ]
+        jobs_df = jobs_df[[
+            "job_id",
+            "station_id",
+            "receiver_id",
+            "name",
+            "total_runtime",
+            "status",
+            "time_created",
+            "last_updated",
+        ]]
 
         return jobs_df
 
@@ -81,7 +81,7 @@ def jobs_cli(main, galileo: GalileoSdk):
     )
     @click.option(
         "-u",
-        "--userid",
+        "--user-ids",
         type=str,
         multiple=True,
         help="Filter by user id, can provide multiple options.",
@@ -93,32 +93,38 @@ def jobs_cli(main, galileo: GalileoSdk):
         help="Filter by status, can provide multiple options.",
     )
     @click.option(
-        "--page", type=int, multiple=True, help="Filter by page.",
+        "--page",
+        type=int,
+        multiple=True,
+        help="Filter by page.",
     )
     @click.option(
-        "--items", type=int, multiple=True, help="Filter by items per page.",
+        "--items",
+        type=int,
+        multiple=True,
+        help="Filter by items per page.",
     )
+    @click.option("-n", "--head", type=int, help="Number of items to display.")
     @click.option(
-        "-n", "--head", type=int, help="Number of items to display."
-    )
-    @click.option(
-        "-p", "--projectid",
+        "-p",
+        "--projectid",
         type=str,
         multiple=True,
         help="Filter by status, can provide multiple options.",
     )
     @click.option('--received', is_flag=True)
     @click.option('--sent', is_flag=True)
-    def ls(index, id, receiver, sid, userid, status, page, items, head, received, sent, projectid):
+    def ls(index, id, receiver, sid, user_ids, status, page, items, head,
+           received, sent, projectid):
         """
         List all jobs.
         """
         spinner = Halo("Retrieving information", spinner="dots").start()
-        self = galileo.profiles.self()
-        userid_filter = userid
-        userid_filter += (self.userid,)
-        received_filter = receiver
-        received_filter += tuple(self.mids)
+
+        #Testing purpose
+        my_id = galileo.profiles.self().userid
+        user_ids = list(user_ids) + [my_id]
+        receiver_ids = list(receiver) + galileo.lz.list_lz(user_ids=[my_id])
         spinner.stop()
 
         if not received and not sent:
@@ -126,8 +132,10 @@ def jobs_cli(main, galileo: GalileoSdk):
             sent = True
 
         if sent:
-            spinner = Halo("Retrieving jobs sent by you", spinner="dots").start()
-            sent_jobs_df = get_jobs(index, id, receiver, sid, userid_filter, status, page, items, spinner, projectid)
+            spinner = Halo("Retrieving jobs sent by you",
+                           spinner="dots").start()
+            sent_jobs_df = get_jobs(index, id, receiver, sid, user_ids, status,
+                                    page, items, spinner, projectid)
             spinner.stop()
             click.echo("SENT JOBS\n=========\n")
             if head:
@@ -137,8 +145,11 @@ def jobs_cli(main, galileo: GalileoSdk):
                 click.echo(sent_jobs_df.head(30))
 
         if received:
-            spinner = Halo("\nRetrieving jobs you received", spinner="dots").start()
-            received_jobs_df = get_jobs(index, id, received_filter, sid, userid, status, page, items, spinner, projectid)
+            spinner = Halo("\nRetrieving jobs you received",
+                           spinner="dots").start()
+            received_jobs_df = get_jobs(index, id, receiver_ids, sid, user_ids,
+                                        status, page, items, spinner,
+                                        projectid)
             spinner.stop()
             click.echo("\nRECEIVED JOBS\n===========\n")
             if head:
@@ -149,38 +160,42 @@ def jobs_cli(main, galileo: GalileoSdk):
 
     @jobs.command()
     @click.option(
-        "-j", "--jobid", type=str, prompt="Job ID", required=True, help="Job id.",
+        "-j",
+        "--jobid",
+        type=str,
+        prompt="Job ID",
+        required=True,
+        help="Job id.",
     )
     def request_stop(jobid):
         """
         Request to stop a job.
         """
-        jobs_list = galileo.jobs.request_stop_job(jobid)
+        jobs_list = [galileo.jobs.request_stop_job(jobid)]
         jobs_list = [job.__dict__ for job in jobs_list]
         jobs_df = pandas.json_normalize(jobs_list)
-        jobs_df.time_created = jobs_df.time_created.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
-        )
-        jobs_df.last_updated = jobs_df.last_updated.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
-        )
-        jobs_df = jobs_df[
-            [
-                "jobid",
-                "stationid",
-                "receiverid",
-                "name",
-                "total_runtime",
-                "status",
-                "time_created",
-                "last_updated",
-            ]
-        ]
+        jobs_df.time_created = jobs_df.time_created.map(lambda x: x)
+        jobs_df.last_updated = jobs_df.last_updated.map(lambda x: x)
+        jobs_df = jobs_df[[
+            "job_id",
+            "station_id",
+            "receiver_id",
+            "name",
+            "total_runtime",
+            "status",
+            "time_created",
+            "last_updated",
+        ]]
         click.echo(jobs_df)
 
     @jobs.command()
     @click.option(
-        "-j", "--jobid", type=str, prompt="Job ID", required=True, help="Job id.",
+        "-j",
+        "--jobid",
+        type=str,
+        prompt="Job ID",
+        required=True,
+        help="Job id.",
     )
     def request_pause(jobid):
         """
@@ -190,59 +205,73 @@ def jobs_cli(main, galileo: GalileoSdk):
         jobs_list = [job.__dict__ for job in jobs_list]
         jobs_df = pandas.json_normalize(jobs_list)
         jobs_df.time_created = jobs_df.time_created.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
-        )
+            lambda x: datetime.datetime.fromtimestamp(x))
         jobs_df.last_updated = jobs_df.last_updated.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
-        )
-        jobs_df = jobs_df[
-            [
-                "jobid",
-                "stationid",
-                "receiverid",
-                "name",
-                "total_runtime",
-                "status",
-                "time_created",
-                "last_updated",
-            ]
-        ]
+            lambda x: datetime.datetime.fromtimestamp(x))
+        jobs_df = jobs_df[[
+            "jobid",
+            "stationid",
+            "receiverid",
+            "name",
+            "total_runtime",
+            "status",
+            "time_created",
+            "last_updated",
+        ]]
         click.echo(jobs_df)
 
     @jobs.command()
     @click.option(
-        "-j", "--jobid", type=str, prompt="Job ID", required=True, help="Job id.",
+        "-j",
+        "--jobid",
+        type=str,
+        prompt="Job ID",
+        required=True,
+        help="Job id.",
     )
     def request_start(jobid):
         """
         Request to start a job.
         """
-        jobs_list = galileo.jobs.request_start_job(jobid)
+        try:
+            jobs_list = galileo.jobs.request_start_job(jobid)
+        except HTTPError as e:
+            status_code = e.response.status_code
+            if status_code == 405:
+                click.echo("Job cannot be started")
+                return
+            elif status_code == 500:
+                curr_job = galileo.jobs.list_jobs(job_ids=[jobid])
+                if not curr_job:
+                    click.echo("Job does not exist")
+                    return
+            raise e
         jobs_list = [job.__dict__ for job in jobs_list]
         jobs_df = pandas.json_normalize(jobs_list)
         jobs_df.time_created = jobs_df.time_created.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
-        )
+            lambda x: datetime.datetime.fromtimestamp(x))
         jobs_df.last_updated = jobs_df.last_updated.map(
-            lambda x: datetime.datetime.fromtimestamp(x)
-        )
-        jobs_df = jobs_df[
-            [
-                "jobid",
-                "stationid",
-                "receiverid",
-                "name",
-                "total_runtime",
-                "status",
-                "time_created",
-                "last_updated",
-            ]
-        ]
+            lambda x: datetime.datetime.fromtimestamp(x))
+        jobs_df = jobs_df[[
+            "jobid",
+            "stationid",
+            "receiverid",
+            "name",
+            "total_runtime",
+            "status",
+            "time_created",
+            "last_updated",
+        ]]
         click.echo(jobs_df)
 
     @jobs.command()
     @click.option(
-        "-j", "--jobid", type=str, prompt="Job ID", required=True, help="Job id.",
+        "-j",
+        "--jobid",
+        type=str,
+        prompt="Job ID",
+        required=True,
+        help="Job id.",
     )
     @click.option(
         "-p",

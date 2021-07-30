@@ -12,12 +12,14 @@ LOCATION = os.path.join("", FILENAME)
 JOB_ID = "job_id"
 DEST_MID = "dest_mid"
 STATION_ID = "station_id"
+UNIVERSE_ID = "universe_id"
 QUERY = generate_query_str({"filename": FILENAME, "path": LOCATION})
 TIMESTAMP = 1584946381
 
 # Arrange
 settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
+settings_repo.get_settings().universe = UNIVERSE_ID
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
 job_repo = JobsRepository(settings_repo, auth_provider, NAMESPACE)
@@ -25,21 +27,30 @@ job_repo = JobsRepository(settings_repo, auth_provider, NAMESPACE)
 job = {
     "jobid": "jobid",
     "receiverid": "receiverid",
-    "project_id": "project_id",
+    "project_id": "mission_id",
     "time_created": TIMESTAMP,
     "last_updated": TIMESTAMP,
     "status": "uploaded",
-    "container": "container",
+    "cpu_count": 1,
+    "gpu_count": 0,
+    "memory_amount": 0,
+    "enable_tunnel": False,
+    "tunnel_port": 8080,
+    "tunnel_url": "https://example.com",
     "name": "name",
     "stationid": "stationid",
     "userid": "userid",
     "state": "state",
-    "oaid": "oaid",
     "pay_status": "pay_status",
     "pay_interval": 1,
     "total_runtime": 10000,
     "archived": False,
-    "status_history": [{"timestamp": TIMESTAMP, "status": "uploaded"}],
+    "container": "container",
+    "oaid": "oaid",
+    "status_history": [{
+        "timestamp": TIMESTAMP,
+        "status": "uploaded"
+    }],
 }
 
 jobObject = job_dict_to_job(job)
@@ -47,20 +58,21 @@ jobObject = job_dict_to_job(job)
 
 def mocked_requests_get(*args, **kwargs):
     if args[0] == "{backend}{namespace}/job/upload_request".format(
-        backend=BACKEND, namespace=NAMESPACE
-    ):
+            backend=BACKEND, namespace=NAMESPACE):
         return MockResponse({"location": LOCATION, "filename": FILENAME}, 200)
-    elif args[0] == "{backend}{namespace}/jobs/{job_id}/results/location".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+    elif args[
+            0] == "{backend}{namespace}/jobs/{job_id}/results/location".format(
+                backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         return MockResponse({"location": LOCATION, "filename": FILENAME}, 200)
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/results".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
-        return MockResponse({"files": [{"path": LOCATION, "filename": FILENAME}]}, 200)
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
+        return MockResponse(
+            {"files": [{
+                "path": LOCATION,
+                "filename": FILENAME
+            }]}, 200)
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/top".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         return MockResponse(
             {
                 "top": {
@@ -74,56 +86,47 @@ def mocked_requests_get(*args, **kwargs):
             200,
         )
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/logs".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         return MockResponse({"logs": "logs"}, 200)
-    elif args[0] == "{backend}{namespace}/jobs".format(
-        backend=BACKEND, namespace=NAMESPACE
-    ):
+    elif args[0] == "{backend}{namespace}/jobs".format(backend=BACKEND,
+                                                       namespace=NAMESPACE):
         return MockResponse({"jobs": [job]}, 200)
     return MockResponse(None, 404)
 
 
 def mocked_requests_post(*args, **kwargs):
-    if args[0] == "{backend}{namespace}/jobs".format(
-        backend=BACKEND, namespace=NAMESPACE
-    ):
+    if args[0] == "{backend}{namespace}/jobs".format(backend=BACKEND,
+                                                     namespace=NAMESPACE):
         return MockResponse({"job": {"jobinfo": "jobinfo"}}, 200)
     return MockResponse(None, 404)
 
 
 def mocked_requests_put(*args, **kwargs):
     if args[0] == "{backend}{namespace}/jobs/{job_id}/results/download_complete".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         return MockResponse(True, 200)
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/run".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         job_copy = job.copy()
         job_copy["status"] = "submit"
         return MockResponse({"job": job_copy}, 200)
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/stop".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         job_copy = job.copy()
         job_copy["status"] = "stop"
         return MockResponse({"job": job_copy}, 200)
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/pause".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         job_copy = job.copy()
         job_copy["status"] = "pause"
         return MockResponse({"job": job_copy}, 200)
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/start".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         job_copy = job.copy()
         job_copy["status"] = "start"
         return MockResponse({"job": job_copy}, 200)
     elif args[0] == "{backend}{namespace}/jobs/{job_id}/kill".format(
-        backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-    ):
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID):
         job_copy = job.copy()
         job_copy["status"] = "kill"
         return MockResponse({"job": job_copy}, 200)
@@ -137,11 +140,14 @@ def test_request_send_job(mocked_requests):
     r = r.json()
 
     # Act
+    # Universes is being mocked and messing stuff up
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/job/upload_request".format(
-            backend=BACKEND, namespace=NAMESPACE
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/job/upload_request".format(backend=BACKEND,
+                                                         namespace=NAMESPACE),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID,
+        },
         json=None,
     )
 
@@ -149,16 +155,23 @@ def test_request_send_job(mocked_requests):
     assert r == {"location": LOCATION, "filename": FILENAME}
 
 
-@mock.patch("galileo_sdk.compat.requests.post", side_effect=mocked_requests_post)
+@mock.patch("galileo_sdk.compat.requests.post",
+            side_effect=mocked_requests_post)
 def test_request_send_job_completed(mocked_requests):
     # Call
     r = job_repo.request_send_job_completed(DEST_MID, FILENAME, STATION_ID)
     r = r.json()
 
     # Act
+    # Universes is being mocked and messing stuff up
+
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs".format(backend=BACKEND, namespace=NAMESPACE),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs".format(backend=BACKEND,
+                                           namespace=NAMESPACE),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json={
             "destination_mid": DEST_MID,
             "filename": FILENAME,
@@ -179,9 +192,11 @@ def test_request_receive_job(mocked_requests):
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs/{job_id}/results/location".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -198,9 +213,11 @@ def test_request_receive_job_completed(mocked_requests):
     # Act
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs/{job_id}/results/download_complete".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -217,10 +234,13 @@ def test_submit_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs/{job_id}/run".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs/{job_id}/run".format(backend=BACKEND,
+                                                        namespace=NAMESPACE,
+                                                        job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -235,10 +255,13 @@ def test_request_stop_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs/{job_id}/stop".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs/{job_id}/stop".format(backend=BACKEND,
+                                                         namespace=NAMESPACE,
+                                                         job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -253,10 +276,13 @@ def test_request_pause_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs/{job_id}/pause".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs/{job_id}/pause".format(backend=BACKEND,
+                                                          namespace=NAMESPACE,
+                                                          job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -271,10 +297,13 @@ def test_request_start_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs/{job_id}/start".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs/{job_id}/start".format(backend=BACKEND,
+                                                          namespace=NAMESPACE,
+                                                          job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -289,10 +318,13 @@ def test_request_top_from_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs/{job_id}/top".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs/{job_id}/top".format(backend=BACKEND,
+                                                        namespace=NAMESPACE,
+                                                        job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -316,10 +348,13 @@ def test_request_logs_from_job(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs/{job_id}/logs".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs/{job_id}/logs".format(backend=BACKEND,
+                                                         namespace=NAMESPACE,
+                                                         job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -334,8 +369,12 @@ def test_list_jobs(mocked_requests):
 
     # Act
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs".format(backend=BACKEND, namespace=NAMESPACE),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs".format(backend=BACKEND,
+                                           namespace=NAMESPACE),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -348,10 +387,13 @@ def test_kill_request(mocked_requests):
     r = job_repo.request_kill_job(JOB_ID)
 
     mocked_requests.assert_called_once_with(
-        "{backend}{namespace}/jobs/{job_id}/kill".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+        "{backend}{namespace}/jobs/{job_id}/kill".format(backend=BACKEND,
+                                                         namespace=NAMESPACE,
+                                                         job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 
@@ -364,9 +406,11 @@ def test_get_results_url(mocked_requests):
 
     mocked_requests.assert_called_once_with(
         "{backend}{namespace}/jobs/{job_id}/results".format(
-            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID
-        ),
-        headers={"Authorization": "Bearer ACCESS_TOKEN"},
+            backend=BACKEND, namespace=NAMESPACE, job_id=JOB_ID),
+        headers={
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "universe-id": UNIVERSE_ID
+        },
         json=None,
     )
 

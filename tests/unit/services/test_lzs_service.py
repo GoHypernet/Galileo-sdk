@@ -7,7 +7,7 @@ from galileo_sdk.business.objects.lz import (
 from galileo_sdk.business import LzService
 
 BACKEND = "http://BACKEND"
-MID = "machine_id"
+LZ_ID = "lz_id"
 AMOUNT = 10
 
 # Arrange
@@ -15,13 +15,13 @@ settings_repo = mock.Mock()
 settings_repo.get_settings().backend = BACKEND
 auth_provider = mock.Mock()
 auth_provider.get_access_token.return_value = "ACCESS_TOKEN"
-machines_repo = mock.Mock()
-machines_service = LzService(machines_repo)
+lzs_repo = mock.Mock()
+lzs_service = LzService(lzs_repo)
 
 
-def test_get_machine_by_id():
+def test_get_lz_by_id():
     x = 1
-    machines_repo.get_lz_by_id.return_value = Lz(
+    lzs_repo.get_lz_by_id.return_value = Lz(
         lz_id=str(x),
         gpu_count=str(x),
         cpu_count=str(x),
@@ -30,21 +30,21 @@ def test_get_machine_by_id():
         name=str(x),
         operating_system=str(x),
         status=ELzStatus.online,
-        userid=str(x),
+        user_id=str(x),
         container_technology="container_tech",
         job_runner="job runner",
         memory_amount=str(x),
     )
 
     # Call
-    r = machines_service.get_lz_by_id(MID)
+    r = lzs_service.get_lz_by_id(LZ_ID)
 
     # Assert
     assert r.userid == str(x)
 
 
 def test_list_machines():
-    machines_repo.list_lz.return_value = [
+    lzs_repo.list_lz.return_value = [
         Lz(
             lz_id=str(x),
             gpu_count=str(x),
@@ -54,16 +54,15 @@ def test_list_machines():
             name=str(x),
             operating_system=str(x),
             status=ELzStatus.online,
-            userid=str(x),
+            user_id=str(x),
             container_technology="container_tech",
             job_runner="job runner",
             memory_amount=str(x),
-        )
-        for x in range(5)
+        ) for x in range(5)
     ]
 
     # Call
-    r = machines_service.list_lz()
+    r = lzs_service.list_lz()
 
     # Assert
     for i in range(5):
@@ -72,7 +71,7 @@ def test_list_machines():
 
 def test_update():
     x = 1
-    machines_repo.update.return_value = Lz(
+    lzs_repo.update.return_value = Lz(
         lz_id=str(x),
         gpu_count=str(x),
         cpu_count=str(x),
@@ -81,14 +80,24 @@ def test_update():
         name=str(x),
         operating_system=str(x),
         status=ELzStatus.online,
-        userid=str(x),
+        user_id=str(x),
         container_technology="container_tech",
         job_runner="job runner",
         memory_amount=str(x),
     )
 
     # Call
-    r = machines_service.update(UpdateLzRequest(lz_id=MID))
+    r = lzs_service.update(UpdateLzRequest(lz_id=LZ_ID))
 
     # Assert
     assert r.userid == str(x)
+
+
+def test_delete_lz():
+    # Arrange
+    lzs_repo.delete_lz_by_id.return_value = {"success": True}
+
+    # Call
+    r = lzs_service.delete_lz_by_id(LZ_ID)
+
+    assert r["success"] is True
