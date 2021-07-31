@@ -28,10 +28,11 @@ very difficult for a containerized Landing Zone to communicate with
 the Slurm controller. For this reason we suggest admins use the binary
 linked above on Slurm systems.
 
-It is also assumed by the LZ that ``/tmp`` belongs to a distributed
-file system that is readable and writable by every node in the
-cluster. You can override this location by setting the ``$TMPDIR``,
-``$TEMP``, or ``$TMP`` environment variables.
+It is also assumed by the LZ that the work directory (`-w`,
+`--work-dir`) belongs to a distributed file system that is readable
+and writable by every node in the cluster. You can influence the
+default location ( ``/tmp``) by setting the ``$TMPDIR``, ``$TEMP``, or
+``$TMP`` environment variables.
 
 Admins should read through the `Slurm Configuration`_ documentation to
 make sure memory, CPUs, and GPUs are allocated to jobs in mutually
@@ -95,23 +96,18 @@ about these cgroups:
     after updating the file.
 
 Next you must tell Slurm to use cgroups for its task management
-services. In slurm.conf make sure the task plugin is
-``TaskPlugin=task/cgroup`` and that the select type parameters
+services. In slurm.conf make sure ``TaskPlugin`` is ``task/cgroup`` or
+``task/affinity,task/cgroup``, and that the select type parameters
 includes memory, e.g.  ``SelectTypeParameters=CR_Core_Memory``.  Any
 of ``CR_Core_Memory``, ``CR_CPU_Memory``, or ``CR_Socket_Memory`` will
 work; consult the slurm.conf `man page
 <https://slurm.schedmd.com/slurm.conf.html>`_ to make a decision. Bear
-in mind the *CPU* settings in Galileo get translated to ``srun ... -n
-<cpus>`` on the cluster. ``CR_Memory`` is discouraged since Galileo
-does attempt to set constraints on CPU/core usage.
+in mind the *CPU* settings in Galileo may get translated to ``srun
+... -n <cpus>`` on the cluster. ``CR_Memory`` is discouraged since
+Galileo does attempt to set constraints on CPU/core usage.
 
-Finally make sure that the cgroups are configured to enforce this
-constraint in cgroup.conf.
-
-.. code-block:: bash
-
-   ConstrainRAMSpace=yes
-   ConstrainSwapSpace=yes
+Also check our `cgroups.conf Recommendations`_ for options affecting
+memory allotment and enforcement.
 
 CPUs/Cores
 ~~~~~~~~~~
@@ -128,14 +124,14 @@ Non-distributed jobs translate the value into these flags
 
 .. code-block:: bash
 
-    --ntasks 1  --cpus-per-task <cpus>
+    --ntasks 1  --cpus-per-task <cpus> --mem <memory>
 
 Distributed jobs assume a one CPU default for tasks and translate
 the value into these flags
 
 .. code-block:: bash
 
-    --ntasks <cpus>
+    --ntasks <cpus> --cpus-per-task 1 --mem-per-cpu <memory / cpus>
 
 How those flags affect actual hardware usage depends on your Slurm
 configuration. In particular, in *slurm.conf*, the value of
@@ -146,12 +142,8 @@ refer to the `slurm.conf man page
 <https://slurm.schedmd.com/slurm.conf.html>`_ to investigate the
 hardware implications of each of these.
 
-As noted in our `Memory`_ section, we
-recommend ``task/cgroup`` for the value of ``TaskPlugin``. If that is
-the case, then we need to ensure the cgroup enforces the core
-constraints in cgroup.conf with ``ConstrainCores=yes``. It is also
-advisable to set ``TaskAffinity=yes`` in cgroup.conf to ensure tasks
-are bound to their allocated cores.
+Also check our `cgroups.conf Recommendations`_ for options affecting
+core allotment and affinity.
 
 .. _slurm_gpus:
 
@@ -162,11 +154,36 @@ Galileo's support for GPU management in Slurm clusters hinges on the
 ``select/cons_tres`` plugin introduced in Slurm version 19.05. Admins
 should consult the `Slurm documentation
 <https://slurm.schedmd.com/gres.html>`_ for correctly configuring this
-feature. To ensure that jobs receive exclusive access to the GPUs
-alloted to them, and only those GPUs, ``TaskPlugin`` should be set to
-``task/cgroup`` in slurm.conf and ``ConstrainDevices=yes`` should be
-included in cgroup.conf. See the `Memory`_ and `CPUs/Cores`_ sections
-for more considerations regarding ``task/cgroup``.
+feature.
+
+Also check our `cgroups.conf Recommendations`_ for options affecting
+GPU allotment.
+
+cgroups.conf Recommendations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Setting ``TaskPlugin`` to ``task/cgroup`` enables a number of
+cgroup.conf constraints should be considered:
+
+* ``ConstrainCores``:
+	Ensures jobs get exclusive access to the cores allotted to them.
+
+* ``ConstrainRAMSpace``, ``ConstrainKmemSpace``, and ``ConstrainSwapSpace``:
+	Ensures jobs will be preempted if they exceed their allotted
+	memory. Note that ``OverMemoryKill`` in *slurm.conf* is similar, but
+	operates on a per-process basis instead of a per-job basis. That
+	would be inappropriate because a job could use twice its allotted
+	memory by utilizing two processes.
+
+* ``ConstrainDevices``:
+	Ensures jobs get exclusive access to the GPUs allotted to them.
+
+* ``TaskAffinity=no``, ``ConstrainCores=yes``, and ``TaskPlugin=task/affinity,task/cgroup``:
+	Officially recommended by slurm for setting default task affinity as
+	well as exclusive core allotment.
+
+Be sure to check the `official documentation
+<https://slurm.schedmd.com/cgroup.conf.html>`_ for other
+considerations.
 
 How to Run the Landing Zone Daemon
 ----------------------------------
