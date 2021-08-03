@@ -37,7 +37,7 @@ def missions_cli(main, galileo: GalileoSdk):
     )
     @click.option(
         "-u",
-        "--userid",
+        "--user_id",
         type=str,
         multiple=True,
         help="Filter by userids, can provide multiple options.",
@@ -52,7 +52,7 @@ def missions_cli(main, galileo: GalileoSdk):
                   '--head',
                   type=int,
                   help="Number of Missions to display.")
-    def ls(index, id, short, name, userid, page, items, head):
+    def ls(index, id, short, name, user_id, page, items, head):
         """
         List the Missions in your Galileo profile.
         """
@@ -60,11 +60,11 @@ def missions_cli(main, galileo: GalileoSdk):
         self = galileo.profiles.self()
         spinner.stop()
         spinner = Halo("Retrieving your Mission", spinner="dot").start()
-        userid += (self.userid, )
+        user_id += (self.user_id, )
         missions = galileo.missions.list_missions(
             mission_ids=list(id),
             names=list(name),
-            user_ids=list(userid),
+            user_ids=list(user_id),
             page=page,
             items=items,
         )

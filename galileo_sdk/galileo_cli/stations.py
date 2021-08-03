@@ -93,7 +93,7 @@ def stations_cli(main, galileo: GalileoSdk):
         stations_list = [station.__dict__ for station in stations_list]
         stations_df = pandas.json_normalize(stations_list)
         stations_df = stations_df[[
-            "stationid", "name", "description", "users", "lz_ids", "volumes"
+            "station_id", "name", "description", "users", "lz_ids", "volumes"
         ]]
         spinner.stop()
         click.echo(stations_df)

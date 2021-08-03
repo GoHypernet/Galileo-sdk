@@ -38,13 +38,13 @@ def lzs_cli(main, galileo: GalileoSdk):
         spinner.start()
 
         self = galileo.profiles.self()
-        userids = []
+        user_ids = []
         if not everything:
-            userids.append(self.userid)
+            user_ids.append(self.user_id)
 
         lzs = galileo.lz.list_lz(
             lz_ids=list(lz_ids),
-            user_ids=list(userids),
+            user_ids=list(user_ids),
             page=page,
             items=items,
         )
