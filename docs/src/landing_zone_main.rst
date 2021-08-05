@@ -113,6 +113,14 @@ Command Line Flags
   location, then it will be utilized and the LZ will authenticate
   automatically without prompting the user.
 
+``--stations``   ``<COMMA SEPARATED LIST OF STATION IDS>``
+  At startup the Landing Zone will attempt to add itself to all of the
+  stations represented by the station ids provided to this flag. If an
+  attempt fails for any reason, then the Landing Zone will remain in
+  any stations it was successfully added to before the failure, it
+  will not attempt to add itself to any subsequent station ids in the
+  list, and the LZ will exit.
+
 .. _landing_zone_main-tunnnel-overrides:
 
 ``--cloudflare-cert <FILE PATH>`` and ``--tunnel-hostname <TEXT>``
