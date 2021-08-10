@@ -122,7 +122,7 @@ def jobs_cli(main, galileo: GalileoSdk):
         spinner = Halo("Retrieving information", spinner="dots").start()
 
         #Testing purpose
-        my_id = galileo.profiles.self().userid
+        my_id = galileo.profiles.self().user_id
         user_ids = list(user_ids) + [my_id]
         receiver_ids = list(receiver) + galileo.lz.list_lz(user_ids=[my_id])
         spinner.stop()
