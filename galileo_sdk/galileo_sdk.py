@@ -45,6 +45,13 @@ if is_py3:
 NAMESPACE = "/galileo/user_interface/v1"
 
 
+def notify():
+    if len(sys.argv) > 1:
+        GalileoSdk.send_notification(GalileoSdk, sys.argv[1])
+    else:
+        print("No message given for notification.")
+
+
 class GalileoSdk:
     def __init__(
         self,

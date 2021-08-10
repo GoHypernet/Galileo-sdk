@@ -13,20 +13,10 @@ is_py3 = _ver[0] == 3
 
 if is_py3:
     install_requires = [
-        "requests>=2.21.0",
-        "python-socketio[client]==4.3.1",
-        "python-engineio==3.9.0",
-        "chardet",
-        "mock",
-        "pathlib",
-        "termcolor==1.1.0",
-        "colorama==0.4.3",
-        "pyfiglet",
-        "click==7.1.2",
-        "click-shell",
-        "pandas",
-        "halo",
-        "curses-menu"
+        "requests>=2.21.0", "python-socketio[client]==4.3.1",
+        "python-engineio==3.9.0", "chardet", "mock", "pathlib",
+        "termcolor==1.1.0", "colorama==0.4.3", "pyfiglet", "click==7.1.2",
+        "click-shell", "pandas", "halo", "curses-menu"
     ]
 else:
     install_requires = [
@@ -46,8 +36,7 @@ class VerifyVersionCommand(install):
 
         if tag != VERSION:
             info = "Git tag: {0} does not match the version of this app: {1}".format(
-                tag, VERSION
-            )
+                tag, VERSION)
             sys.exit(info)
 
 
@@ -57,7 +46,8 @@ setup(
     license="MIT",
     author="Hypernet Labs",
     author_email="galileo@hypernetlabs.io",
-    long_description="Galileo is a hub for modeling, simulations, and data analysis that functions as a quick and "
+    long_description=
+    "Galileo is a hub for modeling, simulations, and data analysis that functions as a quick and "
     "easy portal to cloud resources.  The application streamlines computing infrastructure, "
     "saving engineers and researchers weeks of cloud setup time.  Team and station features allow "
     "teams to collaborate efficiently by sharing projects and results, flexibly controlling "
@@ -67,7 +57,12 @@ setup(
     "jobs, accepting jobs, and accepting members.",
     url="https://hypernetlabs.io/galileo/",
     packages=["galileo_sdk"],
-    entry_points={"console_scripts": ["galileo-cli = galileo_sdk.galileo_cli.cli:main",]},
+    entry_points={
+        "console_scripts": [
+            "galileo-cli = galileo_sdk.galileo_cli.cli:main",
+            "galileo-notify = galileo_sdk.galileo_sdk:notify"
+        ]
+    },
     package_data={
         "galileo_sdk": [
             "sdk/**",
@@ -85,5 +80,7 @@ setup(
     install_requires=install_requires,
     extras_require={"docs": ["sphinx>=2.2.0", "sphinx-material"]},
     tests_require=["pytest-runner", "pytest"],
-    cmdclass={"verify": VerifyVersionCommand,},
+    cmdclass={
+        "verify": VerifyVersionCommand,
+    },
 )
