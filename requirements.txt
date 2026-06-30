@@ -1,6 +1,6 @@
 requests>=2.21.0
 python-engineio==3.9.0
-python-socketio[client]==4.3.1
+python-socketio[client]==5.16.2
 pytest-runner
 pytest
 enum34
