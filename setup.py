@@ -14,7 +14,7 @@ is_py3 = _ver[0] == 3
 if is_py3:
     install_requires = [
         "requests>=2.21.0", "python-socketio[client]==4.3.1",
-        "python-engineio==3.9.0", "chardet", "mock", "pathlib",
+        "python-engineio==4.13.2", "chardet", "mock", "pathlib",
         "termcolor==1.1.0", "colorama==0.4.3", "pyfiglet", "click==7.1.2",
         "click-shell", "pandas", "halo", "curses-menu"
     ]

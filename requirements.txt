@@ -1,5 +1,5 @@
 requests>=2.21.0
-python-engineio==3.9.0
+python-engineio==4.13.2
 python-socketio[client]==4.3.1
 pytest-runner
 pytest
